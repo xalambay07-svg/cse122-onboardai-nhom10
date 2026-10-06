@@ -1,0 +1,173 @@
+/* ==========================================================================
+   DASHBOARD SPECIFIC STYLES - ONBOARDAI (CSE122 - BTL-20)
+   Dành riêng cho màn hình: newhire-onboarding-dashboard.html
+   ========================================================================== */
+
+/* 1. Banner chào mừng */
+.welcome-banner {
+  background: linear-gradient(135deg, #1e40af, #3b82f6);
+  color: white;
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+
+.welcome-title {
+  font-size: 1.65rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.welcome-subtitle {
+  font-size: 0.95rem;
+  color: #dbeafe;
+  max-width: 650px;
+  line-height: 1.5;
+}
+
+/* 2. Thẻ tiến độ tổng quan (Progress Card) */
+.progress-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 12px;
+  background-color: var(--border);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #10b981);
+  border-radius: var(--radius-full);
+  transition: width 0.5s ease;
+}
+
+/* 3. Bố cục lưới 2 cột Dashboard */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.8fr 1.2fr;
+  gap: 24px;
+}
+
+@media (max-width: 992px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 4. Danh sách nhiệm vụ hôm nay (Task Items) */
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin-bottom: 10px;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.task-item:hover {
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.task-item.completed {
+  background-color: #f8fafc;
+  opacity: 0.85;
+}
+
+.task-item.completed .task-title {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.task-checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--success);
+}
+
+.task-content {
+  flex: 1;
+}
+
+.task-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.task-meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  display: flex;
+  gap: 12px;
+}
+
+/* 5. Thẻ Người hướng dẫn (Mentor Card) */
+.mentor-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: var(--bg-main);
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+}
+
+.mentor-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-full);
+  background: white;
+  border: 2px solid var(--primary-light);
+}
+
+/* 6. Link điều hướng Sidebar */
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  margin: 4px 12px;
+  transition: all 0.2s;
+}
+
+.nav-link:hover {
+  background-color: var(--primary-light);
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.nav-link.active {
+  background-color: var(--primary-light);
+  color: var(--primary);
+  font-weight: 600;
+}

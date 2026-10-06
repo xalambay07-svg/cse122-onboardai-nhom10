@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Onboarding Dashboard – OnboardAI | Material Design 3</title>
+  
+  <!-- Font chữ Inter chuẩn Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons (Thư viện Vector Icon hiện đại, thay thế emoji) -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans antialiased h-full flex flex-col">
+  <!-- Container Toast thông báo nổi -->
+  <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <div class="flex h-full min-h-screen">
+    <!-- ================= 1. SIDEBAR CHUẨN MATERIAL DESIGN 3 ================= -->
+    <aside id="appSidebar" class="w-64 bg-white border-r border-slate-200/80 flex flex-col shrink-0 fixed inset-y-0 left-0 z-40 md:static transition-transform duration-300 -translate-x-full md:translate-x-0">
+      <!-- Logo Header -->
+      <div class="h-16 flex items-center gap-3 px-6 border-b border-slate-100">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-sm">
+          <i data-lucide="compass" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="text-base font-bold tracking-tight text-slate-900">Onboard<span class="text-blue-600">AI</span></span>
+          <span class="block text-[10px] uppercase font-semibold tracking-wider text-slate-400">Enterprise</span>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+        <div class="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+          Không gian Nhân sự mới
+        </div>
+        <a href="newhire-onboarding-dashboard.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold bg-blue-50 text-blue-700 transition-colors">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+          <span>Bảng điều khiển</span>
+        </a>
+        <a href="newhire-checklist.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+          <i data-lucide="check-square" class="w-4 h-4"></i>
+          <span>Checklist hội nhập</span>
+        </a>
+        <a href="newhire-ai-help.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+          <i data-lucide="bot" class="w-4 h-4"></i>
+          <span>Trợ lý AI Hỏi đáp</span>
+        </a>
+
+        <div class="pt-5 px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+          Tài khoản & Hệ thống
+        </div>
+        <a href="profile.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+          <i data-lucide="user" class="w-4 h-4"></i>
+          <span>Hồ sơ cá nhân</span>
+        </a>
+        <a href="login.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-rose-600 hover:bg-rose-50 transition-colors">
+          <i data-lucide="log-out" class="w-4 h-4"></i>
+          <span>Đăng xuất</span>
+        </a>
+      </nav>
+
+      <!-- Gamification Card: Level & Streak -->
+      <div class="p-3 m-3 rounded-2xl bg-gradient-to-br from-slate-50 to-blue-50/60 border border-slate-200/70">
+        <div class="flex items-center justify-between text-xs mb-2">
+          <span class="font-semibold text-slate-700 flex items-center gap-1.5">
+            <i data-lucide="award" class="w-4 h-4 text-blue-600"></i> Level 1: Tân binh
+          </span>
+          <span class="font-bold text-blue-600">650 XP</span>
+        </div>
+        <div class="w-full bg-slate-200 rounded-full h-1.5 mb-2 overflow-hidden">
+          <div class="bg-blue-600 h-1.5 rounded-full" style="width: 65%"></div>
+        </div>
+        <div class="flex items-center justify-between text-[11px] text-slate-500">
+          <span>Chuỗi điểm danh</span>
+          <span class="font-semibold text-amber-600 flex items-center gap-1">
+            <i data-lucide="flame" class="w-3.5 h-3.5 fill-amber-500 text-amber-500"></i> 3 ngày
+          </span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Overlay cho Mobile khi mở Sidebar -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-slate-900/40 z-30 hidden md:hidden"></div>
+
+    <!-- ================= 2. MAIN CONTENT ================= -->
+    <div class="flex-1 flex flex-col overflow-y-auto">
+      <!-- Topbar Header -->
+      <header class="h-16 bg-white border-b border-slate-200/80 px-6 flex items-center justify-between sticky top-0 z-20">
+        <div class="flex items-center gap-3">
+          <button id="menuToggleBtn" class="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+          <div class="flex items-center gap-2 text-xs text-slate-500">
+            <span class="font-medium text-slate-700">Hành trình hội nhập</span>
+            <span>/</span>
+            <span class="text-blue-600 font-semibold bg-blue-50 px-2 py-0.5 rounded-md">Tuần 1: Khởi động</span>
+          </div>
+        </div>
+
+        <!-- User Info Pill -->
+        <div class="flex items-center gap-4">
+          <div class="flex items-center gap-3 pl-3 border-l border-slate-100">
+            <div class="relative">
+              <img id="userAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=An" alt="Avatar" class="w-9 h-9 rounded-full ring-2 ring-slate-100 bg-white object-cover">
+              <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white"></span>
+            </div>
+            <div class="hidden sm:block text-left">
+              <div id="userName" class="text-sm font-semibold text-slate-900 leading-tight">Nguyễn Văn An</div>
+              <div class="text-xs text-slate-500">Frontend Developer</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Nội dung chính (Content Body) -->
+      <main class="p-6 md:p-8 max-w-7xl mx-auto w-full space-y-6">
+        
+        <!-- 2.1 AI Daily Briefing / Copilot Banner -->
+        <section class="rounded-2xl bg-gradient-to-r from-blue-700 via-indigo-700 to-indigo-800 text-white p-6 md:p-8 shadow-sm relative overflow-hidden">
+          <div class="relative z-10 max-w-3xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-blue-100 text-xs font-medium mb-3">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-300"></i>
+              <span>AI Morning Briefing &bull; Ngày 3 / 60</span>
+            </div>
+            <h1 id="welcomeTitle" class="text-2xl md:text-3xl font-extrabold tracking-tight mb-2 text-white">
+              Chào mừng, Nguyễn Văn An!
+            </h1>
+            <p class="text-blue-100 text-sm md:text-base leading-relaxed mb-5">
+              Trọng tâm hôm nay của bạn là <strong>Cài đặt môi trường dự án</strong> và <strong>Đọc quy chuẩn Design System</strong>. Mentor Trần Thị Mai đã chuẩn bị tài liệu bên dưới để hỗ trợ bạn.
+            </p>
+            <div class="flex flex-wrap items-center gap-3">
+              <a href="#tasksSection" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white text-blue-700 font-semibold text-xs md:text-sm hover:bg-blue-50 transition shadow-sm">
+                <span>Xem 3 việc cần làm</span>
+                <i data-lucide="arrow-down" class="w-4 h-4"></i>
+              </a>
+              <a href="newhire-ai-help.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium text-xs md:text-sm transition backdrop-blur-sm">
+                <i data-lucide="message-square" class="w-4 h-4 text-blue-200"></i>
+                <span>Hỏi nhanh Trợ lý AI</span>
+              </a>
+            </div>
+          </div>
+          <!-- Chi tiết trang trí nền vi mô -->
+          <div class="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-white/5 to-transparent pointer-events-none"></div>
+        </section>
+
+        <!-- 2.2 Thẻ Tiến độ tổng quan (M3 Surface Card) -->
+        <section class="bg-white rounded-2xl border border-slate-200/70 p-6 shadow-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="text-base font-bold text-slate-900">Tiến độ hội nhập tổng thể</h2>
+                <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">Đúng lộ trình</span>
+              </div>
+              <p id="progressSummary" class="text-xs text-slate-500 mt-1">Đang tính toán các mốc nhiệm vụ...</p>
+            </div>
+            <div class="flex items-baseline gap-1">
+              <span id="progressPercent" class="text-3xl font-extrabold text-blue-600">0%</span>
+              <span class="text-xs text-slate-400 font-medium">hoàn thành</span>
+            </div>
+          </div>
+          <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden p-0.5">
+            <div id="progressBarFill" class="bg-gradient-to-r from-blue-500 to-indigo-600 h-2 rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
+          </div>
+        </section>
+
+        <!-- 2.3 Dashboard Grid 2 Cột -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- Cột chính bên trái: Việc cần làm (Span 7 hoặc 8) -->
+          <div id="tasksSection" class="lg:col-span-7 xl:col-span-8 space-y-6">
+            <div class="bg-white rounded-2xl border border-slate-200/70 p-6 shadow-sm">
+              <div class="flex items-center justify-between mb-5 pb-4 border-b border-slate-100">
+                <div>
+                  <h3 class="text-base font-bold text-slate-900">Việc cần làm hôm nay</h3>
+                  <p class="text-xs text-slate-500 mt-0.5">Tích chọn để tự động cập nhật tiến độ vào hệ thống</p>
+                </div>
+                <a href="newhire-checklist.html" class="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-700">
+                  <span>Toàn bộ lộ trình</span>
+                  <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                </a>
+              </div>
+
+              <!-- Danh sách tasks render động -->
+              <div id="todayTaskList" class="space-y-3">
+                <!-- Javascript sẽ render vào đây -->
+              </div>
+            </div>
+
+            <!-- Gợi ý tài liệu đọc nhanh (Contextual Documents) -->
+            <div class="bg-white rounded-2xl border border-slate-200/70 p-6 shadow-sm">
+              <h3 class="text-base font-bold text-slate-900 mb-4">Tài liệu quan trọng cho tân binh</h3>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div class="p-3.5 rounded-xl border border-slate-100 bg-slate-50/70 hover:bg-white hover:border-blue-200 hover:shadow-sm transition group cursor-pointer">
+                  <div class="w-7 h-7 rounded-lg bg-blue-100/80 text-blue-700 flex items-center justify-center mb-2">
+                    <i data-lucide="book-open" class="w-4 h-4"></i>
+                  </div>
+                  <h4 class="text-xs font-semibold text-slate-900 group-hover:text-blue-600">Sổ tay nhân viên 2026</h4>
+                  <p class="text-[11px] text-slate-500 mt-0.5">Văn hóa & thời gian làm việc</p>
+                </div>
+
+                <div class="p-3.5 rounded-xl border border-slate-100 bg-slate-50/70 hover:bg-white hover:border-blue-200 hover:shadow-sm transition group cursor-pointer">
+                  <div class="w-7 h-7 rounded-lg bg-indigo-100/80 text-indigo-700 flex items-center justify-center mb-2">
+                    <i data-lucide="laptop" class="w-4 h-4"></i>
+                  </div>
+                  <h4 class="text-xs font-semibold text-slate-900 group-hover:text-blue-600">Chính sách Remote (WFH)</h4>
+                  <p class="text-[11px] text-slate-500 mt-0.5">Tối đa 2 ngày/tuần</p>
+                </div>
+
+                <div class="p-3.5 rounded-xl border border-slate-100 bg-slate-50/70 hover:bg-white hover:border-blue-200 hover:shadow-sm transition group cursor-pointer">
+                  <div class="w-7 h-7 rounded-lg bg-emerald-100/80 text-emerald-700 flex items-center justify-center mb-2">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i>
+                  </div>
+                  <h4 class="text-xs font-semibold text-slate-900 group-hover:text-blue-600">Quy định Bảo mật IT</h4>
+                  <p class="text-[11px] text-slate-500 mt-0.5">Xác thực 2 lớp & dữ liệu</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cột phụ bên phải: Mentor & Widget AI (Span 5 hoặc 4) -->
+          <div class="lg:col-span-5 xl:col-span-4 space-y-6">
+            
+            <!-- Thẻ Người hướng dẫn (Mentor Card) -->
+            <div class="bg-white rounded-2xl border border-slate-200/70 p-6 shadow-sm">
+              <h3 class="text-base font-bold text-slate-900 mb-4">Người đồng hành (Mentor)</h3>
+              <div class="flex items-center gap-3.5 p-3.5 rounded-xl bg-slate-50 border border-slate-100 mb-4">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mai" alt="Mentor" class="w-12 h-12 rounded-full bg-white ring-2 ring-slate-100 object-cover">
+                <div class="flex-1 min-w-0">
+                  <h4 class="text-sm font-bold text-slate-900 truncate">Trần Thị Mai</h4>
+                  <p class="text-xs text-slate-500 truncate">Tech Lead &bull; Kỹ thuật</p>
+                  <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600 mt-0.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Đang trực tuyến
+                  </span>
+                </div>
+              </div>
+
+              <!-- Lịch hẹn 1-on-1 sắp tới -->
+              <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-100/80 text-xs text-amber-900 mb-4 space-y-1">
+                <div class="font-semibold flex items-center gap-1.5 text-amber-800">
+                  <i data-lucide="calendar" class="w-3.5 h-3.5"></i> Buổi gặp 1-on-1 tiếp theo:
+                </div>
+                <div class="text-slate-700">15:00 Thứ Sáu tuần này (Check-in 7 ngày)</div>
+              </div>
+
+              <button onclick="showToast('Đã gửi thông báo hẹn gặp tới Mentor!', 'success')" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition">
+                <i data-lucide="message-square" class="w-4 h-4 text-slate-500"></i>
+                <span>Nhắn tin cho Mentor</span>
+              </button>
+            </div>
+
+            <!-- Widget Trợ lý OnboardAI (M3 Tonal AI Card) -->
+            <div class="bg-gradient-to-br from-indigo-50/70 via-white to-purple-50/50 rounded-2xl border border-indigo-100 p-6 shadow-sm">
+              <div class="flex items-center gap-2.5 mb-3">
+                <div class="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-sm">
+                  <i data-lucide="sparkles" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-bold text-indigo-950">Trợ lý OnboardAI (AI-1)</h4>
+                  <p class="text-[11px] text-slate-500">Hỏi đáp chính sách & quy chế</p>
+                </div>
+              </div>
+
+              <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                Mọi câu hỏi về thời gian thử việc, nghỉ phép hay thiết bị làm việc đều được AI trích dẫn chính xác từ tài liệu nội bộ.
+              </p>
+
+              <!-- Câu hỏi gợi ý nhanh -->
+              <div class="space-y-1.5 mb-4">
+                <button onclick="quickAsk('Thời gian thử việc tối đa là bao lâu?')" class="w-full text-left p-2 rounded-lg bg-white border border-slate-200/70 hover:border-indigo-300 text-xs text-slate-700 transition truncate block">
+                  &bull; Thời gian thử việc tối đa là bao lâu?
+                </button>
+                <button onclick="quickAsk('Chính sách làm việc từ xa (WFH)?')" class="w-full text-left p-2 rounded-lg bg-white border border-slate-200/70 hover:border-indigo-300 text-xs text-slate-700 transition truncate block">
+                  &bull; Chính sách làm việc từ xa (WFH)?
+                </button>
+              </div>
+
+              <a href="newhire-ai-help.html" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-700 transition shadow-sm">
+                <span>Khám phá Trợ lý AI đầy đủ</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </a>
+            </div>
+
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Nạp module CSDL LocalStorage và Logic tương tác -->
+  <script src="js/api.js"></script>
+  <script>
+    // Hàm hiển thị Toast thông báo hiện đại
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-xl shadow-lg text-xs font-semibold transition-all transform duration-300 ${
+        type === 'success' ? 'bg-slate-900 text-white' : 'bg-amber-500 text-white'
+      }`;
+      toast.innerHTML = `
+        <i data-lucide="${type === 'success' ? 'check-circle' : 'alert-circle'}" class="w-4 h-4 shrink-0 ${type === 'success' ? 'text-emerald-400' : 'text-white'}"></i>
+        <span>${message}</span>
+      `;
+      container.appendChild(toast);
+      lucide.createIcons();
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-10px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // Điều hướng nhanh sang trang AI với câu hỏi gợi ý
+    function quickAsk(query) {
+      sessionStorage.setItem('AI_PREFILL_QUERY', query);
+      window.location.href = 'newhire-ai-help.html';
+    }
+
+    // Xử lý menu Mobile
+    const menuBtn = document.getElementById('menuToggleBtn');
+    const sidebar = document.getElementById('appSidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    
+    if (menuBtn) {
+      menuBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('-translate-x-full');
+        overlay.classList.toggle('hidden');
+      });
+      overlay.addEventListener('click', () => {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+      });
+    }
+
+    // Khởi tạo Dashboard khi trang tải xong
+    document.addEventListener('DOMContentLoaded', async () => {
+      await API.init();
+
+      const currentUser = API.getCurrentUser();
+      const allTasks = API.getAll('tasks');
+      
+      // Lọc nhiệm vụ thuộc về New Hire hiện tại
+      const userTasks = allTasks.filter(t => t.newHireId === currentUser.id);
+
+      // Cập nhật thông tin Header & Banner
+      document.getElementById('userName').innerText = currentUser.name;
+      document.getElementById('welcomeTitle').innerText = `Chào mừng, ${currentUser.name}!`;
+
+      // Cập nhật thanh tiến độ % chuẩn M3
+      function updateProgress() {
+        const total = userTasks.length;
+        if (total === 0) {
+          document.getElementById('progressPercent').innerText = '0%';
+          document.getElementById('progressBarFill').style.width = '0%';
+          document.getElementById('progressSummary').innerText = 'Chưa có nhiệm vụ nào được giao.';
+          return;
+        }
+
+        const completed = userTasks.filter(t => t.status === 'completed').length;
+        const percent = Math.round((completed / total) * 100);
+
+        document.getElementById('progressPercent').innerText = `${percent}%`;
+        document.getElementById('progressBarFill').style.width = `${percent}%`;
+        document.getElementById('progressSummary').innerText = `Đã hoàn thành ${completed}/${total} nhiệm vụ trong giai đoạn Tuần 1.`;
+      }
+
+      // Render danh sách nhiệm vụ hôm nay theo Material Design 3 cards
+      function renderTodayTasks() {
+        const listContainer = document.getElementById('todayTaskList');
+        listContainer.innerHTML = '';
+
+        if (userTasks.length === 0) {
+          listContainer.innerHTML = `
+            <div class="text-center py-8 text-slate-400 text-xs font-medium">
+              Bạn không còn nhiệm vụ nào cần làm hôm nay.
+            </div>`;
+          return;
+        }
+
+        userTasks.forEach(task => {
+          const isDone = task.status === 'completed';
+          const taskDiv = document.createElement('div');
+          
+          // Class card theo trạng thái hoàn thành hay chưa
+          taskDiv.className = `group flex items-start gap-3.5 p-3.5 rounded-xl border transition-all ${
+            isDone 
+              ? 'bg-slate-50/70 border-slate-100 opacity-75' 
+              : 'bg-white border-slate-200/70 hover:border-blue-300 hover:shadow-sm'
+          }`;
+          taskDiv.id = `task-row-${task.id}`;
+
+          // Badge màu sắc theo danh mục
+          let catBadgeClass = 'bg-blue-50 text-blue-700 border-blue-100';
+          if (task.category === 'Thủ tục') catBadgeClass = 'bg-amber-50 text-amber-700 border-amber-100';
+          if (task.category === 'Chuyên môn') catBadgeClass = 'bg-indigo-50 text-indigo-700 border-indigo-100';
+
+          taskDiv.innerHTML = `
+            <input type="checkbox" class="task-checkbox mt-0.5 w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-slate-300 cursor-pointer" data-id="${task.id}" ${isDone ? 'checked' : ''}>
+            <div class="flex-1 min-w-0">
+              <div class="text-xs md:text-sm font-semibold text-slate-900 leading-snug mb-1 ${isDone ? 'line-through text-slate-400' : ''}">
+                ${task.title}
+              </div>
+              <div class="flex flex-wrap items-center gap-2 text-[11px] text-slate-400">
+                <span class="px-2 py-0.5 rounded-md font-medium border ${catBadgeClass}">${task.category}</span>
+                <span>Hạn chót: ${task.dueDate}</span>
+                <span>&bull;</span>
+                <span>${task.phase || 'Tuần 1'}</span>
+              </div>
+            </div>
+            <button onclick="quickAsk('${task.title}')" title="Hỏi AI về nhiệm vụ này" class="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-blue-600 p-1 rounded-lg transition shrink-0">
+              <i data-lucide="help-circle" class="w-4 h-4"></i>
+            </button>
+          `;
+
+          // Bắt sự kiện tích chọn
+          const checkbox = taskDiv.querySelector('.task-checkbox');
+          checkbox.addEventListener('change', (e) => {
+            const newStatus = e.target.checked ? 'completed' : 'pending';
+            API.update('tasks', task.id, { status: newStatus });
+            task.status = newStatus;
+
+            if (newStatus === 'completed') {
+              showToast(`Đã hoàn thành: "${task.title}"`, 'success');
+            } else {
+              showToast(`Đã chuyển sang chưa hoàn thành`, 'warning');
+            }
+
+            renderTodayTasks();
+            updateProgress();
+            lucide.createIcons();
+          });
+
+          listContainer.appendChild(taskDiv);
+        });
+      }
+
+      // Khởi tạo ban đầu
+      renderTodayTasks();
+      updateProgress();
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
