@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnboardAI – Nền tảng hội nhập nhân sự thông minh | CSE122</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .hero-section {
+      text-align: center;
+      padding: 80px 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .hero-title {
+      font-size: 2.75rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+    .hero-title span {
+      color: var(--primary);
+    }
+    .hero-desc {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      margin-bottom: 36px;
+    }
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    .role-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      text-align: left;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .role-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--primary);
+    }
+    .role-badge {
+      font-size: var(--font-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header / Navigation Bar -->
+  <header class="topbar" style="max-width: 1200px; margin: 0 auto; border: none; background: transparent; padding: 20px;">
+    <div style="font-size: 1.25rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 8px;">
+      🚀 OnboardAI
+    </div>
+    <nav style="display: flex; gap: 16px; align-items: center;">
+      <a href="https://github.com" target="_blank" class="btn btn-outline" style="border-radius: var(--radius-full);">GitHub Repo</a>
+      <a href="login.html" class="btn btn-primary" style="border-radius: var(--radius-full);">Vào ứng dụng &rarr;</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <main>
+    <section class="hero-section">
+      <div class="badge badge-primary" style="margin-bottom: 16px;">Đồ án Bài tập lớn CSE122 – BTL-20</div>
+      <h1 class="hero-title">Hành trình hội nhập nhân sự mới <span>thông minh & liền mạch</span></h1>
+      <p class="hero-desc">
+        Giải pháp Frontend mô phỏng toàn diện quy trình tiếp nhận nhân sự mới (Onboarding): Quản lý lộ trình, Checklist nhiệm vụ, Đánh giá 1-on-1 với Mentor và 3 tính năng trợ lý AI trực quan.
+      </p>
+      <div style="display: flex; gap: 12px; justify-content: center;">
+        <a href="login.html" class="btn btn-primary" style="padding: 12px 28px; font-size: 1rem;">Khám phá ngay</a>
+        <a href="#roles" class="btn btn-outline" style="padding: 12px 28px; font-size: 1rem;">Xem các vai trò</a>
+      </div>
+    </section>
+
+    <!-- Role Preview Section -->
+    <section id="roles" style="background: white; padding: 60px 0; border-top: 1px solid var(--border);">
+      <div style="text-align: center; max-width: 700px; margin: 0 auto 30px;">
+        <h2 style="font-size: 1.8rem; margin-bottom: 10px;">Hệ thống đa vai trò theo chuẩn BTL</h2>
+        <p style="color: var(--text-muted);">Mỗi nhóm người dùng sở hữu không gian làm việc, quyền hạn và trải nghiệm AI riêng biệt.</p>
+      </div>
+
+      <div class="role-grid">
+        <!-- Role 1: New Hire -->
+        <div class="role-card">
+          <span class="role-badge" style="color: #2563eb;">Nhân sự mới (New Hire)</span>
+          <h3 style="margin-bottom: 8px;">Theo dõi hành trình</h3>
+          <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 16px;">
+            Checklist nhiệm vụ theo ngày/tuần, thanh tiến độ trực quan và Trợ lý AI hỏi đáp nội quy (AI-1: Policy Q&A).
+          </p>
+          <a href="newhire-onboarding-dashboard.html" style="font-size: 0.875rem; font-weight: 600;">Xem Dashboard &rarr;</a>
+        </div>
+
+        <!-- Role 2: Mentor -->
+        <div class="role-card">
+          <span class="role-badge" style="color: #16a34a;">Người hướng dẫn (Mentor)</span>
+          <h3 style="margin-bottom: 8px;">Đồng hành & Đánh giá</h3>
+          <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 16px;">
+            Quản lý danh sách Mentee, ghi chú đánh giá 1-on-1 định kỳ và dùng AI đề xuất checklist chuyên môn (AI-2).
+          </p>
+          <a href="mentor-mentee-list.html" style="font-size: 0.875rem; font-weight: 600;">Xem DS Mentee &rarr;</a>
+        </div>
+
+        <!-- Role 3: HR -->
+        <div class="role-card">
+          <span class="role-badge" style="color: #f59e0b;">Nhân sự (HR)</span>
+          <h3 style="margin-bottom: 8px;">Bao quát & Cảnh báo</h3>
+          <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 16px;">
+            Thống kê tiến độ toàn công ty với biểu đồ Chart.js, phát hiện rủi ro trễ hạn tự động nhờ AI (AI-3: Risk Warning).
+          </p>
+          <a href="hr-dashboard.html" style="font-size: 0.875rem; font-weight: 600;">Xem HR Dashboard &rarr;</a>
+        </div>
+
+        <!-- Role 4: Admin -->
+        <div class="role-card">
+          <span class="role-badge" style="color: #dc2626;">Quản trị viên (Admin)</span>
+          <h3 style="margin-bottom: 8px;">Vận hành & Phân quyền</h3>
+          <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 16px;">
+            Quản lý cơ cấu phòng ban, cấp và khóa tài khoản người dùng, xem nhật ký kiểm toán hệ thống.
+          </p>
+          <a href="admin-user-management.html" style="font-size: 0.875rem; font-weight: 600;">Xem Quản trị &rarr;</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer style="text-align: center; padding: 30px; font-size: 0.875rem; color: var(--text-light); border-top: 1px solid var(--border);">
+    Bài tập lớn môn CSE122 – Phát triển ứng dụng Web cơ bản &bull; Nhóm sinh viên thực hiện (SV2 & SV3)
+  </footer>
+
+  <script src="js/api.js"></script>
+</body>
+</html>

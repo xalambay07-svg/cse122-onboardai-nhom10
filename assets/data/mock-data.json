@@ -1,0 +1,202 @@
+{
+  "newHires": [
+    {
+      "id": "NH01",
+      "name": "Nguyễn Văn An",
+      "email": "an.nguyen@onboardai.vn",
+      "departmentId": "DEP01",
+      "department": "Kỹ thuật Công nghệ",
+      "position": "Frontend Developer",
+      "joinDate": "2026-09-15",
+      "mentorId": "MT01",
+      "mentorName": "Trần Thị Mai",
+      "progress": 65,
+      "status": "on_track",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=An"
+    },
+    {
+      "id": "NH02",
+      "name": "Trần Thị Bình",
+      "email": "binh.tran@onboardai.vn",
+      "departmentId": "DEP02",
+      "department": "Marketing & Truyền thông",
+      "position": "Content Creator",
+      "joinDate": "2026-09-08",
+      "mentorId": "MT02",
+      "mentorName": "Lê Minh Tuấn",
+      "progress": 25,
+      "status": "at_risk",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Binh"
+    },
+    {
+      "id": "NH03",
+      "name": "Lê Hoàng Long",
+      "email": "long.le@onboardai.vn",
+      "departmentId": "DEP01",
+      "department": "Kỹ thuật Công nghệ",
+      "position": "Backend Developer",
+      "joinDate": "2026-09-20",
+      "mentorId": "MT01",
+      "mentorName": "Trần Thị Mai",
+      "progress": 40,
+      "status": "on_track",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Long"
+    },
+    {
+      "id": "NH04",
+      "name": "Phạm Minh Thư",
+      "email": "thu.pham@onboardai.vn",
+      "departmentId": "DEP03",
+      "department": "Nhân sự & Vận hành",
+      "position": "HR Executive",
+      "joinDate": "2026-09-01",
+      "mentorId": "MT03",
+      "mentorName": "Phạm Quang Huy",
+      "progress": 100,
+      "status": "completed",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Thu"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "T01",
+      "newHireId": "NH01",
+      "title": "Cài đặt tài khoản Email công ty và Slack",
+      "category": "IT Setup",
+      "phase": "Tuần 1",
+      "dueDate": "2026-09-17",
+      "status": "completed",
+      "priority": "high",
+      "description": "Nhận thông tin đăng nhập từ IT Support và xác thực 2 lớp (2FA)."
+    },
+    {
+      "id": "T02",
+      "newHireId": "NH01",
+      "title": "Đọc và nắm vững Sổ tay Nhân viên & Quy tắc bảo mật",
+      "category": "Thủ tục",
+      "phase": "Tuần 1",
+      "dueDate": "2026-09-18",
+      "status": "completed",
+      "priority": "medium",
+      "description": "Đọc tài liệu tại Thư viện tài liệu và xác nhận hiểu chính sách bảo mật."
+    },
+    {
+      "id": "T03",
+      "newHireId": "NH01",
+      "title": "Gặp mặt Mentor 1-on-1 đầu tiên để thống nhất mục tiêu thử việc",
+      "category": "Gắn kết",
+      "phase": "Tuần 1",
+      "dueDate": "2026-09-19",
+      "status": "completed",
+      "priority": "high",
+      "description": "Họp 30 phút cùng Mentor Trần Thị Mai để trao đổi về KPI 60 ngày."
+    },
+    {
+      "id": "T04",
+      "newHireId": "NH01",
+      "title": "Clone repo dự án và cấu hình môi trường Frontend",
+      "category": "Chuyên môn",
+      "phase": "Tuần 2",
+      "dueDate": "2026-09-24",
+      "status": "in_progress",
+      "priority": "high",
+      "description": "Cài đặt NodeJS, clone source code và chạy thử thành công trên máy local."
+    },
+    {
+      "id": "T05",
+      "newHireId": "NH01",
+      "title": "Đọc tài liệu CSS Design System của công ty",
+      "category": "Chuyên môn",
+      "phase": "Tuần 2",
+      "dueDate": "2026-09-26",
+      "status": "pending",
+      "priority": "medium",
+      "description": "Tìm hiểu bảng mã màu, typography, và quy tắc đặt tên BEM."
+    },
+    {
+      "id": "T06",
+      "newHireId": "NH02",
+      "title": "Cài đặt tài khoản công cụ Marketing (Canva, Ads Manager)",
+      "category": "IT Setup",
+      "phase": "Tuần 1",
+      "dueDate": "2026-09-12",
+      "status": "pending",
+      "priority": "high",
+      "description": "Bị chậm do chờ phê duyệt phân quyền từ IT Admin."
+    }
+  ],
+  "documents": [
+    {
+      "id": "DOC01",
+      "title": "Sổ tay nhân viên 2026",
+      "category": "Quy chế",
+      "summary": "Tổng quan về văn hóa doanh nghiệp, thời gian làm việc từ 8h30 đến 17h30 từ thứ Hai đến thứ Sáu, quy tắc ứng xử và trang phục.",
+      "pageRef": "Trang 12 - Mục 2.1",
+      "updatedAt": "2026-08-25"
+    },
+    {
+      "id": "DOC02",
+      "title": "Chính sách làm việc linh hoạt (Remote / WFH)",
+      "category": "Phúc lợi",
+      "summary": "Nhân viên chính thức sau khi kết thúc thử việc được phép đăng ký làm việc từ xa tối đa 2 ngày/tuần nếu được Quản lý trực tiếp phê duyệt.",
+      "pageRef": "Trang 18 - Mục 4.3",
+      "updatedAt": "2026-08-28"
+    },
+    {
+      "id": "DOC03",
+      "title": "Quy chế đánh giá thử việc và Hợp đồng lao động",
+      "category": "Nhân sự",
+      "summary": "Thời gian thử việc là 60 ngày đối với vị trí chuyên môn. Có 2 buổi đánh giá chính thức vào ngày thứ 30 và ngày thứ 55.",
+      "pageRef": "Trang 25 - Mục 5.2",
+      "updatedAt": "2026-09-01"
+    },
+    {
+      "id": "DOC04",
+      "title": "Hướng dẫn gửi xe và an ninh tòa nhà",
+      "category": "Hành chính",
+      "summary": "Nhân viên gửi xe máy miễn phí tại tầng hầm B2 bằng thẻ từ nhân viên. Tòa nhà đóng cửa sau 22h00.",
+      "pageRef": "Trang 8 - Mục 1.4",
+      "updatedAt": "2026-08-20"
+    }
+  ],
+  "checkins": [
+    {
+      "id": "CHK01",
+      "mentorId": "MT01",
+      "mentorName": "Trần Thị Mai",
+      "newHireId": "NH01",
+      "newHireName": "Nguyễn Văn An",
+      "date": "2026-09-19",
+      "stage": "Tuần đầu (7 ngày)",
+      "rating": 5,
+      "note": "An hòa nhập rất nhanh, chủ động trao đổi với đồng nghiệp và hoàn thành tốt các thủ tục IT.",
+      "status": "completed"
+    }
+  ],
+  "departments": [
+    {
+      "id": "DEP01",
+      "name": "Kỹ thuật Công nghệ",
+      "memberCount": 24,
+      "manager": "Vũ Đình Trọng"
+    },
+    {
+      "id": "DEP02",
+      "name": "Marketing & Truyền thông",
+      "memberCount": 12,
+      "manager": "Lê Minh Tuấn"
+    },
+    {
+      "id": "DEP03",
+      "name": "Nhân sự & Vận hành",
+      "memberCount": 8,
+      "manager": "Phạm Quang Huy"
+    }
+  ],
+  "users": [
+    { "id": "USR01", "email": "admin@onboardai.vn", "role": "admin", "name": "Vũ Quản Trị" },
+    { "id": "USR02", "email": "hr@onboardai.vn", "role": "hr", "name": "Phạm Quang Huy" },
+    { "id": "USR03", "email": "mentor@onboardai.vn", "role": "mentor", "name": "Trần Thị Mai" },
+    { "id": "USR04", "email": "newhire@onboardai.vn", "role": "newhire", "name": "Nguyễn Văn An" }
+  ]
+}
