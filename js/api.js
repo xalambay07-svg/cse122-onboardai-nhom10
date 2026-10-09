@@ -3,7 +3,7 @@
  * Mô phỏng RESTful API và lưu trữ bền vững trên trình duyệt
  */
 
-const STORAGE_KEY = 'ONBOARDAI_DB_V1';
+const STORAGE_KEY = 'ONBOARDAI_DB_V2';
 
 const API = {
   /**

@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hành trình & Checklist hội nhập – NH02 | OnboardAI</title>
+  
+  <!-- Font Inter Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Base Style CSS with Animations System -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Vector Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans antialiased h-full flex flex-col">
+  <!-- Toast thông báo nổi -->
+  <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <div class="flex h-full min-h-screen">
+    <!-- ================= 1. SIDEBAR ĐIỀU HƯỚNG DÙNG CHUNG ================= -->
+    <aside id="appSidebar" class="w-64 bg-white border-r border-slate-200/80 flex flex-col shrink-0 fixed inset-y-0 left-0 z-40 md:static transition-transform duration-300 -translate-x-full md:translate-x-0">
+      <!-- Logo Header -->
+      <div class="h-16 flex items-center gap-3 px-6 border-b border-slate-100">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-sm hover:scale-105 active:scale-95 transition-transform duration-150">
+          <i data-lucide="compass" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="text-base font-bold tracking-tight text-slate-900">Onboard<span class="text-blue-600">AI</span></span>
+          <span class="block text-[10px] uppercase font-semibold tracking-wider text-slate-400">Enterprise</span>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+        <div class="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+          Không gian Nhân sự mới
+        </div>
+        <a href="newhire-onboarding-dashboard.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+          <span>Bảng điều khiển</span>
+        </a>
+        <a href="newhire-checklist.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold bg-blue-50 text-blue-700 transition-colors">
+          <i data-lucide="check-square" class="w-4 h-4"></i>
+          <span>Checklist hội nhập</span>
+        </a>
+        <a href="newhire-ai-help.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+          <i data-lucide="bot" class="w-4 h-4"></i>
+          <span>Trợ lý AI Hỏi đáp</span>
+        </a>
+
+        <div class="pt-5 px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+          Tài khoản & Hệ thống
+        </div>
+        <a href="profile.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+          <i data-lucide="user" class="w-4 h-4"></i>
+          <span>Hồ sơ cá nhân</span>
+        </a>
+        <a href="login.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-rose-600 hover:bg-rose-50 transition-colors">
+          <i data-lucide="log-out" class="w-4 h-4"></i>
+          <span>Đăng xuất</span>
+        </a>
+      </nav>
+
+      <!-- Gamification Card -->
+      <div class="p-3 m-3 rounded-2xl bg-gradient-to-br from-slate-50 to-blue-50/60 border border-slate-200/70">
+        <div class="flex items-center justify-between text-xs mb-2">
+          <span class="font-semibold text-slate-700 flex items-center gap-1.5">
+            <i data-lucide="award" class="w-4 h-4 text-blue-600"></i> Level 1: Tân binh
+          </span>
+          <span id="gamificationXp" class="font-bold text-blue-600 transition-all duration-300">650 XP</span>
+        </div>
+        <div class="w-full bg-slate-200 rounded-full h-1.5 mb-2 overflow-hidden">
+          <div id="gamificationXpBar" class="bg-blue-600 h-1.5 rounded-full transition-all duration-500 ease-out" style="width: 65%"></div>
+        </div>
+        <div class="flex items-center justify-between text-[11px] text-slate-500">
+          <span>Chuỗi điểm danh</span>
+          <span class="font-semibold text-amber-600 flex items-center gap-1">
+            <i data-lucide="flame" class="w-3.5 h-3.5 fill-amber-500 text-amber-500"></i> 3 ngày
+          </span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Overlay cho Mobile -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-slate-900/40 z-30 hidden md:hidden"></div>
+
+    <!-- ================= 2. MAIN WORKSPACE ================= -->
+    <div class="flex-1 flex flex-col overflow-y-auto">
+      <!-- Topbar Header -->
+      <header class="h-16 bg-white border-b border-slate-200/80 px-6 flex items-center justify-between sticky top-0 z-20">
+        <div class="flex items-center gap-3">
+          <button id="menuToggleBtn" class="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+          <div class="flex items-center gap-2 text-xs text-slate-500">
+            <a href="newhire-onboarding-dashboard.html" class="hover:text-blue-600 transition-colors">Hành trình hội nhập</a>
+            <span>/</span>
+            <span class="text-blue-600 font-semibold bg-blue-50 px-2 py-0.5 rounded-md">Checklist chi tiết (NH02)</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 sm:gap-4">
+          <!-- Notification Bell với Hiệu ứng Swing (3.9) -->
+          <button id="notificationBellBtn" onclick="toggleBellNotification()" title="Thông báo mới từ Mentor" class="group relative p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-all duration-150 active:scale-95">
+            <i data-lucide="bell" id="bellIcon" class="w-5 h-5 transition-transform origin-top group-hover:animate-bell-swing"></i>
+            <span class="absolute top-1.5 right-1.5 flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+            </span>
+          </button>
+
+          <!-- User Profile với Chấm Pulse Online (3.6) -->
+          <div class="flex items-center gap-3 pl-3 border-l border-slate-100">
+            <div class="relative">
+              <img id="userAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=An" alt="Avatar" class="w-9 h-9 rounded-full ring-2 ring-slate-100 bg-white object-cover">
+              <span class="absolute bottom-0 right-0 flex h-2.5 w-2.5">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 ring-2 ring-white"></span>
+              </span>
+            </div>
+            <div class="hidden sm:block text-left">
+              <div id="userName" class="text-sm font-semibold text-slate-900 leading-tight">Nguyễn Văn An</div>
+              <div class="text-xs text-slate-500">Frontend Developer</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content Container -->
+      <main class="p-6 md:p-8 max-w-7xl mx-auto w-full space-y-6">
+        
+        <!-- 2.1 Stepper Lộ trình 4 giai đoạn (Journey Stepper) -->
+        <section class="bg-white rounded-2xl border border-slate-200/70 p-6 shadow-sm space-y-5">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h1 class="text-xl md:text-2xl font-extrabold tracking-tight text-slate-900">Bản đồ hành trình 60 ngày</h1>
+              <p class="text-xs text-slate-500 mt-1">Lộ trình được thiết kế cá nhân hóa cho vị trí Frontend Developer</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="text-right">
+                <div class="text-xs text-slate-400 font-medium">Tiến độ chặng hiện tại</div>
+                <div id="phaseProgressText" class="text-sm font-bold text-blue-600">3/5 nhiệm vụ (60%)</div>
+              </div>
+              <div class="w-24 bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                <div id="phaseProgressBar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-500 ease-out" style="width: 60%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4 Khối Stepper Tabs có Zoom & Tactile Scale (3.4) -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <!-- Chặng 1 -->
+            <button onclick="switchPhase('Day 1')" id="tab-day1" class="phase-tab text-left p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/50 hover:bg-emerald-50 transition-all duration-200 hover:-translate-y-0.5 active:scale-95">
+              <div class="flex items-center justify-between text-xs font-semibold text-emerald-800 mb-1">
+                <span>Chặng 1 &bull; Day 1</span>
+                <i data-lucide="check-circle" class="w-4 h-4 text-emerald-600"></i>
+              </div>
+              <div class="text-xs font-bold text-slate-900">Chào sân & Thủ tục</div>
+              <div class="text-[11px] text-emerald-700 mt-0.5 font-medium">Hoàn thành 100%</div>
+            </button>
+
+            <!-- Chặng 2 (Mặc định) -->
+            <button onclick="switchPhase('Tuần 1')" id="tab-tuan1" class="phase-tab active text-left p-3.5 rounded-xl border-2 border-blue-600 bg-blue-50/60 shadow-sm transition-all duration-200 hover:-translate-y-0.5 active:scale-95">
+              <div class="flex items-center justify-between text-xs font-semibold text-blue-700 mb-1">
+                <span>Chặng 2 &bull; Tuần 1</span>
+                <span class="flex h-2 w-2 relative">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
+                </span>
+              </div>
+              <div class="text-xs font-bold text-blue-950">Văn hóa & Môi trường Dev</div>
+              <div class="text-[11px] text-blue-700 font-medium mt-0.5">Đang diễn ra (60%)</div>
+            </button>
+
+            <!-- Chặng 3 -->
+            <button onclick="switchPhase('Tháng 1')" id="tab-thang1" class="phase-tab text-left p-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-all duration-200 hover:-translate-y-0.5 active:scale-95 opacity-80">
+              <div class="flex items-center justify-between text-xs font-semibold text-slate-400 mb-1">
+                <span>Chặng 3 &bull; Tháng 1</span>
+                <i data-lucide="lock" class="w-3.5 h-3.5 text-slate-400"></i>
+              </div>
+              <div class="text-xs font-bold text-slate-700">Dự án & Tác chiến</div>
+              <div class="text-[11px] text-slate-400 mt-0.5 font-medium">Mở khóa sau tuần 1</div>
+            </button>
+
+            <!-- Chặng 4 -->
+            <button onclick="switchPhase('Tháng 2')" id="tab-thang2" class="phase-tab text-left p-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-all duration-200 hover:-translate-y-0.5 active:scale-95 opacity-80">
+              <div class="flex items-center justify-between text-xs font-semibold text-slate-400 mb-1">
+                <span>Chặng 4 &bull; Tháng 2</span>
+                <i data-lucide="lock" class="w-3.5 h-3.5 text-slate-400"></i>
+              </div>
+              <div class="text-xs font-bold text-slate-700">Đánh giá thử việc</div>
+              <div class="text-[11px] text-slate-400 mt-0.5 font-medium">Mục tiêu chính thức</div>
+            </button>
+          </div>
+        </section>
+
+        <!-- 2.2 Thanh Tìm kiếm & Lọc Realtime -->
+        <section class="bg-white rounded-2xl border border-slate-200/70 p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <!-- Ô Search -->
+          <div class="relative flex-1">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+            <input type="text" id="taskSearchInput" placeholder="Tìm kiếm nhanh tên nhiệm vụ, từ khóa kỹ thuật..." class="w-full pl-10 pr-4 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 bg-slate-50/50 transition-all">
+          </div>
+
+          <!-- Bộ lọc danh mục & Trạng thái -->
+          <div class="flex flex-wrap items-center gap-2">
+            <select id="categoryFilter" class="py-2 px-3 text-xs rounded-xl border border-slate-200 bg-white text-slate-700 focus:outline-none focus:border-blue-500 transition-all">
+              <option value="ALL">Tất cả danh mục</option>
+              <option value="IT & Công cụ">IT & Công cụ</option>
+              <option value="Kỹ thuật">Kỹ thuật</option>
+              <option value="Gắn kết đội ngũ">Gắn kết đội ngũ</option>
+              <option value="Đào tạo & Quy chuẩn">Đào tạo & Quy chuẩn</option>
+              <option value="Định hướng công việc">Định hướng công việc</option>
+            </select>
+
+            <select id="statusFilter" class="py-2 px-3 text-xs rounded-xl border border-slate-200 bg-white text-slate-700 focus:outline-none focus:border-blue-500 transition-all">
+              <option value="ALL">Tất cả trạng thái</option>
+              <option value="pending_only">Cần làm</option>
+              <option value="completed_only">Đã hoàn thành</option>
+            </select>
+          </div>
+        </section>
+
+        <!-- 2.3 Bố cục 2 Cột: Danh sách Nhiệm vụ (8) & Widget Trợ lý (4) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- Cột chính (Trái - Span 8): Danh sách nhiệm vụ -->
+          <div class="lg:col-span-8 space-y-4">
+            <div id="tasksListContainer" class="space-y-3">
+              <!-- Render động từ LocalStorage -->
+            </div>
+            
+            <!-- Khối Empty State khi không tìm thấy kết quả -->
+            <div id="emptyTasksState" class="hidden bg-white rounded-2xl border border-slate-200/70 p-10 text-center space-y-3 animate-fade-in">
+              <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 mx-auto flex items-center justify-center">
+                <i data-lucide="inbox" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-sm font-bold text-slate-800">Không tìm thấy nhiệm vụ phù hợp</h3>
+              <p class="text-xs text-slate-500 max-w-sm mx-auto">Vui lòng thử thay đổi từ khóa tìm kiếm hoặc chọn danh mục khác.</p>
+              <button onclick="resetFilters()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 active:scale-95 transition-transform">
+                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                <span>Xóa bộ lọc</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Cột phụ (Phải - Span 4): Widget AI & Help Desk -->
+          <div class="lg:col-span-4 space-y-6">
+            
+            <!-- Widget 1: AI Next Best Action (Khuyên việc tiếp theo) có Viền thở Ánh tím (3.6) -->
+            <div class="bg-gradient-to-br from-indigo-50/90 via-white to-blue-50/50 rounded-2xl border border-indigo-200/80 p-5 shadow-sm space-y-3 animate-ai-glow transition-all hover:shadow-md">
+              <div class="flex items-center gap-2 text-indigo-900">
+                <div class="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center shadow-xs">
+                  <i data-lucide="zap" class="w-4 h-4"></i>
+                </div>
+                <h3 class="text-xs font-bold uppercase tracking-wider">AI Next Best Action</h3>
+              </div>
+              <p class="text-xs text-slate-700 leading-relaxed">
+                Khuyên bạn nên ưu tiên hoàn thành task <strong>"Clone repo & Cài đặt Node.js"</strong> trước 14:00 vì IT Support cần khoảng 2 giờ để cấp quyền token SSH cho máy bạn.
+              </p>
+              <button onclick="focusTask('T02')" class="w-full inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-700 transition-all duration-150 hover:scale-[1.02] active:scale-95 shadow-xs">
+                <span>Thực hiện ngay việc này</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+
+            <!-- Widget 2: Help Desk & Mentor có Chấm Pulse Online (3.6) -->
+            <div class="bg-white rounded-2xl border border-slate-200/70 p-5 shadow-sm space-y-4">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Kênh hỗ trợ nhanh (Help Desk)</h3>
+              
+              <!-- Mentor -->
+              <div class="flex items-center gap-3">
+                <div class="relative shrink-0">
+                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mai" alt="Mentor" class="w-10 h-10 rounded-full bg-slate-50 ring-1 ring-slate-200">
+                  <span class="absolute bottom-0 right-0 flex h-2.5 w-2.5">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 ring-2 ring-white"></span>
+                  </span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-xs font-bold text-slate-900">Trần Thị Mai</div>
+                  <div class="text-[11px] text-slate-500">Tech Lead &bull; Mentor chỉ định</div>
+                </div>
+                <button onclick="showToast('Đã mở tin nhắn Slack với Mentor Mai!', 'success')" class="p-2 rounded-lg border border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-300 hover:bg-blue-50/50 transition-all active:scale-90" title="Nhắn tin với Mentor">
+                  <i data-lucide="message-circle" class="w-4 h-4"></i>
+                </button>
+              </div>
+
+              <!-- IT Support -->
+              <div class="flex items-center gap-3 pt-3 border-t border-slate-100">
+                <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xs shrink-0">
+                  IT
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-xs font-bold text-slate-900">Nguyễn Văn Hải</div>
+                  <div class="text-[11px] text-slate-500">IT Helpdesk &bull; Ext: 104</div>
+                </div>
+                <button onclick="showToast('Hotline IT: 024-3888-9999 (Máy lẻ 104)', 'info')" class="p-2 rounded-lg border border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-300 hover:bg-blue-50/50 transition-all active:scale-90" title="Gọi IT">
+                  <i data-lucide="phone" class="w-4 h-4"></i>
+                </button>
+              </div>
+
+              <!-- Kênh Slack -->
+              <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between text-xs">
+                <span class="text-slate-600">Kênh Slack tân binh:</span>
+                <span class="font-bold text-blue-600">#help-onboarding</span>
+              </div>
+            </div>
+
+            <!-- Widget 3: Tiến độ Huy hiệu & Thẻ Lật 3D (3D Flip Card - 3.7) -->
+            <div class="bg-white rounded-2xl border border-slate-200/70 p-5 shadow-sm space-y-3">
+              <div class="flex items-center justify-between">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Huy hiệu kế tiếp</h3>
+                <button onclick="toggleFlipCard()" class="text-[11px] font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1 transition-all active:scale-95">
+                  <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>
+                  <span id="flipToggleLabel">Lật xem đặc quyền</span>
+                </button>
+              </div>
+
+              <!-- Container Lật Thẻ 3D -->
+              <div class="flip-card-container h-28 cursor-pointer select-none" onclick="toggleFlipCard()">
+                <div id="badgeFlipCard" class="flip-card-inner">
+                  
+                  <!-- Mặt trước (Front side) -->
+                  <div class="flip-card-front h-28 flex items-center gap-3.5 p-3.5 rounded-xl bg-gradient-to-br from-amber-50/90 to-amber-100/60 border border-amber-200 text-amber-950 shadow-xs">
+                    <div class="w-12 h-12 rounded-xl bg-amber-100 border border-amber-200 text-amber-700 flex items-center justify-center shrink-0 shadow-inner">
+                      <i data-lucide="shield-check" class="w-6 h-6"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold">Tân binh tự lập</span>
+                        <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-200/80 text-amber-900">+100 XP</span>
+                      </div>
+                      <div class="text-[11px] text-amber-800/90 mt-0.5">Hoàn thành đủ 5 task Tuần 1 để mở khóa</div>
+                      <div class="text-[10px] text-amber-700 mt-1 font-medium flex items-center gap-1">
+                        <i data-lucide="sparkles" class="w-3 h-3 text-amber-600"></i> Bấm để lật thẻ 3D xem thưởng
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Mặt sau (Back side) -->
+                  <div class="flip-card-back h-28 flex items-center gap-3.5 p-3.5 rounded-xl bg-gradient-to-br from-indigo-900 via-blue-900 to-indigo-950 text-white shadow-md border border-indigo-700/80">
+                    <div class="w-12 h-12 rounded-xl bg-white/10 text-amber-300 flex items-center justify-center shrink-0 border border-white/20">
+                      <i data-lucide="gift" class="w-6 h-6"></i>
+                    </div>
+                    <div class="flex-1 min-w-0 text-left">
+                      <div class="text-xs font-bold text-amber-300 flex items-center justify-between">
+                        <span>Đặc quyền mở khóa</span>
+                        <i data-lucide="check-check" class="w-3.5 h-3.5 text-emerald-400"></i>
+                      </div>
+                      <div class="text-[11px] text-slate-200 mt-1 leading-snug">
+                        Cấp quyền SSH Deploy Staging & vinh danh bảng vàng Onboarding!
+                      </div>
+                      <div class="text-[10px] text-slate-400 mt-1">Bấm để lật lại mặt trước</div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ================= 3. CÁC MODAL TƯƠNG TÁC (AI & PROOF) ================= -->
+
+  <!-- Modal 1: Nộp minh chứng (Proof of Work) -->
+  <div id="proofModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4 transition-opacity duration-200">
+    <div class="modal-content-box bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4 transform transition-all duration-200 scale-95 opacity-0">
+      <div class="flex items-center justify-between">
+        <h3 class="text-sm font-bold text-slate-900">Nộp minh chứng hoàn thành</h3>
+        <button onclick="closeModal('proofModal')" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <p id="proofTaskTitle" class="text-xs text-slate-600 font-medium"></p>
+      
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Đường dẫn minh chứng (GitHub PR / Link Docs)</label>
+          <input type="text" id="proofInputUrl" placeholder="https://github.com/company/repo/pull/1" class="w-full p-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Ghi chú cho Mentor (Tùy chọn)</label>
+          <textarea id="proofInputNote" rows="2" placeholder="Em đã setup xong và chạy thành công trên localhost:3000..." class="w-full p-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"></textarea>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-2">
+        <button onclick="closeModal('proofModal')" class="px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors">Hủy</button>
+        <button onclick="submitTaskProof()" class="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 shadow-sm transition-all duration-150 hover:scale-[1.02] active:scale-95">Xác nhận nộp bài</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: AI Hướng dẫn 3 bước (Instant Actionable Steps) -->
+  <div id="aiGuideModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4 transition-opacity duration-200">
+    <div class="modal-content-box bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4 transform transition-all duration-200 scale-95 opacity-0">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center shadow-xs">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900">AI Hướng dẫn 3 bước thực hiện</h3>
+        </div>
+        <button onclick="closeModal('aiGuideModal')" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div id="aiGuideContent" class="space-y-3 text-xs text-slate-700">
+        <!-- Render nội dung theo task -->
+      </div>
+
+      <div class="flex items-center justify-between pt-3 border-t border-slate-100 text-xs">
+        <span class="text-slate-400 flex items-center gap-1">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-indigo-500"></i>
+          <span>Tóm tắt bởi Trợ lý OnboardAI</span>
+        </span>
+        <button onclick="closeModal('aiGuideModal')" class="px-4 py-2 rounded-xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition-all duration-150 hover:scale-[1.02] active:scale-95">Đã hiểu, đóng hướng dẫn</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: AI Tạo mẫu tin nhắn (Smart Template Generator) -->
+  <div id="aiTemplateModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4 transition-opacity duration-200">
+    <div class="modal-content-box bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4 transform transition-all duration-200 scale-95 opacity-0">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center shadow-xs">
+            <i data-lucide="message-square" class="w-4 h-4"></i>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900">AI Soạn mẫu tin nhắn gửi đồng nghiệp</h3>
+        </div>
+        <button onclick="closeModal('aiTemplateModal')" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Tabs chọn Tone giọng -->
+      <div class="flex gap-2">
+        <button id="toneFormalBtn" onclick="switchTemplateTone('formal')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 transition-all">Văn phong Trang trọng</button>
+        <button id="toneFriendlyBtn" onclick="switchTemplateTone('friendly')" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-50 border border-slate-200 transition-all">Văn phong Thân thiện, gần gũi</button>
+      </div>
+
+      <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-800 font-mono leading-relaxed" id="templateMessageBox">
+        <!-- Nội dung mẫu -->
+      </div>
+
+      <div class="flex items-center justify-between pt-2">
+        <span class="text-xs text-slate-400">Bạn có thể chỉnh sửa trước khi gửi</span>
+        <button onclick="copyTemplateToClipboard()" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 transition-all duration-150 hover:scale-[1.02] active:scale-95 shadow-sm">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+          <span>Sao chép vào Clipboard</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: AI Micro-Quiz (Kiểm tra nhanh) -->
+  <div id="aiQuizModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4 transition-opacity duration-200">
+    <div class="modal-content-box bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4 transform transition-all duration-200 scale-95 opacity-0">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center shadow-xs">
+            <i data-lucide="check-circle" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-slate-900">AI Micro-Quiz: An toàn thông tin</h3>
+            <p class="text-[11px] text-slate-500">Trả lời đúng 2 câu hỏi để tự động hoàn thành nhiệm vụ</p>
+          </div>
+        </div>
+        <button onclick="closeModal('aiQuizModal')" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-2">
+          <div class="font-semibold text-slate-900">Câu 1: Khi nhận được email từ địa chỉ lạ yêu cầu cung cấp mật khẩu nội bộ, bạn cần:</div>
+          <label class="flex items-center gap-2 cursor-pointer p-1.5 rounded hover:bg-white transition-colors">
+            <input type="radio" name="q1" value="wrong" class="text-blue-600"> Cung cấp ngay để không trễ việc
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer p-1.5 rounded hover:bg-white transition-colors">
+            <input type="radio" name="q1" value="correct" class="text-blue-600"> Báo ngay cho IT Helpdesk và tuyệt đối không bấm link lạ
+          </label>
+        </div>
+
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-2">
+          <div class="font-semibold text-slate-900">Câu 2: Quy định xác thực 2 lớp (2FA) áp dụng cho:</div>
+          <label class="flex items-center gap-2 cursor-pointer p-1.5 rounded hover:bg-white transition-colors">
+            <input type="radio" name="q2" value="correct" class="text-blue-600"> Tất cả tài khoản Email, Slack và GitHub công ty
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer p-1.5 rounded hover:bg-white transition-colors">
+            <input type="radio" name="q2" value="wrong" class="text-blue-600"> Chỉ tài khoản của cấp Quản lý
+          </label>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+        <button onclick="closeModal('aiQuizModal')" class="px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors">Hủy</button>
+        <button onclick="submitQuizAnswers()" class="px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition-all duration-150 hover:scale-[1.02] active:scale-95">Nộp bài kiểm tra</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nạp dữ liệu và mã nguồn Javascript -->
+  <script src="js/api.js"></script>
+  <script>
+    // State quản lý cục bộ
+    let currentSelectedTaskId = null;
+    let currentActivePhase = 'Tuần 1';
+    let currentTone = 'formal';
+    let isInitialLoad = true;
+
+    // Toast thông báo hiện đại
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-xl shadow-lg text-xs font-semibold transition-all transform duration-300 animate-fade-in ${
+        type === 'success' ? 'bg-slate-900 text-white' : type === 'info' ? 'bg-blue-600 text-white' : 'bg-amber-600 text-white'
+      }`;
+      toast.innerHTML = `
+        <i data-lucide="${type === 'success' ? 'check-circle' : type === 'info' ? 'info' : 'alert-circle'}" class="w-4 h-4 shrink-0 ${type === 'success' ? 'text-emerald-400' : 'text-white'}"></i>
+        <span>${message}</span>
+      `;
+      container.appendChild(toast);
+      lucide.createIcons();
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-10px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // Modal Helpers với Fade & Scale Transition
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      const box = modal.querySelector('.modal-content-box');
+      modal.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        modal.classList.remove('opacity-0');
+        if (box) {
+          box.classList.remove('scale-95', 'opacity-0');
+          box.classList.add('scale-100', 'opacity-100');
+        }
+      });
+      lucide.createIcons();
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      const box = modal.querySelector('.modal-content-box');
+      if (box) {
+        box.classList.remove('scale-100', 'opacity-100');
+        box.classList.add('scale-95', 'opacity-0');
+      }
+      modal.classList.add('opacity-0');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 150);
+    }
+
+    // Chuyển chặng Stepper với Fade Transition
+    function switchPhase(phaseName) {
+      currentActivePhase = phaseName;
+      document.querySelectorAll('.phase-tab').forEach(tab => {
+        tab.classList.remove('border-2', 'border-blue-600', 'bg-blue-50/60', 'shadow-sm');
+      });
+      
+      const tabIdMap = {
+        'Day 1': 'tab-day1',
+        'Tuần 1': 'tab-tuan1',
+        'Tháng 1': 'tab-thang1',
+        'Tháng 2': 'tab-thang2'
+      };
+      const activeBtn = document.getElementById(tabIdMap[phaseName]);
+      if (activeBtn) {
+        activeBtn.classList.add('border-2', 'border-blue-600', 'bg-blue-50/60', 'shadow-sm');
+      }
+      renderTasksList();
+    }
+
+    // Reset bộ lọc
+    function resetFilters() {
+      document.getElementById('taskSearchInput').value = '';
+      document.getElementById('categoryFilter').value = 'ALL';
+      document.getElementById('statusFilter').value = 'ALL';
+      renderTasksList();
+      showToast('Đã xóa tất cả bộ lọc', 'info');
+    }
+
+    // Focus một task cụ thể từ AI Next Best Action
+    function focusTask(taskId) {
+      const el = document.getElementById(`task-card-${taskId}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.add('ring-2', 'ring-indigo-500', 'shadow-md');
+        setTimeout(() => el.classList.remove('ring-2', 'ring-indigo-500', 'shadow-md'), 2500);
+      }
+    }
+
+    // Tác vụ Accordion xem chi tiết & Gợi ý (Slide & Rotate 3.5)
+    function toggleTaskAccordion(taskId) {
+      const content = document.getElementById(`accordion-${taskId}`);
+      const chevron = document.getElementById(`chevron-${taskId}`);
+      if (!content || !chevron) return;
+      
+      const isHidden = content.classList.contains('hidden');
+      if (isHidden) {
+        content.classList.remove('hidden');
+        chevron.classList.add('rotate-180');
+      } else {
+        content.classList.add('hidden');
+        chevron.classList.remove('rotate-180');
+      }
+      lucide.createIcons();
+    }
+
+    // Lật thẻ Huy hiệu 3D (Flip 3.7)
+    function toggleFlipCard() {
+      const card = document.getElementById('badgeFlipCard');
+      const label = document.getElementById('flipToggleLabel');
+      if (!card) return;
+      card.classList.toggle('flipped');
+      const isFlipped = card.classList.contains('flipped');
+      if (label) {
+        label.innerText = isFlipped ? 'Quay lại mặt trước' : 'Lật xem đặc quyền';
+      }
+    }
+
+    // Rung quả chuông thông báo (Bell Swing 3.9)
+    function toggleBellNotification() {
+      const bell = document.getElementById('bellIcon');
+      if (bell) {
+        bell.classList.remove('animate-bell-swing');
+        void bell.offsetWidth; // Force CSS reflow
+        bell.classList.add('animate-bell-swing');
+      }
+      showToast('Mentor Mai vừa duyệt minh chứng cho nhiệm vụ "Tạo tài khoản Notion" (+30 XP)!', 'info');
+    }
+
+    // Khởi tạo và Render danh sách Nhiệm vụ
+    function renderTasksList() {
+      const currentUser = API.getCurrentUser();
+      const allTasks = API.getAll('tasks');
+      let tasks = allTasks.filter(t => t.newHireId === currentUser.id && (t.phase === currentActivePhase || currentActivePhase === 'Tuần 1'));
+
+      const searchVal = document.getElementById('taskSearchInput').value.toLowerCase().trim();
+      const catVal = document.getElementById('categoryFilter').value;
+      const statusVal = document.getElementById('statusFilter').value;
+
+      // Áp dụng bộ lọc
+      if (searchVal) {
+        tasks = tasks.filter(t => t.title.toLowerCase().includes(searchVal) || (t.description && t.description.toLowerCase().includes(searchVal)));
+      }
+      if (catVal !== 'ALL') {
+        tasks = tasks.filter(t => t.category === catVal);
+      }
+      if (statusVal === 'pending_only') {
+        tasks = tasks.filter(t => t.status !== 'completed');
+      } else if (statusVal === 'completed_only') {
+        tasks = tasks.filter(t => t.status === 'completed');
+      }
+
+      const container = document.getElementById('tasksListContainer');
+      const emptyState = document.getElementById('emptyTasksState');
+      container.innerHTML = '';
+
+      if (tasks.length === 0) {
+        emptyState.classList.remove('hidden');
+        return;
+      }
+      emptyState.classList.add('hidden');
+
+      tasks.forEach((task, index) => {
+        const isDone = task.status === 'completed';
+        const card = document.createElement('div');
+        card.id = `task-card-${task.id}`;
+        
+        // Staggered entrance chỉ chạy lần tải đầu tiên, sau đó dùng animate-fade-in
+        const motionClass = isInitialLoad ? 'stagger-item' : 'animate-fade-in';
+        card.style.setProperty('--stagger-index', index);
+        
+        card.className = `${motionClass} group p-4.5 rounded-2xl border transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 ${
+          isDone ? 'bg-slate-50/70 border-slate-200/50 opacity-80' : 'bg-white border-slate-200/80 hover:border-blue-300'
+        }`;
+
+        // Badge ưu tiên
+        let priorityBadge = 'bg-slate-100 text-slate-700';
+        if (task.priority === 'Bắt buộc') priorityBadge = 'bg-rose-50 text-rose-700 border-rose-100';
+        if (task.priority === 'Ưu tiên cao') priorityBadge = 'bg-amber-50 text-amber-700 border-amber-100';
+
+        // Nút kích hoạt AI tương ứng với Shimmer & Tactile Feedback (3.4 & 3.10)
+        let aiButtonHtml = '';
+        if (task.aiActionType === 'guide_3_steps') {
+          aiButtonHtml = `
+            <button onclick="triggerAiGuide('${task.id}')" class="group/shimmer relative overflow-hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 text-indigo-700 border border-indigo-200/80 text-[11px] font-semibold hover:bg-indigo-100 transition-all duration-150 hover:scale-[1.02] active:scale-95 shadow-xs">
+              <span class="absolute inset-0 -translate-x-full group-hover/shimmer:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/60 to-transparent pointer-events-none"></span>
+              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-indigo-600"></i>
+              <span>AI Hướng dẫn 3 bước</span>
+            </button>`;
+        } else if (task.aiActionType === 'smart_template') {
+          aiButtonHtml = `
+            <button onclick="triggerAiTemplate('${task.id}')" class="group/shimmer relative overflow-hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 text-blue-700 border border-blue-200/80 text-[11px] font-semibold hover:bg-blue-100 transition-all duration-150 hover:scale-[1.02] active:scale-95 shadow-xs">
+              <span class="absolute inset-0 -translate-x-full group-hover/shimmer:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/60 to-transparent pointer-events-none"></span>
+              <i data-lucide="message-square" class="w-3.5 h-3.5 text-blue-600"></i>
+              <span>AI Mẫu tin nhắn</span>
+            </button>`;
+        } else if (task.aiActionType === 'micro_quiz') {
+          aiButtonHtml = `
+            <button onclick="triggerAiQuiz('${task.id}')" class="group/shimmer relative overflow-hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200/80 text-[11px] font-semibold hover:bg-emerald-100 transition-all duration-150 hover:scale-[1.02] active:scale-95 shadow-xs">
+              <span class="absolute inset-0 -translate-x-full group-hover/shimmer:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/60 to-transparent pointer-events-none"></span>
+              <i data-lucide="help-circle" class="w-3.5 h-3.5 text-emerald-600"></i>
+              <span>Làm Quiz 2 câu</span>
+            </button>`;
+        }
+
+        // Bổ sung minh chứng nếu có
+        let proofInfo = '';
+        if (task.proof) {
+          proofInfo = `<div class="mt-2 text-[11px] text-emerald-700 flex items-center gap-1.5 font-medium">
+            <i data-lucide="link" class="w-3.5 h-3.5"></i> 
+            <span>Đã nộp minh chứng:</span>
+            <a href="${task.proof}" target="_blank" class="underline truncate max-w-xs hover:text-emerald-900">${task.proof}</a>
+          </div>`;
+        }
+
+        card.innerHTML = `
+          <div class="flex items-start gap-3.5">
+            <!-- Checkbox Tuỳ chỉnh với Micro-Bounce (3.3) -->
+            <label class="relative flex items-center justify-center cursor-pointer shrink-0 mt-0.5 group/cb" title="${isDone ? 'Đánh dấu chưa xong' : 'Đánh dấu hoàn thành'}">
+              <input type="checkbox" class="task-checkbox peer sr-only" data-id="${task.id}" ${isDone ? 'checked' : ''}>
+              <div class="w-6 h-6 rounded-lg border-2 border-slate-300 group-hover/cb:border-blue-400 peer-checked:border-emerald-500 peer-checked:bg-emerald-500 flex items-center justify-center transition-all duration-200 active:scale-90 shadow-xs">
+                <svg class="w-4 h-4 text-white hidden peer-checked:block animate-check" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                </svg>
+              </div>
+            </label>
+
+            <div class="flex-1 min-w-0">
+              <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase border ${priorityBadge}">${task.priority || 'Tiêu chuẩn'}</span>
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-medium bg-slate-100 text-slate-600">${task.category}</span>
+                <span class="text-[11px] text-slate-400">Hạn: ${task.dueDate}</span>
+              </div>
+              <h4 class="text-xs md:text-sm font-bold text-slate-900 leading-snug transition-all duration-200 ${isDone ? 'line-through text-slate-400' : ''}">${task.title}</h4>
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed">${task.description || ''}</p>
+              ${proofInfo}
+              
+              <!-- Khu vực Action buttons & Accordion Toggle -->
+              <div class="flex flex-wrap items-center justify-between gap-2 mt-3 pt-2.5 border-t border-slate-100">
+                <div class="flex flex-wrap items-center gap-2">
+                  ${aiButtonHtml}
+                  <button onclick="openProofModal('${task.id}', '${task.title.replace(/'/g, "\\'")}')" class="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-600 hover:text-blue-600 px-2.5 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-50 transition-all duration-150 hover:scale-[1.02] active:scale-95">
+                    <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i>
+                    <span>${task.proof ? 'Cập nhật minh chứng' : 'Nộp minh chứng'}</span>
+                  </button>
+                </div>
+
+                <!-- Nút Accordion Chi tiết gợi ý (Slide & Rotate 3.5) -->
+                <button onclick="toggleTaskAccordion('${task.id}')" class="inline-flex items-center gap-1 text-[11px] font-medium text-slate-500 hover:text-slate-800 transition-colors active:scale-95">
+                  <span>Chi tiết gợi ý</span>
+                  <i data-lucide="chevron-down" id="chevron-${task.id}" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+                </button>
+              </div>
+
+              <!-- Khối Accordion trượt xuống mượt mà (Slide Down 3.2) -->
+              <div id="accordion-${task.id}" class="hidden pt-3 mt-2 border-t border-dashed border-slate-200 text-xs text-slate-600 animate-fade-in">
+                <div class="p-3 rounded-xl bg-slate-50/80 border border-slate-100 space-y-1">
+                  <div class="flex items-center gap-1.5 font-semibold text-slate-800">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-blue-600"></i>
+                    <span>Mẹo thực hiện nhanh từ OnboardAI:</span>
+                  </div>
+                  <p class="text-[11px] text-slate-600 leading-relaxed">
+                    ${task.description || 'Tham khảo tài liệu hướng dẫn nội bộ hoặc trao đổi trực tiếp với Mentor Mai qua Slack nếu gặp vướng mắc.'}
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        `;
+
+        // Checkbox event
+        const cb = card.querySelector('.task-checkbox');
+        cb.addEventListener('change', (e) => {
+          const newStatus = e.target.checked ? 'completed' : 'pending';
+          API.update('tasks', task.id, { status: newStatus });
+          task.status = newStatus;
+          showToast(newStatus === 'completed' ? `Đã hoàn thành: "${task.title}" (+30 XP)` : `Đã chuyển về chưa hoàn thành`, newStatus === 'completed' ? 'success' : 'info');
+          renderTasksList();
+          updatePhaseStats();
+        });
+
+        container.appendChild(card);
+      });
+
+      // Tắt cờ initial load sau lượt chạy đầu
+      if (isInitialLoad) {
+        setTimeout(() => {
+          isInitialLoad = false;
+        }, tasks.length * 50 + 350);
+      }
+
+      lucide.createIcons();
+    }
+
+    // Cập nhật thống kê tiến độ chặng
+    function updatePhaseStats() {
+      const currentUser = API.getCurrentUser();
+      const allTasks = API.getAll('tasks');
+      const userTasks = allTasks.filter(t => t.newHireId === currentUser.id && (t.phase === currentActivePhase || currentActivePhase === 'Tuần 1'));
+      
+      const total = userTasks.length;
+      const completed = userTasks.filter(t => t.status === 'completed').length;
+      const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+      document.getElementById('phaseProgressText').innerText = `${completed}/${total} nhiệm vụ (${percent}%)`;
+      document.getElementById('phaseProgressBar').style.width = `${percent}%`;
+
+      // Cập nhật XP game hóa
+      const xp = 500 + completed * 50;
+      document.getElementById('gamificationXp').innerText = `${xp} XP`;
+      document.getElementById('gamificationXpBar').style.width = `${Math.min(100, Math.round(xp / 10))}%`;
+    }
+
+    // ================= ACTIONS & MODAL LOGIC =================
+    function openProofModal(taskId, title) {
+      currentSelectedTaskId = taskId;
+      document.getElementById('proofTaskTitle').innerText = `Nhiệm vụ: ${title}`;
+      const inputEl = document.getElementById('proofInputUrl');
+      inputEl.classList.remove('border-rose-500', 'ring-2', 'ring-rose-200');
+      openModal('proofModal');
+    }
+
+    function submitTaskProof() {
+      const url = document.getElementById('proofInputUrl').value.trim();
+      const modalBox = document.querySelector('#proofModal .modal-content-box');
+      const inputEl = document.getElementById('proofInputUrl');
+
+      // Kiểm tra rỗng kèm hiệu ứng Rung lắc (Shake 3.8)
+      if (!url) {
+        inputEl.classList.add('border-rose-500', 'ring-2', 'ring-rose-200');
+        inputEl.focus();
+        if (modalBox) {
+          modalBox.classList.remove('animate-shake');
+          void modalBox.offsetWidth; // Trigger reflow
+          modalBox.classList.add('animate-shake');
+        }
+        showToast('Vui lòng dán liên kết minh chứng trước khi nộp!', 'warning');
+        return;
+      }
+
+      inputEl.classList.remove('border-rose-500', 'ring-2', 'ring-rose-200');
+      API.update('tasks', currentSelectedTaskId, { proof: url, status: 'completed' });
+      closeModal('proofModal');
+      showToast('Đã nộp minh chứng thành công! Mentor sẽ nhận được thông báo.', 'success');
+      renderTasksList();
+      updatePhaseStats();
+    }
+
+    // AI Action 1: Hướng dẫn 3 bước với Loading Spinner (3.10)
+    function triggerAiGuide(taskId) {
+      openModal('aiGuideModal');
+      const guideBox = document.getElementById('aiGuideContent');
+      
+      // Giả lập trạng thái AI đang phân tích (Loading Spinner 3.10)
+      guideBox.innerHTML = `
+        <div class="py-8 flex flex-col items-center justify-center gap-2.5 text-slate-400">
+          <i data-lucide="loader-2" class="w-6 h-6 animate-spin text-indigo-600"></i>
+          <span class="text-xs font-medium text-slate-600">Trợ lý AI đang phân tích dữ liệu nhiệm vụ...</span>
+        </div>
+      `;
+      lucide.createIcons();
+
+      setTimeout(() => {
+        guideBox.innerHTML = `
+          <div class="space-y-2.5 animate-fade-in">
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-100">
+              <span class="font-bold text-indigo-700">Bước 1:</span> Đảm bảo bạn đã cài đặt Node.js v20+ và cấu hình khóa SSH trên máy cá nhân.
+            </div>
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-100">
+              <span class="font-bold text-indigo-700">Bước 2:</span> Mở Terminal và chạy lệnh clone repository dự án:
+              <div class="bg-slate-900 text-slate-100 p-2.5 rounded-lg mt-1.5 font-mono text-[11px] flex justify-between items-center">
+                <code>git clone git@github.com:onboardai/frontend.git</code>
+                <button onclick="navigator.clipboard.writeText('git clone git@github.com:onboardai/frontend.git'); showToast('Đã sao chép lệnh!', 'info');" class="text-slate-400 hover:text-white transition-colors">Copy</button>
+              </div>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-100">
+              <span class="font-bold text-indigo-700">Bước 3:</span> Chạy lệnh cài thư viện và khởi động môi trường dev:
+              <div class="bg-slate-900 text-slate-100 p-2 rounded-lg mt-1 font-mono text-[11px]">
+                <code>npm install && npm run dev</code>
+              </div>
+            </div>
+          </div>
+        `;
+        lucide.createIcons();
+      }, 300);
+    }
+
+    // AI Action 2: Tạo mẫu tin nhắn với Loading Spinner (3.10)
+    function triggerAiTemplate(taskId) {
+      currentTone = 'formal';
+      openModal('aiTemplateModal');
+      const box = document.getElementById('templateMessageBox');
+      box.innerHTML = `
+        <div class="py-6 flex items-center justify-center gap-2 text-slate-400">
+          <i data-lucide="loader-2" class="w-5 h-5 animate-spin text-blue-600"></i>
+          <span class="text-xs">AI đang soạn thảo mẫu tin nhắn...</span>
+        </div>
+      `;
+      lucide.createIcons();
+
+      setTimeout(() => {
+        switchTemplateTone('formal');
+      }, 250);
+    }
+
+    function switchTemplateTone(tone) {
+      currentTone = tone;
+      const box = document.getElementById('templateMessageBox');
+      const fBtn = document.getElementById('toneFormalBtn');
+      const frBtn = document.getElementById('toneFriendlyBtn');
+
+      if (tone === 'formal') {
+        fBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 transition-all";
+        frBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-50 border border-slate-200 transition-all";
+        box.innerText = `Kính gửi chị Mai,\n\nEm là An (nhân sự mới vị trí Frontend Dev). Theo lộ trình hội nhập tuần đầu, em xin phép đặt lịch hẹn 1-on-1 khoảng 30 phút vào chiều thứ Sáu lúc 15:00 để lắng nghe định hướng mục tiêu thử việc từ chị ạ.\n\nEm cảm ơn chị!`;
+      } else {
+        frBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 transition-all";
+        fBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-50 border border-slate-200 transition-all";
+        box.innerText = `Chào cả nhà,\n\nMình là An - thành viên mới gia nhập team Frontend từ tuần này. Rất vui được đồng hành cùng mọi người trong các sprint sắp tới. Trưa nay có ai rảnh đi ăn trưa cùng mình không nha!`;
+      }
+    }
+
+    function copyTemplateToClipboard() {
+      const text = document.getElementById('templateMessageBox').innerText;
+      navigator.clipboard.writeText(text);
+      showToast('Đã sao chép mẫu tin nhắn vào Clipboard!', 'success');
+      closeModal('aiTemplateModal');
+    }
+
+    // AI Action 3: Làm Quiz
+    function triggerAiQuiz(taskId) {
+      currentSelectedTaskId = taskId;
+      openModal('aiQuizModal');
+    }
+
+    function submitQuizAnswers() {
+      const q1 = document.querySelector('input[name="q1"]:checked');
+      const q2 = document.querySelector('input[name="q2"]:checked');
+      const modalBox = document.querySelector('#aiQuizModal .modal-content-box');
+
+      if (!q1 || !q2) {
+        if (modalBox) {
+          modalBox.classList.remove('animate-shake');
+          void modalBox.offsetWidth;
+          modalBox.classList.add('animate-shake');
+        }
+        showToast('Vui lòng chọn đáp án cho cả 2 câu hỏi!', 'warning');
+        return;
+      }
+
+      if (q1.value === 'correct' && q2.value === 'correct') {
+        API.update('tasks', currentSelectedTaskId, { status: 'completed' });
+        closeModal('aiQuizModal');
+        showToast('Chính xác 2/2 câu! Đã tự động hoàn thành nhiệm vụ (+100 XP)', 'success');
+        renderTasksList();
+        updatePhaseStats();
+      } else {
+        if (modalBox) {
+          modalBox.classList.remove('animate-shake');
+          void modalBox.offsetWidth;
+          modalBox.classList.add('animate-shake');
+        }
+        showToast('Có câu trả lời chưa chính xác, hãy đọc lại quy định và thử lại nhé!', 'warning');
+      }
+    }
+
+    // Khởi tạo trang khi DOM sẵn sàng
+    document.addEventListener('DOMContentLoaded', async () => {
+      await API.init();
+
+      // Sự kiện Search & Filter
+      document.getElementById('taskSearchInput').addEventListener('input', renderTasksList);
+      document.getElementById('categoryFilter').addEventListener('change', renderTasksList);
+      document.getElementById('statusFilter').addEventListener('change', renderTasksList);
+
+      // Mobile Menu
+      const menuBtn = document.getElementById('menuToggleBtn');
+      const sidebar = document.getElementById('appSidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      if (menuBtn) {
+        menuBtn.addEventListener('click', () => {
+          sidebar.classList.toggle('-translate-x-full');
+          overlay.classList.toggle('hidden');
+        });
+        overlay.addEventListener('click', () => {
+          sidebar.classList.add('-translate-x-full');
+          overlay.classList.add('hidden');
+        });
+      }
+
+      renderTasksList();
+      updatePhaseStats();
+    });
+  </script>
+</body>
+</html>
