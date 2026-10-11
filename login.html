@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng nhập | Hệ thống Onboarding & Mentoring</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .quick-role-btn {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .quick-role-btn:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-slate-100 via-blue-50/40 to-indigo-100/30 min-h-screen flex items-center justify-center p-4 sm:p-6 text-slate-800 antialiased">
+
+  <!-- MAIN CARD CONTAINER (CĂN GIỮA, GỌN GÀNG, SANG TRỌNG) -->
+  <div class="w-full max-w-xl bg-white rounded-3xl shadow-2xl shadow-blue-900/10 border border-slate-200/80 overflow-hidden p-6 sm:p-10">
+    
+    <!-- 1. HEADER & LOGO -->
+    <div class="text-center mb-7">
+      <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-500/30 mb-3.5">
+        <i class="fa-solid fa-graduation-cap text-2xl"></i>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Đăng Nhập Hệ Thống</h1>
+      <p class="text-xs sm:text-sm text-slate-500 mt-1.5 max-w-md mx-auto">
+        Cổng thông tin Đào tạo & Kèm cặp nhân sự mới (Mentorship Portal)
+      </p>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- 2. ĐIỂM ĂN TIỀN: BỘ 4 NÚT BẤM CHỌN NHANH VAI TRÒ NHƯ LÚC ĐẦU -->
+    <!-- ========================================================= -->
+    <div class="mb-7 bg-slate-50 border border-slate-200/90 rounded-2xl p-4 sm:p-5">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
+          <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">
+            Chọn nhanh vai trò (Demo Mode)
+          </span>
+        </div>
+        <span class="text-[11px] bg-blue-100 text-blue-700 font-semibold px-2 py-0.5 rounded-full">
+          1-Click Login
+        </span>
+      </div>
+
+      <p class="text-xs text-slate-500 mb-3.5">
+        Bấm vào một trong các nút dưới đây để đăng nhập tức thì và chuyển hướng sang màn hình tương ứng:
+      </p>
+
+      <!-- LƯỚI 4 NÚT CHỌN NHANH ĐÚNG YÊU CẦU ĐỀ BÀI -->
+      <div class="grid grid-cols-2 gap-2.5 sm:gap-3">
+        
+        <!-- NÚT 1: Vào vai New Hire -->
+        <button type="button" onclick="loginAsRole('newhire')"
+                class="quick-role-btn flex items-center gap-3 p-3 rounded-xl bg-white border border-emerald-200 hover:border-emerald-500 hover:bg-emerald-50/50 shadow-sm text-left group">
+          <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+            <i class="fa-solid fa-user-graduate"></i>
+          </div>
+          <div class="overflow-hidden">
+            <div class="text-xs font-bold text-slate-800 group-hover:text-emerald-700">Vào vai New Hire</div>
+            <div class="text-[11px] text-slate-400 truncate">Nhân sự mới</div>
+          </div>
+        </button>
+
+        <!-- NÚT 2: Vào vai Mentor (LÀM NỔI BẬT VÌ ĐÂY LÀ PHÂN HỆ CHÍNH) -->
+        <button type="button" onclick="loginAsRole('mentor')"
+                class="quick-role-btn relative flex items-center gap-3 p-3 rounded-xl bg-blue-50/80 border-2 border-blue-600 hover:bg-blue-100/70 shadow-sm text-left group">
+          <span class="absolute -top-2 right-2 px-1.5 py-0.2 bg-blue-600 text-[9px] text-white font-bold rounded-full uppercase tracking-tighter">
+            Chính
+          </span>
+          <div class="w-10 h-10 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-sm">
+            <i class="fa-solid fa-chalkboard-user"></i>
+          </div>
+          <div class="overflow-hidden">
+            <div class="text-xs font-extrabold text-blue-900 group-hover:text-blue-700">Vào vai Mentor</div>
+            <div class="text-[11px] text-blue-600 font-medium truncate">Người hướng dẫn</div>
+          </div>
+        </button>
+
+        <!-- NÚT 3: Vào vai HR -->
+        <button type="button" onclick="loginAsRole('hr')"
+                class="quick-role-btn flex items-center gap-3 p-3 rounded-xl bg-white border border-purple-200 hover:border-purple-500 hover:bg-purple-50/50 shadow-sm text-left group">
+          <div class="w-10 h-10 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+            <i class="fa-solid fa-id-card-clip"></i>
+          </div>
+          <div class="overflow-hidden">
+            <div class="text-xs font-bold text-slate-800 group-hover:text-purple-700">Vào vai HR</div>
+            <div class="text-[11px] text-slate-400 truncate">Quản trị nhân sự</div>
+          </div>
+        </button>
+
+        <!-- NÚT 4: Vào vai Admin -->
+        <button type="button" onclick="loginAsRole('admin')"
+                class="quick-role-btn flex items-center gap-3 p-3 rounded-xl bg-white border border-rose-200 hover:border-rose-500 hover:bg-rose-50/50 shadow-sm text-left group">
+          <div class="w-10 h-10 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <div class="overflow-hidden">
+            <div class="text-xs font-bold text-slate-800 group-hover:text-rose-700">Vào vai Admin</div>
+            <div class="text-[11px] text-slate-400 truncate">Quản trị hệ thống</div>
+          </div>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- ĐƯỜNG PHÂN CÁCH -->
+    <div class="relative flex items-center justify-center my-6">
+      <div class="border-t border-slate-200 w-full"></div>
+      <span class="bg-white px-3 text-xs text-slate-400 uppercase font-medium">Hoặc đăng nhập với tài khoản</span>
+      <div class="border-t border-slate-200 w-full"></div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- 3. FORM NHẬP EMAIL & MẬT KHẨU                             -->
+    <!-- ========================================================= -->
+    <form id="loginForm" onsubmit="handleFormLogin(event)" class="space-y-4">
+      <!-- Input Email -->
+      <div>
+        <label for="email" class="block text-xs font-semibold text-slate-700 mb-1.5">
+          Email doanh nghiệp
+        </label>
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-sm">
+            <i class="fa-regular fa-envelope"></i>
+          </div>
+          <input type="email" id="email" required
+                 placeholder="name@company.com" 
+                 value="mentor.alex@company.com"
+                 class="w-full pl-10 pr-4 py-2.5 bg-slate-50 focus:bg-white rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-sm text-slate-800 transition-all placeholder:text-slate-400">
+        </div>
+      </div>
+
+      <!-- Input Mật khẩu -->
+      <div>
+        <div class="flex items-center justify-between mb-1.5">
+          <label for="password" class="block text-xs font-semibold text-slate-700">
+            Mật khẩu
+          </label>
+          <a href="#" class="text-xs font-medium text-blue-600 hover:underline">Quên mật khẩu?</a>
+        </div>
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-sm">
+            <i class="fa-solid fa-lock"></i>
+          </div>
+          <input type="password" id="password" required
+                 placeholder="••••••••" 
+                 value="123456"
+                 class="w-full pl-10 pr-10 py-2.5 bg-slate-50 focus:bg-white rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-sm text-slate-800 transition-all placeholder:text-slate-400">
+          <button type="button" onclick="togglePasswordVisibility()" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600">
+            <i id="passwordToggleIcon" class="fa-regular fa-eye"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Ghi nhớ & Gợi ý -->
+      <div class="flex items-center justify-between pt-1">
+        <label class="flex items-center gap-2 cursor-pointer select-none">
+          <input type="checkbox" id="rememberMe" checked class="w-4 h-4 rounded text-blue-600 border-slate-300 focus:ring-blue-500">
+          <span class="text-xs text-slate-600 font-medium">Ghi nhớ đăng nhập</span>
+        </label>
+        <span class="text-xs text-slate-400">Mật khẩu mẫu: <strong class="text-slate-600 font-mono">123456</strong></span>
+      </div>
+
+      <!-- Nút Đăng nhập -->
+      <button type="submit" id="submitBtn"
+              class="w-full py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-lg shadow-blue-500/25 hover:shadow-blue-500/35 transition-all flex items-center justify-center gap-2 active:scale-[0.99]">
+        <span>Đăng Nhập</span>
+        <i class="fa-solid fa-arrow-right text-xs"></i>
+      </button>
+    </form>
+
+    <!-- Toast Thông Báo Kết Quả -->
+    <div id="toastMessage" class="mt-4 hidden p-3 rounded-xl text-xs font-medium border flex items-center gap-2.5 transition-all"></div>
+
+    <!-- Footer Note Nhỏ -->
+    <div class="mt-6 text-center text-xs text-slate-400 border-t border-slate-100 pt-4">
+      Phân hệ phụ trách: <strong>Mentor & Xác thực CSDL</strong> • Tích hợp <strong>AI-2</strong>
+    </div>
+
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- 4. JAVASCRIPT: LOCALSTORAGE & ĐIỀU HƯỚNG VAI TRÒ           -->
+  <!-- ========================================================= -->
+  <script>
+    // 1. DỮ LIỆU CÁC VAI TRÒ MẪU (MOCK DATA)
+    const ROLES_DATA = {
+      newhire: {
+        id: 'USR_NH_001',
+        name: 'Nguyễn Văn An',
+        email: 'an.nguyen@company.com',
+        role: 'newhire',
+        roleTitle: 'Nhân sự mới (New Hire)',
+        department: 'Công nghệ thông tin',
+        position: 'Junior Frontend Developer',
+        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80',
+        mentorName: 'Trần Minh Alex',
+        redirectUrl: 'mentor-mentee-list.html' // Hoặc newhire-dashboard.html
+      },
+      mentor: {
+        id: 'USR_MT_102',
+        name: 'Trần Minh Alex',
+        email: 'mentor.alex@company.com',
+        role: 'mentor',
+        roleTitle: 'Người hướng dẫn (Mentor)',
+        department: 'Engineering Dept',
+        position: 'Senior Software Engineer & Mentor',
+        avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=120&q=80',
+        menteeCount: 3,
+        // Đích đến: Màn hình số 2 của nhóm bạn!
+        redirectUrl: 'mentor-mentee-list.html'
+      },
+      hr: {
+        id: 'USR_HR_055',
+        name: 'Lê Thuỳ Dung',
+        email: 'dung.le@company.com',
+        role: 'hr',
+        roleTitle: 'Quản trị nhân sự (HR)',
+        department: 'Phòng Nhân sự',
+        position: 'Talent Acquisition & Onboarding Lead',
+        avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80',
+        redirectUrl: 'mentor-mentee-list.html'
+      },
+      admin: {
+        id: 'USR_AD_001',
+        name: 'Phạm Quốc Huy',
+        email: 'admin.huy@company.com',
+        role: 'admin',
+        roleTitle: 'Quản trị viên (Admin)',
+        department: 'Quản trị hệ thống',
+        position: 'System Administrator',
+        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80',
+        redirectUrl: 'mentor-mentee-list.html'
+      }
+    };
+
+    // 2. HÀM XỬ LÝ KHI BẤM 4 NÚT CHỌN NHANH VAI TRÒ
+    function loginAsRole(roleKey) {
+      const user = ROLES_DATA[roleKey];
+      if (!user) return;
+
+      // Tự động điền email & pass vào form để người dùng thấy rõ
+      document.getElementById('email').value = user.email;
+      document.getElementById('password').value = '123456';
+
+      // Lưu LocalStorage & Chuyển trang
+      saveSessionAndRedirect(user);
+    }
+
+    // 3. HÀM ĐĂNG NHẬP THỦ CÔNG QUA FORM
+    function handleFormLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim().toLowerCase();
+
+      // Tìm xem có trùng tài khoản mẫu nào không
+      let matchedUser = Object.values(ROLES_DATA).find(u => u.email.toLowerCase() === email);
+
+      if (!matchedUser) {
+        matchedUser = {
+          id: 'USR_CUSTOM_' + Date.now().toString().slice(-4),
+          name: email.split('@')[0],
+          email: email,
+          role: 'mentor',
+          roleTitle: 'Người hướng dẫn (Mentor)',
+          department: 'Phòng Kỹ Thuật',
+          position: 'Technical Mentor',
+          avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=120&q=80',
+          redirectUrl: 'mentor-mentee-list.html'
+        };
+      }
+
+      saveSessionAndRedirect(matchedUser);
+    }
+
+    // 4. LƯU THÔNG TIN VÀO LOCALSTORAGE VÀ CHUYỂN HƯỚNG
+    function saveSessionAndRedirect(user) {
+      const sessionData = {
+        ...user,
+        token: 'BEARER_TOKEN_' + Math.random().toString(36).substring(2).toUpperCase(),
+        loginAt: new Date().toISOString()
+      };
+
+      // Ghi dữ liệu vào LocalStorage
+      localStorage.setItem('currentUser', JSON.stringify(sessionData));
+      localStorage.setItem('userRole', user.role);
+      localStorage.setItem('isLoggedIn', 'true');
+
+      // Hiện Toast thông báo
+      showToast(`Đăng nhập thành công với vai trò: <strong>${user.roleTitle}</strong>! Đang chuyển hướng...`, 'success');
+
+      // Chuyển hướng sau 750ms
+      setTimeout(() => {
+        window.location.href = user.redirectUrl || 'mentor-mentee-list.html';
+      }, 750);
+    }
+
+    // 5. HIỂN THỊ TOAST THÔNG BÁO
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toastMessage');
+      toast.classList.remove('hidden');
+
+      if (type === 'success') {
+        toast.className = 'mt-4 p-3 rounded-xl text-xs font-medium border flex items-center gap-2.5 bg-emerald-50 text-emerald-800 border-emerald-200';
+        toast.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 text-sm"></i> <div>${message}</div>`;
+      } else {
+        toast.className = 'mt-4 p-3 rounded-xl text-xs font-medium border flex items-center gap-2.5 bg-rose-50 text-rose-800 border-rose-200';
+        toast.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-600 text-sm"></i> <div>${message}</div>`;
+      }
+    }
+
+    // 6. TOGGLE ẨN/HIỆN MẬT KHẨU
+    function togglePasswordVisibility() {
+      const pwd = document.getElementById('password');
+      const icon = document.getElementById('passwordToggleIcon');
+      if (pwd.type === 'password') {
+        pwd.type = 'text';
+        icon.className = 'fa-regular fa-eye-slash';
+      } else {
+        pwd.type = 'password';
+        icon.className = 'fa-regular fa-eye';
+      }
+    }
+  </script>
+</body>
+</html>
