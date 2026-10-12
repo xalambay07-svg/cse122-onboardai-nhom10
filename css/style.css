@@ -3,24 +3,24 @@
    ========================================================================== */
 
 :root {
-  /* Color Tokens */
-  --primary: #2563eb;
-  --primary-hover: #1d4ed8;
+  /* Color Tokens (Onboard.io B2B SaaS Palette) */
+  --primary: #1F5AFE;
+  --primary-hover: #1748cc;
   --primary-light: #eff6ff;
   --secondary: #64748b;
-  --success: #16a34a;
-  --success-light: #dcfce7;
+  --success: #00B67A;
+  --success-light: #e4f5ec;
   --warning: #f59e0b;
   --warning-light: #fef3c7;
   --danger: #ef4444;
   --danger-light: #fee2e2;
   
-  /* Neutral Colors */
-  --bg-main: #f8fafc;
+  /* Neutral Colors (Warm Neutral Surface) */
+  --bg-main: #FBFBFD;
   --bg-card: #ffffff;
-  --border: #e2e8f0;
-  --text-main: #0f172a;
-  --text-muted: #64748b;
+  --border: #EFEFE9;
+  --text-main: #1E293B;
+  --text-muted: #64748B;
   --text-light: #94a3b8;
 
   /* Typography */
@@ -328,6 +328,44 @@ a:hover {
 }
 .animate-fade-in {
   animation: quick-fade-in 0.2s ease-out forwards;
+}
+
+/* ==========================================================================
+   ONBOARD.IO INSPIRED B2B STATUS PILLS & UI MICRO-ELEMENTS
+   ========================================================================== */
+.pill-on-track {
+  color: #0A7A52;
+  background-color: #E4F5EC;
+  border: 1px solid rgba(10, 122, 82, 0.2);
+}
+.pill-needs-action {
+  color: #8A5A00;
+  background-color: #FBF2DC;
+  border: 1px solid rgba(138, 90, 0, 0.2);
+}
+.pill-blocked {
+  color: #B4232B;
+  background-color: #FBE9E9;
+  border: 1px solid rgba(180, 35, 43, 0.2);
+}
+.pill-completed {
+  color: #64748B;
+  background-color: #F1F5F9;
+  border: 1px solid #E2E8F0;
+}
+
+/* 6px Micro-Progress Bar */
+.micro-progress-track {
+  height: 6px;
+  background-color: #EDEDE7;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+.micro-progress-fill {
+  height: 6px;
+  background: linear-gradient(90deg, #1F5AFE 0%, #00B67A 100%);
+  border-radius: 9999px;
+  transition: width 0.75s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ==========================================================================
