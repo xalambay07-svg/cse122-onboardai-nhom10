@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng nhập – OnboardAI Enterprise | CSE122</title>
+  
+  <!-- Font Inter Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- CSS Design System with Onboard.io SaaS Tokens & Animations -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#1F5AFE', 600: '#1F5AFE', 700: '#1748cc' },
+            onboard: {
+              bg: '#FBFBFD',
+              surface: '#FFFFFF',
+              border: '#EFEFE9',
+              blue: '#1F5AFE',
+              mint: '#00B67A'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Vector Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-[#FBFBFD] text-[#1E293B] font-sans antialiased min-h-screen flex items-center justify-center p-4">
+  <!-- Toast thông báo nổi -->
+  <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <div class="w-full max-w-md bg-white rounded-3xl border border-[#EFEFE9] shadow-xl p-8 space-y-6 relative overflow-hidden animate-fade-in">
+    <!-- Dải viền mỏng gradient Onboard.io -->
+    <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#1F5AFE] via-indigo-500 to-[#00B67A]"></div>
+
+    <!-- Header Logo -->
+    <div class="text-center space-y-2">
+      <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#1F5AFE] to-indigo-600 flex items-center justify-center text-white mx-auto shadow-xs">
+        <i data-lucide="compass" class="w-6 h-6"></i>
+      </div>
+      <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Onboard<span class="text-[#1F5AFE]">AI</span></h1>
+      <p class="text-xs text-slate-500">Nền tảng đồng hành và quản trị hội nhập nhân sự thông minh</p>
+    </div>
+
+    <!-- Form Đăng nhập -->
+    <form id="loginForm" class="space-y-4">
+      <div>
+        <label for="loginEmail" class="block text-xs font-semibold text-slate-700 mb-1.5">Email làm việc</label>
+        <div class="relative">
+          <i data-lucide="mail" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+          <input type="email" id="loginEmail" value="an.nguyen@company.com" placeholder="name@company.com" required
+            class="w-full pl-10 pr-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-[#1F5AFE] focus:ring-2 focus:ring-blue-100 transition-all bg-slate-50/50">
+        </div>
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between mb-1.5">
+          <label for="loginPassword" class="block text-xs font-semibold text-slate-700">Mật khẩu</label>
+          <span class="text-[11px] text-slate-400">Mẫu: <strong class="font-mono text-slate-600">123456</strong></span>
+        </div>
+        <div class="relative">
+          <i data-lucide="lock" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+          <input type="password" id="loginPassword" value="123456" placeholder="••••••••" required
+            class="w-full pl-10 pr-10 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-[#1F5AFE] focus:ring-2 focus:ring-blue-100 transition-all bg-slate-50/50">
+          <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+            <i data-lucide="eye" id="pwdToggleIcon" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <div id="loginErrorMsg" class="hidden p-2.5 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 font-medium text-center"></div>
+
+      <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-xs active:scale-95 flex items-center justify-center gap-1.5">
+        <span>Đăng nhập hệ thống</span>
+        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </button>
+    </form>
+
+    <!-- Phân cách chọn nhanh vai trò -->
+    <div class="relative flex py-1 items-center">
+      <div class="flex-grow border-t border-slate-200"></div>
+      <span class="shrink-0 mx-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Hoặc vào nhanh với vai trò</span>
+      <div class="flex-grow border-t border-slate-200"></div>
+    </div>
+
+    <!-- Bộ 4 nút chọn nhanh vai trò -->
+    <div class="grid grid-cols-2 gap-2.5">
+      <!-- 1. New Hire (Đích đến chính của Huy) -->
+      <button onclick="quickSelectRole('newhire')" class="p-2.5 rounded-xl border border-blue-200 bg-blue-50/40 hover:border-[#1F5AFE] hover:bg-blue-50 transition-all text-left flex items-center gap-2.5 active:scale-95 group">
+        <div class="w-8 h-8 rounded-lg bg-blue-100 text-[#1F5AFE] group-hover:bg-[#1F5AFE] group-hover:text-white flex items-center justify-center shrink-0 transition-colors">
+          <i data-lucide="user-check" class="w-4 h-4"></i>
+        </div>
+        <div class="min-w-0">
+          <div class="text-xs font-bold text-slate-900 group-hover:text-[#1F5AFE] transition-colors truncate">New Hire</div>
+          <div class="text-[10px] text-slate-500 truncate">Nhân sự mới</div>
+        </div>
+      </button>
+
+      <!-- 2. Mentor -->
+      <button onclick="quickSelectRole('mentor')" class="p-2.5 rounded-xl border border-[#EFEFE9] hover:border-indigo-500 hover:bg-indigo-50/40 transition-all text-left flex items-center gap-2.5 active:scale-95 group">
+        <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white flex items-center justify-center shrink-0 transition-colors">
+          <i data-lucide="award" class="w-4 h-4"></i>
+        </div>
+        <div class="min-w-0">
+          <div class="text-xs font-bold text-slate-900 group-hover:text-indigo-600 transition-colors truncate">Mentor</div>
+          <div class="text-[10px] text-slate-500 truncate">Cố vấn chuyên môn</div>
+        </div>
+      </button>
+
+      <!-- 3. HR -->
+      <button onclick="quickSelectRole('hr')" class="p-2.5 rounded-xl border border-[#EFEFE9] hover:border-[#00B67A] hover:bg-emerald-50/40 transition-all text-left flex items-center gap-2.5 active:scale-95 group">
+        <div class="w-8 h-8 rounded-lg bg-emerald-50 text-[#00B67A] group-hover:bg-[#00B67A] group-hover:text-white flex items-center justify-center shrink-0 transition-colors">
+          <i data-lucide="users" class="w-4 h-4"></i>
+        </div>
+        <div class="min-w-0">
+          <div class="text-xs font-bold text-slate-900 group-hover:text-[#00B67A] transition-colors truncate">HR Manager</div>
+          <div class="text-[10px] text-slate-500 truncate">Quản trị nhân sự</div>
+        </div>
+      </button>
+
+      <!-- 4. Admin -->
+      <button onclick="quickSelectRole('admin')" class="p-2.5 rounded-xl border border-[#EFEFE9] hover:border-purple-500 hover:bg-purple-50/40 transition-all text-left flex items-center gap-2.5 active:scale-95 group">
+        <div class="w-8 h-8 rounded-lg bg-purple-50 text-purple-600 group-hover:bg-purple-600 group-hover:text-white flex items-center justify-center shrink-0 transition-colors">
+          <i data-lucide="shield" class="w-4 h-4"></i>
+        </div>
+        <div class="min-w-0">
+          <div class="text-xs font-bold text-slate-900 group-hover:text-purple-600 transition-colors truncate">Admin</div>
+          <div class="text-[10px] text-slate-500 truncate">Hệ thống</div>
+        </div>
+      </button>
+    </div>
+
+    <!-- Quay về trang chủ Landing Page -->
+    <div class="pt-2 text-center text-xs">
+      <a href="index.html" class="inline-flex items-center gap-1 text-slate-500 hover:text-[#1F5AFE] font-medium transition-colors">
+        <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+        <span>Quay lại trang chủ OnboardAI</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Nạp API Script -->
+  <script src="js/api.js"></script>
+  <script>
+    // Định nghĩa đích đến chuyển trang chuẩn xác của hệ thống
+    const DASHBOARD_REDIRECTS = {
+      newhire: "newhire-onboarding-dashboard.html",
+      mentor: "mentor-mentee-list.html",
+      hr: "hr-dashboard.html",
+      admin: "admin-user-management.html"
+    };
+
+    const MOCK_ACCOUNTS = {
+      newhire: {
+        id: "NH01",
+        name: "Nguyễn Văn An",
+        email: "an.nguyen@company.com",
+        role: "newhire",
+        title: "Frontend Developer",
+        department: "Phòng Kỹ thuật",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=An"
+      },
+      mentor: {
+        id: "M01",
+        name: "Trần Thị Mai",
+        email: "mai.tran@company.com",
+        role: "mentor",
+        title: "Tech Lead",
+        department: "Phòng Kỹ thuật",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mai"
+      },
+      hr: {
+        id: "HR01",
+        name: "Lê Hoàng Nam",
+        email: "nam.le@company.com",
+        role: "hr",
+        title: "HR Specialist",
+        department: "Phòng Nhân sự",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Nam"
+      },
+      admin: {
+        id: "AD01",
+        name: "Quản trị viên Hệ thống",
+        email: "admin@company.com",
+        role: "admin",
+        title: "System Admin",
+        department: "Ban Công nghệ",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Admin"
+      }
+    };
+
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-xl shadow-lg text-xs font-semibold transition-all transform duration-300 animate-fade-in ${
+        type === 'success' ? 'bg-slate-900 text-white' : 'bg-amber-600 text-white'
+      }`;
+      toast.innerHTML = `
+        <i data-lucide="${type === 'success' ? 'check-circle' : 'alert-circle'}" class="w-4 h-4 shrink-0 ${type === 'success' ? 'text-emerald-400' : 'text-white'}"></i>
+        <span>${message}</span>
+      `;
+      container.appendChild(toast);
+      lucide.createIcons();
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-10px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    function loginWithRole(role, customEmail = null) {
+      const user = MOCK_ACCOUNTS[role] || MOCK_ACCOUNTS.newhire;
+      if (customEmail) user.email = customEmail;
+      
+      // Lưu phiên chuẩn đồng bộ toàn dự án (tương thích cả chuẩn currentUser và userRole của thành viên)
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      localStorage.setItem('userRole', role);
+      localStorage.setItem('userEmail', user.email);
+      localStorage.setItem('isLoggedIn', 'true');
+      
+      showToast(`Đăng nhập thành công với vai trò: ${user.name} (${user.title})! Đang chuyển hướng...`, 'success');
+      
+      // Chuyển hướng sau 500ms
+      setTimeout(() => {
+        window.location.href = DASHBOARD_REDIRECTS[role] || "newhire-onboarding-dashboard.html";
+      }, 500);
+    }
+
+    function quickSelectRole(role) {
+      loginWithRole(role);
+    }
+
+    function togglePasswordVisibility() {
+      const input = document.getElementById('loginPassword');
+      const icon = document.getElementById('pwdToggleIcon');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.setAttribute('data-lucide', 'eye-off');
+      } else {
+        input.type = 'password';
+        icon.setAttribute('data-lucide', 'eye');
+      }
+      lucide.createIcons();
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const pass = document.getElementById('loginPassword').value.trim();
+
+      if (!email || !pass) {
+        const err = document.getElementById('loginErrorMsg');
+        err.innerText = 'Vui lòng nhập đầy đủ Email và Mật khẩu!';
+        err.classList.remove('hidden');
+        return;
+      }
+
+      // Nhận diện vai trò từ email
+      let detectedRole = 'newhire';
+      if (email.includes('mentor') || email.includes('mai')) detectedRole = 'mentor';
+      else if (email.includes('hr') || email.includes('nam')) detectedRole = 'hr';
+      else if (email.includes('admin')) detectedRole = 'admin';
+
+      loginWithRole(detectedRole, email);
+    });
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (window.API) {
+        await API.init();
+      }
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

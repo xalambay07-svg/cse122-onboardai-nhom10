@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trợ lý AI Hỏi đáp Nội quy & Quy chế (AI-1) – OnboardAI Enterprise | CSE122</title>
+  
+  <!-- Font Inter Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- CSS Design System with Onboard.io SaaS Tokens & Animations -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#1F5AFE', 600: '#1F5AFE', 700: '#1748cc' },
+            onboard: {
+              bg: '#FBFBFD',
+              surface: '#FFFFFF',
+              border: '#EFEFE9',
+              blue: '#1F5AFE',
+              mint: '#00B67A'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Vector Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-[#FBFBFD] text-[#1E293B] font-sans antialiased h-full flex flex-col">
+  <!-- Toast thông báo nổi -->
+  <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <div class="flex h-full min-h-screen">
+    <!-- ================= 1. SIDEBAR ĐIỀU HƯỚNG DÙNG CHUNG ================= -->
+    <aside id="appSidebar" class="w-64 bg-white border-r border-[#EFEFE9] flex flex-col shrink-0 fixed inset-y-0 left-0 z-40 md:static transition-transform duration-300 -translate-x-full md:translate-x-0">
+      <!-- Logo Header -->
+      <div class="h-16 flex items-center gap-3 px-6 border-b border-slate-100">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#1F5AFE] to-indigo-600 flex items-center justify-center text-white shadow-xs">
+          <i data-lucide="compass" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="text-base font-bold tracking-tight text-slate-900">Onboard<span class="text-[#1F5AFE]">AI</span></span>
+          <span class="block text-[10px] uppercase font-semibold tracking-wider text-slate-400">Enterprise</span>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+        <div class="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+          Không gian Nhân sự mới
+        </div>
+        <a href="newhire-onboarding-dashboard.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+          <span>Bảng điều khiển</span>
+        </a>
+        <a href="newhire-checklist.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+          <i data-lucide="check-square" class="w-4 h-4"></i>
+          <span>Checklist hội nhập</span>
+        </a>
+        <a href="newhire-ai-help.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold bg-blue-50/70 text-[#1F5AFE] transition-colors">
+          <i data-lucide="bot" class="w-4 h-4"></i>
+          <span>Trợ lý AI Hỏi đáp</span>
+        </a>
+
+        <div class="pt-5 px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+          Tài khoản & Hệ thống
+        </div>
+        <a href="index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+          <i data-lucide="home" class="w-4 h-4"></i>
+          <span>Trang chủ OnboardAI</span>
+        </a>
+        <a href="login.html" onclick="logout()" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-rose-600 hover:bg-rose-50 transition-colors">
+          <i data-lucide="log-out" class="w-4 h-4"></i>
+          <span>Đăng xuất</span>
+        </a>
+      </nav>
+
+      <!-- AI Status Badge -->
+      <div class="p-3.5 m-3 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50/60 border border-[#EFEFE9]">
+        <div class="flex items-center gap-2 mb-1.5">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
+          <span class="text-xs font-bold text-slate-800">AI-1 Policy Agent</span>
+        </div>
+        <p class="text-[11px] text-slate-500 leading-relaxed">Sổ tay nhân sự v2025 & Luật LĐ đã sẵn sàng tra cứu trích nguồn chuẩn xác.</p>
+      </div>
+    </aside>
+
+    <!-- Overlay cho Mobile khi mở Sidebar -->
+    <div id="sidebarOverlay" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-slate-900/20 backdrop-blur-xs z-30 hidden md:hidden"></div>
+
+    <!-- ================= 2. MAIN CONTENT ================= -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <!-- Topbar Header -->
+      <header class="h-16 bg-white border-b border-[#EFEFE9] px-4 md:px-8 flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-3">
+          <button onclick="toggleMobileSidebar()" class="p-2 -ml-2 text-slate-500 hover:text-slate-700 md:hidden rounded-lg hover:bg-slate-100">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+          <div>
+            <h1 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <span>Trợ lý AI Hỏi đáp Quy chế</span>
+              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-[#1F5AFE] border border-blue-100">AI-1: Policy Q&A</span>
+            </h1>
+            <p class="text-[11px] text-slate-500 hidden sm:block">Tra cứu tức thì nội quy, bảo hiểm, ngày nghỉ và chính sách công ty kèm trích nguồn minh bạch</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=An" alt="User Avatar" class="w-6 h-6 rounded-full bg-white">
+            <span class="text-xs font-semibold text-slate-700 hidden sm:inline" id="userDisplayName">Nguyễn Văn An</span>
+            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-blue-100 text-[#1F5AFE]">New Hire</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Chat Container -->
+      <main class="flex-1 flex flex-col max-w-4xl w-full mx-auto p-4 md:p-6 overflow-hidden">
+        <!-- Khung chat scrollable -->
+        <div id="chatMessages" class="flex-1 overflow-y-auto space-y-4 pr-2 mb-4 scroll-smooth">
+          <!-- Tin nhắn chào mừng ban đầu từ AI -->
+          <div class="flex items-start gap-3 animate-fade-in">
+            <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#1F5AFE] to-indigo-600 flex items-center justify-center text-white shrink-0 shadow-xs">
+              <i data-lucide="bot" class="w-4 h-4"></i>
+            </div>
+            <div class="flex-1 max-w-2xl bg-white border border-[#EFEFE9] rounded-2xl rounded-tl-sm p-4 shadow-xs">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                  OnboardAI Assistant
+                  <span class="text-[10px] font-normal text-slate-400">Vừa xong</span>
+                </span>
+                <span class="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100 flex items-center gap-1">
+                  <i data-lucide="shield-check" class="w-3 h-3"></i> Đã xác thực dữ liệu
+                </span>
+              </div>
+              <p class="text-xs text-slate-700 leading-relaxed mb-3">
+                Xin chào <strong>Nguyễn Văn An</strong>! Tôi là Trợ lý AI đồng hành hội nhập. Tôi có thể giải đáp ngay mọi câu hỏi về:
+              </p>
+              <ul class="text-xs text-slate-600 space-y-1.5 mb-3 pl-3 border-l-2 border-blue-200">
+                <li>• <strong>Chính sách làm việc từ xa (Remote / Hybrid)</strong></li>
+                <li>• <strong>Quy chế thử việc, đánh giá định kỳ</strong></li>
+                <li>• <strong>Chế độ nghỉ phép, bảo hiểm y tế & thẻ bảo lãnh</strong></li>
+                <li>• <strong>Địa điểm gửi xe, căn tin và thiết bị IT bàn giao</strong></li>
+              </ul>
+              <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-[11px] text-slate-500 flex items-center gap-2">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#1F5AFE] shrink-0"></i>
+                <span>Mọi câu trả lời đều được đính kèm <strong>trang số và mục tài liệu nội bộ</strong> đối soát.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 Câu hỏi gợi ý nhanh -->
+        <div class="mb-3">
+          <div class="text-[11px] font-semibold text-slate-400 mb-2 uppercase tracking-wider flex items-center gap-1.5">
+            <i data-lucide="lightbulb" class="w-3 h-3 text-amber-500"></i>
+            <span>Câu hỏi gợi ý nhanh:</span>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="askPrompt('Chính sách làm việc từ xa (Hybrid) quy định thế nào?')" class="text-xs bg-white border border-[#EFEFE9] hover:border-[#1F5AFE] hover:text-[#1F5AFE] text-slate-700 px-3 py-1.5 rounded-xl transition shadow-xs flex items-center gap-1.5 active:scale-95">
+              <span>🏠 Làm việc từ xa (Hybrid)?</span>
+            </button>
+            <button onclick="askPrompt('Quy chế và thời gian đánh giá kết thúc thử việc?')" class="text-xs bg-white border border-[#EFEFE9] hover:border-[#1F5AFE] hover:text-[#1F5AFE] text-slate-700 px-3 py-1.5 rounded-xl transition shadow-xs flex items-center gap-1.5 active:scale-95">
+              <span>📋 Quy chế đánh giá thử việc?</span>
+            </button>
+            <button onclick="askPrompt('Quy định gửi xe và thẻ ra vào tòa nhà thế nào?')" class="text-xs bg-white border border-[#EFEFE9] hover:border-[#1F5AFE] hover:text-[#1F5AFE] text-slate-700 px-3 py-1.5 rounded-xl transition shadow-xs flex items-center gap-1.5 active:scale-95">
+              <span>🛵 Gửi xe & Thẻ tòa nhà?</span>
+            </button>
+            <button onclick="askPrompt('Chính sách bảo hiểm sức khỏe khám chữa bệnh tư nhân?')" class="text-xs bg-white border border-[#EFEFE9] hover:border-[#1F5AFE] hover:text-[#1F5AFE] text-slate-700 px-3 py-1.5 rounded-xl transition shadow-xs flex items-center gap-1.5 active:scale-95">
+              <span>🏥 Bảo hiểm sức khỏe tư nhân?</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Ô nhập câu hỏi (Chu trình 7 bước: Validate, Loading, Citation, Fallback) -->
+        <div class="bg-white border border-[#EFEFE9] rounded-2xl p-2 shadow-xs">
+          <form id="chatForm" class="flex items-center gap-2" onsubmit="handleSend(event)">
+            <input type="text" id="userInput" placeholder="Nhập câu hỏi của bạn về nội quy, chế độ, phúc lợi..." autocomplete="off"
+              class="flex-1 px-4 py-2.5 text-xs text-slate-800 placeholder-slate-400 border-none focus:outline-none focus:ring-0">
+            <button type="submit" id="sendBtn" class="px-4 py-2.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold transition shadow-xs active:scale-95 flex items-center gap-1.5 shrink-0">
+              <span>Gửi câu hỏi</span>
+              <i data-lucide="send" class="w-3.5 h-3.5"></i>
+            </button>
+          </form>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Nạp API Script -->
+  <script src="js/api.js"></script>
+  <script>
+    // Cơ sở tri thức tài liệu giả lập (Internal Knowledge Base với Trích dẫn nguồn)
+    const POLICY_KNOWLEDGE_BASE = [
+      {
+        keywords: ['từ xa', 'remote', 'hybrid', 'wfh', 'ở nhà'],
+        answer: 'Nhân viên chính thức được quyền làm việc từ xa tối đa <strong>2 ngày/tuần</strong> sau khi hoàn thành 2 tháng thử việc và được Trưởng bộ phận phê duyệt kế hoạch công việc qua hệ thống Portal.',
+        source: 'Sổ tay Nhân viên OnboardAI 2025 – Mục 4.2: Quy chế Làm việc Linh hoạt (Trang 18)'
+      },
+      {
+        keywords: ['thử việc', 'đánh giá', '2 tháng', 'chính thức', 'kết thúc'],
+        answer: 'Thời gian thử việc tiêu chuẩn là <strong>60 ngày (02 tháng)</strong>. Vào ngày thứ 50, phòng Nhân sự sẽ tự động mở đợt Đánh giá 1-on-1 giữa Mentor và Mentee. Mức lương thử việc nhận tối thiểu 85% mức lương chính thức theo thỏa thuận.',
+        source: 'Quy chế Tiếp nhận & Bổ nhiệm Nhân sự – Điều 6.1 (Trang 24)'
+      },
+      {
+        keywords: ['gửi xe', 'thẻ', 'tòa nhà', 'hầm xe', 'ra vào', 'bãi xe'],
+        answer: 'Công ty hỗ trợ <strong>100% chi phí gửi xe</strong> tại Hầm B2 của Tòa nhà Trụ sở. Bạn cần mang CCCD và đăng ký biển số xe tại quầy Lễ tân Tầng 1 trong ngày đầu tiên để kích hoạt mã chip trên Thẻ nhân viên.',
+        source: 'Nội quy Cơ sở vật chất & An ninh Tòa nhà – Mục 2.4 (Trang 8)'
+      },
+      {
+        keywords: ['bảo hiểm', 'sức khỏe', 'khám', 'y tế', 'bảo lãnh', 'bảo việt'],
+        answer: 'Ngoài BHXH và BHYT bắt buộc của Nhà nước, toàn bộ nhân sự chính thức và nhân sự thử việc đạt tháng thứ 2 sẽ được cấp gói <strong>Bảo hiểm sức khỏe Bảo Việt Premium</strong> trị giá hạn mức nội trú 120.000.000 VNĐ/năm, bao gồm bảo lãnh viện phí tại Vinmec, Việt Pháp.',
+        source: 'Chính sách Đãi ngộ & Phúc lợi Toàn diện – Mục 5.3 (Trang 31)'
+      },
+      {
+        keywords: ['nghỉ phép', 'phép năm', 'annual leave', 'nghỉ ốm'],
+        answer: 'Mỗi năm nhân viên có <strong>14 ngày phép năm có hưởng lương</strong> (tích lũy 1.16 ngày/tháng). Trong thời gian thử việc, bạn vẫn được hưởng phép theo tỷ lệ tháng làm việc nếu có trường hợp đột xuất bất khả kháng.',
+        source: 'Sổ tay Nhân viên OnboardAI 2025 – Mục 3.1: Chế độ Nghỉ phép (Trang 15)'
+      },
+      {
+        keywords: ['thiết bị', 'laptop', 'máy tính', 'macbook', 'màn hình', 'it'],
+        answer: 'Nhân viên khối Kỹ thuật được cấp phát Laptop (MacBook Pro / Dell XPS) kèm màn hình rời 27 inch 4K và chuột bàn phím. Mọi đề xuất nâng cấp hoặc cấp tài khoản phần mềm (GitHub Copilot, Slack Enterprise) được gửi qua Bộ phận IT Helpdesk.',
+        source: 'Chính sách Cấp phát Tài sản CNTT – Mục 1.2 (Trang 5)'
+      }
+    ];
+
+    function toggleMobileSidebar() {
+      const sidebar = document.getElementById('appSidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      sidebar.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+    }
+
+    function showToast(msg, type = 'success') {
+      const c = document.getElementById('toast-container');
+      const t = document.createElement('div');
+      t.className = `pointer-events-auto flex items-center gap-2 px-4 py-2.5 rounded-xl shadow-lg text-xs font-semibold animate-fade-in ${
+        type === 'success' ? 'bg-slate-900 text-white' : 'bg-amber-600 text-white'
+      }`;
+      t.innerHTML = `<i data-lucide="${type === 'success' ? 'check-circle' : 'alert-circle'}" class="w-4 h-4 ${type === 'success' ? 'text-emerald-400' : 'text-white'}"></i><span>${msg}</span>`;
+      c.appendChild(t);
+      lucide.createIcons();
+      setTimeout(() => {
+        t.style.opacity = '0';
+        setTimeout(() => t.remove(), 300);
+      }, 3000);
+    }
+
+    function logout() {
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('isLoggedIn');
+    }
+
+    function askPrompt(questionText) {
+      document.getElementById('userInput').value = questionText;
+      handleSend(new Event('submit'));
+    }
+
+    function handleSend(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById('userInput');
+      const q = input.value.trim();
+      if (!q) {
+        showToast('Vui lòng nhập câu hỏi cần tra cứu!', 'warning');
+        return;
+      }
+
+      // 1. Thêm tin nhắn của User vào chat
+      appendUserMessage(q);
+      input.value = '';
+
+      // 2. Hiển thị loading của AI (chu trình 7 bước)
+      const loadingId = appendLoadingIndicator();
+
+      // 3. Giả lập AI tra cứu tài liệu trong 800ms
+      setTimeout(() => {
+        removeLoading(loadingId);
+        processAIResponse(q);
+      }, 800);
+    }
+
+    function appendUserMessage(text) {
+      const container = document.getElementById('chatMessages');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'flex items-start justify-end gap-3 animate-fade-in';
+      msgDiv.innerHTML = `
+        <div class="max-w-xl bg-[#1F5AFE] text-white rounded-2xl rounded-tr-sm p-3.5 shadow-xs text-xs leading-relaxed">
+          <p>${escapeHtml(text)}</p>
+          <div class="text-[10px] text-blue-200 text-right mt-1">Vừa gửi</div>
+        </div>
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=An" alt="User" class="w-8 h-8 rounded-full border border-blue-200 shrink-0">
+      `;
+      container.appendChild(msgDiv);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function appendLoadingIndicator() {
+      const container = document.getElementById('chatMessages');
+      const id = 'loading-' + Date.now();
+      const msgDiv = document.createElement('div');
+      msgDiv.id = id;
+      msgDiv.className = 'flex items-start gap-3 animate-fade-in';
+      msgDiv.innerHTML = `
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#1F5AFE] to-indigo-600 flex items-center justify-center text-white shrink-0 shadow-xs">
+          <i data-lucide="bot" class="w-4 h-4"></i>
+        </div>
+        <div class="bg-white border border-[#EFEFE9] rounded-2xl rounded-tl-sm px-4 py-3 shadow-xs flex items-center gap-2">
+          <div class="flex gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-[#1F5AFE] animate-bounce"></span>
+            <span class="w-2 h-2 rounded-full bg-[#1F5AFE] animate-bounce [animation-delay:0.2s]"></span>
+            <span class="w-2 h-2 rounded-full bg-[#1F5AFE] animate-bounce [animation-delay:0.4s]"></span>
+          </div>
+          <span class="text-xs text-slate-500 font-medium">OnboardAI đang tra cứu tài liệu nội bộ...</span>
+        </div>
+      `;
+      container.appendChild(msgDiv);
+      lucide.createIcons();
+      container.scrollTop = container.scrollHeight;
+      return id;
+    }
+
+    function removeLoading(id) {
+      const el = document.getElementById(id);
+      if (el) el.remove();
+    }
+
+    function processAIResponse(query) {
+      const qLower = query.toLowerCase();
+      let match = null;
+
+      // Tìm kiếm trong Knowledge Base
+      for (const item of POLICY_KNOWLEDGE_BASE) {
+        if (item.keywords.some(k => qLower.includes(k))) {
+          match = item;
+          break;
+        }
+      }
+
+      const container = document.getElementById('chatMessages');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'flex items-start gap-3 animate-fade-in';
+
+      if (match) {
+        // Trả lời chuẩn xác có thẻ trích dẫn nguồn (Yêu cầu đề tài BTL CSE122)
+        msgDiv.innerHTML = `
+          <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#1F5AFE] to-indigo-600 flex items-center justify-center text-white shrink-0 shadow-xs">
+            <i data-lucide="bot" class="w-4 h-4"></i>
+          </div>
+          <div class="flex-1 max-w-2xl bg-white border border-[#EFEFE9] rounded-2xl rounded-tl-sm p-4 shadow-xs">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                OnboardAI Assistant
+                <span class="text-[10px] font-normal text-slate-400">Vừa xong</span>
+              </span>
+              <span class="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100 flex items-center gap-1">
+                <i data-lucide="check" class="w-3 h-3"></i> Khớp tài liệu 100%
+              </span>
+            </div>
+            <div class="text-xs text-slate-700 leading-relaxed mb-3">
+              ${match.answer}
+            </div>
+
+            <!-- Thẻ trích nguồn minh bạch -->
+            <div class="p-2.5 rounded-xl bg-blue-50/60 border border-blue-100 text-[11px] text-blue-900 mb-3 flex items-start gap-2">
+              <i data-lucide="bookmark" class="w-3.5 h-3.5 text-[#1F5AFE] shrink-0 mt-0.5"></i>
+              <div>
+                <strong class="font-semibold text-[#1F5AFE]">Nguồn trích dẫn:</strong> ${match.source}
+              </div>
+            </div>
+
+            <!-- Nút tương tác và phản hồi người dùng -->
+            <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] text-slate-500">
+              <div class="flex items-center gap-2">
+                <button onclick="handleFeedback(this, true)" class="hover:text-emerald-600 flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-slate-50 transition">
+                  <i data-lucide="thumbs-up" class="w-3.5 h-3.5"></i> Hữu ích
+                </button>
+                <button onclick="handleFeedback(this, false)" class="hover:text-rose-600 flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-slate-50 transition">
+                  <i data-lucide="thumbs-down" class="w-3.5 h-3.5"></i> Chưa rõ
+                </button>
+                <button onclick="copyAnswer(this)" class="hover:text-slate-900 flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-slate-50 transition">
+                  <i data-lucide="copy" class="w-3.5 h-3.5"></i> Sao chép
+                </button>
+              </div>
+              <span class="text-[10px] text-slate-400">AI Policy Engine v2.4</span>
+            </div>
+          </div>
+        `;
+      } else {
+        // Fallback UI khi AI không tìm thấy câu trả lời
+        msgDiv.innerHTML = `
+          <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center text-white shrink-0 shadow-xs">
+            <i data-lucide="help-circle" class="w-4 h-4"></i>
+          </div>
+          <div class="flex-1 max-w-2xl bg-white border border-amber-200/80 rounded-2xl rounded-tl-sm p-4 shadow-xs">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-slate-900">OnboardAI Assistant</span>
+              <span class="text-[10px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
+                Chưa có trong dữ liệu
+              </span>
+            </div>
+            <p class="text-xs text-slate-700 leading-relaxed mb-3">
+              Rất tiếc, câu hỏi của bạn chưa có dữ liệu chính xác trong các tài liệu nội quy hiện thời. Để đảm bảo thông tin chính xác nhất, bạn có muốn chuyển tiếp câu hỏi này cho phòng <strong>Nhân sự (HR)</strong> hỗ trợ trực tiếp không?
+            </p>
+            <div class="flex items-center gap-2">
+              <button onclick="escalateToHR(this)" class="px-3.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 active:scale-95">
+                <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                <span>Gửi câu hỏi tới phòng HR</span>
+              </button>
+              <button onclick="document.getElementById('userInput').focus()" class="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
+                Hỏi câu khác
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      container.appendChild(msgDiv);
+      lucide.createIcons();
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function handleFeedback(btn, isPositive) {
+      if (isPositive) {
+        showToast('Cảm ơn bạn đã phản hồi! Đánh giá đã được lưu vào hệ thống.', 'success');
+        btn.classList.add('text-emerald-600', 'font-bold');
+      } else {
+        showToast('Cảm ơn bạn đã đóng góp! AI sẽ tự động học hỏi thêm từ phản hồi này.', 'warning');
+        btn.classList.add('text-rose-600', 'font-bold');
+      }
+    }
+
+    function copyAnswer(btn) {
+      showToast('Đã sao chép nội dung câu trả lời vào bộ nhớ tạm!', 'success');
+    }
+
+    function escalateToHR(btn) {
+      btn.disabled = true;
+      btn.className = 'px-3.5 py-1.5 rounded-xl bg-emerald-600 text-white text-xs font-bold flex items-center gap-1.5 cursor-default';
+      btn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5"></i><span>Đã chuyển HR tiếp nhận</span>';
+      lucide.createIcons();
+      showToast('Đã gửi thông báo tới Chuyên viên Nhân sự (Lê Hoàng Nam). Bạn sẽ nhận câu trả lời qua Email nội bộ!', 'success');
+    }
+
+    function escapeHtml(text) {
+      const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+      return text.replace(/[&<>"']/g, m => map[m]);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Đọc thông tin user đăng nhập
+      const userRaw = localStorage.getItem('currentUser');
+      if (userRaw) {
+        try {
+          const user = JSON.parse(userRaw);
+          if (user.name) {
+            document.getElementById('userDisplayName').innerText = user.name;
+          }
+        } catch (e) {}
+      }
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

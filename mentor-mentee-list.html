@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Danh sách Mentee – Người hướng dẫn (M01) | OnboardAI Enterprise</title>
+  
+  <!-- Font Inter Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- CSS Design System with Onboard.io SaaS Tokens & Animations -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#1F5AFE', 600: '#1F5AFE', 700: '#1748cc' },
+            onboard: {
+              bg: '#FBFBFD',
+              surface: '#FFFFFF',
+              border: '#EFEFE9',
+              blue: '#1F5AFE',
+              mint: '#00B67A'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Vector Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-[#FBFBFD] text-[#1E293B] font-sans antialiased h-full flex flex-col">
+  <!-- Toast thông báo nổi -->
+  <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <div class="flex h-full min-h-screen">
+    <!-- ================= 1. SIDEBAR ĐIỀU HƯỚNG DÙNG CHUNG ================= -->
+    <aside id="appSidebar" class="w-64 bg-white border-r border-[#EFEFE9] flex flex-col shrink-0 fixed inset-y-0 left-0 z-40 md:static transition-transform duration-300 -translate-x-full md:translate-x-0">
+      <!-- Logo Header -->
+      <div class="h-16 flex items-center gap-3 px-6 border-b border-slate-100">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-xs">
+          <i data-lucide="compass" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="text-base font-bold tracking-tight text-slate-900">Onboard<span class="text-indigo-600">AI</span></span>
+          <span class="block text-[10px] uppercase font-semibold tracking-wider text-slate-400">Mentor Space</span>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+        <div class="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+          Không gian Người hướng dẫn
+        </div>
+        <a href="mentor-mentee-list.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold bg-indigo-50/70 text-indigo-600 transition-colors">
+          <i data-lucide="users" class="w-4 h-4"></i>
+          <span>Danh sách Mentee</span>
+        </a>
+        <a href="newhire-onboarding-dashboard.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+          <i data-lucide="eye" class="w-4 h-4"></i>
+          <span>Xem phân hệ New Hire</span>
+        </a>
+        <a href="newhire-checklist.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+          <i data-lucide="check-square" class="w-4 h-4"></i>
+          <span>Checklist mẫu</span>
+        </a>
+
+        <div class="pt-5 px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+          Tài khoản & Hệ thống
+        </div>
+        <a href="index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+          <i data-lucide="home" class="w-4 h-4"></i>
+          <span>Trang chủ OnboardAI</span>
+        </a>
+        <a href="login.html" onclick="logout()" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-rose-600 hover:bg-rose-50 transition-colors">
+          <i data-lucide="log-out" class="w-4 h-4"></i>
+          <span>Đăng xuất</span>
+        </a>
+      </nav>
+
+      <!-- Member Allocation Note -->
+      <div class="p-3.5 m-3 rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50/60 border border-[#EFEFE9]">
+        <div class="flex items-center gap-2 mb-1.5">
+          <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+          <span class="text-xs font-bold text-slate-800">Phân công SV2 (Hoàng)</span>
+        </div>
+        <p class="text-[11px] text-slate-500 leading-relaxed">Màn hình M01 (Danh sách Mentee), M02 (Đánh giá 1-on-1) & AI-2 (Gợi ý checklist chuyên môn).</p>
+      </div>
+    </aside>
+
+    <!-- Overlay cho Mobile khi mở Sidebar -->
+    <div id="sidebarOverlay" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-slate-900/20 backdrop-blur-xs z-30 hidden md:hidden"></div>
+
+    <!-- ================= 2. MAIN CONTENT ================= -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+      <!-- Topbar Header -->
+      <header class="h-16 bg-white border-b border-[#EFEFE9] px-4 md:px-8 flex items-center justify-between shrink-0 sticky top-0 z-20">
+        <div class="flex items-center gap-3">
+          <button onclick="toggleMobileSidebar()" class="p-2 -ml-2 text-slate-500 hover:text-slate-700 md:hidden rounded-lg hover:bg-slate-100">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+          <div>
+            <h1 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <span>Quản lý & Hướng dẫn Mentee</span>
+              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100">Mã M01</span>
+            </h1>
+            <p class="text-[11px] text-slate-500 hidden sm:block">Theo dõi tiến độ gia nhập, phê duyệt nhiệm vụ và ghi chú đánh giá 1-on-1</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mai" alt="Mentor Avatar" class="w-6 h-6 rounded-full bg-white">
+            <span class="text-xs font-semibold text-slate-700 hidden sm:inline">Trần Thị Mai</span>
+            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-indigo-100 text-indigo-700">Mentor (Tech Lead)</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Dashboard Body -->
+      <main class="flex-1 p-4 md:p-8 max-w-7xl w-full mx-auto space-y-6">
+        <!-- Thông báo đồng bộ nhóm -->
+        <div class="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-100 flex items-start gap-3">
+          <div class="p-2 rounded-xl bg-indigo-600 text-white shrink-0 mt-0.5">
+            <i data-lucide="git-merge" class="w-4 h-4"></i>
+          </div>
+          <div class="flex-1 text-xs">
+            <div class="font-bold text-slate-900 mb-0.5">Đã kết nối thành công dữ liệu giữa Trưởng nhóm & Thành viên</div>
+            <p class="text-slate-600 leading-relaxed">
+              Dữ liệu Mentee bên dưới được đọc trực tiếp từ <code class="px-1.5 py-0.5 bg-white rounded border border-indigo-200 font-mono text-indigo-700">assets/data/mock-data.json</code> thông qua <code class="px-1.5 py-0.5 bg-white rounded border border-indigo-200 font-mono text-indigo-700">js/api.js</code>. Khi New Hire hoàn thành checklist bên phân hệ của Huy, thanh tiến độ tại đây sẽ tự động cập nhật đồng bộ!
+            </p>
+          </div>
+        </div>
+
+        <!-- Mentee Stats Summary -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="bg-white p-4 rounded-2xl border border-[#EFEFE9] shadow-xs flex items-center justify-between">
+            <div>
+              <div class="text-xs text-slate-500 font-medium">Tổng số Mentee</div>
+              <div class="text-2xl font-extrabold text-slate-900 mt-1">2</div>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-blue-50 text-[#1F5AFE] flex items-center justify-center">
+              <i data-lucide="users" class="w-5 h-5"></i>
+            </div>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-[#EFEFE9] shadow-xs flex items-center justify-between">
+            <div>
+              <div class="text-xs text-slate-500 font-medium">Đang tiến triển tốt</div>
+              <div class="text-2xl font-extrabold text-[#00B67A] mt-1">2</div>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-[#00B67A] flex items-center justify-center">
+              <i data-lucide="check-circle" class="w-5 h-5"></i>
+            </div>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-[#EFEFE9] shadow-xs flex items-center justify-between">
+            <div>
+              <div class="text-xs text-slate-500 font-medium">Cần đánh giá 1-on-1 tuần này</div>
+              <div class="text-2xl font-extrabold text-amber-600 mt-1">1</div>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+              <i data-lucide="calendar" class="w-5 h-5"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mentee Cards List -->
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-sm font-bold text-slate-900">Danh sách nhân sự mới phụ trách trực tiếp</h2>
+            <span class="text-xs text-slate-500">Phòng Kỹ thuật Công nghệ</span>
+          </div>
+
+          <!-- Mentee 1: Nguyen Van An (Direct link to Huy's New Hire slice) -->
+          <div class="bg-white rounded-2xl border border-[#EFEFE9] p-5 shadow-xs hover:border-indigo-300 transition-all space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="flex items-center gap-3.5">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=An" alt="An Avatar" class="w-12 h-12 rounded-2xl border border-slate-200 bg-slate-50">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <h3 class="text-sm font-bold text-slate-900">Nguyễn Văn An</h3>
+                    <span class="pill-status pill-on-track">ON TRACK</span>
+                  </div>
+                  <div class="text-xs text-slate-500 mt-0.5">Frontend Developer &bull; Gia nhập: 15/09/2026 &bull; Mã: <span class="font-mono text-slate-700 font-semibold">NH01</span></div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <a href="newhire-onboarding-dashboard.html" class="px-3.5 py-2 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 active:scale-95">
+                  <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                  <span>Xem Dashboard New Hire &rarr;</span>
+                </a>
+                <a href="newhire-checklist.html" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition flex items-center gap-1.5">
+                  <i data-lucide="check-square" class="w-3.5 h-3.5"></i>
+                  <span>Kiểm tra Checklist</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div>
+              <div class="flex items-center justify-between text-xs mb-1.5">
+                <span class="text-slate-500">Tiến độ hoàn thành nhiệm vụ</span>
+                <span class="font-bold text-[#1F5AFE]" id="anProgressText">65% (13/20 nhiệm vụ)</span>
+              </div>
+              <div class="progress-bar-micro">
+                <div class="progress-fill-micro bg-gradient-to-r from-[#1F5AFE] to-[#00B67A]" style="width: 65%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mentee 2: Le Hoang Long -->
+          <div class="bg-white rounded-2xl border border-[#EFEFE9] p-5 shadow-xs hover:border-indigo-300 transition-all space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="flex items-center gap-3.5">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Long" alt="Long Avatar" class="w-12 h-12 rounded-2xl border border-slate-200 bg-slate-50">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <h3 class="text-sm font-bold text-slate-900">Lê Hoàng Long</h3>
+                    <span class="pill-status pill-on-track">ON TRACK</span>
+                  </div>
+                  <div class="text-xs text-slate-500 mt-0.5">Backend Developer &bull; Gia nhập: 20/09/2026 &bull; Mã: <span class="font-mono text-slate-700 font-semibold">NH03</span></div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <button onclick="showToast('Tính năng Đánh giá 1-on-1 (M02) của SV2 sẽ mở trong sprint tiếp theo!', 'warning')" class="px-3.5 py-2 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold border border-indigo-200 transition flex items-center gap-1.5">
+                  <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
+                  <span>Ghi chú 1-on-1</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div>
+              <div class="flex items-center justify-between text-xs mb-1.5">
+                <span class="text-slate-500">Tiến độ hoàn thành nhiệm vụ</span>
+                <span class="font-bold text-indigo-600">40% (8/20 nhiệm vụ)</span>
+              </div>
+              <div class="progress-bar-micro">
+                <div class="progress-fill-micro bg-gradient-to-r from-indigo-500 to-[#1F5AFE]" style="width: 40%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Nạp API Script -->
+  <script src="js/api.js"></script>
+  <script>
+    function toggleMobileSidebar() {
+      const sidebar = document.getElementById('appSidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      sidebar.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+    }
+
+    function showToast(msg, type = 'success') {
+      const c = document.getElementById('toast-container');
+      const t = document.createElement('div');
+      t.className = `pointer-events-auto flex items-center gap-2 px-4 py-2.5 rounded-xl shadow-lg text-xs font-semibold animate-fade-in ${
+        type === 'success' ? 'bg-slate-900 text-white' : 'bg-amber-600 text-white'
+      }`;
+      t.innerHTML = `<i data-lucide="${type === 'success' ? 'check-circle' : 'alert-circle'}" class="w-4 h-4 ${type === 'success' ? 'text-emerald-400' : 'text-white'}"></i><span>${msg}</span>`;
+      c.appendChild(t);
+      lucide.createIcons();
+      setTimeout(() => {
+        t.style.opacity = '0';
+        setTimeout(() => t.remove(), 300);
+      }, 3000);
+    }
+
+    function logout() {
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('isLoggedIn');
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (window.API) {
+        await API.init();
+        // Lấy tiến độ thực tế của NH01
+        try {
+          const tasks = await API.getTasksByNewHire('NH01');
+          if (tasks && tasks.length > 0) {
+            const completed = tasks.filter(t => t.status === 'completed').length;
+            const pct = Math.round((completed / tasks.length) * 100);
+            const el = document.getElementById('anProgressText');
+            if (el) el.innerText = `${pct}% (${completed}/${tasks.length} nhiệm vụ)`;
+          }
+        } catch (e) {}
+      }
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
