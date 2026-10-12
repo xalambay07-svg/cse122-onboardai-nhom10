@@ -23,9 +23,9 @@
           colors: {
             brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#1F5AFE', 600: '#1F5AFE', 700: '#1748cc' },
             onboard: {
-              bg: '#FBFBFD',
+              bg: '#F1F5F9',
               surface: '#FFFFFF',
-              border: '#EFEFE9',
+              border: '#E2E8F0',
               blue: '#1F5AFE',
               mint: '#00B67A'
             }
@@ -38,7 +38,7 @@
   <!-- Lucide Vector Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-[#FBFBFD] text-[#1E293B] font-sans antialiased h-full flex flex-col">
+<body class="bg-[#F1F5F9] text-[#1E293B] font-sans antialiased h-full flex flex-col">
   <!-- Thanh Thị sát của Quản trị viên (Admin View-as Bar - Mặc định ẩn, chỉ hiện khi HR/Admin truy cập) -->
   <div id="adminImpersonateBar" class="hidden bg-slate-900 text-white px-4 py-2.5 text-xs font-medium flex flex-wrap items-center justify-between gap-2 z-50 border-b border-indigo-500/40 shrink-0">
     <div class="flex items-center gap-2">
@@ -55,7 +55,7 @@
 
   <div class="flex h-full min-h-screen">
     <!-- ================= 1. SIDEBAR ĐIỀU HƯỚNG DÙNG CHUNG ================= -->
-    <aside id="appSidebar" class="w-64 bg-white border-r border-[#EFEFE9] flex flex-col shrink-0 fixed inset-y-0 left-0 z-40 md:static transition-transform duration-300 -translate-x-full md:translate-x-0">
+    <aside id="appSidebar" class="w-64 bg-white border-r border-[#E2E8F0] flex flex-col shrink-0 fixed inset-y-0 left-0 z-40 md:static transition-transform duration-300 -translate-x-full md:translate-x-0">
       <!-- Logo Header -->
       <div class="h-16 flex items-center gap-3 px-6 border-b border-slate-100">
         <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-xs">
@@ -99,7 +99,7 @@
       </nav>
 
       <!-- Member Allocation Note -->
-      <div class="p-3.5 m-3 rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50/60 border border-[#EFEFE9]">
+      <div class="p-3.5 m-3 rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50/60 border border-[#E2E8F0]">
         <div class="flex items-center gap-2 mb-1.5">
           <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
           <span class="text-xs font-bold text-slate-800">Phân công SV2 (Hoàng)</span>
@@ -114,7 +114,7 @@
     <!-- ================= 2. MAIN CONTENT ================= -->
     <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
       <!-- Topbar Header -->
-      <header class="h-16 bg-white border-b border-[#EFEFE9] px-4 md:px-8 flex items-center justify-between shrink-0 sticky top-0 z-20">
+      <header class="h-16 bg-white border-b border-[#E2E8F0] px-4 md:px-8 flex items-center justify-between shrink-0 sticky top-0 z-20">
         <div class="flex items-center gap-3">
           <button onclick="toggleMobileSidebar()" class="p-2 -ml-2 text-slate-500 hover:text-slate-700 md:hidden rounded-lg hover:bg-slate-100">
             <i data-lucide="menu" class="w-5 h-5"></i>
@@ -154,7 +154,7 @@
 
         <!-- Mentee Stats Summary -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div class="bg-white p-4 rounded-2xl border border-[#EFEFE9] shadow-xs flex items-center justify-between">
+          <div class="bg-white p-4 rounded-2xl border border-[#E2E8F0] shadow-xs flex items-center justify-between">
             <div>
               <div class="text-xs text-slate-500 font-medium">Tổng số Mentee</div>
               <div class="text-2xl font-extrabold text-slate-900 mt-1">2</div>
@@ -163,7 +163,7 @@
               <i data-lucide="users" class="w-5 h-5"></i>
             </div>
           </div>
-          <div class="bg-white p-4 rounded-2xl border border-[#EFEFE9] shadow-xs flex items-center justify-between">
+          <div class="bg-white p-4 rounded-2xl border border-[#E2E8F0] shadow-xs flex items-center justify-between">
             <div>
               <div class="text-xs text-slate-500 font-medium">Đang tiến triển tốt</div>
               <div class="text-2xl font-extrabold text-[#00B67A] mt-1">2</div>
@@ -172,7 +172,7 @@
               <i data-lucide="check-circle" class="w-5 h-5"></i>
             </div>
           </div>
-          <div class="bg-white p-4 rounded-2xl border border-[#EFEFE9] shadow-xs flex items-center justify-between">
+          <div class="bg-white p-4 rounded-2xl border border-[#E2E8F0] shadow-xs flex items-center justify-between">
             <div>
               <div class="text-xs text-slate-500 font-medium">Cần đánh giá 1-on-1 tuần này</div>
               <div class="text-2xl font-extrabold text-amber-600 mt-1">1</div>
@@ -191,7 +191,7 @@
           </div>
 
           <!-- Mentee 1: Nguyen Van An (Direct link to Huy's New Hire slice) -->
-          <div class="bg-white rounded-2xl border border-[#EFEFE9] p-5 shadow-xs hover:border-indigo-300 transition-all space-y-4">
+          <div class="bg-white rounded-2xl border border-[#E2E8F0] p-5 shadow-xs hover:border-indigo-300 transition-all space-y-4">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div class="flex items-center gap-3.5">
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=An" alt="An Avatar" class="w-12 h-12 rounded-2xl border border-slate-200 bg-slate-50">
@@ -229,7 +229,7 @@
           </div>
 
           <!-- Mentee 2: Le Hoang Long -->
-          <div class="bg-white rounded-2xl border border-[#EFEFE9] p-5 shadow-xs hover:border-indigo-300 transition-all space-y-4">
+          <div class="bg-white rounded-2xl border border-[#E2E8F0] p-5 shadow-xs hover:border-indigo-300 transition-all space-y-4">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div class="flex items-center gap-3.5">
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Long" alt="Long Avatar" class="w-12 h-12 rounded-2xl border border-slate-200 bg-slate-50">
@@ -329,3 +329,5 @@
   </script>
 </body>
 </html>
+
+

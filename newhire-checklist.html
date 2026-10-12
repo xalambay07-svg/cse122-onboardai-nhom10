@@ -23,9 +23,9 @@
           colors: {
             brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#1F5AFE', 600: '#1F5AFE', 700: '#1748cc' },
             onboard: {
-              bg: '#FBFBFD',
+              bg: '#F1F5F9',
               surface: '#FFFFFF',
-              border: '#EFEFE9',
+              border: '#E2E8F0',
               blue: '#1F5AFE',
               mint: '#00B67A'
             }
@@ -38,7 +38,7 @@
   <!-- Lucide Vector Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-[#FBFBFD] text-[#1E293B] font-sans antialiased h-full flex flex-col">
+<body class="bg-[#F1F5F9] text-[#1E293B] font-sans antialiased h-full flex flex-col">
   <!-- Thanh Thị sát của Quản trị viên (Admin View-as Bar - Mặc định ẩn, chỉ hiện khi HR/Admin truy cập) -->
   <div id="adminImpersonateBar" class="hidden bg-slate-900 text-white px-4 py-2.5 text-xs font-medium flex flex-wrap items-center justify-between gap-2 z-50 border-b border-indigo-500/40 shrink-0">
     <div class="flex items-center gap-2">
@@ -55,7 +55,7 @@
 
   <div class="flex h-full min-h-screen">
     <!-- ================= 1. SIDEBAR ĐIỀU HƯỚNG DÙNG CHUNG ================= -->
-    <aside id="appSidebar" class="w-64 bg-white border-r border-[#EFEFE9] flex flex-col shrink-0 fixed inset-y-0 left-0 z-40 md:static transition-transform duration-300 -translate-x-full md:translate-x-0">
+    <aside id="appSidebar" class="w-64 bg-white border-r border-[#E2E8F0] flex flex-col shrink-0 fixed inset-y-0 left-0 z-40 md:static transition-transform duration-300 -translate-x-full md:translate-x-0">
       <!-- Logo Header -->
       <div class="h-16 flex items-center gap-3 px-6 border-b border-slate-100">
         <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#1F5AFE] to-indigo-600 flex items-center justify-center text-white shadow-xs hover:scale-105 active:scale-95 transition-transform duration-150">
@@ -99,7 +99,7 @@
       </nav>
 
       <!-- Gamification Card -->
-      <div class="p-3.5 m-3 rounded-2xl bg-gradient-to-br from-slate-50 to-blue-50/60 border border-[#EFEFE9]">
+      <div class="p-3.5 m-3 rounded-2xl bg-gradient-to-br from-slate-50 to-blue-50/60 border border-[#E2E8F0]">
         <div class="flex items-center justify-between text-xs mb-2">
           <span class="font-semibold text-slate-700 flex items-center gap-1.5">
             <i data-lucide="award" class="w-4 h-4 text-[#1F5AFE]"></i> Level 1: Tân binh
@@ -124,7 +124,7 @@
     <!-- ================= 2. MAIN WORKSPACE ================= -->
     <div class="flex-1 flex flex-col overflow-y-auto">
       <!-- Topbar Header -->
-      <header class="h-16 bg-white border-b border-[#EFEFE9] px-6 flex items-center justify-between sticky top-0 z-20">
+      <header class="h-16 bg-white border-b border-[#E2E8F0] px-6 flex items-center justify-between sticky top-0 z-20">
         <div class="flex items-center gap-3">
           <button id="menuToggleBtn" class="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100">
             <i data-lucide="menu" class="w-5 h-5"></i>
@@ -167,7 +167,7 @@
       <main class="p-6 md:p-8 max-w-7xl mx-auto w-full space-y-6">
         
         <!-- 2.1 Stepper Lộ trình 4 giai đoạn & Micro-Progress Bar 6px -->
-        <section class="bg-white rounded-2xl border border-[#EFEFE9] p-6 shadow-xs space-y-5">
+        <section class="bg-white rounded-2xl border border-[#E2E8F0] p-6 shadow-xs space-y-5">
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <h1 class="text-xl md:text-2xl font-extrabold tracking-tight text-slate-900">Bản đồ hành trình 60 ngày</h1>
@@ -211,7 +211,7 @@
             </button>
 
             <!-- Chặng 3 -->
-            <button onclick="switchPhase('Tháng 1')" id="tab-thang1" class="phase-tab text-left p-3.5 rounded-xl border border-[#EFEFE9] bg-white hover:bg-slate-50 transition-all duration-200 hover:-translate-y-0.5 active:scale-95 opacity-80">
+            <button onclick="switchPhase('Tháng 1')" id="tab-thang1" class="phase-tab text-left p-3.5 rounded-xl border border-[#E2E8F0] bg-white hover:bg-slate-50 transition-all duration-200 hover:-translate-y-0.5 active:scale-95 opacity-80">
               <div class="flex items-center justify-between text-xs font-semibold text-slate-400 mb-1">
                 <span>Chặng 3 &bull; Tháng 1</span>
                 <i data-lucide="lock" class="w-3.5 h-3.5 text-slate-400"></i>
@@ -221,7 +221,7 @@
             </button>
 
             <!-- Chặng 4 -->
-            <button onclick="switchPhase('Tháng 2')" id="tab-thang2" class="phase-tab text-left p-3.5 rounded-xl border border-[#EFEFE9] bg-white hover:bg-slate-50 transition-all duration-200 hover:-translate-y-0.5 active:scale-95 opacity-80">
+            <button onclick="switchPhase('Tháng 2')" id="tab-thang2" class="phase-tab text-left p-3.5 rounded-xl border border-[#E2E8F0] bg-white hover:bg-slate-50 transition-all duration-200 hover:-translate-y-0.5 active:scale-95 opacity-80">
               <div class="flex items-center justify-between text-xs font-semibold text-slate-400 mb-1">
                 <span>Chặng 4 &bull; Tháng 2</span>
                 <i data-lucide="lock" class="w-3.5 h-3.5 text-slate-400"></i>
@@ -233,7 +233,7 @@
         </section>
 
         <!-- 2.2 Thanh Tìm kiếm & Lọc Realtime -->
-        <section class="bg-white rounded-2xl border border-[#EFEFE9] p-4 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <section class="bg-white rounded-2xl border border-[#E2E8F0] p-4 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
           <!-- Ô Search -->
           <div class="relative flex-1">
             <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
@@ -269,7 +269,7 @@
             </div>
             
             <!-- Khối Empty State khi không tìm thấy kết quả -->
-            <div id="emptyTasksState" class="hidden bg-white rounded-2xl border border-[#EFEFE9] p-10 text-center space-y-3 animate-fade-in">
+            <div id="emptyTasksState" class="hidden bg-white rounded-2xl border border-[#E2E8F0] p-10 text-center space-y-3 animate-fade-in">
               <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 mx-auto flex items-center justify-center">
                 <i data-lucide="inbox" class="w-6 h-6"></i>
               </div>
@@ -310,7 +310,7 @@
             </div>
 
             <!-- Widget 2: Help Desk & Mentor -->
-            <div class="bg-white rounded-2xl border border-[#EFEFE9] p-5 shadow-xs space-y-4">
+            <div class="bg-white rounded-2xl border border-[#E2E8F0] p-5 shadow-xs space-y-4">
               <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Kênh hỗ trợ nhanh (Help Desk)</h3>
               
               <!-- Mentor -->
@@ -353,7 +353,7 @@
             </div>
 
             <!-- Widget 3: Tiến độ Huy hiệu & Thẻ Lật 3D (3D Flip Card - 3.7) -->
-            <div class="bg-white rounded-2xl border border-[#EFEFE9] p-5 shadow-xs space-y-3">
+            <div class="bg-white rounded-2xl border border-[#E2E8F0] p-5 shadow-xs space-y-3">
               <div class="flex items-center justify-between">
                 <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Huy hiệu kế tiếp</h3>
                 <button onclick="toggleFlipCard()" class="text-[11px] font-semibold text-[#1F5AFE] hover:underline flex items-center gap-1 transition-all active:scale-95">
@@ -415,7 +415,7 @@
 
   <!-- Modal 1: Nộp minh chứng (Proof of Work) -->
   <div id="proofModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4 transition-opacity duration-200">
-    <div class="modal-content-box bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4 transform transition-all duration-200 scale-95 opacity-0 border border-[#EFEFE9]">
+    <div class="modal-content-box bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4 transform transition-all duration-200 scale-95 opacity-0 border border-[#E2E8F0]">
       <div class="flex items-center justify-between">
         <h3 class="text-sm font-bold text-slate-900">Nộp minh chứng hoàn thành</h3>
         <button onclick="closeModal('proofModal')" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors">
@@ -444,7 +444,7 @@
 
   <!-- Modal 2: AI Hướng dẫn 3 bước với quy trình AI Thinking & Tool Execution minh bạch -->
   <div id="aiGuideModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4 transition-opacity duration-200">
-    <div class="modal-content-box bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4 transform transition-all duration-200 scale-95 opacity-0 border border-[#EFEFE9]">
+    <div class="modal-content-box bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4 transform transition-all duration-200 scale-95 opacity-0 border border-[#E2E8F0]">
       <div class="flex items-center justify-between pb-3 border-b border-slate-100">
         <div class="flex items-center gap-2">
           <div class="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center shadow-xs">
@@ -473,7 +473,7 @@
 
   <!-- Modal 3: AI Tạo mẫu tin nhắn (Smart Template Generator) -->
   <div id="aiTemplateModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4 transition-opacity duration-200">
-    <div class="modal-content-box bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4 transform transition-all duration-200 scale-95 opacity-0 border border-[#EFEFE9]">
+    <div class="modal-content-box bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4 transform transition-all duration-200 scale-95 opacity-0 border border-[#E2E8F0]">
       <div class="flex items-center justify-between pb-3 border-b border-slate-100">
         <div class="flex items-center gap-2">
           <div class="w-7 h-7 rounded-lg bg-[#1F5AFE] text-white flex items-center justify-center shadow-xs">
@@ -492,7 +492,7 @@
         <button id="toneFriendlyBtn" onclick="switchTemplateTone('friendly')" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-50 border border-slate-200 transition-all">Văn phong Thân thiện, gần gũi</button>
       </div>
 
-      <div class="p-3.5 rounded-xl bg-slate-50 border border-[#EFEFE9] text-xs text-slate-800 font-mono leading-relaxed" id="templateMessageBox">
+      <div class="p-3.5 rounded-xl bg-slate-50 border border-[#E2E8F0] text-xs text-slate-800 font-mono leading-relaxed" id="templateMessageBox">
         <!-- Nội dung mẫu -->
       </div>
 
@@ -508,7 +508,7 @@
 
   <!-- Modal 4: AI Micro-Quiz (Kiểm tra nhanh) -->
   <div id="aiQuizModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4 transition-opacity duration-200">
-    <div class="modal-content-box bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4 transform transition-all duration-200 scale-95 opacity-0 border border-[#EFEFE9]">
+    <div class="modal-content-box bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4 transform transition-all duration-200 scale-95 opacity-0 border border-[#E2E8F0]">
       <div class="flex items-center justify-between pb-3 border-b border-slate-100">
         <div class="flex items-center gap-2">
           <div class="w-7 h-7 rounded-lg bg-[#00B67A] text-white flex items-center justify-center shadow-xs">
@@ -525,7 +525,7 @@
       </div>
 
       <div class="space-y-3 text-xs">
-        <div class="p-3 rounded-xl bg-slate-50 border border-[#EFEFE9] space-y-2">
+        <div class="p-3 rounded-xl bg-slate-50 border border-[#E2E8F0] space-y-2">
           <div class="font-semibold text-slate-900">Câu 1: Khi nhận được email từ địa chỉ lạ yêu cầu cung cấp mật khẩu nội bộ, bạn cần:</div>
           <label class="flex items-center gap-2 cursor-pointer p-1.5 rounded hover:bg-white transition-colors">
             <input type="radio" name="q1" value="wrong" class="text-[#1F5AFE]"> Cung cấp ngay để không trễ việc
@@ -535,7 +535,7 @@
           </label>
         </div>
 
-        <div class="p-3 rounded-xl bg-slate-50 border border-[#EFEFE9] space-y-2">
+        <div class="p-3 rounded-xl bg-slate-50 border border-[#E2E8F0] space-y-2">
           <div class="font-semibold text-slate-900">Câu 2: Quy định xác thực 2 lớp (2FA) áp dụng cho:</div>
           <label class="flex items-center gap-2 cursor-pointer p-1.5 rounded hover:bg-white transition-colors">
             <input type="radio" name="q2" value="correct" class="text-[#1F5AFE]"> Tất cả tài khoản Email, Slack và GitHub công ty
@@ -737,19 +737,19 @@
             ? 'bg-slate-50/70 border-slate-200/50 opacity-80' 
             : isBlocked
             ? 'bg-rose-50/20 border-rose-200/70'
-            : 'bg-white border-[#EFEFE9] hover:border-blue-300'
+            : 'bg-white border-[#E2E8F0] hover:border-blue-300'
         }`;
 
-        // B2B Status Pill chuẩn Onboard.io
+        // B2B Status Pill chuẩn Ring-Inset
         let b2bPill = '';
         if (isDone) {
-          b2bPill = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold text-slate-500 bg-slate-100 border border-slate-200">COMPLETED</span>`;
+          b2bPill = `<span class="pill-status pill-completed">COMPLETED</span>`;
         } else if (isBlocked) {
-          b2bPill = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold text-[#B4232B] bg-[#FBE9E9] border border-rose-200/60"><span class="w-1.5 h-1.5 rounded-full bg-[#B4232B] animate-pulse"></span>BLOCKED</span>`;
+          b2bPill = `<span class="pill-status pill-blocked">BLOCKED</span>`;
         } else if (task.priority === 'Bắt buộc' || task.dueDate.includes('Hôm nay')) {
-          b2bPill = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold text-[#8A5A00] bg-[#FBF2DC] border border-amber-200/60"><span class="w-1.5 h-1.5 rounded-full bg-[#D9A441]"></span>NEEDS ACTION</span>`;
+          b2bPill = `<span class="pill-status pill-needs-action">NEEDS ACTION</span>`;
         } else {
-          b2bPill = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold text-[#0A7A52] bg-[#E4F5EC] border border-emerald-200/60"><span class="w-1.5 h-1.5 rounded-full bg-[#00B67A]"></span>ON TRACK</span>`;
+          b2bPill = `<span class="pill-status pill-on-track">ON TRACK</span>`;
         }
 
         // Subtext giải thích nếu bị blocked
@@ -802,7 +802,7 @@
             <!-- Checkbox Tuỳ chỉnh với Micro-Bounce (3.3) -->
             <label class="relative flex items-center justify-center cursor-pointer shrink-0 mt-0.5 group/cb" title="${isDone ? 'Đánh dấu chưa xong' : 'Đánh dấu hoàn thành'}">
               <input type="checkbox" class="task-checkbox peer sr-only" data-id="${task.id}" ${isDone ? 'checked' : ''}>
-              <div class="w-6 h-6 rounded-lg border-2 border-slate-300 group-hover/cb:border-blue-400 peer-checked:border-[#00B67A] peer-checked:bg-[#00B67A] flex items-center justify-center transition-all duration-200 active:scale-90 shadow-2xs">
+              <div class="w-6 h-6 rounded-lg border-2 border-slate-400 group-hover/cb:border-blue-500 peer-checked:border-[#00B67A] peer-checked:bg-[#00B67A] flex items-center justify-center transition-all duration-200 active:scale-90 shadow-2xs">
                 <svg class="w-4 h-4 text-white hidden peer-checked:block animate-check" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                 </svg>
@@ -813,13 +813,13 @@
               <div class="flex items-center justify-between gap-2 mb-1.5">
                 <div class="flex flex-wrap items-center gap-2">
                   <span class="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase bg-slate-100 text-slate-700">${task.priority || 'Tiêu chuẩn'}</span>
-                  <span class="px-2 py-0.5 rounded-md text-[10px] font-medium bg-slate-100 text-slate-600">${task.category}</span>
-                  <span class="text-[11px] text-slate-400">Hạn: ${task.dueDate}</span>
+                  <span class="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-100 text-slate-700">${task.category}</span>
+                  <span class="text-[11px] text-slate-500 font-medium">Hạn: <strong class="text-slate-700 tabular-nums">${task.dueDate}</strong></span>
                 </div>
                 ${b2bPill}
               </div>
               <h4 class="text-xs md:text-sm font-bold text-slate-900 leading-snug transition-all duration-200 ${isDone ? 'line-through text-slate-400' : ''}">${task.title}</h4>
-              <p class="text-xs text-slate-500 mt-1 leading-relaxed">${task.description || ''}</p>
+              <p class="text-xs text-slate-600 mt-1 leading-relaxed">${task.description || ''}</p>
               ${blockedAlert}
               ${proofInfo}
               
@@ -842,7 +842,7 @@
 
               <!-- Khối Accordion trượt xuống mượt mà (Slide Down 3.2) -->
               <div id="accordion-${task.id}" class="hidden pt-3 mt-2 border-t border-dashed border-slate-200 text-xs text-slate-600 animate-fade-in">
-                <div class="p-3 rounded-xl bg-slate-50/80 border border-[#EFEFE9] space-y-1">
+                <div class="p-3 rounded-xl bg-slate-50/80 border border-[#E2E8F0] space-y-1">
                   <div class="flex items-center gap-1.5 font-semibold text-slate-800">
                     <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#1F5AFE]"></i>
                     <span>Mẹo thực hiện nhanh từ OnboardAI:</span>
@@ -947,14 +947,14 @@
             <i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin text-indigo-600"></i>
             <span>OnboardAI Copilot đang xử lý minh bạch...</span>
           </div>
-          <div id="aiStep1" class="p-2.5 rounded-xl bg-slate-50 border border-[#EFEFE9] text-slate-700 flex items-center justify-between transition-all">
+          <div id="aiStep1" class="p-2.5 rounded-xl bg-slate-50 border border-[#E2E8F0] text-slate-700 flex items-center justify-between transition-all">
             <span class="flex items-center gap-2">
               <i data-lucide="file-search" class="w-4 h-4 text-[#1F5AFE]"></i>
               <span>Quét tài liệu: <strong>Sổ tay nhân sự v2026.pdf</strong></span>
             </span>
             <span id="aiStep1Status" class="text-slate-400 text-[11px]">Đang đọc...</span>
           </div>
-          <div id="aiStep2" class="p-2.5 rounded-xl bg-slate-50 border border-[#EFEFE9] text-slate-700 flex items-center justify-between transition-all opacity-40">
+          <div id="aiStep2" class="p-2.5 rounded-xl bg-slate-50 border border-[#E2E8F0] text-slate-700 flex items-center justify-between transition-all opacity-40">
             <span class="flex items-center gap-2">
               <i data-lucide="shield-check" class="w-4 h-4 text-indigo-600"></i>
               <span>Kiểm tra trạng thái: <strong>GitLab SSH & Token dev</strong></span>
@@ -999,17 +999,17 @@
               <i data-lucide="check-circle-2" class="w-4 h-4 text-[#00B67A] shrink-0"></i>
               <span>AI đã đối chiếu quyền tài khoản và tài liệu công ty: Đã sẵn sàng thực thi.</span>
             </div>
-            <div class="p-3 rounded-xl bg-white border border-[#EFEFE9] shadow-2xs">
+            <div class="p-3 rounded-xl bg-white border border-[#E2E8F0] shadow-2xs">
               <span class="font-bold text-indigo-700">Bước 1:</span> Đảm bảo bạn đã cài đặt Node.js v20+ và cấu hình khóa SSH trên máy cá nhân.
             </div>
-            <div class="p-3 rounded-xl bg-white border border-[#EFEFE9] shadow-2xs">
+            <div class="p-3 rounded-xl bg-white border border-[#E2E8F0] shadow-2xs">
               <span class="font-bold text-indigo-700">Bước 2:</span> Mở Terminal và chạy lệnh clone repository dự án:
               <div class="bg-slate-900 text-slate-100 p-2.5 rounded-lg mt-1.5 font-mono text-[11px] flex justify-between items-center">
                 <code>git clone git@github.com:onboardai/frontend.git</code>
                 <button onclick="navigator.clipboard.writeText('git clone git@github.com:onboardai/frontend.git'); showToast('Đã sao chép lệnh!', 'info');" class="text-slate-400 hover:text-white transition-colors">Copy</button>
               </div>
             </div>
-            <div class="p-3 rounded-xl bg-white border border-[#EFEFE9] shadow-2xs">
+            <div class="p-3 rounded-xl bg-white border border-[#E2E8F0] shadow-2xs">
               <span class="font-bold text-indigo-700">Bước 3:</span> Chạy lệnh cài thư viện và khởi động môi trường dev:
               <div class="bg-slate-900 text-slate-100 p-2 rounded-lg mt-1 font-mono text-[11px]">
                 <code>npm install && npm run dev</code>
@@ -1144,3 +1144,5 @@
   </script>
 </body>
 </html>
+
+

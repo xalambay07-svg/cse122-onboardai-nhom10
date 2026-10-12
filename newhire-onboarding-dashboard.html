@@ -23,9 +23,9 @@
           colors: {
             brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#1F5AFE', 600: '#1F5AFE', 700: '#1748cc' },
             onboard: {
-              bg: '#FBFBFD',
+              bg: '#F1F5F9',
               surface: '#FFFFFF',
-              border: '#EFEFE9',
+              border: '#E2E8F0',
               blue: '#1F5AFE',
               mint: '#00B67A'
             }
@@ -38,7 +38,7 @@
   <!-- Lucide Vector Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-[#FBFBFD] text-[#1E293B] font-sans antialiased h-full flex flex-col">
+<body class="bg-[#F1F5F9] text-slate-900 font-sans antialiased h-full flex flex-col">
   <!-- Thanh Thị sát của Quản trị viên (Admin View-as Bar - Mặc định ẩn, chỉ hiện khi HR/Admin truy cập) -->
   <div id="adminImpersonateBar" class="hidden bg-slate-900 text-white px-4 py-2.5 text-xs font-medium flex flex-wrap items-center justify-between gap-2 z-50 border-b border-indigo-500/40 shrink-0">
     <div class="flex items-center gap-2">
@@ -55,7 +55,7 @@
 
   <div class="flex h-full min-h-screen">
     <!-- ================= 1. SIDEBAR ĐIỀU HƯỚNG DÙNG CHUNG ================= -->
-    <aside id="appSidebar" class="w-64 bg-white border-r border-[#EFEFE9] flex flex-col shrink-0 fixed inset-y-0 left-0 z-40 md:static transition-transform duration-300 -translate-x-full md:translate-x-0">
+    <aside id="appSidebar" class="w-64 bg-white border-r border-[#E2E8F0] flex flex-col shrink-0 fixed inset-y-0 left-0 z-40 md:static transition-transform duration-300 -translate-x-full md:translate-x-0">
       <!-- Logo Header -->
       <div class="h-16 flex items-center gap-3 px-6 border-b border-slate-100">
         <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#1F5AFE] to-indigo-600 flex items-center justify-center text-white shadow-xs hover:scale-105 active:scale-95 transition-transform duration-150">
@@ -99,7 +99,7 @@
       </nav>
 
       <!-- Gamification Card: Level & Streak -->
-      <div class="p-3.5 m-3 rounded-2xl bg-gradient-to-br from-slate-50 to-blue-50/60 border border-[#EFEFE9]">
+      <div class="p-3.5 m-3 rounded-2xl bg-gradient-to-br from-slate-50 to-blue-50/60 border border-[#E2E8F0]">
         <div class="flex items-center justify-between text-xs mb-2">
           <span class="font-semibold text-slate-700 flex items-center gap-1.5">
             <i data-lucide="award" class="w-4 h-4 text-[#1F5AFE]"></i> Level 1: Tân binh
@@ -124,7 +124,7 @@
     <!-- ================= 2. MAIN CONTENT ================= -->
     <div class="flex-1 flex flex-col overflow-y-auto">
       <!-- Topbar Header -->
-      <header class="h-16 bg-white border-b border-[#EFEFE9] px-6 flex items-center justify-between sticky top-0 z-20">
+      <header class="h-16 bg-white border-b border-[#E2E8F0] px-6 flex items-center justify-between sticky top-0 z-20">
         <div class="flex items-center gap-3">
           <button id="menuToggleBtn" class="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100">
             <i data-lucide="menu" class="w-5 h-5"></i>
@@ -167,7 +167,7 @@
       <main class="p-6 md:p-8 max-w-7xl mx-auto w-full space-y-6">
         
         <!-- 2.1 KHỐI NÂNG CẤP: AI Daily Briefing (Học hỏi chuẩn Onboard.io) -->
-        <section class="relative bg-white border border-[#EFEFE9] rounded-2xl p-6 shadow-xs overflow-hidden">
+        <section class="relative bg-white border border-[#E2E8F0] rounded-2xl p-6 shadow-xs overflow-hidden">
           <!-- Viền sáng gradient mỏng trên đầu card -->
           <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#1F5AFE] via-indigo-500 to-[#00B67A]"></div>
           
@@ -202,7 +202,7 @@
               <span>Thực hiện ngay việc hôm nay</span>
               <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i>
             </a>
-            <a href="newhire-ai-help.html" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs border border-[#EFEFE9] transition active:scale-95">
+            <a href="newhire-ai-help.html" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs border border-[#E2E8F0] transition active:scale-95">
               <i data-lucide="bot" class="w-3.5 h-3.5 text-indigo-600"></i>
               <span>Hỏi nhanh Trợ lý AI</span>
             </a>
@@ -210,7 +210,7 @@
         </section>
 
         <!-- 2.2 KHỐI NÂNG CẤP: Thanh tiến độ siêu mảnh 6px chuẩn Onboard.io -->
-        <section class="bg-white rounded-2xl border border-[#EFEFE9] p-5 shadow-xs">
+        <section class="bg-white rounded-2xl border border-[#E2E8F0] p-5 shadow-xs">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2.5">
             <div class="flex items-center gap-2">
               <h2 class="text-xs md:text-sm font-bold text-slate-900">Tiến độ hội nhập tổng thể</h2>
@@ -233,7 +233,7 @@
           
           <!-- Cột chính bên trái: Việc cần làm (Span 7 hoặc 8) -->
           <div id="tasksSection" class="lg:col-span-7 xl:col-span-8 space-y-6">
-            <div class="bg-white rounded-2xl border border-[#EFEFE9] p-6 shadow-xs">
+            <div class="bg-white rounded-2xl border border-[#E2E8F0] p-6 shadow-xs">
               <div class="flex items-center justify-between mb-5 pb-4 border-b border-slate-100">
                 <div>
                   <h3 class="text-base font-bold text-slate-900">Việc cần làm hôm nay</h3>
@@ -245,17 +245,17 @@
                 </a>
               </div>
 
-              <!-- Danh sách tasks render động kèm B2B Status Pills -->
-              <div id="todayTaskList" class="space-y-3">
+              <!-- Danh sách tasks phẳng chuẩn divide-y (không hộp lồng hộp) -->
+              <div id="todayTaskList" class="divide-y divide-slate-100 -mx-6 -mb-6">
                 <!-- Javascript sẽ render vào đây -->
               </div>
             </div>
 
             <!-- Gợi ý tài liệu đọc nhanh (Contextual Documents) -->
-            <div class="bg-white rounded-2xl border border-[#EFEFE9] p-6 shadow-xs">
+            <div class="bg-white rounded-2xl border border-[#E2E8F0] p-6 shadow-xs">
               <h3 class="text-base font-bold text-slate-900 mb-4">Tài liệu quan trọng cho tân binh</h3>
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div class="p-3.5 rounded-xl border border-[#EFEFE9] bg-slate-50/70 hover:bg-white hover:border-blue-200 hover:shadow-xs transition-all duration-200 group cursor-pointer">
+                <div class="p-3.5 rounded-xl border border-[#E2E8F0] bg-slate-50/70 hover:bg-white hover:border-blue-200 hover:shadow-xs transition-all duration-200 group cursor-pointer">
                   <div class="w-7 h-7 rounded-lg bg-blue-100/80 text-[#1F5AFE] flex items-center justify-center mb-2">
                     <i data-lucide="book-open" class="w-4 h-4"></i>
                   </div>
@@ -263,7 +263,7 @@
                   <p class="text-[11px] text-slate-500 mt-0.5">Văn hóa & thời gian làm việc</p>
                 </div>
 
-                <div class="p-3.5 rounded-xl border border-[#EFEFE9] bg-slate-50/70 hover:bg-white hover:border-blue-200 hover:shadow-xs transition-all duration-200 group cursor-pointer">
+                <div class="p-3.5 rounded-xl border border-[#E2E8F0] bg-slate-50/70 hover:bg-white hover:border-blue-200 hover:shadow-xs transition-all duration-200 group cursor-pointer">
                   <div class="w-7 h-7 rounded-lg bg-indigo-100/80 text-indigo-700 flex items-center justify-center mb-2">
                     <i data-lucide="laptop" class="w-4 h-4"></i>
                   </div>
@@ -271,7 +271,7 @@
                   <p class="text-[11px] text-slate-500 mt-0.5">Tối đa 2 ngày/tuần</p>
                 </div>
 
-                <div class="p-3.5 rounded-xl border border-[#EFEFE9] bg-slate-50/70 hover:bg-white hover:border-blue-200 hover:shadow-xs transition-all duration-200 group cursor-pointer">
+                <div class="p-3.5 rounded-xl border border-[#E2E8F0] bg-slate-50/70 hover:bg-white hover:border-blue-200 hover:shadow-xs transition-all duration-200 group cursor-pointer">
                   <div class="w-7 h-7 rounded-lg bg-emerald-100/80 text-[#00B67A] flex items-center justify-center mb-2">
                     <i data-lucide="shield-check" class="w-4 h-4"></i>
                   </div>
@@ -286,9 +286,9 @@
           <div class="lg:col-span-5 xl:col-span-4 space-y-6">
             
             <!-- Thẻ Người hướng dẫn (Mentor Card) -->
-            <div class="bg-white rounded-2xl border border-[#EFEFE9] p-6 shadow-xs">
+            <div class="bg-white rounded-2xl border border-[#E2E8F0] p-6 shadow-xs">
               <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Người đồng hành (Mentor)</h3>
-              <div class="flex items-center gap-3.5 p-3.5 rounded-xl bg-slate-50/80 border border-[#EFEFE9] mb-4">
+              <div class="flex items-center gap-3.5 p-3.5 rounded-xl bg-slate-50/80 border border-[#E2E8F0] mb-4">
                 <div class="relative shrink-0">
                   <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mai" alt="Mentor" class="w-12 h-12 rounded-full bg-white ring-2 ring-slate-100 object-cover">
                   <span class="absolute bottom-0 right-0 flex h-2.5 w-2.5">
@@ -340,10 +340,10 @@
 
               <!-- Câu hỏi gợi ý nhanh -->
               <div class="space-y-1.5 mb-4">
-                <button onclick="quickAsk('Thời gian thử việc tối đa là bao lâu?')" class="w-full text-left p-2.5 rounded-xl bg-white border border-[#EFEFE9] hover:border-indigo-300 text-xs text-slate-700 transition truncate block hover:scale-[1.01] active:scale-95 shadow-2xs">
+                <button onclick="quickAsk('Thời gian thử việc tối đa là bao lâu?')" class="w-full text-left p-2.5 rounded-xl bg-white border border-[#E2E8F0] hover:border-indigo-300 text-xs text-slate-700 transition truncate block hover:scale-[1.01] active:scale-95 shadow-2xs">
                   &bull; Thời gian thử việc tối đa là bao lâu?
                 </button>
-                <button onclick="quickAsk('Chính sách làm việc từ xa (WFH)?')" class="w-full text-left p-2.5 rounded-xl bg-white border border-[#EFEFE9] hover:border-indigo-300 text-xs text-slate-700 transition truncate block hover:scale-[1.01] active:scale-95 shadow-2xs">
+                <button onclick="quickAsk('Chính sách làm việc từ xa (WFH)?')" class="w-full text-left p-2.5 rounded-xl bg-white border border-[#E2E8F0] hover:border-indigo-300 text-xs text-slate-700 transition truncate block hover:scale-[1.01] active:scale-95 shadow-2xs">
                   &bull; Chính sách làm việc từ xa (WFH)?
                 </button>
               </div>
@@ -478,33 +478,33 @@
           const isBlocked = task.status === 'blocked';
           const taskDiv = document.createElement('div');
           
-          taskDiv.className = `group flex items-start gap-3.5 p-4 rounded-xl border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xs ${
+          taskDiv.className = `group flex items-start gap-3.5 px-6 py-4 transition-colors hover:bg-slate-50/80 ${
             isDone 
-              ? 'bg-slate-50/70 border-slate-200/50 opacity-80' 
+              ? 'bg-slate-50/40 opacity-75' 
               : isBlocked
-              ? 'bg-rose-50/20 border-rose-200/60'
-              : 'bg-white border-[#EFEFE9] hover:border-blue-300'
+              ? 'bg-rose-50/25'
+              : 'bg-white'
           }`;
           taskDiv.id = `task-row-${task.id}`;
 
-          // B2B Status Pill chuẩn Onboard.io
+          // B2B Status Pill chuẩn Ring-Inset
           let statusPillHtml = '';
           if (isDone) {
-            statusPillHtml = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold text-slate-500 bg-slate-100 border border-slate-200">COMPLETED</span>`;
+            statusPillHtml = `<span class="pill-status pill-completed">COMPLETED</span>`;
           } else if (isBlocked) {
-            statusPillHtml = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold text-[#B4232B] bg-[#FBE9E9] border border-rose-200/60"><span class="w-1.5 h-1.5 rounded-full bg-[#B4232B] animate-pulse"></span>BLOCKED</span>`;
+            statusPillHtml = `<span class="pill-status pill-blocked">BLOCKED</span>`;
           } else if (task.priority === 'Bắt buộc' || task.dueDate.includes('Hôm nay')) {
-            statusPillHtml = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold text-[#8A5A00] bg-[#FBF2DC] border border-amber-200/60"><span class="w-1.5 h-1.5 rounded-full bg-[#D9A441]"></span>NEEDS ACTION</span>`;
+            statusPillHtml = `<span class="pill-status pill-needs-action">NEEDS ACTION</span>`;
           } else {
-            statusPillHtml = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold text-[#0A7A52] bg-[#E4F5EC] border border-emerald-200/60"><span class="w-1.5 h-1.5 rounded-full bg-[#00B67A]"></span>ON TRACK</span>`;
+            statusPillHtml = `<span class="pill-status pill-on-track">ON TRACK</span>`;
           }
 
           // Subtext giải thích nếu bị blocked
           let blockedSubtext = '';
           if (isBlocked && task.blockedReason) {
             blockedSubtext = `
-              <div class="mt-1.5 text-[11px] text-rose-700 bg-rose-50 p-1.5 rounded-lg border border-rose-100 flex items-center gap-1 font-medium">
-                <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i>
+              <div class="mt-1.5 text-[11px] text-rose-800 bg-rose-50 p-2 rounded-xl border border-rose-200/60 flex items-center gap-1.5 font-medium">
+                <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0 text-rose-600"></i>
                 <span>${task.blockedReason}</span>
               </div>`;
           }
@@ -513,7 +513,7 @@
             <!-- Checkbox tùy chỉnh Micro-Bounce -->
             <label class="relative flex items-center justify-center cursor-pointer shrink-0 mt-0.5 group/cb" title="${isDone ? 'Đánh dấu chưa xong' : 'Đánh dấu hoàn thành'}">
               <input type="checkbox" class="task-checkbox peer sr-only" data-id="${task.id}" ${isDone ? 'checked' : ''}>
-              <div class="w-5 h-5 rounded-md border-2 border-slate-300 group-hover/cb:border-blue-400 peer-checked:border-[#00B67A] peer-checked:bg-[#00B67A] flex items-center justify-center transition-all duration-200 active:scale-90 shadow-2xs">
+              <div class="w-5 h-5 rounded-md border-2 border-slate-400 group-hover/cb:border-blue-500 peer-checked:border-[#00B67A] peer-checked:bg-[#00B67A] flex items-center justify-center transition-all duration-200 active:scale-90 shadow-2xs">
                 <svg class="w-3.5 h-3.5 text-white stroke-[3] hidden peer-checked:block animate-check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                 </svg>
@@ -527,11 +527,11 @@
                 </div>
                 ${statusPillHtml}
               </div>
-              <div class="flex flex-wrap items-center gap-2 text-[11px] text-slate-400">
-                <span class="px-2 py-0.5 rounded-md font-medium bg-slate-100 text-slate-600">${task.category}</span>
-                <span>Hạn chót: ${task.dueDate}</span>
+              <div class="flex flex-wrap items-center gap-2 text-[11px] text-slate-500 font-medium">
+                <span class="px-2 py-0.5 rounded-md font-semibold bg-slate-100 text-slate-700">${task.category}</span>
+                <span>Hạn chót: <strong class="text-slate-700 tabular-nums">${task.dueDate}</strong></span>
                 <span>&bull;</span>
-                <span>${task.phase || 'Tuần 1'}</span>
+                <span class="text-slate-600">${task.phase || 'Tuần 1'}</span>
               </div>
               ${blockedSubtext}
             </div>
@@ -571,3 +571,5 @@
   </script>
 </body>
 </html>
+
+

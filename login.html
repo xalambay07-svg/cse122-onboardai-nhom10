@@ -23,9 +23,9 @@
           colors: {
             brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#1F5AFE', 600: '#1F5AFE', 700: '#1748cc' },
             onboard: {
-              bg: '#FBFBFD',
+              bg: '#F1F5F9',
               surface: '#FFFFFF',
-              border: '#EFEFE9',
+              border: '#E2E8F0',
               blue: '#1F5AFE',
               mint: '#00B67A'
             }
@@ -38,11 +38,11 @@
   <!-- Lucide Vector Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-[#FBFBFD] text-[#1E293B] font-sans antialiased min-h-screen flex items-center justify-center p-4">
+<body class="bg-[#F1F5F9] text-[#1E293B] font-sans antialiased min-h-screen flex items-center justify-center p-4">
   <!-- Toast thông báo nổi -->
   <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-  <div class="w-full max-w-md bg-white rounded-3xl border border-[#EFEFE9] shadow-xl p-8 space-y-6 relative overflow-hidden animate-fade-in">
+  <div class="w-full max-w-md bg-white rounded-3xl border border-[#E2E8F0] shadow-xl p-8 space-y-6 relative overflow-hidden animate-fade-in">
     <!-- Dải viền mỏng gradient Onboard.io -->
     <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#1F5AFE] via-indigo-500 to-[#00B67A]"></div>
 
@@ -110,7 +110,7 @@
       </button>
 
       <!-- 2. Mentor -->
-      <button onclick="quickSelectRole('mentor')" class="p-2.5 rounded-xl border border-[#EFEFE9] hover:border-indigo-500 hover:bg-indigo-50/40 transition-all text-left flex items-center gap-2.5 active:scale-95 group">
+      <button onclick="quickSelectRole('mentor')" class="p-2.5 rounded-xl border border-[#E2E8F0] hover:border-indigo-500 hover:bg-indigo-50/40 transition-all text-left flex items-center gap-2.5 active:scale-95 group">
         <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white flex items-center justify-center shrink-0 transition-colors">
           <i data-lucide="award" class="w-4 h-4"></i>
         </div>
@@ -121,7 +121,7 @@
       </button>
 
       <!-- 3. HR -->
-      <button onclick="quickSelectRole('hr')" class="p-2.5 rounded-xl border border-[#EFEFE9] hover:border-[#00B67A] hover:bg-emerald-50/40 transition-all text-left flex items-center gap-2.5 active:scale-95 group">
+      <button onclick="quickSelectRole('hr')" class="p-2.5 rounded-xl border border-[#E2E8F0] hover:border-[#00B67A] hover:bg-emerald-50/40 transition-all text-left flex items-center gap-2.5 active:scale-95 group">
         <div class="w-8 h-8 rounded-lg bg-emerald-50 text-[#00B67A] group-hover:bg-[#00B67A] group-hover:text-white flex items-center justify-center shrink-0 transition-colors">
           <i data-lucide="users" class="w-4 h-4"></i>
         </div>
@@ -132,7 +132,7 @@
       </button>
 
       <!-- 4. Admin -->
-      <button onclick="quickSelectRole('admin')" class="p-2.5 rounded-xl border border-[#EFEFE9] hover:border-purple-500 hover:bg-purple-50/40 transition-all text-left flex items-center gap-2.5 active:scale-95 group">
+      <button onclick="quickSelectRole('admin')" class="p-2.5 rounded-xl border border-[#E2E8F0] hover:border-purple-500 hover:bg-purple-50/40 transition-all text-left flex items-center gap-2.5 active:scale-95 group">
         <div class="w-8 h-8 rounded-lg bg-purple-50 text-purple-600 group-hover:bg-purple-600 group-hover:text-white flex items-center justify-center shrink-0 transition-colors">
           <i data-lucide="shield" class="w-4 h-4"></i>
         </div>
@@ -286,3 +286,5 @@
   </script>
 </body>
 </html>
+
+
