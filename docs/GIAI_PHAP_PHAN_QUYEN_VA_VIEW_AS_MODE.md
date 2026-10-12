@@ -41,52 +41,93 @@ Nhóm cân nhắc 2 phương án sau để lấy ý kiến thống nhất:
    - Hệ thống kiểm tra: `currentUser.role === 'newhire'` và không có cờ `isImpersonating`.
    - Màn hình New Hire hiển thị chuẩn xác: Menu bên trái **CHỈ CÓ** công việc của An (Dashboard, Checklist, Trợ lý AI). Không có bất kỳ dấu vết nào về khu vực HR/Admin.
 
-2. **Trường hợp 2: Chuyên viên Lê Hoàng Nam (HR) đi thị sát nhân viên An:**
-   - Từ trang `hr-dashboard.html`, HR bấm vào nút: `[Xem vai trò New Hire]`.
-   - Hệ thống lưu cờ phiên: `sessionStorage.setItem('isImpersonating', 'true')`.
+2. **Trường hợp 2: Chuyên viên Nhân sự (HR) đi thị sát nhân viên:**
+   - Từ trang `hr-dashboard.html`, HR bấm vào nút: `[Xem vai trò New Hire]` tại một nhân sự bất kỳ (ví dụ: Trần Thị Bình - NH02).
+   - Hệ thống lưu cờ phiên:
+     ```javascript
+     sessionStorage.setItem('isImpersonating', 'true');
+     sessionStorage.setItem('impersonatedUserId', 'NH02'); // Lưu động ID nhân sự
+     ```
    - Khi chuyển sang trang New Hire, một thanh Banner ghim sát mép trên cùng xuất hiện:
      ```
      +---------------------------------------------------------------------------------------------------------+
-     | 👁️ CHẾ ĐỘ QUẢN TRỊ: Đang xem giao diện của Nguyễn Văn An (NH01)       [ ⬅️ Thoát chế độ xem & Về HR ]   |
+     | 👁️ CHẾ ĐỘ THỊ SÁT: Đang xem giao diện của Trần Thị Bình (NH02)       [ ⬅️ Thoát chế độ xem (Phím Esc) ]  |
      +---------------------------------------------------------------------------------------------------------+
      ```
-   - Khi HR bấm nút **[Thoát chế độ xem]**, hệ thống tự xóa cờ và chuyển ngay về `hr-dashboard.html`.
+   - Khi HR bấm nút **[Thoát chế độ xem]** (hoặc bấm phím `Esc`), hệ thống tự xóa cờ và chuyển ngay về `hr-dashboard.html`.
+
+---
+
+### 3.2. CÁC ĐIỂM BỔ SUNG NÂNG CẤP ĐẮT GIÁ (PRO ENHANCEMENTS)
+
+1. **Động hóa thông tin nhân sự (`impersonatedUserId`):**
+   - Không fix cứng tên *"Nguyễn Văn An"*. Khi HR bấm xem nhân sự nào (An - 65% hay Bình - 25%), Dashboard New Hire sẽ đọc `impersonatedUserId` từ session và hiển thị đúng tên, avatar và % tiến độ của nhân sự đó từ `mock-data.json`.
+2. **Phím tắt thoát nhanh `Esc` (Quick Exit Keyboard Shortcut):**
+   - Hỗ trợ sự kiện phím `Escape` trên bàn phím để thoát ngay về HR Dashboard mà không cần rà chuột lên mép trên màn hình. Rất hữu ích khi live demo trước máy chiếu!
+3. **Chỉ thị phím tắt trên nút bấm UI:**
+   - Trên nút Thoát có gắn kèm phím kẹp `<kbd class="bg-indigo-800 text-[10px] px-1.5 py-0.5 rounded">Esc</kbd>` để tạo ấn tượng về độ chau chuốt UX.
+4. **Cô lập thị giác (Visual Isolation):**
+   - Thanh thị sát sử dụng tông nền đen sâu (`bg-slate-950`) có viền vàng hổ phách (`border-b border-amber-500/30`) và chấm trạng thái nhấp nháy (`animate-ping`) để tách biệt hoàn toàn với màu trắng/xanh của New Hire Dashboard.
 
 ---
 
 ## 4. ĐOẠN MÃ MẪU ĐỂ TRIỂN KHAI (CODE IMPLEMENTATION SNIPPET)
 
-### A. Mã HTML của Thanh Thị sát (Chèn vào đầu thẻ `<body>` của New Hire Dashboard):
+### A. Mã HTML của Thanh Thị sát (Chèn vào ngay sau thẻ mở `<body>` của New Hire Dashboard):
 ```html
 <!-- Admin View-as Bar (Mặc định ẩn, chỉ hiện khi HR/Admin đi kiểm tra) -->
-<div id="adminImpersonateBar" class="hidden bg-slate-900 text-white px-4 py-2 text-xs font-semibold flex items-center justify-between z-50 border-b border-indigo-500/40">
-  <div class="flex items-center gap-2">
-    <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
-    <span class="text-amber-400 font-bold">CHẾ ĐỘ THỊ SÁT (ADMIN VIEW-AS):</span>
-    <span class="text-slate-300">Bạn đang kiểm tra giao diện dưới góc nhìn của <strong class="text-white">Nguyễn Văn An (NH01)</strong></span>
+<div id="adminImpersonateBar" class="hidden sticky top-0 z-50 bg-slate-950 text-white px-4 py-2.5 text-xs font-semibold flex items-center justify-between border-b border-amber-500/30 shadow-md">
+  <div class="flex items-center gap-2.5">
+    <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span>
+    <span class="text-amber-400 font-extrabold uppercase tracking-wider text-[11px]">Chế độ thị sát (Admin View-As):</span>
+    <span class="text-slate-300">Đang kiểm tra giao diện của <strong class="text-white font-bold" id="impersonatedUserName">Nguyễn Văn An (NH01)</strong></span>
   </div>
-  <a href="hr-dashboard.html" onclick="exitImpersonation()" class="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-bold transition flex items-center gap-1.5 shadow-xs">
-    <span>⬅️ Thoát chế độ xem & Quay lại HR</span>
-  </a>
+  <div class="flex items-center gap-2">
+    <button onclick="exitImpersonation()" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold transition flex items-center gap-2 shadow-xs active:scale-95 cursor-pointer">
+      <span>⬅️ Thoát chế độ xem</span>
+      <kbd class="px-1.5 py-0.5 rounded bg-indigo-800 text-[10px] font-mono text-indigo-200 border border-indigo-700">Esc</kbd>
+    </button>
+  </div>
 </div>
 ```
 
-### B. Mã JavaScript kiểm tra phân quyền thông minh:
+### B. Mã JavaScript kiểm tra phân quyền & phím tắt thông minh:
 ```javascript
+// Kiểm tra và hiển thị thanh thị sát khi tải trang
 function checkAdminImpersonation() {
   const isImpersonating = sessionStorage.getItem('isImpersonating') === 'true';
+  const targetUserId = sessionStorage.getItem('impersonatedUserId') || 'NH01';
   const bar = document.getElementById('adminImpersonateBar');
   
-  // Nếu đúng là Quản trị viên đang đi kiểm tra -> Mới cho hiện thanh thoát
   if (isImpersonating && bar) {
     bar.classList.remove('hidden');
+    
+    // Nếu có dữ liệu mockData, hiển thị đúng tên nhân sự đang xem
+    if (typeof mockData !== 'undefined' && mockData.newHires) {
+      const targetUser = mockData.newHires.find(u => u.id === targetUserId);
+      if (targetUser) {
+        const nameEl = document.getElementById('impersonatedUserName');
+        if (nameEl) nameEl.textContent = `${targetUser.name} (${targetUser.id})`;
+      }
+    }
   }
 }
 
+// Hàm thoát chế độ thị sát & quay về HR Dashboard
 function exitImpersonation() {
   sessionStorage.removeItem('isImpersonating');
+  sessionStorage.removeItem('impersonatedUserId');
+  window.location.href = 'hr-dashboard.html';
 }
 
+// Lắng nghe phím tắt Escape để thoát nhanh khi thuyết trình
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && sessionStorage.getItem('isImpersonating') === 'true') {
+    exitImpersonation();
+  }
+});
+
+// Kích hoạt khi trang tải xong
 document.addEventListener('DOMContentLoaded', checkAdminImpersonation);
 ```
 
@@ -102,6 +143,6 @@ document.addEventListener('DOMContentLoaded', checkAdminImpersonation);
 ---
 
 ## 6. KẾT LUẬN CẦN LẤY Ý KIẾN THỐNG NHẤT
-Nhóm xem qua tài liệu này và phản hồi:
-1. **Đồng ý triển khai Phương án B (Thanh View-As thông minh)?**
-2. Hay giữ **Phương án A (Nghiêm ngặt, bắt buộc bấm Đăng xuất khi muốn đổi vai trò)?**
+Nhóm đã thống nhất:
+1. **Chốt triển khai Phương án B (Thanh View-As thông minh)** với đầy đủ các nâng cấp: Động hóa ID nhân sự, hỗ trợ phím tắt `Esc` và cô lập thị giác.
+2. Đưa tài liệu này sang môi trường thực hành để tiến hành cài đặt vào các trang New Hire và HR Dashboard.

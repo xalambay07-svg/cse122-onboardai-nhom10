@@ -39,6 +39,17 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body class="bg-[#FBFBFD] text-[#1E293B] font-sans antialiased h-full flex flex-col">
+  <!-- Thanh Thị sát của Quản trị viên (Admin View-as Bar - Mặc định ẩn, chỉ hiện khi HR/Admin truy cập) -->
+  <div id="adminImpersonateBar" class="hidden bg-slate-900 text-white px-4 py-2.5 text-xs font-medium flex flex-wrap items-center justify-between gap-2 z-50 border-b border-indigo-500/40 shrink-0">
+    <div class="flex items-center gap-2">
+      <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-500 text-slate-950">Chế độ thị sát</span>
+      <span class="text-slate-300">Đang xem giao diện dưới góc nhìn của <strong class="text-white">Nguyễn Văn An (NH01 - Frontend Developer)</strong></span>
+    </div>
+    <button onclick="exitImpersonation('hr-dashboard.html')" class="px-3 py-1.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-600 text-white text-xs font-bold transition shadow-xs">
+      Thoát chế độ xem & Quay lại Bảng điều khiển HR
+    </button>
+  </div>
+
   <!-- Toast thông báo nổi -->
   <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
@@ -1089,8 +1100,22 @@
       }
     }
 
+    function checkAdminImpersonation() {
+      const isImpersonating = sessionStorage.getItem('isImpersonating');
+      const bar = document.getElementById('adminImpersonateBar');
+      if (isImpersonating && bar) {
+        bar.classList.remove('hidden');
+      }
+    }
+
+    function exitImpersonation(returnUrl = 'hr-dashboard.html') {
+      sessionStorage.removeItem('isImpersonating');
+      window.location.href = returnUrl;
+    }
+
     // Khởi tạo trang khi DOM sẵn sàng
     document.addEventListener('DOMContentLoaded', async () => {
+      checkAdminImpersonation();
       await API.init();
 
       // Sự kiện Search & Filter
