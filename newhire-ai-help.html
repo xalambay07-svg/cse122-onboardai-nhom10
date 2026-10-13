@@ -37,6 +37,8 @@
 
   <!-- Lucide Vector Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Fuse.js for Fuzzy Search Fallback (Progressive Enhancement) -->
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.basic.min.js"></script>
 </head>
 <body class="bg-[#F1F5F9] text-[#1E293B] font-sans antialiased h-full flex flex-col">
   <!-- Thanh Thị sát của Quản trị viên (Admin View-as Bar - Mặc định ẩn, chỉ hiện khi HR/Admin truy cập) -->
@@ -133,9 +135,9 @@
 
         <div class="flex items-center gap-3">
           <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=An" alt="User Avatar" class="w-6 h-6 rounded-full bg-white">
+            <img id="userAvatarImg" src="https://api.dicebear.com/7.x/avataaars/svg?seed=An" alt="User Avatar" class="w-6 h-6 rounded-full bg-white">
             <span class="text-xs font-semibold text-slate-700 hidden sm:inline" id="userDisplayName">Nguyễn Văn An</span>
-            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-blue-100 text-[#1F5AFE]">New Hire</span>
+            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-blue-100 text-[#1F5AFE]" id="userRoleBadge">New Hire</span>
           </div>
         </div>
       </header>
@@ -160,7 +162,7 @@
                 </span>
               </div>
               <p class="text-xs text-slate-700 leading-relaxed mb-3">
-                Xin chào <strong>Nguyễn Văn An</strong>! Tôi là Trợ lý AI đồng hành hội nhập. Tôi có thể giải đáp ngay mọi câu hỏi về:
+                Xin chào <strong id="welcomeUserName">Nguyễn Văn An</strong>! Tôi là Trợ lý AI đồng hành hội nhập. Tôi có thể giải đáp ngay mọi câu hỏi về:
               </p>
               <ul class="text-xs text-slate-600 space-y-1.5 mb-3 pl-3 border-l-2 border-blue-200">
                 <li>• <strong>Chính sách làm việc từ xa (Remote / Hybrid)</strong></li>
@@ -176,7 +178,7 @@
           </div>
         </div>
 
-        <!-- 3 Câu hỏi gợi ý nhanh -->
+        <!-- Câu hỏi gợi ý nhanh -->
         <div class="mb-3">
           <div class="text-[11px] font-semibold text-slate-400 mb-2 uppercase tracking-wider flex items-center gap-1.5">
             <i data-lucide="lightbulb" class="w-3 h-3 text-amber-500"></i>
@@ -184,24 +186,46 @@
           </div>
           <div class="flex flex-wrap gap-2">
             <button onclick="askPrompt('Chính sách làm việc từ xa (Hybrid) quy định thế nào?')" class="text-xs bg-white border border-[#E2E8F0] hover:border-[#1F5AFE] hover:text-[#1F5AFE] text-slate-700 px-3 py-1.5 rounded-xl transition shadow-xs flex items-center gap-1.5 active:scale-95">
-              <span>🏠 Làm việc từ xa (Hybrid)?</span>
+              <i data-lucide="laptop" class="w-3.5 h-3.5 text-[#1F5AFE]"></i>
+              <span>Làm việc từ xa (Hybrid)?</span>
             </button>
             <button onclick="askPrompt('Quy chế và thời gian đánh giá kết thúc thử việc?')" class="text-xs bg-white border border-[#E2E8F0] hover:border-[#1F5AFE] hover:text-[#1F5AFE] text-slate-700 px-3 py-1.5 rounded-xl transition shadow-xs flex items-center gap-1.5 active:scale-95">
-              <span>📋 Quy chế đánh giá thử việc?</span>
+              <i data-lucide="clipboard-check" class="w-3.5 h-3.5 text-indigo-600"></i>
+              <span>Quy chế đánh giá thử việc?</span>
             </button>
             <button onclick="askPrompt('Quy định gửi xe và thẻ ra vào tòa nhà thế nào?')" class="text-xs bg-white border border-[#E2E8F0] hover:border-[#1F5AFE] hover:text-[#1F5AFE] text-slate-700 px-3 py-1.5 rounded-xl transition shadow-xs flex items-center gap-1.5 active:scale-95">
-              <span>🛵 Gửi xe & Thẻ tòa nhà?</span>
+              <i data-lucide="car" class="w-3.5 h-3.5 text-emerald-600"></i>
+              <span>Gửi xe & Thẻ tòa nhà?</span>
             </button>
             <button onclick="askPrompt('Chính sách bảo hiểm sức khỏe khám chữa bệnh tư nhân?')" class="text-xs bg-white border border-[#E2E8F0] hover:border-[#1F5AFE] hover:text-[#1F5AFE] text-slate-700 px-3 py-1.5 rounded-xl transition shadow-xs flex items-center gap-1.5 active:scale-95">
-              <span>🏥 Bảo hiểm sức khỏe tư nhân?</span>
+              <i data-lucide="shield" class="w-3.5 h-3.5 text-rose-600"></i>
+              <span>Bảo hiểm sức khỏe tư nhân?</span>
+            </button>
+            <button onclick="askPrompt('Mentor của tôi là ai?')" class="text-xs bg-white border border-[#E2E8F0] hover:border-[#1F5AFE] hover:text-[#1F5AFE] text-slate-700 px-3 py-1.5 rounded-xl transition shadow-xs flex items-center gap-1.5 active:scale-95">
+              <i data-lucide="user-check" class="w-3.5 h-3.5 text-purple-600"></i>
+              <span>Mentor của tôi là ai?</span>
+            </button>
+            <button onclick="askPrompt('Hôm nay tôi cần làm gì?')" class="text-xs bg-white border border-[#E2E8F0] hover:border-[#1F5AFE] hover:text-[#1F5AFE] text-slate-700 px-3 py-1.5 rounded-xl transition shadow-xs flex items-center gap-1.5 active:scale-95">
+              <i data-lucide="calendar-check" class="w-3.5 h-3.5 text-cyan-600"></i>
+              <span>Hôm nay tôi cần làm gì?</span>
             </button>
           </div>
+        </div>
+
+        <!-- Khung gợi ý tức thì khi đang gõ (Typeahead Autocomplete 150ms) -->
+        <div id="typeaheadSuggestions" class="hidden mb-2 p-2 bg-white border border-[#E2E8F0] rounded-xl shadow-xs animate-fade-in">
+          <div class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+            <i data-lucide="sparkles" class="w-3 h-3 text-[#1F5AFE]"></i>
+            <span>Gợi ý chủ đề khớp nhất:</span>
+          </div>
+          <div id="typeaheadList" class="flex flex-wrap gap-1.5"></div>
         </div>
 
         <!-- Ô nhập câu hỏi (Chu trình 7 bước: Validate, Loading, Citation, Fallback) -->
         <div class="bg-white border border-[#E2E8F0] rounded-2xl p-2 shadow-xs">
           <form id="chatForm" class="flex items-center gap-2" onsubmit="handleSend(event)">
             <input type="text" id="userInput" placeholder="Nhập câu hỏi của bạn về nội quy, chế độ, phúc lợi..." autocomplete="off"
+              oninput="handleTypeahead(this.value)"
               class="flex-1 px-4 py-2.5 text-xs text-slate-800 placeholder-slate-400 border-none focus:outline-none focus:ring-0">
             <button type="submit" id="sendBtn" class="px-4 py-2.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold transition shadow-xs active:scale-95 flex items-center gap-1.5 shrink-0">
               <span>Gửi câu hỏi</span>
@@ -216,40 +240,841 @@
   <!-- Nạp API Script -->
   <script src="js/api.js"></script>
   <script>
-    // Cơ sở tri thức tài liệu giả lập (Internal Knowledge Base với Trích dẫn nguồn)
-    const POLICY_KNOWLEDGE_BASE = [
+    /**
+     * ONBOARDAI - AI POLICY ENGINE v3.0 (CSE122 - BTL-20)
+     * Client-side Intelligent Search Engine & Context-Aware Onboarding Assistant
+     * Direction 1: 100% Vanilla JS, Offline Ready, Transparent Grounded Citations
+     */
+
+    // 1. CHUẨN HÓA VĂN BẢN (Text Normalization)
+    function normalize(text) {
+      if (!text) return '';
+      return text.toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd')
+        .replace(/[^a-z0-9\s]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    // 2. SO KHỚP TỪ NGUYÊN VẸN (Word Boundary / Exact Phrase Match)
+    function containsPhrase(normQuery, normPhrase) {
+      if (!normQuery || !normPhrase) return false;
+      return (' ' + normQuery + ' ').includes(' ' + normPhrase + ' ');
+    }
+
+    // 3. AN TOÀN HTML (XSS Sanitizer)
+    function escapeHtml(text) {
+      if (text === null || text === undefined) return '';
+      const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+      return String(text).replace(/[&<>"']/g, m => map[m]);
+    }
+
+    // 4. LẤY DỮ LIỆU PHIÊN ĐĂNG NHẬP & HỒ SƠ NHÂN SỰ
+    function getCurrentUserData() {
+      let user = null;
+      const raw = localStorage.getItem('currentUser') || localStorage.getItem('ONBOARDAI_CURRENT_USER');
+      if (raw) {
+        try { user = JSON.parse(raw); } catch (e) {}
+      }
+      if (!user && window.API && window.API.getCurrentUser) {
+        user = window.API.getCurrentUser();
+      }
+      if (!user) {
+        user = {
+          id: 'NH01',
+          name: 'Nguyễn Văn An',
+          role: 'newhire',
+          position: 'Frontend Developer',
+          department: 'Kỹ thuật Công nghệ',
+          email: 'an.nguyen@onboardai.vn'
+        };
+      }
+
+      let newHires = [];
+      if (window.API && window.API.getAll) {
+        newHires = window.API.getAll('newHires') || [];
+      }
+      const match = newHires.find(n => n.id === user.id || n.email === user.email) || {};
+
+      return {
+        id: user.id || match.id || 'NH01',
+        name: user.name || match.name || 'Nguyễn Văn An',
+        role: user.role || 'newhire',
+        position: user.title || match.position || 'Frontend Developer',
+        department: user.department || match.department || 'Kỹ thuật Công nghệ',
+        joinDate: match.joinDate || '2026-09-15',
+        mentorName: match.mentorName || 'Trần Thị Mai',
+        mentorId: match.mentorId || 'MT01',
+        progress: match.progress !== undefined ? match.progress : 65,
+        status: match.status || 'on_track',
+        avatar: user.avatar || match.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.name || 'An')}`
+      };
+    }
+
+    // 5. CƠ SỞ TRI THỨC TOÀN DIỆN (KNOWLEDGE BASE: Policy + Personal + Smalltalk)
+    const KNOWLEDGE_BASE = [
+      // === NHÓM 1: QUY CHẾ VÀ CHÍNH SÁCH DOANH NGHIỆP (POLICY) ===
       {
-        keywords: ['từ xa', 'remote', 'hybrid', 'wfh', 'ở nhà'],
-        answer: 'Nhân viên chính thức được quyền làm việc từ xa tối đa <strong>2 ngày/tuần</strong> sau khi hoàn thành 2 tháng thử việc và được Trưởng bộ phận phê duyệt kế hoạch công việc qua hệ thống Portal.',
-        source: 'Sổ tay Nhân viên OnboardAI 2025 – Mục 4.2: Quy chế Làm việc Linh hoạt (Trang 18)'
-      },
-      {
-        keywords: ['thử việc', 'đánh giá', '2 tháng', 'chính thức', 'kết thúc'],
-        answer: 'Thời gian thử việc tiêu chuẩn là <strong>60 ngày (02 tháng)</strong>. Vào ngày thứ 50, phòng Nhân sự sẽ tự động mở đợt Đánh giá 1-on-1 giữa Mentor và Mentee. Mức lương thử việc nhận tối thiểu 85% mức lương chính thức theo thỏa thuận.',
-        source: 'Quy chế Tiếp nhận & Bổ nhiệm Nhân sự – Điều 6.1 (Trang 24)'
-      },
-      {
-        keywords: ['gửi xe', 'thẻ', 'tòa nhà', 'hầm xe', 'ra vào', 'bãi xe'],
-        answer: 'Công ty hỗ trợ <strong>100% chi phí gửi xe</strong> tại Hầm B2 của Tòa nhà Trụ sở. Bạn cần mang CCCD và đăng ký biển số xe tại quầy Lễ tân Tầng 1 trong ngày đầu tiên để kích hoạt mã chip trên Thẻ nhân viên.',
-        source: 'Nội quy Cơ sở vật chất & An ninh Tòa nhà – Mục 2.4 (Trang 8)'
-      },
-      {
-        keywords: ['bảo hiểm', 'sức khỏe', 'khám', 'y tế', 'bảo lãnh', 'bảo việt'],
-        answer: 'Ngoài BHXH và BHYT bắt buộc của Nhà nước, toàn bộ nhân sự chính thức và nhân sự thử việc đạt tháng thứ 2 sẽ được cấp gói <strong>Bảo hiểm sức khỏe Bảo Việt Premium</strong> trị giá hạn mức nội trú 120.000.000 VNĐ/năm, bao gồm bảo lãnh viện phí tại Vinmec, Việt Pháp.',
-        source: 'Chính sách Đãi ngộ & Phúc lợi Toàn diện – Mục 5.3 (Trang 31)'
-      },
-      {
-        keywords: ['nghỉ phép', 'phép năm', 'annual leave', 'nghỉ ốm'],
+        id: 'annual-leave',
+        type: 'policy',
+        title: 'Chế độ nghỉ phép năm',
+        keywords: ['nghỉ phép', 'phép năm', 'annual leave', 'nghi phep', 'phep nam'],
+        synonyms: ['xin nghỉ', 'off', 'ngày nghỉ', 'nghỉ có lương', 'được nghỉ mấy ngày', 'leave', 'xin off', 'nghi phep con may ngay', 'nghi phep duoc may ngay'],
         answer: 'Mỗi năm nhân viên có <strong>14 ngày phép năm có hưởng lương</strong> (tích lũy 1.16 ngày/tháng). Trong thời gian thử việc, bạn vẫn được hưởng phép theo tỷ lệ tháng làm việc nếu có trường hợp đột xuất bất khả kháng.',
-        source: 'Sổ tay Nhân viên OnboardAI 2025 – Mục 3.1: Chế độ Nghỉ phép (Trang 15)'
+        source: 'Sổ tay Nhân viên OnboardAI 2025 – Mục 3.1: Chế độ Nghỉ phép (Trang 15)',
+        followUps: ['sick-leave', 'probation', 'remote-work']
       },
       {
-        keywords: ['thiết bị', 'laptop', 'máy tính', 'macbook', 'màn hình', 'it'],
+        id: 'sick-leave',
+        type: 'policy',
+        title: 'Chế độ nghỉ ốm & Hưởng BHXH',
+        keywords: ['nghỉ ốm', 'ốm đau', 'bị ốm', 'sick leave', 'nghi om', 'bi om'],
+        synonyms: ['nằm viện', 'khám bệnh', 'sốt', 'nghỉ bệnh', 'chế độ ốm đau', 'bhxh ốm', 'nghi do om', 'nghi om huong bao hiem'],
+        answer: 'Khi bị ốm, nhân viên cần thông báo cho Quản lý trực tiếp trước 08:30 sáng và nộp giấy chứng nhận nghỉ việc hưởng BHXH (Mẫu C65-HD) cho phòng HR trong vòng <strong>03 ngày làm việc</strong> để được cơ quan BHXH chi trả 75% mức lương đóng bảo hiểm.',
+        source: 'Quy chế Chế độ Phúc lợi & Nghỉ ốm – Mục 3.3 (Trang 17)',
+        followUps: ['annual-leave', 'health-insurance']
+      },
+      {
+        id: 'remote-work',
+        type: 'policy',
+        title: 'Làm việc từ xa (Hybrid / WFH)',
+        keywords: ['từ xa', 'remote', 'hybrid', 'wfh', 'ở nhà', 'tu xa', 'lam viec tu xa'],
+        synonyms: ['làm việc tại nhà', 'online', 'ngồi nhà', 'work from home', 'chế độ hybrid', 'wfh dc ko', 'wfh duoc khong'],
+        answer: 'Nhân viên chính thức được quyền làm việc từ xa tối đa <strong>2 ngày/tuần</strong> sau khi hoàn thành 2 tháng thử việc và được Trưởng bộ phận phê duyệt kế hoạch công việc qua hệ thống Portal.',
+        source: 'Sổ tay Nhân viên OnboardAI 2025 – Mục 4.2: Quy chế Làm việc Linh hoạt (Trang 18)',
+        followUps: ['probation', 'working-hours']
+      },
+      {
+        id: 'probation',
+        type: 'policy',
+        title: 'Quy chế thử việc & Đánh giá',
+        keywords: ['thử việc', 'đánh giá thử việc', '2 tháng thử việc', 'kết thúc thử việc', 'quy chế thử việc', 'probation', 'thu viec'],
+        synonyms: ['thời gian thử việc', 'thử việc mấy tháng', 'lương thử việc', '85%', 'thu viec may thang', 'luong thu viec', 'thử việc bao lâu', 'danh gia thu viec'],
+        answer: 'Thời gian thử việc tiêu chuẩn là <strong>60 ngày (02 tháng)</strong>. Vào ngày thứ 50, phòng Nhân sự sẽ tự động mở đợt Đánh giá 1-on-1 giữa Mentor và Mentee. Mức lương thử việc nhận tối thiểu <strong>85%</strong> mức lương chính thức theo thỏa thuận.',
+        source: 'Quy chế Tiếp nhận & Bổ nhiệm Nhân sự – Điều 6.1 (Trang 24)',
+        followUps: ['annual-leave', 'remote-work', 'salary-payroll']
+      },
+      {
+        id: 'parking',
+        type: 'policy',
+        title: 'Quy định gửi xe & Thẻ ra vào tòa nhà',
+        keywords: ['gửi xe', 'thẻ ra vào', 'thẻ tòa nhà', 'hầm xe', 'bãi xe', 'gui xe'],
+        synonyms: ['vé xe', 'đỗ xe', 'xe máy', 'ô tô', 'thẻ nhân viên', 'hầm b2', 'giữ xe', 'mất tiền', 'gui xe co mat tien khong', 'phi gui xe'],
+        answer: 'Công ty hỗ trợ <strong>100% chi phí gửi xe</strong> tại Hầm B2 của Tòa nhà Trụ sở. Bạn cần mang CCCD và đăng ký biển số xe tại quầy Lễ tân Tầng 1 trong ngày đầu tiên để kích hoạt mã chip trên Thẻ nhân viên.',
+        source: 'Nội quy Cơ sở vật chất & An ninh Tòa nhà – Mục 2.4 (Trang 8)',
+        followUps: ['working-hours', 'it-equipment']
+      },
+      {
+        id: 'health-insurance',
+        type: 'policy',
+        title: 'Bảo hiểm sức khỏe & Chăm sóc y tế',
+        keywords: ['bảo hiểm', 'sức khỏe', 'khám bệnh', 'khám sức khỏe', 'y tế', 'bảo lãnh', 'bảo việt', 'bao hiem', 'suc khoe'],
+        synonyms: ['bhyt', 'bhxh', 'bệnh viện', 'vinmec', 'nha khoa', 'bảo lãnh viện phí', 'gói bảo hiểm', 'bao hiem gom nhung gi'],
+        answer: 'Ngoài BHXH và BHYT bắt buộc của Nhà nước, toàn bộ nhân sự chính thức và nhân sự thử việc đạt tháng thứ 2 sẽ được cấp gói <strong>Bảo hiểm sức khỏe Bảo Việt Premium</strong> trị giá hạn mức nội trú 120.000.000 VNĐ/năm, bao gồm bảo lãnh viện phí tại Vinmec, Việt Pháp.',
+        source: 'Chính sách Đãi ngộ & Phúc lợi Toàn diện – Mục 5.3 (Trang 31)',
+        followUps: ['sick-leave', 'annual-leave']
+      },
+      {
+        id: 'it-equipment',
+        type: 'policy',
+        title: 'Cấp phát thiết bị IT & Laptop làm việc',
+        keywords: ['thiết bị', 'laptop', 'máy tính', 'macbook', 'màn hình', 'it helpdesk', 'bộ phận it', 'cấp máy', 'xin cấp', 'thiet bi', 'may tinh'],
+        synonyms: ['chuột', 'bàn phím', 'tai nghe', 'đổi máy', 'máy bàn', 'macbook pro', 'dell xps', 'hỏng máy', 'sửa máy', 'xin cap laptop', 'cap phat may'],
         answer: 'Nhân viên khối Kỹ thuật được cấp phát Laptop (MacBook Pro / Dell XPS) kèm màn hình rời 27 inch 4K và chuột bàn phím. Mọi đề xuất nâng cấp hoặc cấp tài khoản phần mềm (GitHub Copilot, Slack Enterprise) được gửi qua Bộ phận IT Helpdesk.',
-        source: 'Chính sách Cấp phát Tài sản CNTT – Mục 1.2 (Trang 5)'
+        source: 'Chính sách Cấp phát Tài sản CNTT – Mục 1.2 (Trang 5)',
+        followUps: ['wifi-vpn', 'security-password']
+      },
+      {
+        id: 'working-hours',
+        type: 'policy',
+        title: 'Giờ làm việc & Chấm công',
+        keywords: ['giờ làm việc', 'chấm công', 'thời gian làm việc', 'checkin', 'checkout', 'gio lam viec', 'cham cong'],
+        synonyms: ['mấy giờ', 'đi làm', 'tan làm', 'đi muộn', 'về sớm', 'vân tay', 'faceid', 'ca làm việc', 'khung gio lam viec'],
+        answer: 'Thời gian làm việc tiêu chuẩn từ <strong>08:30 – 17:30</strong> (nghỉ trưa 12:00 – 13:00) từ Thứ Hai đến Thứ Sáu. Nhân viên có khung giờ linh hoạt ±30 phút (08:00 - 09:00). Chấm công tự động qua nhận diện khuôn mặt (FaceID) tại cửa hoặc ứng dụng nội bộ khi kết nối Wi-Fi văn phòng.',
+        source: 'Nội quy Lao động OnboardAI – Điều 4: Thời giờ làm việc & Nghỉ ngơi (Trang 6)',
+        followUps: ['remote-work', 'lunch-allowance']
+      },
+      {
+        id: 'salary-payroll',
+        type: 'policy',
+        title: 'Lương & Ngày trả lương hàng tháng',
+        keywords: ['lương', 'ngày trả lương', 'bảng lương', 'payslip', 'chuyển lương', 'luong', 'ngay tra luong'],
+        synonyms: ['nhận lương', 'kỳ lương', 'ngày nhận lương', 'bao giờ có lương', 'thanh toán lương', 'thuế thu nhập', 'tra luong ngay nao'],
+        answer: 'Lương được chi trả định kỳ vào <strong>ngày 05 hàng tháng</strong> qua tài khoản Ngân hàng Techcombank / Vietcombank. Bảng lương chi tiết (Payslip điện tử có mật khẩu bảo mật) sẽ được gửi tới Email nội bộ trước ngày 03 hàng tháng để nhân viên đối soát.',
+        source: 'Quy chế Chi trả Lương thưởng & Đãi ngộ – Mục 2.1 (Trang 12)',
+        followUps: ['probation', 'lunch-allowance']
+      },
+      {
+        id: 'wifi-vpn',
+        type: 'policy',
+        title: 'Wi-Fi văn phòng & Mạng nội bộ VPN',
+        keywords: ['wifi', 'vpn', 'mạng nội bộ', 'kết nối mạng', 'mat khau wifi', 'mang noi bo'],
+        synonyms: ['mật khẩu wifi', 'pass wifi', 'mạng wifi', 'openvpn', 'truy cập vpn', 'mạng công ty', 'ket noi wifi'],
+        answer: 'Mạng Wi-Fi văn phòng là <strong>OnboardAI_Staff</strong> (Xác thực bằng tài khoản Google Workspace công ty). Để truy cập hệ thống Staging và máy chủ nội bộ khi làm việc từ xa, bạn sử dụng phần mềm OpenVPN với chứng thực 2FA OTP.',
+        source: 'Hướng dẫn Kỹ thuật & Hạ tầng Mạng – Mục 1.1 (Trang 3)',
+        followUps: ['it-equipment', 'security-password']
+      },
+      {
+        id: 'meeting-room',
+        type: 'policy',
+        title: 'Đặt phòng họp & Không gian chung',
+        keywords: ['phòng họp', 'đặt phòng', 'meeting room', 'book phòng', 'phong hop', 'dat phong'],
+        synonyms: ['họp', 'phòng brainstorm', 'hội thảo', 'lịch họp', 'calendar', 'máy chiếu', 'phong hop lon'],
+        answer: 'Công ty có 6 phòng họp (từ 4 đến 20 người) trang bị sẵn màn hình hội nghị và Google Meet Series One. Bạn đặt phòng trực tiếp qua <strong>Google Calendar</strong> bằng cách thêm phòng vào mục *Rooms* trước ít nhất 15 phút.',
+        source: 'Sổ tay Sử dụng Không gian Chung – Mục 3.2 (Trang 10)',
+        followUps: ['working-hours', 'dress-code']
+      },
+      {
+        id: 'dress-code',
+        type: 'policy',
+        title: 'Quy định trang phục (Dress code)',
+        keywords: ['trang phục', 'dress code', 'mặc gì', 'đồng phục', 'trang phuc', 'dong phuc'],
+        synonyms: ['quần áo', 'áo thun', 'váy', 'giày', 'mặc đồ', 'công sở', 'thứ sáu', 'quy dinh mac do'],
+        answer: 'OnboardAI áp dụng phong cách <strong>Smart Casual</strong> thoải mái, lịch sự. Nhân viên có thể mặc áo phông, sơ mi, quần jeans và giày thể thao. Vào các ngày tiếp khách hàng hoặc đối tác quan trọng, trang phục chuẩn công sở (Business Casual) được khuyến khích.',
+        source: 'Sổ tay Văn hóa Doanh nghiệp – Mục 1.4: Tác phong làm việc (Trang 9)',
+        followUps: ['working-hours', 'lunch-allowance']
+      },
+      {
+        id: 'lunch-allowance',
+        type: 'policy',
+        title: 'Phụ cấp ăn trưa & Tiện ích Pantry',
+        keywords: ['ăn trưa', 'phụ cấp', 'căn tin', 'căng tin', 'allowance', 'phu cap', 'an trua'],
+        synonyms: ['tiền ăn', 'phụ cấp ăn', 'cơm trưa', 'trà cà phê', 'pantry', 'snack', 'đồ ăn nhẹ', 'phu cap an trua', 'co phu cap an trua khong'],
+        answer: 'Công ty hỗ trợ phụ cấp ăn trưa <strong>730.000 VNĐ/tháng</strong> (cộng trực tiếp vào kỳ lương). Khu vực Pantry Tầng 3 phục vụ miễn phí cà phê hạt máy pha, trà sữa, trái cây tươi hàng ngày và tủ bánh mì/mì gói tự phục vụ.',
+        source: 'Chính sách Đãi ngộ & Phúc lợi Toàn diện – Mục 5.1 (Trang 29)',
+        followUps: ['salary-payroll', 'working-hours']
+      },
+      {
+        id: 'security-password',
+        type: 'policy',
+        title: 'Bảo mật thông tin & Mật khẩu tài khoản',
+        keywords: ['bảo mật', 'mật khẩu', 'password', 'an toàn thông tin', '2fa', 'bao mat', 'mat khau'],
+        synonyms: ['bảo mật tài khoản', 'xác thực 2 lớp', 'lộ mật khẩu', 'đổi pass', 'quy tắc bảo mật', 'ndas', 'bảo vệ dữ liệu', 'doi mat khau'],
+        answer: 'Toàn bộ tài khoản phải kích hoạt xác thực 2 bước (2FA). Mật khẩu tối thiểu 12 ký tự gồm chữ hoa, số và ký tự đặc biệt, định kỳ đổi 90 ngày/lần. Nhân viên không được tự ý cài đặt phần mềm không có bản quyền hoặc chia sẻ dữ liệu mã nguồn ra ngoài.',
+        source: 'Quy chế An toàn An ninh Thông tin – Mục 2.2 (Trang 7)',
+        followUps: ['it-equipment', 'wifi-vpn']
+      },
+      {
+        id: 'internal-training',
+        type: 'policy',
+        title: 'Đào tạo nội bộ & Ngân sách học tập',
+        keywords: ['đào tạo', 'học tập', 'ngân sách đào tạo', 'training', 'khóa học', 'dao tao', 'hoc tap'],
+        synonyms: ['chứng chỉ', 'coursera', 'udemy', 'thi chứng chỉ', 'học thêm', 'trợ cấp học', 'ngan sach hoc tap'],
+        answer: 'Mỗi nhân viên chính thức có ngân sách phát triển cá nhân <strong>5.000.000 VNĐ/năm</strong> để mua sách, đăng ký khóa học online (Udemy, Coursera) hoặc thi chứng chỉ chuyên môn liên quan vị trí đảm nhiệm.',
+        source: 'Chính sách Đào tạo & Phát triển Năng lực – Mục 4.1 (Trang 33)',
+        followUps: ['probation', 'annual-leave']
+      },
+
+      // === NHÓM 2: CÂU HỎI VỀ DỮ LIỆU CÁ NHÂN (PERSONAL) ===
+      {
+        id: 'my-mentor',
+        type: 'personal',
+        title: 'Mentor (Người hướng dẫn) của tôi',
+        keywords: ['mentor của tôi là ai', 'mentor của tôi', 'người hướng dẫn', 'ai kèm tôi', 'mentor la ai', 'thông tin mentor', 'ai huong dan toi'],
+        synonyms: ['mentor', 'nguoi huong dan', 'ai huong dan', 'buddy cua toi', 'nguoi kem cap', 'mentor la nguoi nao', 'ai la mentor'],
+        handler: (user) => {
+          return {
+            answer: `Mentor trực tiếp đồng hành cùng bạn là <strong>${escapeHtml(user.mentorName)}</strong> (${escapeHtml(user.department)}). Bạn có thể trao đổi 1-on-1 hàng tuần hoặc gửi tin nhắn trực tiếp qua mục *Nhắn tin cho Mentor* trên Bảng điều khiển hội nhập.`,
+            source: `Hệ thống Phân công Mentor OnboardAI – Hồ sơ Nhân sự ${escapeHtml(user.id)}`,
+            followUps: ['my-tasks-today', 'my-progress', 'probation']
+          };
+        }
+      },
+      {
+        id: 'my-tasks-today',
+        type: 'personal',
+        title: 'Việc cần làm hôm nay của tôi',
+        keywords: ['hôm nay tôi cần làm gì', 'hôm nay làm gì', 'việc hôm nay', 'task của tôi', 'nhiệm vụ hôm nay', 'cong viec hom nay'],
+        synonyms: ['viec can lam', 'hom nay toi lam gi', 'task hom nay', 'viec hom nay cua toi', 'hom nay co viec gi'],
+        handler: (user) => {
+          let allTasks = [];
+          if (window.API && window.API.getAll) {
+            allTasks = window.API.getAll('tasks') || [];
+          }
+          const myTasks = allTasks.filter(t => t.newHireId === user.id && t.status !== 'completed');
+          const todayTasks = myTasks.filter(t => (t.dueDate && t.dueDate.toLowerCase().includes('hôm nay')) || t.status === 'blocked');
+          const displayTasks = todayTasks.length > 0 ? todayTasks.slice(0, 3) : myTasks.slice(0, 3);
+
+          if (displayTasks.length === 0) {
+            return {
+              answer: `Tuyệt vời! Hiện bạn <strong>không có đầu việc nào quá hạn hoặc cần hoàn tất gấp trong hôm nay</strong>. Bạn có thể xem lại toàn bộ lộ trình tại trang <a href="newhire-checklist.html" class="text-[#1F5AFE] underline font-semibold">Checklist hội nhập</a>.`,
+              source: `Checklist Nhiệm vụ Hội nhập – Hồ sơ ${escapeHtml(user.id)}`,
+              followUps: ['my-progress', 'my-mentor']
+            };
+          }
+
+          const taskListHtml = displayTasks.map(t => {
+            const isBlocked = t.status === 'blocked';
+            const statusBadge = isBlocked 
+              ? `<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">Đang bị chặn</span>`
+              : `<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">Hạn: ${escapeHtml(t.dueDate)}</span>`;
+            return `<li class="py-1.5 flex flex-col gap-0.5 border-b border-slate-100 last:border-0">
+              <div class="flex items-center justify-between gap-2">
+                <span class="font-semibold text-slate-800">• ${escapeHtml(t.title)}</span>
+                ${statusBadge}
+              </div>
+              ${isBlocked && t.blockedReason ? `<span class="text-[11px] text-rose-600 pl-3">Lý do: ${escapeHtml(t.blockedReason)}</span>` : ''}
+            </li>`;
+          }).join('');
+
+          return {
+            answer: `Hôm nay bạn có <strong>${displayTasks.length} nhiệm vụ ưu tiên</strong> cần lưu ý:<ul class="mt-2 text-xs space-y-1">${taskListHtml}</ul><div class="mt-2.5"><a href="newhire-checklist.html" class="inline-flex items-center gap-1 text-[#1F5AFE] hover:underline font-semibold text-xs">Mở toàn bộ Checklist hội nhập &rarr;</a></div>`,
+            source: `Checklist Nhiệm vụ Hội nhập – Hồ sơ ${escapeHtml(user.id)}`,
+            followUps: ['my-overdue', 'my-mentor']
+          };
+        }
+      },
+      {
+        id: 'my-overdue',
+        type: 'personal',
+        title: 'Nhiệm vụ sắp hết hạn hoặc đang bị chặn',
+        keywords: ['task nào sắp hết hạn', 'sắp hết hạn', 'trễ hạn', 'gấp', 'task gap', 'viec gap', 'bi chan', 'nhiem vu gap'],
+        synonyms: ['task sap het han', 'viec sap het han', 'deadline gap', 'task nao can lam gap', 'viec nao bi chan'],
+        handler: (user) => {
+          let allTasks = [];
+          if (window.API && window.API.getAll) {
+            allTasks = window.API.getAll('tasks') || [];
+          }
+          const urgentTasks = allTasks.filter(t => t.newHireId === user.id && t.status !== 'completed' && (t.status === 'blocked' || (t.dueDate && t.dueDate.toLowerCase().includes('hôm nay'))));
+          
+          if (urgentTasks.length === 0) {
+            return {
+              answer: `Hiện tại bạn <strong>không có công việc nào bị trễ hạn hoặc bị chặn (blocked)</strong>. Mọi tiến trình đều đang đúng tiến độ!`,
+              source: `Checklist Nhiệm vụ Hội nhập – Cập nhật thời gian thực`,
+              followUps: ['my-tasks-today', 'my-progress']
+            };
+          }
+
+          const urgentHtml = urgentTasks.map(t => {
+            return `<li class="py-1.5 flex items-start justify-between gap-2 border-b border-slate-100 last:border-0">
+              <div>
+                <span class="font-semibold text-slate-800">• ${escapeHtml(t.title)}</span>
+                ${t.blockedReason ? `<div class="text-[11px] text-rose-600 font-medium mt-0.5">Trở ngại: ${escapeHtml(t.blockedReason)}</div>` : ''}
+              </div>
+              <span class="shrink-0 text-[10px] font-bold px-1.5 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200">${t.status === 'blocked' ? 'BỊ CHẶN' : 'HÔM NAY'}</span>
+            </li>`;
+          }).join('');
+
+          return {
+            answer: `Bạn có <strong>${urgentTasks.length} nhiệm vụ gấp cần giải quyết</strong>:<ul class="mt-2 text-xs space-y-1">${urgentHtml}</ul><div class="mt-2.5 text-[11px] text-slate-500">Đối với các mục bị chặn quyền truy cập, bạn có thể gửi yêu cầu hỗ trợ qua IT Helpdesk hoặc nhờ Mentor hỗ trợ gỡ vướng.</div>`,
+            source: `Cảnh báo Tiến độ Onboarding – Hồ sơ ${escapeHtml(user.id)}`,
+            followUps: ['my-tasks-today', 'my-mentor']
+          };
+        }
+      },
+      {
+        id: 'my-progress',
+        type: 'personal',
+        title: 'Tiến độ hội nhập của tôi',
+        keywords: ['tôi được bao nhiêu phần trăm rồi', 'tiến độ', 'bao nhiêu phần trăm', 'tôi làm tới đâu', 'tien do cua toi', 'phan tram hoan thanh'],
+        synonyms: ['toi duoc bao nhieu phan tram', 'tien do hoi nhap', 'hoan thanh bao nhieu', 'tien do cua minh'],
+        handler: (user) => {
+          let allTasks = [];
+          if (window.API && window.API.getAll) {
+            allTasks = window.API.getAll('tasks') || [];
+          }
+          const myTasks = allTasks.filter(t => t.newHireId === user.id);
+          const completedCount = myTasks.filter(t => t.status === 'completed').length;
+          const totalCount = myTasks.length || 10;
+          const pct = user.progress !== undefined ? user.progress : Math.round((completedCount / totalCount) * 100);
+
+          return {
+            answer: `Tiến độ hội nhập hiện tại của bạn đạt <strong>${pct}%</strong> (đã hoàn thành <strong>${completedCount}/${totalCount} nhiệm vụ</strong>). Trạng thái tổng thể: <span class="font-bold text-emerald-600">Đúng tiến độ (On Track)</span>. Bạn đang làm rất tốt, hãy duy trì nhịp độ này nhé!`,
+            source: `Hồ sơ Theo dõi Hội nhập Nhân sự – Mã ${escapeHtml(user.id)}`,
+            followUps: ['my-probation-end', 'my-tasks-today']
+          };
+        }
+      },
+      {
+        id: 'my-join-date',
+        type: 'personal',
+        title: 'Ngày bắt đầu làm việc của tôi',
+        keywords: ['ngày vào làm', 'tôi vào hôm nào', 'ngay vao cong ty', 'ngay bat dau', 'ngay onboarding'],
+        synonyms: ['vao lam ngay nao', 'ngay onboarding', 'bat dau lam viec tu bao gio', 'ngay toi vao lam'],
+        handler: (user) => {
+          let formattedDate = user.joinDate;
+          if (user.joinDate && user.joinDate.includes('-')) {
+            const parts = user.joinDate.split('-');
+            if (parts.length === 3) formattedDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
+          }
+          return {
+            answer: `Ngày bắt đầu làm việc chính thức của bạn tại OnboardAI là <strong>${escapeHtml(formattedDate)}</strong> (vị trí: <em>${escapeHtml(user.position)}</em> - ${escapeHtml(user.department)}).`,
+            source: `Hợp đồng Thử việc & Tiếp nhận Nhân sự – Hồ sơ ${escapeHtml(user.id)}`,
+            followUps: ['my-probation-end', 'probation']
+          };
+        }
+      },
+      {
+        id: 'my-probation-end',
+        type: 'personal',
+        title: 'Thời điểm kết thúc thử việc',
+        keywords: ['khi nào tôi hết thử việc', 'hết thử việc', 'khi nào chính thức', 'khi nao toi het thu viec', 'ket thuc thu viec'],
+        synonyms: ['ngay len chinh thuc', 'bao gio het thu viec', 'thoi gian thu viec con bao lau', 'ngay ket thuc thu viec'],
+        handler: (user) => {
+          let endDateStr = '14/11/2026';
+          try {
+            if (user.joinDate) {
+              const d = new Date(user.joinDate);
+              d.setDate(d.getDate() + 60);
+              const day = String(d.getDate()).padStart(2, '0');
+              const month = String(d.getMonth() + 1).padStart(2, '0');
+              const year = d.getFullYear();
+              endDateStr = `${day}/${month}/${year}`;
+            }
+          } catch (e) {}
+
+          return {
+            answer: `Thời gian thử việc tiêu chuẩn của bạn là 60 ngày, dự kiến kết thúc vào ngày <strong>${endDateStr}</strong>. Vào khoảng ngày thứ 50 của kỳ thử việc, phòng Nhân sự sẽ phối hợp cùng Mentor ${escapeHtml(user.mentorName)} để tiến hành buổi Đánh giá 1-on-1 tổng kết.`,
+            source: `Điều khoản Hợp đồng Thử việc & Quy chế Đánh giá Nhân sự`,
+            followUps: ['probation', 'my-progress', 'annual-leave']
+          };
+        }
+      },
+
+      // === NHÓM 3: GIAO TIẾP CƠ BẢN (SMALLTALK) ===
+      {
+        id: 'greeting',
+        type: 'smalltalk',
+        title: 'Chào hỏi',
+        keywords: ['xin chào', 'chào', 'hello', 'hi', 'alo', 'chao ban', 'chao onboardai'],
+        synonyms: ['good morning', 'hey', 'chao e', 'chao em', 'chao ad', 'hi ban'],
+        handler: (user) => {
+          return {
+            answer: `Xin chào <strong>${escapeHtml(user.name)}</strong>! Tôi là Trợ lý AI đồng hành hội nhập. Hôm nay tôi có thể hỗ trợ gì cho bạn về nội quy, chế độ, phúc lợi hay các công việc đang thực hiện?`,
+            source: `Trợ lý Hội nhập OnboardAI sẵn sàng hỗ trợ`,
+            followUps: ['annual-leave', 'probation', 'my-tasks-today']
+          };
+        }
+      },
+      {
+        id: 'thanks',
+        type: 'smalltalk',
+        title: 'Cảm ơn',
+        keywords: ['cảm ơn', 'thanks', 'cám ơn', 'cam on nhe', 'thank you', 'tks'],
+        synonyms: ['cam on ban', 'cam on nha', 'tks ad', 'rat huu ich', 'thank bot'],
+        handler: (user) => {
+          return {
+            answer: `Rất vui được hỗ trợ bạn! Nếu còn bất kỳ băn khoăn nào trong quá trình làm việc và hội nhập, bạn cứ nhắn tin cho tôi bất cứ lúc nào nhé. Chúc bạn một ngày làm việc thật năng suất!`,
+            source: `Trợ lý Hội nhập OnboardAI`,
+            followUps: ['my-tasks-today', 'health-insurance']
+          };
+        }
+      },
+      {
+        id: 'bye',
+        type: 'smalltalk',
+        title: 'Tạm biệt',
+        keywords: ['tạm biệt', 'bye', 'goodbye', 'hen gap lai', 'chao nhe'],
+        synonyms: ['tam biet nhe', 'see you', 'off day', 'nghi day'],
+        handler: (user) => {
+          return {
+            answer: `Tạm biệt bạn! Chúc bạn có một ngày làm việc tràn đầy hứng khởi và gặt hái nhiều kết quả tốt đẹp tại OnboardAI. Hẹn gặp lại bạn!`,
+            source: `Trợ lý Hội nhập OnboardAI`,
+            followUps: ['my-tasks-today', 'annual-leave']
+          };
+        }
       }
     ];
 
+    // 6. DANH SÁCH TỪ KHÓA LIÊN QUAN CÔNG VIỆC (Dành cho Zone 2)
+    const WORK_RELATED_TERMS = [
+      'cong ty', 'luong', 'thuong', 'phong ban', 'sep', 'quan ly', 'du an', 'quy dinh',
+      'chinh sach', 'hop dong', 'phu cap', 'an trua', 'dong phuc', 'cham cong', 'gio lam',
+      'van phong', 'dao tao', 'khoa hoc', 'nghi', 'hr', 'nhan su', 'it', 'may tinh',
+      'tai khoan', 'email', 'mentor', 'buddy', 'kpi', 'okr', 'bao hiem', 'nghi phep',
+      'nghi om', 'che do', 'quy che', 'tru so', 'toa nha', 'the nhan vien', 'thiet bi',
+      'git', 'commit', 'repo', 'code', 'deploy', 'ticket', 'jira', 'slack', 'onboard'
+    ];
+
+    // 7. BIẾN TOÀN CỤC & TIỀN XỬ LÝ (Pre-normalization)
+    let lastAnsweredEntryId = null;
+    let lastUnansweredQuery = '';
+    let fuseInstance = null;
+    let typeaheadTimeout = null;
+
+    function initKnowledgeBase() {
+      KNOWLEDGE_BASE.forEach(entry => {
+        entry._normKeywords = (entry.keywords || []).map(k => normalize(k));
+        entry._normSynonyms = (entry.synonyms || []).map(s => normalize(s));
+      });
+
+      // Khởi tạo Fuse.js nếu thư viện được nạp thành công (Progressive Enhancement)
+      if (typeof Fuse !== 'undefined') {
+        try {
+          const fuseData = KNOWLEDGE_BASE.map(item => ({
+            id: item.id,
+            title: item.title,
+            searchTerms: [...(item.keywords || []), ...(item.synonyms || [])].join(' ')
+          }));
+          fuseInstance = new Fuse(fuseData, {
+            keys: ['searchTerms', 'title'],
+            threshold: 0.35,
+            ignoreLocation: true
+          });
+        } catch (e) {
+          console.warn('[AI Engine] Khởi tạo Fuse.js bỏ qua:', e);
+        }
+      }
+    }
+
+    // 8. THUẬT TOÁN CHẤM ĐIỂM MỤC TRI THỨC (Scoring Algorithm)
+    function scoreEntry(normQuery, entry) {
+      let score = 0;
+      const hits = [];
+
+      (entry._normKeywords || []).forEach((k, i) => {
+        if (k && containsPhrase(normQuery, k)) {
+          score += 3;
+          hits.push(entry.keywords[i]);
+        }
+      });
+
+      (entry._normSynonyms || []).forEach((s, i) => {
+        if (s && containsPhrase(normQuery, s)) {
+          score += 2;
+          hits.push(entry.synonyms[i]);
+        }
+      });
+
+      return { entry, score, hits };
+    }
+
+    // 9. GỢI Ý TỨC THÌ KHI ĐANG GÕ (Typeahead Autocomplete 150ms Debounce)
+    function handleTypeahead(val) {
+      clearTimeout(typeaheadTimeout);
+      const container = document.getElementById('typeaheadSuggestions');
+      const list = document.getElementById('typeaheadList');
+      if (!container || !list) return;
+
+      const q = (val || '').trim();
+      if (q.length < 2) {
+        container.classList.add('hidden');
+        list.innerHTML = '';
+        return;
+      }
+
+      typeaheadTimeout = setTimeout(() => {
+        const norm = normalize(q);
+        const ranked = KNOWLEDGE_BASE
+          .filter(e => e.type !== 'smalltalk')
+          .map(entry => scoreEntry(norm, entry))
+          .filter(r => r.score >= 2)
+          .sort((a, b) => b.score - a.score)
+          .slice(0, 3);
+
+        if (ranked.length > 0) {
+          list.innerHTML = ranked.map(r => `
+            <button type="button" onclick="askPrompt('${escapeHtml(r.entry.title)}')" class="text-xs bg-slate-50 hover:bg-blue-50 hover:text-[#1F5AFE] text-slate-700 border border-slate-200 hover:border-blue-200 px-2.5 py-1 rounded-xl transition shadow-2xs flex items-center gap-1.5 active:scale-95">
+              <i data-lucide="corner-down-right" class="w-3 h-3 text-[#1F5AFE]"></i>
+              <span>${escapeHtml(r.entry.title)}</span>
+            </button>
+          `).join('');
+          container.classList.remove('hidden');
+          lucide.createIcons();
+        } else {
+          container.classList.add('hidden');
+          list.innerHTML = '';
+        }
+      }, 150);
+    }
+
+    // 10. ĐIỀU HƯỚNG VÀ XỬ LÝ TRUY VẤN AI (Core Decision Engine)
+    function processAIResponse(query) {
+      const normQuery = normalize(query);
+      const user = getCurrentUserData();
+      const MIN_SCORE = 2;
+      const MIN_GAP = 2;
+
+      // 1. Chấm điểm tất cả các mục trong Knowledge Base
+      let ranked = KNOWLEDGE_BASE
+        .map(entry => scoreEntry(normQuery, entry))
+        .filter(r => r.score >= MIN_SCORE)
+        .sort((a, b) => b.score - a.score);
+
+      // 2. Fuzzy search fallback nếu không có kết quả và có Fuse.js
+      let isFuzzy = false;
+      if (ranked.length === 0 && fuseInstance) {
+        try {
+          const fuzzyResults = fuseInstance.search(normQuery);
+          if (fuzzyResults.length > 0) {
+            const matchId = fuzzyResults[0].item.id;
+            const found = KNOWLEDGE_BASE.find(e => e.id === matchId);
+            if (found) {
+              ranked = [{ entry: found, score: 3, hits: ['gõ gần đúng'], isFuzzy: true }];
+              isFuzzy = true;
+            }
+          }
+        } catch (err) {}
+      }
+
+      // 3. Xử lý ngữ cảnh 1 lượt (câu ngắn <= 6 từ có từ nối tiếp tục)
+      const words = normQuery.split(' ').filter(Boolean);
+      const isContextual = /^(con|the con|vay|the|bao lau|thu tuc|nhu the nao|o dau)/.test(normQuery);
+      if (ranked.length === 0 && lastAnsweredEntryId && words.length <= 6 && isContextual) {
+        const prevEntry = KNOWLEDGE_BASE.find(e => e.id === lastAnsweredEntryId);
+        if (prevEntry && prevEntry.followUps && prevEntry.followUps.length > 0) {
+          const followUpEntry = KNOWLEDGE_BASE.find(e => e.id === prevEntry.followUps[0]);
+          if (followUpEntry) {
+            ranked = [{ entry: followUpEntry, score: 3, hits: ['ngữ cảnh liên kết'] }];
+          }
+        }
+      }
+
+      const [top, second] = ranked;
+
+      // 4. Phân vùng quyết định
+      if (!top) {
+        // Không khớp mục nào: phân vùng Zone 2 (Việc công ty chưa có tài liệu) vs Zone 3 (Ngoài công việc)
+        lastUnansweredQuery = query;
+        const isWorkRelated = WORK_RELATED_TERMS.some(term => containsPhrase(normQuery, term));
+        if (isWorkRelated) {
+          renderZone2Response(query, user);
+        } else {
+          renderZone3Response(query, user);
+        }
+      } else if (second && (top.score - second.score < MIN_GAP) && !isFuzzy && top.entry.id !== second.entry.id) {
+        // Phân vân giữa 2 chủ đề điểm gần bằng nhau -> Kích hoạt Hỏi lại (Clarification)
+        renderClarificationResponse(top.entry, second.entry);
+      } else {
+        // Vùng 1: Trả lời chuẩn xác có trích nguồn
+        lastAnsweredEntryId = top.entry.id;
+        renderZone1Response(top.entry, top.score, user, isFuzzy);
+      }
+    }
+
+    // 11. RENDER VÙNG 1: TRẢ LỜI CHUẨN XÁC KÈM TRÍCH NGUỒN VÀ GỢI Ý
+    function renderZone1Response(entry, score, user, isFuzzy) {
+      let answer = entry.answer;
+      let source = entry.source;
+      let followUps = entry.followUps || [];
+
+      if (typeof entry.handler === 'function') {
+        const res = entry.handler(user);
+        answer = res.answer;
+        source = res.source;
+        if (res.followUps) followUps = res.followUps;
+      }
+
+      // Nhãn độ khớp minh bạch chuẩn B2B SaaS (Không raw emoji)
+      let badgeHtml = '';
+      if (isFuzzy) {
+        badgeHtml = `
+          <span class="text-[10px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200 flex items-center gap-1">
+            <i data-lucide="sparkles" class="w-3 h-3 text-blue-600"></i> Độ khớp khá (Gõ gần đúng)
+          </span>
+        `;
+      } else if (score >= 5) {
+        badgeHtml = `
+          <span class="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
+            <i data-lucide="shield-check" class="w-3 h-3 text-emerald-600"></i> Độ khớp cao
+          </span>
+        `;
+      } else {
+        badgeHtml = `
+          <span class="text-[10px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200 flex items-center gap-1">
+            <i data-lucide="check" class="w-3 h-3 text-blue-600"></i> Độ khớp khá
+          </span>
+        `;
+      }
+
+      // Nút câu hỏi gợi ý tiếp theo (Follow-up chips)
+      let followUpsHtml = '';
+      if (followUps && followUps.length > 0) {
+        const chips = followUps.map(fId => {
+          const target = KNOWLEDGE_BASE.find(e => e.id === fId);
+          if (!target) return '';
+          return `
+            <button type="button" onclick="askPrompt('${escapeHtml(target.title)}')" class="text-xs bg-slate-50 hover:bg-blue-50 hover:text-[#1F5AFE] text-slate-700 border border-slate-200 hover:border-blue-200 px-2.5 py-1 rounded-xl transition shadow-2xs flex items-center gap-1 active:scale-95">
+              <i data-lucide="arrow-right" class="w-3 h-3 text-[#1F5AFE]"></i>
+              <span>${escapeHtml(target.title)}</span>
+            </button>
+          `;
+        }).filter(Boolean).join('');
+
+        if (chips) {
+          followUpsHtml = `
+            <div class="pt-2.5 mt-2.5 border-t border-slate-100">
+              <div class="text-[11px] font-medium text-slate-400 mb-1.5 flex items-center gap-1">
+                <i data-lucide="corner-down-right" class="w-3 h-3 text-slate-400"></i>
+                <span>Gợi ý tìm hiểu tiếp:</span>
+              </div>
+              <div class="flex flex-wrap gap-1.5">${chips}</div>
+            </div>
+          `;
+        }
+      }
+
+      const container = document.getElementById('chatMessages');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'flex items-start gap-3 animate-fade-in';
+      msgDiv.innerHTML = `
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#1F5AFE] to-indigo-600 flex items-center justify-center text-white shrink-0 shadow-xs">
+          <i data-lucide="bot" class="w-4 h-4"></i>
+        </div>
+        <div class="flex-1 max-w-2xl bg-white border border-[#E2E8F0] rounded-2xl rounded-tl-sm p-4 shadow-xs">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+              OnboardAI Assistant
+              <span class="text-[10px] font-normal text-slate-400">Vừa xong</span>
+            </span>
+            ${badgeHtml}
+          </div>
+          <div class="text-xs text-slate-700 leading-relaxed mb-3">
+            ${answer}
+          </div>
+
+          ${source ? `
+          <div class="p-2.5 rounded-xl bg-blue-50/60 border border-blue-100 text-[11px] text-blue-900 mb-3 flex items-start gap-2">
+            <i data-lucide="bookmark" class="w-3.5 h-3.5 text-[#1F5AFE] shrink-0 mt-0.5"></i>
+            <div>
+              <strong class="font-semibold text-[#1F5AFE]">Nguồn trích dẫn:</strong> ${source}
+            </div>
+          </div>
+          ` : ''}
+
+          ${followUpsHtml}
+
+          <div class="flex items-center justify-between pt-2 mt-2 border-t border-slate-100 text-[11px] text-slate-500">
+            <div class="flex items-center gap-2">
+              <button onclick="handleFeedback(this, true)" class="hover:text-emerald-600 flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-slate-50 transition">
+                <i data-lucide="thumbs-up" class="w-3.5 h-3.5"></i> Hữu ích
+              </button>
+              <button onclick="handleFeedback(this, false)" class="hover:text-rose-600 flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-slate-50 transition">
+                <i data-lucide="thumbs-down" class="w-3.5 h-3.5"></i> Chưa rõ
+              </button>
+              <button onclick="copyAnswer(this)" class="hover:text-slate-900 flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-slate-50 transition">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i> Sao chép
+              </button>
+            </div>
+            <span class="text-[10px] text-slate-400">AI Policy Engine v3.0</span>
+          </div>
+        </div>
+      `;
+      container.appendChild(msgDiv);
+      lucide.createIcons();
+      container.scrollTop = container.scrollHeight;
+    }
+
+    // 12. RENDER HỎI LẠI KHI 2 CHỦ ĐỀ GẦN ĐIỂM NHAU (Clarification Dialogue)
+    function renderClarificationResponse(topEntry, secondEntry) {
+      const container = document.getElementById('chatMessages');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'flex items-start gap-3 animate-fade-in';
+      msgDiv.innerHTML = `
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-indigo-600 flex items-center justify-center text-white shrink-0 shadow-xs">
+          <i data-lucide="help-circle" class="w-4 h-4"></i>
+        </div>
+        <div class="flex-1 max-w-2xl bg-white border border-[#E2E8F0] rounded-2xl rounded-tl-sm p-4 shadow-xs">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+              OnboardAI Assistant
+              <span class="text-[10px] font-normal text-slate-400">Vừa xong</span>
+            </span>
+            <span class="text-[10px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200 flex items-center gap-1">
+              <i data-lucide="help-circle" class="w-3 h-3 text-amber-600"></i> Cần xác nhận chủ đề
+            </span>
+          </div>
+          <p class="text-xs text-slate-700 leading-relaxed mb-3">
+            Câu hỏi của bạn liên quan đến 2 chủ đề quy chế: <strong>${escapeHtml(topEntry.title)}</strong> và <strong>${escapeHtml(secondEntry.title)}</strong>. Bạn muốn tìm hiểu cụ thể về nội dung nào?
+          </p>
+          <div class="flex flex-wrap gap-2 pt-1">
+            <button onclick="askPrompt('${escapeHtml(topEntry.title)}')" class="px-3.5 py-2 rounded-xl bg-blue-50 hover:bg-[#1F5AFE] text-[#1F5AFE] hover:text-white border border-blue-200 text-xs font-semibold transition flex items-center gap-1.5 active:scale-95 shadow-2xs">
+              <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+              <span>${escapeHtml(topEntry.title)}</span>
+            </button>
+            <button onclick="askPrompt('${escapeHtml(secondEntry.title)}')" class="px-3.5 py-2 rounded-xl bg-blue-50 hover:bg-[#1F5AFE] text-[#1F5AFE] hover:text-white border border-blue-200 text-xs font-semibold transition flex items-center gap-1.5 active:scale-95 shadow-2xs">
+              <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+              <span>${escapeHtml(secondEntry.title)}</span>
+            </button>
+          </div>
+        </div>
+      `;
+      container.appendChild(msgDiv);
+      lucide.createIcons();
+      container.scrollTop = container.scrollHeight;
+    }
+
+    // 13. RENDER VÙNG 2: LIÊN QUAN CÔNG VIỆC NHƯNG CHƯA CÓ TRONG QUY CHẾ
+    function renderZone2Response(query, user) {
+      const container = document.getElementById('chatMessages');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'flex items-start gap-3 animate-fade-in';
+      msgDiv.innerHTML = `
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center text-white shrink-0 shadow-xs">
+          <i data-lucide="help-circle" class="w-4 h-4"></i>
+        </div>
+        <div class="flex-1 max-w-2xl bg-white border border-amber-200 rounded-2xl rounded-tl-sm p-4 shadow-xs">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold text-slate-900">OnboardAI Assistant</span>
+            <span class="text-[10px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200 flex items-center gap-1">
+              <i data-lucide="alert-circle" class="w-3 h-3 text-amber-600"></i> Chưa có trong dữ liệu
+            </span>
+          </div>
+          <p class="text-xs text-slate-700 leading-relaxed mb-3">
+            Rất tiếc, câu hỏi của bạn chưa có dữ liệu chính xác trong các tài liệu nội quy hiện thời. Để đảm bảo thông tin chính xác nhất, bạn có muốn chuyển tiếp câu hỏi này cho phòng <strong>Nhân sự (HR)</strong> hỗ trợ trực tiếp không?
+          </p>
+          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600 mb-3 flex items-start gap-2">
+            <i data-lucide="user-check" class="w-3.5 h-3.5 text-blue-600 shrink-0 mt-0.5"></i>
+            <span>Gợi ý thêm: Bạn cũng có thể liên hệ trực tiếp Mentor <strong>${escapeHtml(user.mentorName)}</strong> để được hướng dẫn nhanh.</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="escalateToHR(this)" class="px-3.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 active:scale-95">
+              <i data-lucide="send" class="w-3.5 h-3.5"></i>
+              <span>Gửi câu hỏi tới phòng HR</span>
+            </button>
+            <button onclick="document.getElementById('userInput').focus()" class="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
+              Hỏi câu khác
+            </button>
+          </div>
+        </div>
+      `;
+      container.appendChild(msgDiv);
+      lucide.createIcons();
+      container.scrollTop = container.scrollHeight;
+    }
+
+    // 14. RENDER VÙNG 3: NGOÀI CÔNG VIỆC (Từ chối lịch thiệp & gợi ý chủ đề)
+    function renderZone3Response(query, user) {
+      const container = document.getElementById('chatMessages');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'flex items-start gap-3 animate-fade-in';
+      msgDiv.innerHTML = `
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-slate-600 to-slate-800 flex items-center justify-center text-white shrink-0 shadow-xs">
+          <i data-lucide="bot" class="w-4 h-4"></i>
+        </div>
+        <div class="flex-1 max-w-2xl bg-white border border-[#E2E8F0] rounded-2xl rounded-tl-sm p-4 shadow-xs">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold text-slate-900">OnboardAI Assistant</span>
+            <span class="text-[10px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200 flex items-center gap-1">
+              <i data-lucide="info" class="w-3 h-3 text-slate-500"></i> Ngoài phạm vi hỗ trợ
+            </span>
+          </div>
+          <p class="text-xs text-slate-700 leading-relaxed mb-3">
+            Mình là trợ lý hội nhập nhân sự OnboardAI nên chỉ hỗ trợ được các câu hỏi về quy chế, quyền lợi, bảo hiểm và công việc của bạn tại công ty. Bạn thử hỏi một trong các chủ đề sau nhé:
+          </p>
+          <div class="flex flex-wrap gap-2 pt-1">
+            <button onclick="askPrompt('Chế độ nghỉ phép năm')" class="px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-[#1F5AFE] border border-slate-200 text-xs font-medium transition flex items-center gap-1 active:scale-95">
+              <i data-lucide="calendar" class="w-3 h-3 text-[#1F5AFE]"></i>
+              <span>Chế độ nghỉ phép năm</span>
+            </button>
+            <button onclick="askPrompt('Thời gian thử việc')" class="px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-[#1F5AFE] border border-slate-200 text-xs font-medium transition flex items-center gap-1 active:scale-95">
+              <i data-lucide="clock" class="w-3 h-3 text-indigo-600"></i>
+              <span>Thời gian thử việc</span>
+            </button>
+            <button onclick="askPrompt('Hôm nay tôi cần làm gì')" class="px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-[#1F5AFE] border border-slate-200 text-xs font-medium transition flex items-center gap-1 active:scale-95">
+              <i data-lucide="check-square" class="w-3 h-3 text-emerald-600"></i>
+              <span>Việc hôm nay của tôi</span>
+            </button>
+          </div>
+        </div>
+      `;
+      container.appendChild(msgDiv);
+      lucide.createIcons();
+      container.scrollTop = container.scrollHeight;
+    }
+
+    // 15. CÁC HÀM TIỆN ÍCH & TƯƠNG TÁC GIAO DIỆN
     function toggleMobileSidebar() {
       const sidebar = document.getElementById('appSidebar');
       const overlay = document.getElementById('sidebarOverlay');
@@ -274,10 +1099,13 @@
 
     function logout() {
       localStorage.removeItem('currentUser');
+      localStorage.removeItem('ONBOARDAI_CURRENT_USER');
       localStorage.removeItem('isLoggedIn');
     }
 
     function askPrompt(questionText) {
+      const typeaheadContainer = document.getElementById('typeaheadSuggestions');
+      if (typeaheadContainer) typeaheadContainer.classList.add('hidden');
       document.getElementById('userInput').value = questionText;
       handleSend(new Event('submit'));
     }
@@ -291,11 +1119,14 @@
         return;
       }
 
+      const typeaheadContainer = document.getElementById('typeaheadSuggestions');
+      if (typeaheadContainer) typeaheadContainer.classList.add('hidden');
+
       // 1. Thêm tin nhắn của User vào chat
       appendUserMessage(q);
       input.value = '';
 
-      // 2. Hiển thị loading của AI (chu trình 7 bước)
+      // 2. Hiển thị loading của AI
       const loadingId = appendLoadingIndicator();
 
       // 3. Giả lập AI tra cứu tài liệu trong 800ms
@@ -306,6 +1137,7 @@
     }
 
     function appendUserMessage(text) {
+      const user = getCurrentUserData();
       const container = document.getElementById('chatMessages');
       const msgDiv = document.createElement('div');
       msgDiv.className = 'flex items-start justify-end gap-3 animate-fade-in';
@@ -314,7 +1146,7 @@
           <p>${escapeHtml(text)}</p>
           <div class="text-[10px] text-blue-200 text-right mt-1">Vừa gửi</div>
         </div>
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=An" alt="User" class="w-8 h-8 rounded-full border border-blue-200 shrink-0">
+        <img src="${escapeHtml(user.avatar)}" alt="${escapeHtml(user.name)}" class="w-8 h-8 rounded-full border border-blue-200 shrink-0 bg-white">
       `;
       container.appendChild(msgDiv);
       container.scrollTop = container.scrollHeight;
@@ -350,101 +1182,6 @@
       if (el) el.remove();
     }
 
-    function processAIResponse(query) {
-      const qLower = query.toLowerCase();
-      let match = null;
-
-      // Tìm kiếm trong Knowledge Base
-      for (const item of POLICY_KNOWLEDGE_BASE) {
-        if (item.keywords.some(k => qLower.includes(k))) {
-          match = item;
-          break;
-        }
-      }
-
-      const container = document.getElementById('chatMessages');
-      const msgDiv = document.createElement('div');
-      msgDiv.className = 'flex items-start gap-3 animate-fade-in';
-
-      if (match) {
-        // Trả lời chuẩn xác có thẻ trích dẫn nguồn (Yêu cầu đề tài BTL CSE122)
-        msgDiv.innerHTML = `
-          <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#1F5AFE] to-indigo-600 flex items-center justify-center text-white shrink-0 shadow-xs">
-            <i data-lucide="bot" class="w-4 h-4"></i>
-          </div>
-          <div class="flex-1 max-w-2xl bg-white border border-[#E2E8F0] rounded-2xl rounded-tl-sm p-4 shadow-xs">
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-xs font-bold text-slate-900 flex items-center gap-1.5">
-                OnboardAI Assistant
-                <span class="text-[10px] font-normal text-slate-400">Vừa xong</span>
-              </span>
-              <span class="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100 flex items-center gap-1">
-                <i data-lucide="check" class="w-3 h-3"></i> Khớp tài liệu 100%
-              </span>
-            </div>
-            <div class="text-xs text-slate-700 leading-relaxed mb-3">
-              ${match.answer}
-            </div>
-
-            <!-- Thẻ trích nguồn minh bạch -->
-            <div class="p-2.5 rounded-xl bg-blue-50/60 border border-blue-100 text-[11px] text-blue-900 mb-3 flex items-start gap-2">
-              <i data-lucide="bookmark" class="w-3.5 h-3.5 text-[#1F5AFE] shrink-0 mt-0.5"></i>
-              <div>
-                <strong class="font-semibold text-[#1F5AFE]">Nguồn trích dẫn:</strong> ${match.source}
-              </div>
-            </div>
-
-            <!-- Nút tương tác và phản hồi người dùng -->
-            <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] text-slate-500">
-              <div class="flex items-center gap-2">
-                <button onclick="handleFeedback(this, true)" class="hover:text-emerald-600 flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-slate-50 transition">
-                  <i data-lucide="thumbs-up" class="w-3.5 h-3.5"></i> Hữu ích
-                </button>
-                <button onclick="handleFeedback(this, false)" class="hover:text-rose-600 flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-slate-50 transition">
-                  <i data-lucide="thumbs-down" class="w-3.5 h-3.5"></i> Chưa rõ
-                </button>
-                <button onclick="copyAnswer(this)" class="hover:text-slate-900 flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-slate-50 transition">
-                  <i data-lucide="copy" class="w-3.5 h-3.5"></i> Sao chép
-                </button>
-              </div>
-              <span class="text-[10px] text-slate-400">AI Policy Engine v2.4</span>
-            </div>
-          </div>
-        `;
-      } else {
-        // Fallback UI khi AI không tìm thấy câu trả lời
-        msgDiv.innerHTML = `
-          <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center text-white shrink-0 shadow-xs">
-            <i data-lucide="help-circle" class="w-4 h-4"></i>
-          </div>
-          <div class="flex-1 max-w-2xl bg-white border border-amber-200/80 rounded-2xl rounded-tl-sm p-4 shadow-xs">
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-xs font-bold text-slate-900">OnboardAI Assistant</span>
-              <span class="text-[10px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
-                Chưa có trong dữ liệu
-              </span>
-            </div>
-            <p class="text-xs text-slate-700 leading-relaxed mb-3">
-              Rất tiếc, câu hỏi của bạn chưa có dữ liệu chính xác trong các tài liệu nội quy hiện thời. Để đảm bảo thông tin chính xác nhất, bạn có muốn chuyển tiếp câu hỏi này cho phòng <strong>Nhân sự (HR)</strong> hỗ trợ trực tiếp không?
-            </p>
-            <div class="flex items-center gap-2">
-              <button onclick="escalateToHR(this)" class="px-3.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 active:scale-95">
-                <i data-lucide="send" class="w-3.5 h-3.5"></i>
-                <span>Gửi câu hỏi tới phòng HR</span>
-              </button>
-              <button onclick="document.getElementById('userInput').focus()" class="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
-                Hỏi câu khác
-              </button>
-            </div>
-          </div>
-        `;
-      }
-
-      container.appendChild(msgDiv);
-      lucide.createIcons();
-      container.scrollTop = container.scrollHeight;
-    }
-
     function handleFeedback(btn, isPositive) {
       if (isPositive) {
         showToast('Cảm ơn bạn đã phản hồi! Đánh giá đã được lưu vào hệ thống.', 'success');
@@ -464,12 +1201,21 @@
       btn.className = 'px-3.5 py-1.5 rounded-xl bg-emerald-600 text-white text-xs font-bold flex items-center gap-1.5 cursor-default';
       btn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5"></i><span>Đã chuyển HR tiếp nhận</span>';
       lucide.createIcons();
-      showToast('Đã gửi thông báo tới Chuyên viên Nhân sự (Lê Hoàng Nam). Bạn sẽ nhận câu trả lời qua Email nội bộ!', 'success');
-    }
 
-    function escapeHtml(text) {
-      const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-      return text.replace(/[&<>"']/g, m => map[m]);
+      const user = getCurrentUserData();
+      const existing = JSON.parse(localStorage.getItem('unansweredQuestions') || '[]');
+      existing.unshift({
+        id: 'UQ_' + Date.now().toString(36),
+        question: lastUnansweredQuery || 'Câu hỏi chưa có trong tài liệu',
+        userId: user.id,
+        userName: user.name,
+        department: user.department,
+        createdAt: new Date().toISOString(),
+        status: 'pending'
+      });
+      localStorage.setItem('unansweredQuestions', JSON.stringify(existing));
+
+      showToast('Đã gửi thông báo tới Chuyên viên Nhân sự (Lê Hoàng Nam). Bạn sẽ nhận câu trả lời qua Email nội bộ!', 'success');
     }
 
     function checkAdminImpersonation() {
@@ -487,15 +1233,17 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       checkAdminImpersonation();
-      // Đọc thông tin user đăng nhập
-      const userRaw = localStorage.getItem('currentUser');
-      if (userRaw) {
-        try {
-          const user = JSON.parse(userRaw);
-          if (user.name) {
-            document.getElementById('userDisplayName').innerText = user.name;
-          }
-        } catch (e) {}
+      initKnowledgeBase();
+
+      // Đọc thông tin user đăng nhập và cập nhật giao diện
+      const user = getCurrentUserData();
+      if (user) {
+        const nameEl = document.getElementById('userDisplayName');
+        if (nameEl) nameEl.innerText = user.name;
+        const avatarEl = document.getElementById('userAvatarImg');
+        if (avatarEl && user.avatar) avatarEl.src = user.avatar;
+        const welcomeEl = document.getElementById('welcomeUserName');
+        if (welcomeEl) welcomeEl.innerText = user.name;
       }
       lucide.createIcons();
     });
