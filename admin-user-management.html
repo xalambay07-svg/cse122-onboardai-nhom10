@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quản trị Tài khoản & Phân quyền (AD02) | OnboardAI Enterprise</title>
+  <link rel="icon" href="assets/images/brand/onboardai-mark-small.svg" type="image/svg+xml">
 
   <!-- Font Inter Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -48,24 +49,24 @@
       animation: fadeInSlideUp 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
-    /* Hiệu ứng nhấp sáng vàng nhẹ rồi mờ dần cho dòng vừa thêm/sửa (Mục 7) */
+    /* Hiệu ứng nhấp sáng vàng nhẹ rồi mờ dần cho dòng vừa thêm/sửa (Mục 3.2: ~1.2s) */
     @keyframes highlightFlash {
       0% { background-color: #FEF9C3; }
       35% { background-color: #FEF08A; }
       100% { background-color: transparent; }
     }
     .row-highlight-flash {
-      animation: highlightFlash 2.4s ease-out forwards;
+      animation: highlightFlash 1.2s ease-out forwards;
     }
 
-    /* Hiệu ứng thu gọn + mờ dần khi xóa dòng (Mục 7) */
+    /* Hiệu ứng thu gọn + mờ dần khi xóa dòng (~250ms) */
     .row-collapsing {
       opacity: 0 !important;
       transform: translateX(16px) scale(0.98);
-      transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* Hiệu ứng rung nhẹ (Shake) khi bấm lưu mà form còn lỗi (Mục 7) */
+    /* Hiệu ứng rung nhẹ (Shake) khi bấm lưu mà form còn lỗi */
     @keyframes formShake {
       0%, 100% { transform: translateX(0); }
       20%, 60% { transform: translateX(-6px); }
@@ -75,18 +76,27 @@
       animation: formShake 0.38s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
     }
 
-    /* Hiệu ứng mờ dần khi chuyển 3 tab (Mục 7) */
+    /* Hiệu ứng mờ dần khi chuyển 3 tab */
     .tab-panel {
       animation: fadeInSlideUp 0.24s ease-out;
     }
 
-    /* Thanh đếm ngược 5 giây cho thông báo Hoàn tác (Mục 5.3 & 7) */
+    /* Thanh đếm ngược 5 giây cho thông báo Hoàn tác */
     @keyframes undoCountdown {
       from { width: 100%; }
       to { width: 0%; }
     }
     .undo-progress-bar {
       animation: undoCountdown 5s linear forwards;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .stagger-row, .row-highlight-flash, .animate-shake, .tab-panel {
+        animation: none !important;
+      }
+      .row-collapsing {
+        transition: none !important;
+      }
     }
   </style>
 </head>
@@ -98,19 +108,19 @@
     <!-- ================= 1. SIDEBAR ĐIỀU HƯỚNG DÙNG CHUNG ================= -->
     <aside id="appSidebar" class="w-64 bg-white border-r border-[#E2E8F0] flex flex-col shrink-0 fixed inset-y-0 left-0 z-40 md:static transition-transform duration-300 -translate-x-full md:translate-x-0">
       <!-- Logo Header -->
-      <div class="h-16 flex items-center gap-3 px-6 border-b border-slate-100">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-violet-600 to-[#1F5AFE] flex items-center justify-center text-white shadow-xs">
-          <i data-lucide="shield-check" class="w-5 h-5"></i>
-        </div>
-        <div>
-          <span class="text-base font-bold tracking-tight text-slate-900">Onboard<span class="text-[#1F5AFE]">AI</span></span>
-          <span class="block text-[10px] uppercase font-semibold tracking-wider text-violet-600 font-mono">System Admin</span>
-        </div>
+      <div class="h-16 flex items-center px-6 border-b border-slate-100">
+        <a href="index.html" class="flex items-center gap-2.5">
+          <img src="assets/images/brand/onboardai-mark.svg" width="36" height="36" alt="">
+          <div>
+            <div class="text-[17px] font-extrabold tracking-tight leading-tight text-slate-900">Onboard<span class="text-[#1F5AFE]">AI</span></div>
+            <div class="text-[10px] font-bold tracking-[.12em] text-violet-600">SYSTEM ADMIN</div>
+          </div>
+        </a>
       </div>
 
       <!-- Navigation Links -->
       <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-        <div class="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+        <div class="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
           Phân hệ Quản trị hệ thống
         </div>
         <a href="admin-user-management.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold bg-violet-50 text-violet-700 border border-violet-200/70 transition-colors">
@@ -122,7 +132,7 @@
           <span>Bảng điều khiển HR</span>
         </a>
 
-        <div class="pt-4 px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+        <div class="pt-4 px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
           Chế độ thị sát (View-As)
         </div>
         <a href="newhire-onboarding-dashboard.html" onclick="startImpersonation('newhire-onboarding-dashboard.html', 'Nguyễn Văn An (New Hire)')" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
@@ -134,7 +144,7 @@
           <span>Thị sát Người hướng dẫn</span>
         </a>
 
-        <div class="pt-5 px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+        <div class="pt-5 px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
           Tài khoản & Hệ thống
         </div>
         <a href="profile.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
@@ -160,7 +170,7 @@
           </span>
           <span class="text-xs font-bold text-violet-950">RBAC Guardrails v2.0</span>
         </div>
-        <p class="text-[11px] text-violet-800 leading-relaxed">Rào chắn bảo vệ Admin cuối cùng, kiểm tra bàn giao Mentee và nhật ký kiểm toán đang kích hoạt.</p>
+        <p class="text-xs text-violet-800 leading-relaxed">Rào chắn bảo vệ Admin cuối cùng, kiểm tra bàn giao Mentee và nhật ký kiểm toán đang kích hoạt.</p>
       </div>
     </aside>
 
@@ -169,7 +179,7 @@
 
     <!-- ================= 2. MAIN CONTENT ================= -->
     <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
-      <!-- Topbar Header -->
+      <!-- Topbar Header (Giữ tiêu đề trang duy nhất tại đây theo Mục 4 - Lỗi #9) -->
       <header class="h-16 bg-white border-b border-[#E2E8F0] px-4 md:px-8 flex items-center justify-between shrink-0 sticky top-0 z-20">
         <div class="flex items-center gap-3">
           <button onclick="toggleMobileSidebar()" class="p-2 -ml-2 text-slate-500 hover:text-slate-700 md:hidden rounded-lg hover:bg-slate-100">
@@ -180,7 +190,7 @@
               <h1 class="text-base font-bold text-slate-900">Quản trị Tài khoản & Phân quyền</h1>
               <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-violet-50 text-violet-700 ring-1 ring-inset ring-violet-600/20">Mã AD02</span>
             </div>
-            <p class="text-[11px] text-slate-500 hidden sm:block">Quản lý vòng đời tài khoản, ma trận phân quyền RBAC 4 tầng và nhật ký kiểm toán toàn hệ thống</p>
+            <p class="text-xs text-slate-500 hidden sm:block">Quản lý vòng đời tài khoản, ma trận phân quyền RBAC 4 tầng và nhật ký kiểm toán toàn hệ thống</p>
           </div>
         </div>
 
@@ -200,27 +210,10 @@
       <!-- Main Body -->
       <main class="flex-1 p-4 md:p-8 max-w-7xl w-full mx-auto space-y-6 pb-24">
 
-        <!-- ================= TIÊU ĐỀ & THANH ĐIỀU HƯỚNG 3 TAB (MỤC 3) ================= -->
-        <div class="bg-white rounded-2xl border border-[#E2E8F0] p-4 sm:p-6 shadow-2xs">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-200">
-            <div>
-              <div class="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-violet-700 bg-violet-50 px-2.5 py-0.5 rounded-md ring-1 ring-inset ring-violet-600/20 mb-2">
-                <i data-lucide="key-round" class="w-3.5 h-3.5"></i>
-                <span>Identity & Access Management (IAM)</span>
-              </div>
-              <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight">Quản trị tài khoản (AD02)</h2>
-              <p class="text-xs text-slate-600 mt-0.5">Đồng bộ trực tiếp với CSDL nhân sự mới (<code class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-800 font-mono text-[11px]">newHires</code>) và chế độ thị sát phân quyền View-As.</p>
-            </div>
-            <div class="flex items-center gap-2.5 shrink-0">
-              <button onclick="openUserDrawer('create')" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition active:scale-95">
-                <i data-lucide="user-plus" class="w-4 h-4"></i>
-                <span>Thêm tài khoản</span>
-              </button>
-            </div>
-          </div>
-
+        <!-- ================= THANH ĐIỀU HƯỚNG 3 TAB & NÚT THÊM TÀI KHOẢN (ĐÃ BỎ TIÊU ĐỀ TRÙNG LẶP LỖI #9) ================= -->
+        <div class="bg-white rounded-2xl border border-[#E2E8F0] p-3.5 sm:px-5 sm:py-3.5 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <!-- 3 Tabs Navigation -->
-          <div class="flex flex-wrap items-center gap-2 pt-4" role="tablist">
+          <div class="flex flex-wrap items-center gap-2" role="tablist">
             <button id="tabBtn-users" onclick="switchTab('users')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition bg-slate-900 text-white shadow-2xs">
               <i data-lucide="users" class="w-4 h-4"></i>
               <span>Danh sách tài khoản</span>
@@ -235,6 +228,13 @@
               <i data-lucide="history" class="w-4 h-4"></i>
               <span>Nhật ký hoạt động</span>
               <span id="tabCountLogs" class="px-1.5 py-0.5 rounded-md text-[11px] bg-slate-100 text-slate-700 tabular-nums">3</span>
+            </button>
+          </div>
+
+          <div class="flex items-center gap-2.5 shrink-0">
+            <button onclick="openUserDrawer('create')" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition active:scale-95">
+              <i data-lucide="user-plus" class="w-4 h-4"></i>
+              <span>Thêm tài khoản</span>
             </button>
           </div>
         </div>
@@ -1268,11 +1268,26 @@
         persistAllData();
       }
 
-      renderAll();
+      renderAll(true);
     }
 
-    function renderAll() {
-      updateKpiCards();
+    function countUp(el, to, { duration = 800, suffix = '' } = {}) {
+      if (!el) return;
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        el.textContent = to + suffix;
+        return;
+      }
+      const start = performance.now();
+      const step = now => {
+        const t = Math.min((now - start) / duration, 1);
+        el.textContent = Math.round(to * (1 - Math.pow(1 - t, 3))) + suffix;
+        if (t < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+
+    function renderAll(animateKpi = false) {
+      updateKpiCards(animateKpi);
       updateTabCounters();
       renderHealthCheck();
       renderUserTable();
@@ -1287,7 +1302,7 @@
       document.getElementById('tabCountLogs').textContent = auditLogsList.length;
     }
 
-    function updateKpiCards() {
+    function updateKpiCards(animate = false) {
       const total = usersList.length;
       const activeCount = usersList.filter((u) => u.status === 'active').length;
       const lockedCount = usersList.filter((u) => u.status === 'locked').length;
@@ -1298,14 +1313,21 @@
       const mentorCount = usersList.filter((u) => u.role === 'mentor').length;
       const nhCount = usersList.filter((u) => u.role === 'newhire').length;
 
-      document.getElementById('kpiTotalUsers').textContent = total;
       document.getElementById('kpiRoleBreakdown').innerHTML = `${adminCount} Admin &bull; ${hrCount} HR &bull; ${mentorCount} Mentor &bull; ${nhCount} New Hire`;
-      document.getElementById('kpiActiveUsers').textContent = activeCount;
-      document.getElementById('kpiLockedUsers').textContent = lockedCount;
-      document.getElementById('kpiPendingUsers').textContent = pendingCount;
+      if (animate) {
+        countUp(document.getElementById('kpiTotalUsers'), total);
+        countUp(document.getElementById('kpiActiveUsers'), activeCount);
+        countUp(document.getElementById('kpiLockedUsers'), lockedCount);
+        countUp(document.getElementById('kpiPendingUsers'), pendingCount);
+      } else {
+        document.getElementById('kpiTotalUsers').textContent = total;
+        document.getElementById('kpiActiveUsers').textContent = activeCount;
+        document.getElementById('kpiLockedUsers').textContent = lockedCount;
+        document.getElementById('kpiPendingUsers').textContent = pendingCount;
+      }
     }
 
-    // ================= KIỂM TRA SỨC KHỎE TÀI KHOẢN (MỤC 5.6) =================
+    // ================= KIỂM TRA SỨC KHỎE TÀI KHOẢN (MỤC 5.6 - ĐÃ SỬA LỖI #8 KÉO HẾT CHIỀU NGANG) =================
     function renderHealthCheck() {
       const container = document.getElementById('healthCheckContainer');
       const issues = [];
@@ -1376,20 +1398,20 @@
             <h3 class="text-xs font-extrabold text-slate-900 uppercase tracking-wider">Kiểm tra sức khỏe tài khoản</h3>
             <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 text-amber-800 ring-1 ring-inset ring-amber-600/20 tabular-nums">${issues.length} cần lưu ý</span>
           </div>
-          <span class="text-[11px] text-slate-500">Quy tắc tự động: kiểm tra gán Mentor, tải kèm cặp (&le;5 người) và kích hoạt đăng nhập</span>
+          <span class="text-xs text-slate-500">Quy tắc tự động: kiểm tra gán Mentor, tải kèm cặp (&le;5 người) và kích hoạt đăng nhập</span>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+        <div class="grid ${issues.length === 1 ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'} gap-2.5">
           ${issues
             .map(
-              (item) => `
-            <div class="flex items-center justify-between gap-3 p-3 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] text-xs">
-              <div class="flex items-start gap-2 min-w-0">
+              (item, idx) => `
+            <div class="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] text-xs ${issues.length > 2 && issues.length % 2 === 1 && idx === issues.length - 1 ? 'md:col-span-2' : ''}">
+              <div class="flex items-start gap-2.5 min-w-0">
                 <span class="w-2 h-2 rounded-full mt-1.5 shrink-0 ${
                   item.severity === 'rose' ? 'bg-rose-500' : item.severity === 'amber' ? 'bg-amber-500' : 'bg-[#1F5AFE]'
                 }"></span>
                 <span class="text-slate-700 leading-relaxed">${item.text}</span>
               </div>
-              <button onclick="${item.onClick}" class="shrink-0 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 border border-slate-300 text-[11px] font-bold text-slate-800 transition shadow-2xs">
+              <button onclick="${item.onClick}" class="shrink-0 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 border border-slate-300 text-xs font-bold text-slate-800 transition shadow-2xs">
                 ${item.actionLabel}
               </button>
             </div>
@@ -1477,15 +1499,14 @@
         tbody.innerHTML = '';
         emptyState.classList.remove('hidden');
         emptyState.innerHTML = `
-          <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-500 flex items-center justify-center mx-auto mb-3">
-            <i data-lucide="user-plus" class="w-6 h-6"></i>
+          <div class="flex flex-col items-center text-center py-8">
+            <div class="onbi-stage" style="--onbi-w:96px">
+              <img src="assets/images/mascot/onbi-thinking.webp" width="256" height="480" alt="">
+            </div>
+            <h3 class="mt-3 text-sm font-extrabold text-slate-900">Chưa có tài khoản nào trong hệ thống</h3>
+            <p class="mt-1 text-xs text-slate-600">Hãy tạo tài khoản đầu tiên để bắt đầu phân quyền hội nhập.</p>
+            <button onclick="openUserDrawer('create')" class="mt-3 px-3 py-1.5 rounded-lg text-xs font-bold bg-[#1F5AFE] text-white hover:bg-blue-700 transition">Thêm tài khoản đầu tiên</button>
           </div>
-          <h4 class="text-sm font-bold text-slate-900">Chưa có tài khoản nào trong hệ thống</h4>
-          <p class="text-xs text-slate-500 mt-1 mb-4">Hãy tạo tài khoản đầu tiên để bắt đầu phân quyền hội nhập.</p>
-          <button onclick="openUserDrawer('create')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1F5AFE] text-white text-xs font-bold">
-            <i data-lucide="plus" class="w-4 h-4"></i>
-            <span>Thêm tài khoản đầu tiên</span>
-          </button>
         `;
         return;
       }
@@ -1494,15 +1515,14 @@
         tbody.innerHTML = '';
         emptyState.classList.remove('hidden');
         emptyState.innerHTML = `
-          <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-500 flex items-center justify-center mx-auto mb-3">
-            <i data-lucide="search-x" class="w-6 h-6"></i>
+          <div class="flex flex-col items-center text-center py-8">
+            <div class="onbi-stage" style="--onbi-w:96px">
+              <img src="assets/images/mascot/onbi-thinking.webp" width="256" height="480" alt="">
+            </div>
+            <h3 class="mt-3 text-sm font-extrabold text-slate-900">Không có tài khoản phù hợp</h3>
+            <p class="mt-1 text-xs text-slate-600">Onbi chưa tìm thấy ai khớp bộ lọc.</p>
+            <button onclick="resetAllFilters()" class="mt-3 px-3 py-1.5 rounded-lg text-xs font-bold ring-1 ring-slate-300 hover:bg-slate-50 transition">Xóa bộ lọc</button>
           </div>
-          <h4 class="text-sm font-bold text-slate-900">Không tìm thấy tài khoản phù hợp</h4>
-          <p class="text-xs text-slate-500 mt-1 mb-4">Không có nhân sự nào khớp với từ khóa hoặc tổ hợp bộ lọc hiện tại.</p>
-          <button onclick="resetAllFilters()" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition">
-            <i data-lucide="filter-x" class="w-3.5 h-3.5"></i>
-            <span>Xóa bộ lọc</span>
-          </button>
         `;
         return;
       }

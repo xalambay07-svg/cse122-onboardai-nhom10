@@ -1,144 +1,525 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OnboardAI – Nền tảng hội nhập nhân sự thông minh | CSE122</title>
+  <link rel="icon" href="assets/images/brand/onboardai-mark-small.svg" type="image/svg+xml">
+
+  <!-- Font Inter Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Shared Design System CSS -->
   <link rel="stylesheet" href="css/style.css">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#1F5AFE', 600: '#1F5AFE', 700: '#1748cc' },
+            onboard: {
+              bg: '#F1F5F9',
+              surface: '#FFFFFF',
+              border: '#E2E8F0',
+              blue: '#1F5AFE',
+              mint: '#00B67A'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Vector Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
   <style>
-    .hero-section {
-      text-align: center;
-      padding: 80px 20px;
-      max-width: 900px;
-      margin: 0 auto;
+    /* Hiệu ứng hiện dần khi cuộn theo Mục 3.2 */
+    @media (prefers-reduced-motion: no-preference) {
+      @supports ((animation-timeline: view()) and (animation-range: entry)) {
+        @keyframes reveal {
+          from { opacity: 0; translate: 0 24px; }
+        }
+        .reveal {
+          animation: reveal linear both;
+          animation-timeline: view();
+          animation-range: entry 0% entry 60%;
+        }
+      }
+      .float-card-slow {
+        animation: floatCard 5s ease-in-out infinite;
+      }
+      .float-card-delayed {
+        animation: floatCard 5.5s ease-in-out 1.2s infinite;
+      }
+      @keyframes floatCard {
+        50% { translate: 0 -6px; }
+      }
     }
-    .hero-title {
-      font-size: 2.75rem;
-      font-weight: 800;
-      color: var(--text-main);
-      margin-bottom: 20px;
-      line-height: 1.2;
-    }
-    .hero-title span {
-      color: var(--primary);
-    }
-    .hero-desc {
-      font-size: 1.15rem;
-      color: var(--text-muted);
-      margin-bottom: 36px;
-    }
-    .role-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 20px;
-      max-width: 1100px;
-      margin: 40px auto;
-      padding: 0 20px;
-    }
-    .role-card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 24px;
-      text-align: left;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .role-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-md);
-      border-color: var(--primary);
-    }
-    .role-badge {
-      font-size: var(--font-xs);
-      font-weight: 700;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-      display: inline-block;
+    @media (prefers-reduced-motion: reduce) {
+      .float-card-slow, .float-card-delayed {
+        animation: none !important;
+      }
     }
   </style>
 </head>
-<body>
-  <!-- Header / Navigation Bar -->
-  <header class="topbar" style="max-width: 1200px; margin: 0 auto; border: none; background: transparent; padding: 20px;">
-    <div style="font-size: 1.25rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 8px;">
-      🚀 OnboardAI
+<body class="bg-[#F8FAFC] text-[#0F172A] font-sans antialiased selection:bg-blue-100 selection:text-[#1F5AFE]">
+
+  <!-- ================= HEADER / NAVIGATION BAR ================= -->
+  <header class="sticky top-0 z-40 bg-white/85 backdrop-blur-md border-b border-[#E2E8F0]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2.5">
+        <img src="assets/images/brand/onboardai-mark.svg" width="36" height="36" alt="">
+        <div>
+          <div class="text-[17px] font-extrabold tracking-tight leading-tight text-slate-900">Onboard<span class="text-[#1F5AFE]">AI</span></div>
+          <div class="text-[10px] font-bold tracking-[.12em] text-slate-400">ENTERPRISE</div>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-7 text-xs font-semibold text-slate-600">
+        <a href="#ai-features" class="hover:text-[#1F5AFE] transition">Bộ 3 Trợ lý AI</a>
+        <a href="#roles" class="hover:text-[#1F5AFE] transition">Không gian 4 Vai trò</a>
+        <a href="#milestones" class="hover:text-[#1F5AFE] transition">Cột mốc Hành trình</a>
+      </nav>
+
+      <div class="flex items-center gap-2.5">
+        <a href="https://github.com/xalambay07-svg/cse122-onboardai-nhom10" target="_blank" rel="noopener" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 transition">
+          <i data-lucide="github" class="w-4 h-4 text-slate-600"></i>
+          <span>GitHub Repo</span>
+        </a>
+        <a href="login.html" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition active:scale-95">
+          <span>Vào ứng dụng</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </a>
+      </div>
     </div>
-    <nav style="display: flex; gap: 16px; align-items: center;">
-      <a href="https://github.com/xalambay07-svg/cse122-onboardai-nhom10" target="_blank" class="btn btn-outline" style="border-radius: var(--radius-full);">GitHub Repo</a>
-      <a href="login.html" class="btn btn-primary" style="border-radius: var(--radius-full);">Vào ứng dụng &rarr;</a>
-    </nav>
   </header>
 
-  <!-- Hero Section -->
   <main>
-    <section class="hero-section">
-      <div class="badge badge-primary" style="margin-bottom: 16px;">Đồ án Bài tập lớn CSE122 – BTL-20</div>
-      <h1 class="hero-title">Hành trình hội nhập nhân sự mới <span>thông minh & liền mạch</span></h1>
-      <p class="hero-desc">
-        Giải pháp Frontend mô phỏng toàn diện quy trình tiếp nhận nhân sự mới (Onboarding): Quản lý lộ trình, Checklist nhiệm vụ, Đánh giá 1-on-1 với Mentor và 3 tính năng trợ lý AI trực quan.
-      </p>
-      <div style="display: flex; gap: 12px; justify-content: center;">
-        <a href="login.html" class="btn btn-primary" style="padding: 12px 28px; font-size: 1rem;">Khám phá ngay</a>
-        <a href="#roles" class="btn btn-outline" style="padding: 12px 28px; font-size: 1rem;">Xem các vai trò</a>
+    <!-- ================= HERO SECTION (2 CỘT: TRÁI TIÊU ĐỀ - PHẢI DASHBOARD TRONG KHUNG CỬA SỔ + THẺ NỔI) ================= -->
+    <section class="relative overflow-hidden pt-10 pb-20 lg:pt-16 lg:pb-24 border-b border-[#E2E8F0] bg-gradient-to-b from-white via-[#F8FAFC] to-[#F1F5F9]/70">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
+
+          <!-- Cột Trái: Tiêu đề & Nút hành động -->
+          <div class="lg:col-span-6 space-y-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-xs font-bold text-[#1F5AFE]">
+              <span class="w-2 h-2 rounded-full bg-[#1F5AFE]"></span>
+              <span>Đồ án Bài tập lớn CSE122 – Đề tài BTL-20</span>
+            </div>
+
+            <h1 class="text-3xl sm:text-4xl lg:text-[42px] font-extrabold tracking-tight text-slate-900 leading-[1.15]">
+              Hành trình hội nhập nhân sự mới <span class="text-[#1F5AFE]">thông minh & liền mạch</span>
+            </h1>
+
+            <p class="text-sm sm:text-base text-slate-600 leading-relaxed max-w-xl">
+              Nền tảng quản trị Onboarding chuẩn B2B SaaS giúp kết nối Nhân sự mới, Mentor, HR và Quản trị viên trên cùng một dòng chảy dữ liệu — tích hợp trợ lý ảo <strong>Onbi</strong>, lộ trình 4 chặng huy hiệu và hệ thống cảnh báo rủi ro trễ hạn tự động.
+            </p>
+
+            <div class="flex flex-wrap items-center gap-3 pt-1">
+              <a href="login.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-sm font-bold shadow-md shadow-blue-500/20 transition active:scale-95">
+                <span>Khám phá ngay</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </a>
+              <a href="#roles" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-sm font-bold transition">
+                <i data-lucide="layout-grid" class="w-4 h-4 text-slate-500"></i>
+                <span>Xem các vai trò</span>
+              </a>
+            </div>
+
+            <!-- Chỉ số nhanh -->
+            <div class="pt-4 border-t border-slate-200/80 grid grid-cols-3 gap-4 max-w-md">
+              <div>
+                <div class="text-xl font-extrabold text-slate-900">4 vai trò</div>
+                <div class="text-xs text-slate-500 mt-0.5">Phân quyền RBAC chuẩn</div>
+              </div>
+              <div>
+                <div class="text-xl font-extrabold text-[#1F5AFE]">3 mô-đun AI</div>
+                <div class="text-xs text-slate-500 mt-0.5">Hỏi đáp, Gợi ý & Radar</div>
+              </div>
+              <div>
+                <div class="text-xl font-extrabold text-[#00B67A]">4 cột mốc</div>
+                <div class="text-xs text-slate-500 mt-0.5">Huy hiệu mở khóa</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cột Phải: Giao diện Dashboard thật trong khung cửa sổ + 3 Thẻ nổi nhẹ -->
+          <div class="lg:col-span-6 relative">
+            <!-- Khung cửa sổ trình duyệt mô phỏng Dashboard thật -->
+            <div class="rounded-2xl bg-white border border-slate-200/90 shadow-2xl overflow-hidden">
+              <!-- Thanh tiêu đề cửa sổ -->
+              <div class="h-9 bg-slate-100 border-b border-slate-200 px-4 flex items-center justify-between">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full bg-rose-400"></span>
+                  <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                </div>
+                <div class="px-3 py-0.5 rounded-md bg-white border border-slate-200 text-[11px] font-mono text-slate-500 flex items-center gap-1.5">
+                  <i data-lucide="lock" class="w-3 h-3 text-emerald-600"></i>
+                  <span>onboardai.enterprise/newhire-dashboard</span>
+                </div>
+                <span class="text-[10px] font-bold text-[#1F5AFE] uppercase">Live UI</span>
+              </div>
+
+              <!-- Nội dung thu nhỏ của Dashboard thật -->
+              <div class="p-4 sm:p-5 bg-[#F1F5F9] space-y-4">
+                <!-- Header chào nhân sự + tiến độ -->
+                <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-2xs">
+                  <div class="flex items-center justify-between gap-2 mb-3">
+                    <div class="flex items-center gap-2.5">
+                      <img src="assets/images/brand/onboardai-mark.svg" width="28" height="28" alt="">
+                      <div>
+                        <div class="text-xs font-extrabold text-slate-900">Lộ trình của Nguyễn Văn An</div>
+                        <div class="text-[11px] text-slate-500">Frontend Developer &bull; Tuần 1: Văn hóa & Môi trường</div>
+                      </div>
+                    </div>
+                    <span class="pill-status pill-on-track">Đúng tiến độ</span>
+                  </div>
+                  <div class="flex items-center justify-between text-xs font-bold text-slate-700 mb-1.5">
+                    <span>Tiến độ hoàn thành Chặng 2</span>
+                    <span class="text-[#1F5AFE]">65%</span>
+                  </div>
+                  <div class="micro-progress-track">
+                    <div class="micro-progress-fill bg-gradient-to-r from-[#1F5AFE] to-[#00B67A]" style="width: 65%"></div>
+                  </div>
+                </div>
+
+                <!-- Danh sách việc mẫu có tick SVG -->
+                <div class="bg-white rounded-xl p-3.5 border border-slate-200 space-y-2.5">
+                  <div class="flex items-center justify-between text-xs">
+                    <div class="flex items-center gap-2.5 is-done">
+                      <span class="w-4 h-4 rounded bg-[#00B67A] flex items-center justify-center shrink-0">
+                        <svg viewBox="0 0 24 24" class="w-3 h-3" aria-hidden="true">
+                          <path class="tick" d="M5 13l4 4L19 7" pathLength="1" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </span>
+                      <span class="text-slate-500 line-through font-medium">Ký cam kết bảo mật thông tin (NDA)</span>
+                    </div>
+                    <span class="pill-status pill-completed">Hoàn thành</span>
+                  </div>
+                  <div class="flex items-center justify-between text-xs pt-2 border-t border-slate-100">
+                    <div class="flex items-center gap-2.5">
+                      <span class="w-4 h-4 rounded border-2 border-[#1F5AFE] shrink-0"></span>
+                      <span class="text-slate-800 font-semibold">Cấu hình môi trường Git & nhận quyền Repo</span>
+                    </div>
+                    <span class="pill-status pill-needs-action">Cần làm ngay</span>
+                  </div>
+                </div>
+
+                <!-- Hàng 4 Huy hiệu cột mốc trong khung preview -->
+                <div class="bg-white rounded-xl p-3.5 border border-slate-200 flex items-center justify-between gap-3">
+                  <div>
+                    <div class="text-xs font-bold text-slate-900">Cột mốc hành trình</div>
+                    <div class="text-[11px] text-slate-500 mt-0.5">Tiếp theo: <strong class="text-slate-800">Tự lập</strong> &bull; còn 4 việc</div>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="badge"><img src="assets/images/badges/badge-1.webp" width="128" height="128" alt="Huy hiệu Tân binh"></span>
+                    <span class="badge is-locked"><img src="assets/images/badges/badge-2.webp" width="128" height="128" alt=""></span>
+                    <span class="badge is-locked"><img src="assets/images/badges/badge-3.webp" width="128" height="128" alt=""></span>
+                    <span class="badge is-locked"><img src="assets/images/badges/badge-4.webp" width="128" height="128" alt=""></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Thẻ nhỏ nổi nhẹ 1 (Góc trên phải): Linh vật Onbi chào -->
+            <div class="hidden sm:flex float-card-slow absolute -top-5 -right-4 bg-white rounded-2xl p-3 border border-blue-200 shadow-xl items-center gap-3 max-w-[250px]">
+              <img class="onbi-avatar" src="assets/images/mascot/onbi-avatar-128.webp" width="36" height="36" alt="Onbi">
+              <div class="text-xs">
+                <div class="font-extrabold text-slate-900 flex items-center gap-1">
+                  <span>Onbi</span>
+                  <span class="text-[10px] font-semibold text-[#1F5AFE] bg-blue-50 px-1.5 py-0.5 rounded">AI-1</span>
+                </div>
+                <p class="text-slate-600 text-[11px] leading-snug mt-0.5">"Mình tra cứu sẵn sổ tay nghỉ phép & BHXH cho bạn rồi nhé!"</p>
+              </div>
+            </div>
+
+            <!-- Thẻ nhỏ nổi nhẹ 2 (Góc dưới trái): AI-3 Risk Radar -->
+            <div class="hidden sm:flex float-card-delayed absolute -bottom-5 -left-5 bg-slate-900 text-white rounded-2xl p-3.5 border border-slate-700 shadow-xl items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-400/30 flex items-center justify-center text-amber-400 shrink-0">
+                <i data-lucide="radar" class="w-4 h-4"></i>
+              </div>
+              <div class="text-xs">
+                <div class="font-bold text-white">AI-3 Risk Radar</div>
+                <div class="text-[11px] text-slate-300">Phát hiện sớm 2 điểm nghẽn quy trình</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
     </section>
 
-    <!-- Role Preview Section -->
-    <section id="roles" style="background: white; padding: 60px 0; border-top: 1px solid var(--border);">
-      <div style="text-align: center; max-width: 700px; margin: 0 auto 30px;">
-        <h2 style="font-size: 1.8rem; margin-bottom: 10px;">Hệ thống đa vai trò theo chuẩn BTL</h2>
-        <p style="color: var(--text-muted);">Mỗi nhóm người dùng sở hữu không gian làm việc, quyền hạn và trải nghiệm AI riêng biệt.</p>
+    <!-- ================= MỖI VAI TRÒ MỘT KHÔNG GIAN LÀM VIỆC RIÊNG (MỤC 5 & 6) ================= -->
+    <section id="roles" class="py-16 lg:py-20 bg-white border-b border-[#E2E8F0] reveal">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-2xl mx-auto text-center mb-12">
+          <span class="text-xs font-bold uppercase tracking-wider text-[#1F5AFE] bg-blue-50 px-3 py-1 rounded-full border border-blue-200/60">Kiến trúc phân quyền RBAC</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-3">
+            Mỗi vai trò một không gian làm việc riêng
+          </h2>
+          <p class="text-sm text-slate-600 mt-2">
+            Bốn phân hệ chuyên biệt được thiết kế tối ưu cho từng nhóm người dùng trong quy trình hội nhập doanh nghiệp.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <!-- Vai trò 1: New Hire (Xanh dương) -->
+          <div class="group bg-white rounded-2xl border border-[#E2E8F0] hover:border-blue-400 p-6 shadow-2xs hover:shadow-md transition flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-blue-50 text-[#1F5AFE] ring-1 ring-inset ring-blue-600/20">
+                  <i data-lucide="user-check" class="w-3.5 h-3.5"></i>
+                  <span>Nhân sự mới (New Hire)</span>
+                </span>
+              </div>
+              <h3 class="text-base font-extrabold text-slate-900 mb-2">Theo dõi hành trình & Hỏi đáp Onbi</h3>
+              <p class="text-xs text-slate-600 leading-relaxed mb-5">
+                Thực hiện Checklist theo 4 chặng, mở khóa huy hiệu cột mốc và trò chuyện trực tiếp với trợ lý <strong>Onbi</strong> để tra cứu quy chế nội bộ 24/7.
+              </p>
+            </div>
+            <div class="pt-4 border-t border-slate-100 flex flex-col gap-2">
+              <a href="newhire-onboarding-dashboard.html" class="inline-flex items-center justify-between text-xs font-bold text-[#1F5AFE] group-hover:translate-x-0.5 transition">
+                <span>Mở Dashboard Nhân sự mới</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </a>
+              <div class="flex items-center gap-3 text-xs text-slate-500">
+                <a href="newhire-checklist.html" class="hover:text-[#1F5AFE] underline decoration-slate-300">Checklist (NH02)</a>
+                <span>&bull;</span>
+                <a href="newhire-ai-help.html" class="hover:text-[#1F5AFE] underline decoration-slate-300">Trợ lý Onbi (NH03)</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Vai trò 2: Mentor (Màu chàm Indigo - Khớp ứng dụng theo Mục 5) -->
+          <div class="group bg-white rounded-2xl border border-[#E2E8F0] hover:border-indigo-400 p-6 shadow-2xs hover:shadow-md transition flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 ring-1 ring-inset ring-indigo-600/20">
+                  <i data-lucide="award" class="w-3.5 h-3.5"></i>
+                  <span>Người hướng dẫn (Mentor)</span>
+                </span>
+              </div>
+              <h3 class="text-base font-extrabold text-slate-900 mb-2">Đồng hành & Đánh giá 1-on-1</h3>
+              <p class="text-xs text-slate-600 leading-relaxed mb-5">
+                Theo dõi danh sách Mentee phụ trách, nghiệm thu kết quả công việc, ghi nhận phản hồi 1-on-1 định kỳ và dùng AI gợi ý lộ trình chuyên môn.
+              </p>
+            </div>
+            <div class="pt-4 border-t border-slate-100 flex flex-col gap-2">
+              <a href="mentor-mentee-list.html" class="inline-flex items-center justify-between text-xs font-bold text-indigo-600 group-hover:translate-x-0.5 transition">
+                <span>Mở Không gian Mentor</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </a>
+              <div class="text-xs text-slate-500">
+                <span>Gồm DS Mentee (MT01) & Đánh giá (MT02)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Vai trò 3: HR (Màu hổ phách Amber) -->
+          <div class="group bg-white rounded-2xl border border-[#E2E8F0] hover:border-amber-400 p-6 shadow-2xs hover:shadow-md transition flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 ring-1 ring-inset ring-amber-600/20">
+                  <i data-lucide="pie-chart" class="w-3.5 h-3.5"></i>
+                  <span>Chuyên viên Nhân sự (HR)</span>
+                </span>
+              </div>
+              <h3 class="text-base font-extrabold text-slate-900 mb-2">Bao quát & Can thiệp điểm nghẽn</h3>
+              <p class="text-xs text-slate-600 leading-relaxed mb-5">
+                Giám sát tiến độ toàn công ty qua biểu đồ trực quan, phát hiện sớm nhân sự có nguy cơ trễ hạn nhờ <strong>AI-3 Risk Radar</strong> và gửi nhắc nhở 1 chạm.
+              </p>
+            </div>
+            <div class="pt-4 border-t border-slate-100 flex flex-col gap-2">
+              <a href="hr-dashboard.html" class="inline-flex items-center justify-between text-xs font-bold text-amber-700 group-hover:translate-x-0.5 transition">
+                <span>Mở Bảng điều khiển HR (HR01)</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </a>
+              <div class="text-xs text-slate-500">
+                <span>Thống kê phòng ban & Can thiệp nhanh</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Vai trò 4: Admin (Màu tím Violet - Khớp ứng dụng theo Mục 5) -->
+          <div class="group bg-white rounded-2xl border border-[#E2E8F0] hover:border-violet-400 p-6 shadow-2xs hover:shadow-md transition flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-violet-50 text-violet-700 ring-1 ring-inset ring-violet-600/20">
+                  <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+                  <span>Quản trị viên (Admin)</span>
+                </span>
+              </div>
+              <h3 class="text-base font-extrabold text-slate-900 mb-2">Tài khoản, RBAC & Kiểm toán</h3>
+              <p class="text-xs text-slate-600 leading-relaxed mb-5">
+                Quản lý vòng đời tài khoản, kiểm tra sức khỏe phân công Mentor, đối chiếu ma trận quyền RBAC 4 tầng và tra cứu nhật ký hoạt động.
+              </p>
+            </div>
+            <div class="pt-4 border-t border-slate-100 flex flex-col gap-2">
+              <a href="admin-user-management.html" class="inline-flex items-center justify-between text-xs font-bold text-violet-700 group-hover:translate-x-0.5 transition">
+                <span>Mở Quản trị Tài khoản (AD02)</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </a>
+              <div class="text-xs text-slate-500">
+                <span>Hỗ trợ chế độ thị sát View-As</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+    </section>
 
-      <div class="role-grid">
-        <!-- Role 1: New Hire -->
-        <div class="role-card">
-          <span class="role-badge" style="color: #2563eb;">Nhân sự mới (New Hire)</span>
-          <h3 style="margin-bottom: 8px;">Theo dõi hành trình</h3>
-          <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 16px;">
-            Checklist nhiệm vụ theo ngày/tuần, thanh tiến độ trực quan và Trợ lý AI hỏi đáp nội quy (AI-1: Policy Q&A).
-          </p>
-          <a href="newhire-onboarding-dashboard.html" style="font-size: 0.875rem; font-weight: 600;">Xem Dashboard &rarr;</a>
+    <!-- ================= GIỚI THIỆU 3 TÍNH NĂNG AI (MỤC 6) ================= -->
+    <section id="ai-features" class="py-16 lg:py-20 bg-[#F8FAFC] border-b border-[#E2E8F0] reveal">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mb-12">
+          <div class="lg:col-span-8">
+            <span class="text-xs font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200/60">Trí tuệ nhân tạo ứng dụng</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-3">
+              Bộ 3 tính năng AI đồng hành xuyên suốt lộ trình
+            </h2>
+            <p class="text-sm text-slate-600 mt-2 max-w-2xl">
+              Thay vì để nhân sự mới tự bơi trong hàng chục tài liệu PDF, OnboardAI tích hợp 3 lớp trợ lý thông minh hỗ trợ đúng lúc cho cả Nhân sự mới, Mentor và HR.
+            </p>
+          </div>
+          <div class="lg:col-span-4 flex justify-start lg:justify-end">
+            <div class="flex items-center gap-3 bg-white px-4 py-3 rounded-2xl border border-slate-200 shadow-2xs">
+              <div class="onbi-stage" style="--onbi-w:56px">
+                <img src="assets/images/mascot/onbi-greeting.webp" width="256" height="480" alt="">
+              </div>
+              <div class="text-xs">
+                <div class="font-extrabold text-slate-900">Linh vật Onbi</div>
+                <div class="text-slate-500">Người bạn đồng hành hội nhập</div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <!-- Role 2: Mentor -->
-        <div class="role-card">
-          <span class="role-badge" style="color: #16a34a;">Người hướng dẫn (Mentor)</span>
-          <h3 style="margin-bottom: 8px;">Đồng hành & Đánh giá</h3>
-          <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 16px;">
-            Quản lý danh sách Mentee, ghi chú đánh giá 1-on-1 định kỳ và dùng AI đề xuất checklist chuyên môn (AI-2).
-          </p>
-          <a href="mentor-mentee-list.html" style="font-size: 0.875rem; font-weight: 600;">Xem DS Mentee &rarr;</a>
-        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- AI-1 -->
+          <div class="bg-white rounded-2xl border border-[#E2E8F0] p-6 shadow-2xs flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="px-2.5 py-1 rounded-lg bg-blue-50 text-[#1F5AFE] text-xs font-extrabold">AI-1 &bull; Policy Q&A</span>
+                <img class="onbi-avatar" src="assets/images/mascot/onbi-avatar-128.webp" width="36" height="36" alt="Onbi">
+              </div>
+              <h3 class="text-base font-extrabold text-slate-900 mb-2">Trợ lý Onbi Hỏi đáp Quy chế</h3>
+              <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                Giải đáp tức thì các câu hỏi về phép năm, bảo hiểm, thiết bị IT và tiến độ cá nhân kèm <strong>trích dẫn điều khoản sổ tay</strong>. Tự động chuyển tiếp cho HR khi gặp câu hỏi ngoài tài liệu.
+              </p>
+            </div>
+            <a href="newhire-ai-help.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#1F5AFE] hover:underline pt-3 border-t border-slate-100">
+              <span>Trải nghiệm chat với Onbi</span>
+              <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
 
-        <!-- Role 3: HR -->
-        <div class="role-card">
-          <span class="role-badge" style="color: #f59e0b;">Nhân sự (HR)</span>
-          <h3 style="margin-bottom: 8px;">Bao quát & Cảnh báo</h3>
-          <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 16px;">
-            Thống kê tiến độ toàn công ty với biểu đồ Chart.js, phát hiện rủi ro trễ hạn tự động nhờ AI (AI-3: Risk Warning).
-          </p>
-          <a href="hr-dashboard.html" style="font-size: 0.875rem; font-weight: 600;">Xem HR Dashboard &rarr;</a>
-        </div>
+          <!-- AI-2 -->
+          <div class="bg-white rounded-2xl border border-[#E2E8F0] p-6 shadow-2xs flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-extrabold">AI-2 &bull; Smart Checklist</span>
+                <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                  <i data-lucide="sparkles" class="w-4 h-4"></i>
+                </div>
+              </div>
+              <h3 class="text-base font-extrabold text-slate-900 mb-2">Cá nhân hóa Lộ trình theo Vị trí</h3>
+              <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                Đề xuất danh sách nhiệm vụ chuyên môn theo đúng phòng ban và vị trí công việc (Frontend, Backend, Marketing, HR), tự động sắp xếp mức độ ưu tiên trong ngày.
+              </p>
+            </div>
+            <a href="newhire-checklist.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:underline pt-3 border-t border-slate-100">
+              <span>Xem Checklist 4 chặng</span>
+              <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
 
-        <!-- Role 4: Admin -->
-        <div class="role-card">
-          <span class="role-badge" style="color: #dc2626;">Quản trị viên (Admin)</span>
-          <h3 style="margin-bottom: 8px;">Vận hành & Phân quyền</h3>
-          <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 16px;">
-            Quản lý cơ cấu phòng ban, cấp và khóa tài khoản người dùng, xem nhật ký kiểm toán hệ thống.
-          </p>
-          <a href="admin-user-management.html" style="font-size: 0.875rem; font-weight: 600;">Xem Quản trị &rarr;</a>
+          <!-- AI-3 -->
+          <div class="bg-white rounded-2xl border border-[#E2E8F0] p-6 shadow-2xs flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-800 text-xs font-extrabold">AI-3 &bull; Risk Radar</span>
+                <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                  <i data-lucide="radar" class="w-4 h-4"></i>
+                </div>
+              </div>
+              <h3 class="text-base font-extrabold text-slate-900 mb-2">Dự báo Rủi ro & Can thiệp 1-Click</h3>
+              <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                Chủ động quét dữ liệu để phát hiện nhân sự bị kẹt quyền IT hoặc chưa được Mentor phản hồi, giúp HR gửi thư nhắc nhở soạn sẵn chỉ với một cú nhấp chuột.
+              </p>
+            </div>
+            <a href="hr-dashboard.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-700 hover:underline pt-3 border-t border-slate-100">
+              <span>Mở Trung tâm Can thiệp AI-3</span>
+              <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CỘT MỐC HÀNH TRÌNH 4 HUY HIỆU (MỤC 2) ================= -->
+    <section id="milestones" class="py-14 bg-white border-b border-[#E2E8F0] reveal">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-3xl p-6 sm:p-10 text-white flex flex-col lg:flex-row items-center justify-between gap-8">
+          <div class="space-y-2 max-w-xl">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-400">Hành trình 60 ngày thử việc</span>
+            <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight">4 Cột mốc Huy hiệu truyền cảm hứng</h2>
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Mỗi chặng hoàn thành mở khóa một huy hiệu cột mốc rõ ràng: từ <strong>Tân binh</strong> ngày đầu nhận việc đến <strong>Thành viên chính thức</strong> sau kỳ đánh giá thử việc.
+            </p>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full lg:w-auto">
+            <div class="bg-white/10 border border-white/15 rounded-2xl p-3.5 flex flex-col items-center text-center">
+              <img src="assets/images/badges/badge-1.webp" width="56" height="56" alt="Huy hiệu Tân binh" class="w-14 h-14">
+              <span class="text-xs font-bold mt-2">Tân binh</span>
+              <span class="text-[11px] text-slate-300">Xong Ngày 1</span>
+            </div>
+            <div class="bg-white/10 border border-white/15 rounded-2xl p-3.5 flex flex-col items-center text-center">
+              <img src="assets/images/badges/badge-2.webp" width="56" height="56" alt="Huy hiệu Tự lập" class="w-14 h-14">
+              <span class="text-xs font-bold mt-2">Tự lập</span>
+              <span class="text-[11px] text-slate-300">Xong Tuần 1</span>
+            </div>
+            <div class="bg-white/10 border border-white/15 rounded-2xl p-3.5 flex flex-col items-center text-center">
+              <img src="assets/images/badges/badge-3.webp" width="56" height="56" alt="Huy hiệu Hòa nhập" class="w-14 h-14">
+              <span class="text-xs font-bold mt-2">Hòa nhập</span>
+              <span class="text-[11px] text-slate-300">Xong Tháng 1</span>
+            </div>
+            <div class="bg-white/10 border border-white/15 rounded-2xl p-3.5 flex flex-col items-center text-center">
+              <img src="assets/images/badges/badge-4.webp" width="56" height="56" alt="Huy hiệu Thành viên chính thức" class="w-14 h-14">
+              <span class="text-xs font-bold mt-2">Chính thức</span>
+              <span class="text-[11px] text-slate-300">Qua Tháng 2</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
   </main>
 
-  <footer style="text-align: center; padding: 30px; font-size: 0.875rem; color: var(--text-light); border-top: 1px solid var(--border);">
-    Bài tập lớn môn CSE122 – Phát triển ứng dụng Web cơ bản &bull; Nhóm 10 thực hiện (Huy - SV1, Hoàng - SV2, SV3)
+  <!-- ================= FOOTER (BỔ SUNG TÊN SV3 THEO MỤC 6) ================= -->
+  <footer class="bg-white py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+      <div class="flex items-center gap-2.5">
+        <img src="assets/images/brand/onboardai-mark-small.svg" width="22" height="22" alt="">
+        <span class="font-bold text-slate-800">OnboardAI Enterprise</span>
+        <span>&bull;</span>
+        <span>Đồ án môn CSE122 – Phát triển ứng dụng Web cơ bản (BTL-20)</span>
+      </div>
+      <div class="text-center sm:text-right">
+        Nhóm 10 thực hiện: <strong class="text-slate-700">SV1 (Mentor &amp; Auth)</strong> &bull; <strong class="text-slate-700">SV2 (Core API &amp; Data)</strong> &bull; <strong class="text-slate-700">Huy – SV3 (New Hire, HR &amp; Admin UI)</strong>
+      </div>
+    </div>
   </footer>
 
   <script src="js/api.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
 </body>
 </html>
-

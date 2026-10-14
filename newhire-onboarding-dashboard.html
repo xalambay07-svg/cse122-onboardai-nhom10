@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bảng điều khiển hội nhập – NH01 | OnboardAI</title>
+  <title>Bảng điều khiển hội nhập (NH01) | OnboardAI</title>
+  <link rel="icon" href="assets/images/brand/onboardai-mark-small.svg" type="image/svg+xml">
   
   <!-- Font Inter Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -56,65 +57,71 @@
   <div class="flex h-full min-h-screen">
     <!-- ================= 1. SIDEBAR ĐIỀU HƯỚNG DÙNG CHUNG ================= -->
     <aside id="appSidebar" class="w-64 bg-white border-r border-[#E2E8F0] flex flex-col shrink-0 fixed inset-y-0 left-0 z-40 md:static transition-transform duration-300 -translate-x-full md:translate-x-0">
-      <!-- Logo Header -->
-      <div class="h-16 flex items-center gap-3 px-6 border-b border-slate-100">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#1F5AFE] to-indigo-600 flex items-center justify-center text-white shadow-xs hover:scale-105 active:scale-95 transition-transform duration-150">
-          <i data-lucide="compass" class="w-5 h-5"></i>
-        </div>
-        <div>
-          <span class="text-base font-bold tracking-tight text-slate-900">Onboard<span class="text-[#1F5AFE]">AI</span></span>
-          <span class="block text-[10px] uppercase font-semibold tracking-wider text-slate-400">Enterprise</span>
-        </div>
+      <!-- Logo Header (Mục 1.2) -->
+      <div class="h-16 flex items-center px-6 border-b border-slate-100">
+        <a href="index.html" class="flex items-center gap-2.5 hover:no-underline">
+          <img src="assets/images/brand/onboardai-mark.svg" width="36" height="36" alt="">
+          <div>
+            <div class="text-[17px] font-extrabold tracking-tight leading-tight text-slate-900">Onboard<span class="text-[#1F5AFE]">AI</span></div>
+            <div class="text-[10px] font-bold tracking-[.12em] text-slate-500">ENTERPRISE</div>
+          </div>
+        </a>
       </div>
 
-      <!-- Navigation Links -->
+      <!-- Navigation Links (Đồng bộ 3 trang New Hire - Mục 5) -->
       <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-        <div class="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+        <div class="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
           Không gian Nhân sự mới
         </div>
-        <a href="newhire-onboarding-dashboard.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold bg-blue-50/70 text-[#1F5AFE] transition-colors">
+        <a href="newhire-onboarding-dashboard.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold bg-blue-50/70 text-[#1F5AFE] transition-colors hover:no-underline">
           <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
           <span>Bảng điều khiển</span>
         </a>
-        <a href="newhire-checklist.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+        <a href="newhire-checklist.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors hover:no-underline">
           <i data-lucide="check-square" class="w-4 h-4"></i>
           <span>Checklist hội nhập</span>
         </a>
-        <a href="newhire-ai-help.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+        <a href="newhire-ai-help.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors hover:no-underline">
           <i data-lucide="bot" class="w-4 h-4"></i>
           <span>Trợ lý AI Hỏi đáp</span>
         </a>
 
-        <div class="pt-5 px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+        <div class="pt-5 px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
           Tài khoản & Hệ thống
         </div>
-        <a href="profile.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+        <a href="profile.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors hover:no-underline">
           <i data-lucide="user" class="w-4 h-4"></i>
           <span>Hồ sơ cá nhân</span>
         </a>
-        <a href="login.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-rose-600 hover:bg-rose-50 transition-colors">
+        <a href="login.html" onclick="logout()" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-rose-600 hover:bg-rose-50 transition-colors hover:no-underline">
           <i data-lucide="log-out" class="w-4 h-4"></i>
           <span>Đăng xuất</span>
         </a>
       </nav>
 
-      <!-- Gamification Card: Level & Streak -->
-      <div class="p-3.5 m-3 rounded-2xl bg-gradient-to-br from-slate-50 to-blue-50/60 border border-[#E2E8F0]">
-        <div class="flex items-center justify-between text-xs mb-2">
-          <span class="font-semibold text-slate-700 flex items-center gap-1.5">
-            <i data-lucide="award" class="w-4 h-4 text-[#1F5AFE]"></i> Level 1: Tân binh
+      <!-- Khối Cột mốc hành trình 4 huy hiệu (Thay cho XP & chuỗi điểm danh - Mục 2) -->
+      <div class="m-3 rounded-2xl ring-1 ring-slate-200 bg-white p-4">
+        <div class="flex items-center justify-between mb-2.5">
+          <span class="text-xs font-bold text-slate-900">Cột mốc hành trình</span>
+          <span id="sidebarBadgeCount" class="text-xs font-bold text-[#1F5AFE] tabular-nums">1/4</span>
+        </div>
+        <div class="flex gap-3">
+          <span id="sidebarBadge1" class="badge" title="Tân binh – đã đạt">
+            <img src="assets/images/badges/badge-1.webp" width="128" height="128" alt="Huy hiệu Tân binh">
           </span>
-          <span id="gamificationXp" class="font-bold text-[#1F5AFE]">650 XP</span>
-        </div>
-        <div class="w-full bg-[#EDEDE7] rounded-full h-1.5 mb-2 overflow-hidden">
-          <div id="gamificationXpBar" class="bg-gradient-to-r from-[#1F5AFE] to-[#00B67A] h-1.5 rounded-full transition-all duration-500 ease-out" style="width: 65%"></div>
-        </div>
-        <div class="flex items-center justify-between text-[11px] text-slate-500">
-          <span>Chuỗi điểm danh</span>
-          <span class="font-semibold text-amber-600 flex items-center gap-1">
-            <i data-lucide="flame" class="w-3.5 h-3.5 fill-amber-500 text-amber-500"></i> 3 ngày
+          <span id="sidebarBadge2" class="badge is-locked" title="Tự lập">
+            <img src="assets/images/badges/badge-2.webp" width="128" height="128" alt="Huy hiệu Tự lập (chưa mở)">
+          </span>
+          <span id="sidebarBadge3" class="badge is-locked" title="Hòa nhập">
+            <img src="assets/images/badges/badge-3.webp" width="128" height="128" alt="Huy hiệu Hòa nhập (chưa mở)">
+          </span>
+          <span id="sidebarBadge4" class="badge is-locked" title="Thành viên chính thức">
+            <img src="assets/images/badges/badge-4.webp" width="128" height="128" alt="Huy hiệu Thành viên chính thức (chưa mở)">
           </span>
         </div>
+        <p id="sidebarNextBadgeHint" class="mt-2.5 text-xs text-slate-500">
+          Tiếp theo: <b class="text-slate-900">Tự lập</b> &middot; còn 4 việc
+        </p>
       </div>
     </aside>
 
@@ -122,130 +129,126 @@
     <div id="sidebarOverlay" class="fixed inset-0 bg-slate-900/40 z-30 hidden md:hidden"></div>
 
     <!-- ================= 2. MAIN CONTENT ================= -->
-    <div class="flex-1 flex flex-col overflow-y-auto">
-      <!-- Topbar Header -->
-      <header class="h-16 bg-white border-b border-[#E2E8F0] px-6 flex items-center justify-between sticky top-0 z-20">
+    <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+      <!-- Topbar Header đồng bộ chuẩn HR01/AD02 (Mục 5) -->
+      <header class="h-16 bg-white border-b border-[#E2E8F0] px-4 md:px-8 flex items-center justify-between shrink-0 sticky top-0 z-20">
         <div class="flex items-center gap-3">
-          <button id="menuToggleBtn" class="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100">
+          <button id="menuToggleBtn" class="p-2 -ml-2 text-slate-500 hover:text-slate-700 md:hidden rounded-lg hover:bg-slate-100">
             <i data-lucide="menu" class="w-5 h-5"></i>
           </button>
-          <div class="flex items-center gap-2 text-xs text-slate-500">
-            <span class="font-medium text-slate-700">Hành trình hội nhập</span>
-            <span>/</span>
-            <span class="text-[#1F5AFE] font-semibold bg-blue-50 px-2 py-0.5 rounded-md">Tuần 1: Khởi động</span>
+          <div>
+            <h1 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <span>Bảng điều khiển Hội nhập Cá nhân</span>
+              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-[#1F5AFE] border border-blue-200 whitespace-nowrap">Mã NH01</span>
+            </h1>
+            <p class="text-xs text-slate-500 hidden sm:block">Theo dõi lộ trình hội nhập, việc cần làm hôm nay và kết nối cùng Mentor</p>
           </div>
         </div>
 
-        <div class="flex items-center gap-3 sm:gap-4">
-          <!-- Notification Bell với Swing (3.9) -->
-          <button onclick="showToast('Bạn có thông báo mới từ Mentor Mai: Lịch 1-on-1 thứ Sáu lúc 15:00', 'info')" title="Thông báo mới" class="group relative p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-all duration-150 active:scale-95">
-            <i data-lucide="bell" class="w-5 h-5 transition-transform origin-top group-hover:animate-bell-swing"></i>
-            <span class="absolute top-1.5 right-1.5 flex h-2 w-2">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
-            </span>
-          </button>
-
-          <!-- User Info Pill với Pulse Online (3.6) -->
-          <div class="flex items-center gap-3 pl-3 border-l border-slate-100">
-            <div class="relative">
-              <img id="userAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=An" alt="Avatar" class="w-9 h-9 rounded-full ring-2 ring-slate-100 bg-white object-cover">
-              <span class="absolute bottom-0 right-0 flex h-2.5 w-2.5">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#00B67A] ring-2 ring-white"></span>
-              </span>
-            </div>
-            <div class="hidden sm:block text-left">
-              <div id="userName" class="text-sm font-semibold text-slate-900 leading-tight">Nguyễn Văn An</div>
-              <div class="text-xs text-slate-500">Frontend Developer</div>
-            </div>
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-slate-50 border border-[#E2E8F0]">
+            <img id="userAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=An" alt="Avatar" class="w-6 h-6 rounded-full bg-white object-cover">
+            <span id="userName" class="text-xs font-semibold text-slate-800 hidden sm:inline">Nguyễn Văn An</span>
+            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-600/20 whitespace-nowrap">New Hire</span>
           </div>
         </div>
       </header>
 
       <!-- Nội dung chính (Content Body) -->
-      <main class="p-6 md:p-8 max-w-7xl mx-auto w-full space-y-6">
+      <main class="p-4 md:p-8 max-w-7xl mx-auto w-full space-y-6">
         
-        <!-- 2.1 KHỐI NÂNG CẤP: AI Daily Briefing (Học hỏi chuẩn Onboard.io) -->
+        <!-- 2.1 AI Daily Briefing -->
         <section class="relative bg-white border border-[#E2E8F0] rounded-2xl p-6 shadow-xs overflow-hidden">
-          <!-- Viền sáng gradient mỏng trên đầu card -->
           <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#1F5AFE] via-indigo-500 to-[#00B67A]"></div>
           
           <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
             <div class="flex items-start gap-3.5">
               <div class="w-11 h-11 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold border border-indigo-100 shadow-xs shrink-0">
-                <i data-lucide="sparkles" class="w-5 h-5 text-indigo-600 animate-pulse"></i>
+                <i data-lucide="sparkles" class="w-5 h-5 text-indigo-600"></i>
               </div>
               <div>
                 <div class="flex flex-wrap items-center gap-2 mb-1">
-                  <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-100">AI Daily Briefing</span>
-                  <span class="text-xs text-slate-400">&bull; Ngày 3 trong lộ trình</span>
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-100">Gợi ý từ Onbi</span>
+                  <span class="text-xs text-slate-500">&bull; Ngày 3 trong lộ trình</span>
                 </div>
-                <h1 id="welcomeTitle" class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Chào Nguyễn Văn An, hôm nay là ngày tăng tốc!</h1>
+                <h2 id="welcomeTitle" class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Chào Nguyễn Văn An, hôm nay là ngày tăng tốc!</h2>
                 <p class="text-xs md:text-sm text-slate-600 mt-2 leading-relaxed max-w-2xl">
                   Mục tiêu chính hôm nay: Hoàn tất <strong>Clone repo & Cài đặt Node.js</strong> trước 14:00 để kịp tham gia buổi review kỹ thuật với Mentor Trần Thị Mai lúc 15:00.
                 </p>
               </div>
             </div>
 
-            <!-- B2B Status Pill: ON TRACK -->
+            <!-- Nhãn trạng thái người dùng tiếng Việt & không xuống dòng (Mục 4 Lỗi #4 & Mục 5) -->
             <div class="shrink-0 flex items-center gap-2">
-              <span id="overallStatusPill" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-[#0A7A52] bg-[#E4F5EC] border border-emerald-200/60 shadow-xs">
-                <span class="w-2 h-2 rounded-full bg-[#00B67A] animate-ping"></span>
-                <span id="overallStatusText">ON TRACK (60%)</span>
+              <span id="overallStatusPill" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-[#0A7A52] bg-[#E4F5EC] border border-emerald-200/60 shadow-xs whitespace-nowrap">
+                <span class="w-2 h-2 rounded-full bg-[#00B67A]"></span>
+                <span id="overallStatusText" class="whitespace-nowrap">Đúng tiến độ (60%)</span>
               </span>
             </div>
           </div>
 
           <div class="flex flex-wrap items-center gap-3 mt-4 pt-4 border-t border-slate-100">
-            <a href="#tasksSection" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#1F5AFE] text-white font-semibold text-xs hover:bg-blue-700 transition shadow-xs active:scale-95">
+            <a href="#tasksSection" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#1F5AFE] text-white font-semibold text-xs hover:bg-blue-700 transition shadow-xs active:scale-95 hover:no-underline">
               <span>Thực hiện ngay việc hôm nay</span>
               <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i>
             </a>
-            <a href="newhire-ai-help.html" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs border border-[#E2E8F0] transition active:scale-95">
+            <a href="newhire-ai-help.html" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs border border-[#E2E8F0] transition active:scale-95 hover:no-underline">
               <i data-lucide="bot" class="w-3.5 h-3.5 text-indigo-600"></i>
-              <span>Hỏi nhanh Trợ lý AI</span>
+              <span>Hỏi nhanh Onbi</span>
             </a>
           </div>
         </section>
 
-        <!-- 2.2 KHỐI NÂNG CẤP: Thanh tiến độ siêu mảnh 6px chuẩn Onboard.io -->
+        <!-- 2.2 Thanh tiến độ siêu mảnh 6px (Số đếm tăng dần countUp - Mục 3.2) -->
         <section class="bg-white rounded-2xl border border-[#E2E8F0] p-5 shadow-xs">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2.5">
             <div class="flex items-center gap-2">
               <h2 class="text-xs md:text-sm font-bold text-slate-900">Tiến độ hội nhập tổng thể</h2>
-              <span id="progressPillBadge" class="px-2 py-0.5 rounded-full text-[10px] font-bold text-[#0A7A52] bg-[#E4F5EC] border border-emerald-200/60">3/5 Nhiệm vụ</span>
+              <span id="progressPillBadge" class="px-2 py-0.5 rounded-full text-[11px] font-bold text-[#0A7A52] bg-[#E4F5EC] border border-emerald-200/60 whitespace-nowrap tabular-nums">1/5 Nhiệm vụ</span>
             </div>
             <div class="flex items-baseline gap-1">
-              <span id="progressPercent" class="text-base md:text-lg font-extrabold text-[#1F5AFE]">60%</span>
-              <span class="text-[11px] text-slate-400 font-normal">hoàn thành</span>
+              <span id="progressPercent" class="text-base md:text-lg font-extrabold text-[#1F5AFE] tabular-nums">20%</span>
+              <span class="text-xs text-slate-500 font-normal">hoàn thành</span>
             </div>
           </div>
-          <!-- Thanh rãnh siêu mảnh 6px chuẩn Onboard.io -->
-          <div class="w-full h-1.5 bg-[#EDEDE7] rounded-full overflow-hidden">
-            <div id="progressBarFill" class="h-full bg-gradient-to-r from-[#1F5AFE] to-[#00B67A] rounded-full transition-all duration-700 ease-out" style="width: 60%"></div>
+          <!-- Thanh rãnh siêu mảnh 6px chạy mượt từ 0 -->
+          <div class="micro-progress-track">
+            <div id="progressBarFill" class="micro-progress-fill" style="width: 0%"></div>
           </div>
-          <p id="progressSummary" class="text-[11px] text-slate-400 mt-2">Đang hoàn thành các nhiệm vụ tuần 1 để mở khóa chặng Tháng 1.</p>
+          <p id="progressSummary" class="text-xs text-slate-500 mt-2">Đang hoàn thành các nhiệm vụ tuần 1 để mở khóa cột mốc Tự lập.</p>
         </section>
 
         <!-- 2.3 Dashboard Grid 2 Cột -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
           
-          <!-- Cột chính bên trái: Việc cần làm (Span 7 hoặc 8) -->
-          <div id="tasksSection" class="lg:col-span-7 xl:col-span-8 space-y-6">
+          <!-- Cột chính bên trái: Việc cần làm -->
+          <div id="tasksSection" class="lg:col-span-7 xl:col-span-8 space-y-6 min-w-0">
             <div class="bg-white rounded-2xl border border-[#E2E8F0] p-6 shadow-xs">
               <div class="flex items-center justify-between mb-5 pb-4 border-b border-slate-100">
                 <div>
                   <h3 class="text-base font-bold text-slate-900">Việc cần làm hôm nay</h3>
-                  <p class="text-xs text-slate-500 mt-0.5">Tích chọn để tự động cập nhật tiến độ vào hệ thống</p>
+                  <p class="text-xs text-slate-500 mt-0.5">Tích chọn để tự động cập nhật tiến độ và mở khóa cột mốc huy hiệu</p>
                 </div>
-                <a href="newhire-checklist.html" class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1F5AFE] hover:underline">
+                <a href="newhire-checklist.html" class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1F5AFE] hover:underline shrink-0">
                   <span>Toàn bộ lộ trình</span>
                   <i data-lucide="chevron-right" class="w-4 h-4"></i>
                 </a>
               </div>
 
-              <!-- Danh sách tasks phẳng chuẩn divide-y (không hộp lồng hộp) -->
+              <!-- Trạng thái Hết việc hôm nay dùng Onbi (Mục 1.4) -->
+              <div id="allDoneBanner" class="hidden flex-col items-center text-center py-8 border-b border-slate-100 mb-2">
+                <div class="onbi-stage" style="--onbi-w:96px">
+                  <img src="assets/images/mascot/onbi-happy.webp" width="256" height="480" alt="">
+                </div>
+                <h3 class="mt-3 text-sm font-extrabold text-slate-900">Tuyệt vời!</h3>
+                <p class="mt-1 text-xs text-slate-600">Hôm nay bạn đã xong hết việc.</p>
+                <a href="newhire-checklist.html" class="mt-3 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-800 bg-white hover:bg-slate-50 ring-1 ring-slate-300 transition hover:no-underline">
+                  <span>Xem lộ trình</span>
+                  <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                </a>
+              </div>
+
+              <!-- Danh sách tasks phẳng chuẩn divide-y -->
               <div id="todayTaskList" class="divide-y divide-slate-100 -mx-6 -mb-6">
                 <!-- Javascript sẽ render vào đây -->
               </div>
@@ -255,51 +258,50 @@
             <div class="bg-white rounded-2xl border border-[#E2E8F0] p-6 shadow-xs">
               <h3 class="text-base font-bold text-slate-900 mb-4">Tài liệu quan trọng cho tân binh</h3>
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div class="p-3.5 rounded-xl border border-[#E2E8F0] bg-slate-50/70 hover:bg-white hover:border-blue-200 hover:shadow-xs transition-all duration-200 group cursor-pointer">
+                <div onclick="quickAsk('Thời gian làm việc trong Sổ tay nhân viên 2026 quy định thế nào?')" class="p-3.5 rounded-xl border border-[#E2E8F0] bg-slate-50/70 hover:bg-white hover:border-blue-200 hover:shadow-xs transition-all duration-200 group cursor-pointer">
                   <div class="w-7 h-7 rounded-lg bg-blue-100/80 text-[#1F5AFE] flex items-center justify-center mb-2">
                     <i data-lucide="book-open" class="w-4 h-4"></i>
                   </div>
                   <h4 class="text-xs font-semibold text-slate-900 group-hover:text-[#1F5AFE] transition-colors">Sổ tay nhân viên 2026</h4>
-                  <p class="text-[11px] text-slate-500 mt-0.5">Văn hóa & thời gian làm việc</p>
+                  <p class="text-xs text-slate-500 mt-0.5">Văn hóa & thời gian làm việc</p>
                 </div>
 
-                <div class="p-3.5 rounded-xl border border-[#E2E8F0] bg-slate-50/70 hover:bg-white hover:border-blue-200 hover:shadow-xs transition-all duration-200 group cursor-pointer">
+                <div onclick="quickAsk('Chính sách làm việc từ xa (WFH) quy định thế nào?')" class="p-3.5 rounded-xl border border-[#E2E8F0] bg-slate-50/70 hover:bg-white hover:border-blue-200 hover:shadow-xs transition-all duration-200 group cursor-pointer">
                   <div class="w-7 h-7 rounded-lg bg-indigo-100/80 text-indigo-700 flex items-center justify-center mb-2">
                     <i data-lucide="laptop" class="w-4 h-4"></i>
                   </div>
                   <h4 class="text-xs font-semibold text-slate-900 group-hover:text-[#1F5AFE] transition-colors">Chính sách Remote (WFH)</h4>
-                  <p class="text-[11px] text-slate-500 mt-0.5">Tối đa 2 ngày/tuần</p>
+                  <p class="text-xs text-slate-500 mt-0.5">Tối đa 2 ngày/tuần</p>
                 </div>
 
-                <div class="p-3.5 rounded-xl border border-[#E2E8F0] bg-slate-50/70 hover:bg-white hover:border-blue-200 hover:shadow-xs transition-all duration-200 group cursor-pointer">
+                <div onclick="quickAsk('Hướng dẫn cài đặt VPN và xác thực bảo mật 2 lớp (2FA)?')" class="p-3.5 rounded-xl border border-[#E2E8F0] bg-slate-50/70 hover:bg-white hover:border-blue-200 hover:shadow-xs transition-all duration-200 group cursor-pointer">
                   <div class="w-7 h-7 rounded-lg bg-emerald-100/80 text-[#00B67A] flex items-center justify-center mb-2">
                     <i data-lucide="shield-check" class="w-4 h-4"></i>
                   </div>
                   <h4 class="text-xs font-semibold text-slate-900 group-hover:text-[#1F5AFE] transition-colors">Quy định Bảo mật IT</h4>
-                  <p class="text-[11px] text-slate-500 mt-0.5">Xác thực 2 lớp & dữ liệu</p>
+                  <p class="text-xs text-slate-500 mt-0.5">Xác thực 2 lớp & dữ liệu</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Cột phụ bên phải: Mentor & Widget AI (Span 5 hoặc 4) -->
-          <div class="lg:col-span-5 xl:col-span-4 space-y-6">
+          <!-- Cột phụ bên phải: Mentor & Thẻ Onbi Copilot -->
+          <div class="lg:col-span-5 xl:col-span-4 space-y-6 min-w-0">
             
             <!-- Thẻ Người hướng dẫn (Mentor Card) -->
             <div class="bg-white rounded-2xl border border-[#E2E8F0] p-6 shadow-xs">
-              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Người đồng hành (Mentor)</h3>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4">Người đồng hành (Mentor)</h3>
               <div class="flex items-center gap-3.5 p-3.5 rounded-xl bg-slate-50/80 border border-[#E2E8F0] mb-4">
                 <div class="relative shrink-0">
                   <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mai" alt="Mentor" class="w-12 h-12 rounded-full bg-white ring-2 ring-slate-100 object-cover">
                   <span class="absolute bottom-0 right-0 flex h-2.5 w-2.5">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#00B67A] ring-2 ring-white"></span>
                   </span>
                 </div>
                 <div class="flex-1 min-w-0">
                   <h4 class="text-sm font-bold text-slate-900 truncate">Trần Thị Mai</h4>
                   <p class="text-xs text-slate-500 truncate">Tech Lead &bull; Kỹ thuật</p>
-                  <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-[#00B67A] mt-0.5">
+                  <span class="inline-flex items-center gap-1 text-xs font-semibold text-[#00B67A] mt-0.5">
                     Đang trực tuyến
                   </span>
                 </div>
@@ -319,23 +321,24 @@
               </button>
             </div>
 
-            <!-- Widget Trợ lý OnboardAI (Có Khung 3 chấm Mac Dots phong cách Onboard.io) -->
-            <div class="bg-gradient-to-br from-indigo-50/80 via-white to-purple-50/50 rounded-2xl border border-indigo-200/80 p-6 shadow-xs animate-ai-glow">
-              <!-- 3 Mac Dots phong cách Onboard.io Claude Demo -->
-              <div class="flex items-center justify-between pb-3 mb-3 border-b border-indigo-100/70">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-2.5 h-2.5 rounded-full bg-[#F0C4B4]"></span>
-                  <span class="w-2.5 h-2.5 rounded-full bg-[#F0E0B4]"></span>
-                  <span class="w-2.5 h-2.5 rounded-full bg-[#CFE6D0]"></span>
+            <!-- Thẻ Trợ lý Onbi (Mục 1.3: dùng onbi-avatar-128.webp & đổi tên thành Onbi · Trợ lý hội nhập) -->
+            <div class="bg-gradient-to-br from-indigo-50/80 via-white to-blue-50/50 rounded-2xl border border-indigo-200/80 p-6 shadow-xs animate-ai-glow">
+              <div class="flex items-center justify-between pb-3.5 mb-3.5 border-b border-indigo-100/80">
+                <div class="flex items-center gap-2.5">
+                  <img class="onbi-avatar" src="assets/images/mascot/onbi-avatar-128.webp" width="36" height="36" alt="Onbi">
+                  <div>
+                    <div class="text-sm font-extrabold text-slate-900 leading-tight">Onbi</div>
+                    <div class="text-xs font-medium text-slate-500">Trợ lý hội nhập</div>
+                  </div>
                 </div>
-                <div class="flex items-center gap-1.5 text-[11px] font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100">
+                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100">
                   <i data-lucide="sparkles" class="w-3 h-3 text-indigo-600"></i>
-                  <span>OnboardAI Copilot v2.4</span>
-                </div>
+                  <span>AI-1</span>
+                </span>
               </div>
 
               <p class="text-xs text-slate-600 leading-relaxed mb-4">
-                Mọi câu hỏi về thời gian thử việc, nghỉ phép hay cấp phát thiết bị đều được AI tra cứu và trích dẫn chuẩn xác từ tài liệu công ty.
+                Mọi câu hỏi về thời gian thử việc, nghỉ phép hay cấp phát thiết bị đều được <strong>Onbi</strong> tra cứu và trích dẫn chuẩn xác từ tài liệu công ty.
               </p>
 
               <!-- Câu hỏi gợi ý nhanh -->
@@ -348,8 +351,8 @@
                 </button>
               </div>
 
-              <a href="newhire-ai-help.html" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-700 transition shadow-xs active:scale-95">
-                <span>Khám phá Trợ lý AI đầy đủ</span>
+              <a href="newhire-ai-help.html" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#1F5AFE] text-white text-xs font-semibold hover:bg-blue-700 transition shadow-xs active:scale-95 hover:no-underline">
+                <span>Trò chuyện cùng Onbi</span>
                 <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
               </a>
             </div>
@@ -364,6 +367,27 @@
   <!-- Nạp module CSDL LocalStorage và Logic tương tác -->
   <script src="js/api.js"></script>
   <script>
+    function logout() {
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('isLoggedIn');
+    }
+
+    // Hàm đếm số tăng dần (Mục 3.2)
+    function countUp(el, to, { duration = 800, suffix = '' } = {}) {
+      if (!el) return;
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        el.textContent = to + suffix;
+        return;
+      }
+      const start = performance.now();
+      const step = (now) => {
+        const t = Math.min((now - start) / duration, 1);
+        el.textContent = Math.round(to * (1 - Math.pow(1 - t, 3))) + suffix;
+        if (t < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+
     // Hàm hiển thị Toast thông báo hiện đại
     function showToast(message, type = 'success') {
       const container = document.getElementById('toast-container');
@@ -440,48 +464,80 @@
       
       // Lọc nhiệm vụ thuộc về New Hire hiện tại
       const userTasks = allTasks.filter(t => t.newHireId === currentUser.id);
+      let isFirstProgressRender = true;
 
       // Cập nhật thông tin Header & Banner
       document.getElementById('userName').innerText = currentUser.name;
       document.getElementById('welcomeTitle').innerText = `Chào ${currentUser.name}, hôm nay là ngày tăng tốc!`;
 
-      // Cập nhật thanh tiến độ 6px chuẩn Onboard.io
+      // Cập nhật thanh tiến độ 6px & khối Cột mốc hành trình ở Sidebar (Mục 2 & 3.2)
       function updateProgress() {
         const total = userTasks.length;
-        if (total === 0) {
-          document.getElementById('progressPercent').innerText = '0%';
-          document.getElementById('progressBarFill').style.width = '0%';
-          document.getElementById('progressSummary').innerText = 'Chưa có nhiệm vụ nào được giao.';
-          document.getElementById('progressPillBadge').innerText = '0 Nhiệm vụ';
-          return;
+        const completed = userTasks.filter(t => t.status === 'completed').length;
+        const remaining = Math.max(total - completed, 0);
+        const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+        const pctEl = document.getElementById('progressPercent');
+        if (isFirstProgressRender) {
+          countUp(pctEl, percent, { duration: 800, suffix: '%' });
+          isFirstProgressRender = false;
+        } else {
+          pctEl.textContent = `${percent}%`;
         }
 
-        const completed = userTasks.filter(t => t.status === 'completed').length;
-        const percent = Math.round((completed / total) * 100);
-
-        document.getElementById('progressPercent').innerText = `${percent}%`;
-        document.getElementById('progressBarFill').style.width = `${percent}%`;
-        document.getElementById('progressSummary').innerText = `Đã hoàn thành ${completed}/${total} nhiệm vụ trong giai đoạn Tuần 1.`;
+        requestAnimationFrame(() => {
+          document.getElementById('progressBarFill').style.width = `${percent}%`;
+        });
+        document.getElementById('progressSummary').innerText =
+          remaining === 0 && total > 0
+            ? `Tuyệt vời! Bạn đã hoàn thành toàn bộ ${total}/${total} nhiệm vụ trong giai đoạn Tuần 1.`
+            : `Đã hoàn thành ${completed}/${total} nhiệm vụ trong giai đoạn Tuần 1.`;
         document.getElementById('progressPillBadge').innerText = `${completed}/${total} Nhiệm vụ`;
 
-        // Cập nhật B2B Pill trên Banner
+        // Cập nhật nhãn trạng thái tiếng Việt (Mục 5)
         const statusText = document.getElementById('overallStatusText');
         if (statusText) {
-          statusText.innerText = `ON TRACK (${percent}%)`;
+          statusText.innerText = `Đúng tiến độ (${percent}%)`;
+        }
+
+        // Cập nhật Cột mốc hành trình ở Sidebar (Mục 2: tính trực tiếp từ danh sách việc)
+        const badge2 = document.getElementById('sidebarBadge2');
+        const badgeCount = document.getElementById('sidebarBadgeCount');
+        const nextHint = document.getElementById('sidebarNextBadgeHint');
+        if (total > 0 && remaining === 0) {
+          badge2.classList.remove('is-locked');
+          badge2.title = 'Tự lập – đã đạt';
+          badgeCount.textContent = '2/4';
+          nextHint.innerHTML = `Tiếp theo: <b class="text-slate-900">Hòa nhập</b> &middot; chặng Tháng 1`;
+        } else {
+          badge2.classList.add('is-locked');
+          badge2.title = `Tự lập – còn ${remaining} việc`;
+          badgeCount.textContent = '1/4';
+          nextHint.innerHTML = `Tiếp theo: <b class="text-slate-900">Tự lập</b> &middot; còn ${remaining} việc`;
         }
       }
 
-      // Render danh sách nhiệm vụ hôm nay theo chuẩn Status Pills B2B
+      // Render danh sách nhiệm vụ hôm nay với SVG tick vẽ dần & nhãn tiếng Việt (Mục 1.4, 3.2, 4, 5)
       function renderTodayTasks() {
         const listContainer = document.getElementById('todayTaskList');
+        const allDoneBanner = document.getElementById('allDoneBanner');
         listContainer.innerHTML = '';
 
+        const completedCount = userTasks.filter(t => t.status === 'completed').length;
+
         if (userTasks.length === 0) {
-          listContainer.innerHTML = `
-            <div class="text-center py-8 text-slate-400 text-xs font-medium">
-              Bạn không còn nhiệm vụ nào cần làm hôm nay.
-            </div>`;
+          allDoneBanner.classList.remove('hidden');
+          allDoneBanner.classList.add('flex');
           return;
+        }
+
+        // Hiện trạng thái Onbi vui "Tuyệt vời! Hôm nay bạn đã xong hết việc." khi xong 100% việc (Mục 1.4)
+        if (completedCount === userTasks.length) {
+          allDoneBanner.classList.remove('hidden');
+          allDoneBanner.classList.add('flex');
+        } else {
+          allDoneBanner.classList.add('hidden');
+          allDoneBanner.classList.remove('flex');
         }
 
         userTasks.forEach(task => {
@@ -491,54 +547,54 @@
           
           taskDiv.className = `group flex items-start gap-3.5 px-6 py-4 transition-colors hover:bg-slate-50/80 ${
             isDone 
-              ? 'bg-slate-50/40 opacity-75' 
+              ? 'is-done bg-slate-50/40' 
               : isBlocked
               ? 'bg-rose-50/25'
               : 'bg-white'
           }`;
           taskDiv.id = `task-row-${task.id}`;
 
-          // B2B Status Pill chuẩn Ring-Inset
+          // Nhãn trạng thái tiếng Việt chuẩn Mục 5 & whitespace-nowrap (Mục 4 Lỗi #4)
           let statusPillHtml = '';
           if (isDone) {
-            statusPillHtml = `<span class="pill-status pill-completed">COMPLETED</span>`;
+            statusPillHtml = `<span class="pill-status pill-completed whitespace-nowrap">Hoàn thành</span>`;
           } else if (isBlocked) {
-            statusPillHtml = `<span class="pill-status pill-blocked">BLOCKED</span>`;
-          } else if (task.priority === 'Bắt buộc' || task.dueDate.includes('Hôm nay')) {
-            statusPillHtml = `<span class="pill-status pill-needs-action">NEEDS ACTION</span>`;
+            statusPillHtml = `<span class="pill-status pill-blocked whitespace-nowrap">Bị chặn</span>`;
+          } else if (task.priority === 'Bắt buộc' || (task.dueDate && task.dueDate.includes('Hôm nay'))) {
+            statusPillHtml = `<span class="pill-status pill-needs-action whitespace-nowrap">Cần làm ngay</span>`;
           } else {
-            statusPillHtml = `<span class="pill-status pill-on-track">ON TRACK</span>`;
+            statusPillHtml = `<span class="pill-status pill-on-track whitespace-nowrap">Chưa làm</span>`;
           }
 
           // Subtext giải thích nếu bị blocked
           let blockedSubtext = '';
           if (isBlocked && task.blockedReason) {
             blockedSubtext = `
-              <div class="mt-1.5 text-[11px] text-rose-800 bg-rose-50 p-2 rounded-xl border border-rose-200/60 flex items-center gap-1.5 font-medium">
+              <div class="mt-1.5 text-xs text-rose-800 bg-rose-50 p-2 rounded-xl border border-rose-200/60 flex items-center gap-1.5 font-medium">
                 <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0 text-rose-600"></i>
                 <span>${task.blockedReason}</span>
               </div>`;
           }
 
           taskDiv.innerHTML = `
-            <!-- Checkbox tùy chỉnh Micro-Bounce -->
-            <label class="relative flex items-center justify-center cursor-pointer shrink-0 mt-0.5 group/cb" title="${isDone ? 'Đánh dấu chưa xong' : 'Đánh dấu hoàn thành'}">
+            <!-- Checkbox SVG dấu tick vẽ dần (Mục 3.2 & Mục 4 Lỗi #3) -->
+            <label class="relative flex items-center justify-center cursor-pointer shrink-0 mt-0.5 group/cb ${isDone ? 'is-done' : ''}" title="${isDone ? 'Đánh dấu chưa xong' : 'Đánh dấu hoàn thành'}">
               <input type="checkbox" class="task-checkbox peer sr-only" data-id="${task.id}" ${isDone ? 'checked' : ''}>
-              <div class="w-5 h-5 rounded-md border-2 border-slate-400 group-hover/cb:border-blue-500 peer-checked:border-[#00B67A] peer-checked:bg-[#00B67A] flex items-center justify-center transition-all duration-200 active:scale-90 shadow-2xs">
-                <svg class="w-3.5 h-3.5 text-white stroke-[3] hidden peer-checked:block animate-check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+              <div class="w-5 h-5 rounded-md border-2 ${isDone ? 'border-[#00B67A] bg-[#00B67A]' : 'border-slate-400 group-hover/cb:border-blue-500'} flex items-center justify-center transition-all duration-200 active:scale-90 shadow-2xs">
+                <svg viewBox="0 0 24 24" class="w-3.5 h-3.5" aria-hidden="true">
+                  <path class="tick" d="M5 13l4 4L19 7" pathLength="1" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </div>
             </label>
 
             <div class="flex-1 min-w-0">
               <div class="flex items-center justify-between gap-2 mb-1">
-                <div class="text-xs md:text-sm font-bold text-slate-900 leading-snug transition-all duration-200 ${isDone ? 'line-through text-slate-400' : ''}">
+                <div class="text-xs md:text-sm font-bold leading-snug transition-all duration-200 ${isDone ? 'line-through text-slate-500' : 'text-slate-900'}">
                   ${task.title}
                 </div>
                 ${statusPillHtml}
               </div>
-              <div class="flex flex-wrap items-center gap-2 text-[11px] text-slate-500 font-medium">
+              <div class="flex flex-wrap items-center gap-2 text-xs text-slate-500 font-medium">
                 <span class="px-2 py-0.5 rounded-md font-semibold bg-slate-100 text-slate-700">${task.category}</span>
                 <span>Hạn chót: <strong class="text-slate-700 tabular-nums">${task.dueDate}</strong></span>
                 <span>&bull;</span>
@@ -547,7 +603,7 @@
               ${blockedSubtext}
             </div>
             
-            <button onclick="quickAsk('${task.title}')" title="Hỏi AI về nhiệm vụ này" class="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-[#1F5AFE] p-1 rounded-lg transition-all shrink-0 active:scale-90">
+            <button onclick="quickAsk('${task.title}')" title="Hỏi Onbi về nhiệm vụ này" class="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-[#1F5AFE] p-1 rounded-lg transition-all shrink-0 active:scale-90">
               <i data-lucide="bot" class="w-4 h-4"></i>
             </button>
           `;
@@ -560,7 +616,7 @@
             task.status = newStatus;
 
             if (newStatus === 'completed') {
-              showToast(`Đã hoàn thành: "${task.title}" (+30 XP)`, 'success');
+              showToast(`Đã hoàn thành: "${task.title}"`, 'success');
             } else {
               showToast(`Đã chuyển sang chưa hoàn thành`, 'info');
             }
@@ -582,5 +638,3 @@
   </script>
 </body>
 </html>
-
-

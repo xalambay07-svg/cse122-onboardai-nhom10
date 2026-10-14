@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bảng điều khiển Nhân sự (HR01) – AI Risk Radar | OnboardAI Enterprise</title>
+  <link rel="icon" href="assets/images/brand/onboardai-mark-small.svg" type="image/svg+xml">
   
   <!-- Font Inter Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,17 +43,48 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
-    /* Hiệu ứng quét sáng Shimmer cho AI Banner */
+    /* Hiệu ứng quét sáng Shimmer & Vệt quét tròn Radar cho AI-3 Banner */
     .ai-shimmer {
-      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0) 100%);
+      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0) 100%);
       background-size: 200% 100%;
-      animation: shimmerSweep 3.5s infinite;
+      animation: shimmerSweep 4s infinite;
     }
     @keyframes shimmerSweep {
       0% { background-position: -200% 0; }
       100% { background-position: 200% 0; }
     }
-    /* Staggered entrance animation delays (Fail-safe: default visible) */
+    .radar-sweep {
+      position: absolute;
+      right: -60px;
+      top: -80px;
+      width: 340px;
+      height: 340px;
+      border-radius: 9999px;
+      background: conic-gradient(from 0deg, transparent 0deg 260deg, rgba(31, 90, 254, 0.14) 330deg, rgba(99, 102, 241, 0.28) 360deg);
+      border: 1px solid rgba(99, 102, 241, 0.18);
+      pointer-events: none;
+    }
+    .radar-sweep::after {
+      content: "";
+      position: absolute;
+      inset: 55px;
+      border-radius: 9999px;
+      border: 1px dashed rgba(148, 163, 184, 0.16);
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .radar-sweep {
+        animation: radarSpin 7s linear infinite;
+      }
+      @keyframes radarSpin {
+        to { transform: rotate(360deg); }
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ai-shimmer, .radar-sweep {
+        animation: none !important;
+      }
+    }
+    /* Staggered entrance animation delays */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
@@ -85,19 +117,19 @@
     <!-- ================= 1. SIDEBAR ĐIỀU HƯỚNG DÙNG CHUNG ================= -->
     <aside id="appSidebar" class="w-64 bg-white border-r border-[#E2E8F0] flex flex-col shrink-0 fixed inset-y-0 left-0 z-40 md:static transition-transform duration-300 -translate-x-full md:translate-x-0">
       <!-- Logo Header -->
-      <div class="h-16 flex items-center gap-3 px-6 border-b border-slate-100">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-indigo-600 flex items-center justify-center text-white shadow-xs">
-          <i data-lucide="compass" class="w-5 h-5"></i>
-        </div>
-        <div>
-          <span class="text-base font-bold tracking-tight text-slate-900">Onboard<span class="text-[#1F5AFE]">AI</span></span>
-          <span class="block text-[10px] uppercase font-semibold tracking-wider text-amber-600 font-mono">HR Specialist</span>
-        </div>
+      <div class="h-16 flex items-center px-6 border-b border-slate-100">
+        <a href="index.html" class="flex items-center gap-2.5">
+          <img src="assets/images/brand/onboardai-mark.svg" width="36" height="36" alt="">
+          <div>
+            <div class="text-[17px] font-extrabold tracking-tight leading-tight text-slate-900">Onboard<span class="text-[#1F5AFE]">AI</span></div>
+            <div class="text-[10px] font-bold tracking-[.12em] text-amber-600">HR SPECIALIST</div>
+          </div>
+        </a>
       </div>
 
       <!-- Navigation Links -->
       <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-        <div class="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+        <div class="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
           Không gian Quản trị HR
         </div>
         <a href="hr-dashboard.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold bg-amber-50 text-amber-800 border border-amber-200/60 transition-colors">
@@ -105,7 +137,7 @@
           <span>Bảng điều khiển HR</span>
         </a>
 
-        <div class="pt-4 px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+        <div class="pt-4 px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
           Phạm vi giám sát Onboarding
         </div>
         <a href="newhire-onboarding-dashboard.html" onclick="sessionStorage.setItem('isImpersonating', 'hr')" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors group">
@@ -117,7 +149,7 @@
           <span>Thị sát Người hướng dẫn</span>
         </a>
 
-        <div class="pt-5 px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+        <div class="pt-5 px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
           Tài khoản & Hệ thống
         </div>
         <a href="index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
@@ -139,7 +171,7 @@
           </span>
           <span class="text-xs font-bold text-amber-900">AI-3 Risk Radar</span>
         </div>
-        <p class="text-[11px] text-amber-800 leading-relaxed">Đang chủ động quét điểm nghẽn quy trình và phát hiện nguy cơ trễ hạn tự động.</p>
+        <p class="text-xs text-amber-800 leading-relaxed">Đang chủ động quét điểm nghẽn quy trình và phát hiện nguy cơ trễ hạn tự động.</p>
       </div>
     </aside>
 
@@ -159,12 +191,12 @@
               <span>Bảng điều khiển Nhân sự Toàn công ty</span>
               <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">Mã HR01</span>
             </h1>
-            <p class="text-[11px] text-slate-500 hidden sm:block">Giám sát tiến độ tiếp nhận, phân tích rủi ro trễ hạn và can thiệp quy trình thông minh</p>
+            <p class="text-xs text-slate-500 hidden sm:block">Giám sát tiến độ tiếp nhận, phân tích rủi ro trễ hạn và can thiệp quy trình thông minh</p>
           </div>
         </div>
 
         <div class="flex items-center gap-3">
-          <button onclick="triggerQuickAction('all')" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700 transition">
+          <button onclick="filterTable('all')" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700 transition">
             <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-slate-500"></i>
             <span>Làm mới số liệu</span>
           </button>
@@ -190,8 +222,11 @@
               </div>
             </div>
             <div class="mt-3">
-              <div class="text-3xl font-extrabold text-slate-900 tracking-tight">4 <span class="text-xs font-normal text-slate-500">nhân sự</span></div>
-              <div class="flex items-center gap-1.5 text-[11px] text-emerald-600 font-semibold mt-1">
+              <div class="text-3xl font-extrabold text-slate-900 tracking-tight flex items-baseline gap-1.5">
+                <span id="kpiTotalOnboarding">4</span>
+                <span class="text-xs font-normal text-slate-500">nhân sự</span>
+              </div>
+              <div class="flex items-center gap-1.5 text-xs text-emerald-600 font-semibold mt-1">
                 <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
                 <span>+2 mới trong tháng 09/2026</span>
               </div>
@@ -207,10 +242,10 @@
               </div>
             </div>
             <div class="mt-3">
-              <div class="text-3xl font-extrabold text-slate-900 tracking-tight" id="kpiAvgProgress">57.5%</div>
+              <div class="text-3xl font-extrabold text-slate-900 tracking-tight" id="kpiAvgProgress">58%</div>
               <!-- Thanh tiến độ 6px Onboard.io -->
-              <div class="progress-bar-micro mt-2">
-                <div class="progress-fill-micro bg-gradient-to-r from-[#1F5AFE] to-[#00B67A]" style="width: 57.5%;"></div>
+              <div class="micro-progress-track mt-2.5">
+                <div id="kpiAvgProgressBar" class="micro-progress-fill bg-gradient-to-r from-[#1F5AFE] to-[#00B67A]" style="width: 57.5%;"></div>
               </div>
             </div>
           </div>
@@ -224,14 +259,17 @@
               </div>
             </div>
             <div class="mt-3">
-              <div class="text-3xl font-extrabold text-amber-600 tracking-tight">1 <span class="text-xs font-semibold text-amber-700">ca (25%)</span></div>
-              <div class="text-[11px] text-amber-800 font-medium mt-1 truncate">
+              <div class="text-3xl font-extrabold text-amber-600 tracking-tight flex items-baseline gap-1.5">
+                <span id="kpiAtRisk">1</span>
+                <span class="text-xs font-semibold text-amber-700">ca (25%)</span>
+              </div>
+              <div class="text-xs text-amber-800 font-medium mt-1 truncate">
                 Trần Thị Bình (MKT) &bull; Tắc 4 ngày
               </div>
             </div>
           </div>
 
-          <!-- Card 4: Điểm nghẽn quy trình (Blocked IT) -->
+          <!-- Card 4: Điểm nghẽn quy trình (Blocked IT - Đã sửa lỗi #6 khoảng cách "1 ca IT") -->
           <div class="bg-white p-5 rounded-2xl border border-rose-200/90 bg-gradient-to-br from-white to-rose-50/30 shadow-xs flex flex-col justify-between hover:border-rose-400 transition">
             <div class="flex items-center justify-between">
               <span class="text-xs font-semibold text-rose-700 uppercase tracking-wider">Điểm nghẽn quy trình</span>
@@ -240,8 +278,11 @@
               </div>
             </div>
             <div class="mt-3">
-              <div class="text-3xl font-extrabold text-rose-600 tracking-tight">1 <span class="text-xs font-semibold text-rose-700">ca IT</span></div>
-              <div class="text-[11px] text-rose-800 font-medium mt-1 truncate">
+              <div class="text-3xl font-extrabold text-rose-600 tracking-tight flex items-baseline gap-1.5">
+                <span id="kpiBlockedIt">1</span>
+                <span class="text-xs font-semibold text-rose-700">ca IT</span>
+              </div>
+              <div class="text-xs text-rose-800 font-medium mt-1 truncate">
                 Nguyễn Văn An &bull; Chờ cấp SSH Key
               </div>
             </div>
@@ -251,8 +292,9 @@
         <!-- ================= TẦNG 2: TÍNH NĂNG AI-3 (AI RISK RADAR & CAN THIỆP 1-CLICK) ================= -->
         <section class="stagger-2">
           <div class="rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-6 md:p-8 relative overflow-hidden shadow-xl border border-indigo-900/60">
-            <!-- Hiệu ứng quét sáng Shimmer -->
+            <!-- Hiệu ứng quét sáng Shimmer & Vệt quét tròn Radar -->
             <div class="absolute inset-0 ai-shimmer pointer-events-none"></div>
+            <div class="radar-sweep" aria-hidden="true"></div>
 
             <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
               <div class="space-y-3 max-w-2xl">
@@ -305,7 +347,7 @@
               <canvas id="deptBarChart"></canvas>
             </div>
 
-            <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
               <span>Đạt chỉ tiêu: <strong>Nhân sự (100%)</strong></span>
               <span class="text-amber-600 font-medium">Chậm kế hoạch: <strong>Marketing (25%)</strong></span>
             </div>
@@ -329,19 +371,19 @@
               <!-- Nhãn căn giữa tâm Doughnut không lo bị lệch -->
               <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                 <span class="text-3xl font-extrabold text-slate-900 leading-tight">4</span>
-                <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Nhân sự</span>
+                <span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Nhân sự</span>
               </div>
             </div>
 
             <!-- Chú thích Legend tùy biến -->
-            <div class="pt-3 border-t border-slate-100 grid grid-cols-3 gap-2 text-center text-[11px]">
+            <div class="pt-3 border-t border-slate-100 grid grid-cols-3 gap-2 text-center text-xs">
               <div>
                 <div class="inline-block w-2.5 h-2.5 rounded-full bg-[#1F5AFE] mr-1"></div>
-                <span class="text-slate-600">Đúng hạn: <strong>2</strong></span>
+                <span class="text-slate-600">Đúng tiến độ: <strong>2</strong></span>
               </div>
               <div>
                 <div class="inline-block w-2.5 h-2.5 rounded-full bg-[#F59E0B] mr-1"></div>
-                <span class="text-slate-600">Rủi ro: <strong>1</strong></span>
+                <span class="text-slate-600">Có rủi ro: <strong>1</strong></span>
               </div>
               <div>
                 <div class="inline-block w-2.5 h-2.5 rounded-full bg-[#00B67A] mr-1"></div>
@@ -359,19 +401,22 @@
               <p class="text-xs text-slate-500 mt-0.5">Dữ liệu thời gian thực được đồng bộ từ <code class="font-mono text-indigo-600">mock-data.json</code></p>
             </div>
 
-            <!-- Bộ lọc nhanh 1 chạm (Filter Tabs) -->
+            <!-- Bộ lọc nhanh 1 chạm (Filter Tabs - Không dùng raw emoji) -->
             <div class="flex flex-wrap items-center gap-1.5 p-1 bg-slate-50 rounded-2xl border border-slate-200 text-xs">
-              <button onclick="filterTable('all')" id="tab-all" class="px-3 py-1.5 rounded-xl font-bold bg-white text-[#1F5AFE] shadow-xs transition">
-                Tất cả (4)
+              <button onclick="filterTable('all')" id="tab-all" class="px-3 py-1.5 rounded-xl font-bold bg-white text-[#1F5AFE] shadow-xs transition flex items-center gap-1.5">
+                <span>Tất cả (<span id="count-all">4</span>)</span>
               </button>
-              <button onclick="filterTable('action_needed')" id="tab-action_needed" class="px-3 py-1.5 rounded-xl font-medium text-slate-600 hover:text-slate-900 transition">
-                ⚠️ Cần can thiệp (2)
+              <button onclick="filterTable('action_needed')" id="tab-action_needed" class="px-3 py-1.5 rounded-xl font-medium text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5">
+                <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-amber-500"></i>
+                <span>Cần can thiệp (<span id="count-action_needed">2</span>)</span>
               </button>
-              <button onclick="filterTable('blocked')" id="tab-blocked" class="px-3 py-1.5 rounded-xl font-medium text-slate-600 hover:text-slate-900 transition">
-                🚫 Kẹt IT (1)
+              <button onclick="filterTable('blocked')" id="tab-blocked" class="px-3 py-1.5 rounded-xl font-medium text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5">
+                <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-rose-500"></i>
+                <span>Kẹt IT (<span id="count-blocked">1</span>)</span>
               </button>
-              <button onclick="filterTable('on_track')" id="tab-on_track" class="px-3 py-1.5 rounded-xl font-medium text-slate-600 hover:text-slate-900 transition">
-                🟢 Tiến triển tốt (2)
+              <button onclick="filterTable('on_track')" id="tab-on_track" class="px-3 py-1.5 rounded-xl font-medium text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-500"></i>
+                <span>Đúng tiến độ (<span id="count-on_track">2</span>)</span>
               </button>
             </div>
           </div>
@@ -380,7 +425,7 @@
           <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse text-xs">
               <thead>
-                <tr class="border-b border-slate-100 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                <tr class="border-b border-slate-100 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
                   <th class="py-3 px-4">Nhân sự</th>
                   <th class="py-3 px-4">Phòng ban & Vị trí</th>
                   <th class="py-3 px-4">Mentor phụ trách</th>
@@ -645,13 +690,48 @@
       }
     }
 
+    function countUp(el, to, { duration = 800, suffix = '' } = {}) {
+      if (!el) return;
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        el.textContent = to + suffix;
+        return;
+      }
+      const start = performance.now();
+      const step = now => {
+        const t = Math.min((now - start) / duration, 1);
+        el.textContent = Math.round(to * (1 - Math.pow(1 - t, 3))) + suffix;
+        if (t < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+
+    function updateFilterTabCounts() {
+      const actionNeededCount = newHiresData.filter(d => d.status === 'at_risk' || d.blocked).length;
+      const blockedCount = newHiresData.filter(d => d.blocked).length;
+      const onTrackCount = newHiresData.filter(d => d.status === 'on_track' && !d.blocked).length;
+      const elAll = document.getElementById('count-all');
+      const elAction = document.getElementById('count-action_needed');
+      const elBlocked = document.getElementById('count-blocked');
+      const elOnTrack = document.getElementById('count-on_track');
+      if (elAll) elAll.textContent = newHiresData.length;
+      if (elAction) elAction.textContent = actionNeededCount;
+      if (elBlocked) elBlocked.textContent = blockedCount;
+      if (elOnTrack) elOnTrack.textContent = onTrackCount;
+    }
+
     function confirmSendIntervention(type) {
       closeDrawer();
       if (type === 'mentor') {
+        const binh = newHiresData.find(d => d.id === 'NH02' || d.status === 'at_risk');
+        if (binh) binh.status = 'on_track';
         showToast('Đã gửi email nhắc nhở khẩn cấp tới Mentor Lê Minh Tuấn qua hệ thống!', 'success');
       } else {
+        const an = newHiresData.find(d => d.id === 'NH01' || d.blocked);
+        if (an) an.blocked = false;
         showToast('Đã đẩy Ticket #TK-IT-9021 sang mức độ Khẩn cấp tới Trưởng nhóm IT!', 'success');
       }
+      updateFilterTabCounts();
+      renderTable();
     }
 
     // ================= TABLE RENDERING & FILTER =================
@@ -663,9 +743,9 @@
         const btn = document.getElementById(`tab-${t}`);
         if (!btn) return;
         if (t === filter) {
-          btn.className = "px-3 py-1.5 rounded-xl font-bold bg-white text-[#1F5AFE] shadow-xs transition";
+          btn.className = "px-3 py-1.5 rounded-xl font-bold bg-white text-[#1F5AFE] shadow-xs transition flex items-center gap-1.5";
         } else {
-          btn.className = "px-3 py-1.5 rounded-xl font-medium text-slate-600 hover:text-slate-900 transition";
+          btn.className = "px-3 py-1.5 rounded-xl font-medium text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5";
         }
       });
 
@@ -685,19 +765,37 @@
         filtered = newHiresData.filter(d => d.status === 'on_track' && !d.blocked);
       }
 
+      if (filtered.length === 0) {
+        const emptyTr = document.createElement('tr');
+        emptyTr.innerHTML = `
+          <td colspan="6" class="py-6 px-4">
+            <div class="flex flex-col items-center text-center py-8 animate-fade-in">
+              <div class="onbi-stage" style="--onbi-w:96px">
+                <img src="assets/images/mascot/onbi-greeting.webp" width="256" height="480" alt="">
+              </div>
+              <h3 class="mt-3 text-sm font-extrabold text-slate-900">Mọi nhân sự đều đúng tiến độ!</h3>
+              <p class="mt-1 text-xs text-slate-600">Không có ai cần can thiệp lúc này.</p>
+              <button onclick="filterTable('all')" class="mt-3 px-3 py-1.5 rounded-lg text-xs font-bold ring-1 ring-slate-300 hover:bg-slate-50 transition">Xem tất cả</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(emptyTr);
+        return;
+      }
+
       filtered.forEach(nh => {
         const tr = document.createElement('tr');
         tr.className = "hover:bg-slate-50/70 transition-colors";
 
         let statusPillHtml = '';
         if (nh.status === 'completed') {
-          statusPillHtml = '<span class="pill-status pill-completed">COMPLETED</span>';
+          statusPillHtml = '<span class="pill-status pill-completed whitespace-nowrap">Hoàn thành</span>';
         } else if (nh.status === 'at_risk') {
-          statusPillHtml = '<span class="pill-status pill-needs-action">AT RISK</span>';
+          statusPillHtml = '<span class="pill-status pill-needs-action whitespace-nowrap">Có rủi ro</span>';
         } else if (nh.blocked) {
-          statusPillHtml = '<span class="pill-status pill-blocked">BLOCKED IT</span>';
+          statusPillHtml = '<span class="pill-status pill-blocked whitespace-nowrap">Bị chặn</span>';
         } else {
-          statusPillHtml = '<span class="pill-status pill-on-track">ON TRACK</span>';
+          statusPillHtml = '<span class="pill-status pill-on-track whitespace-nowrap">Đúng tiến độ</span>';
         }
 
         tr.innerHTML = `
@@ -706,13 +804,13 @@
               <img src="${nh.avatar}" alt="${nh.name}" class="w-8 h-8 rounded-full border border-slate-200 bg-slate-50 shrink-0">
               <div>
                 <div class="font-bold text-slate-900">${nh.name}</div>
-                <div class="text-[11px] text-slate-400 font-mono">${nh.email}</div>
+                <div class="text-xs text-slate-500 font-mono">${nh.email}</div>
               </div>
             </div>
           </td>
           <td class="py-3 px-4">
             <div class="font-medium text-slate-800">${nh.department}</div>
-            <div class="text-[11px] text-slate-400">${nh.position}</div>
+            <div class="text-xs text-slate-500">${nh.position}</div>
           </td>
           <td class="py-3 px-4">
             <div class="font-medium text-slate-700 flex items-center gap-1.5">
@@ -721,12 +819,12 @@
             </div>
           </td>
           <td class="py-3 px-4">
-            <div class="w-36 space-y-1">
-              <div class="flex justify-between text-[11px] font-semibold text-slate-600">
+            <div class="w-36 space-y-1.5">
+              <div class="flex justify-between text-xs font-semibold text-slate-700">
                 <span>${nh.progress}%</span>
               </div>
-              <div class="progress-bar-micro">
-                <div class="progress-fill-micro ${nh.progress === 100 ? 'bg-[#00B67A]' : (nh.progress < 30 ? 'bg-amber-500' : 'bg-[#1F5AFE]')}" style="width: ${nh.progress}%"></div>
+              <div class="micro-progress-track">
+                <div class="micro-progress-fill ${nh.progress === 100 ? 'bg-[#00B67A]' : (nh.progress < 30 ? 'bg-amber-500' : 'bg-[#1F5AFE]')}" style="width: ${nh.progress}%"></div>
               </div>
             </div>
           </td>
@@ -736,10 +834,10 @@
           <td class="py-3 px-4 text-right">
             ${
               nh.status === 'at_risk'
-                ? `<button onclick="openInterventionDrawer('mentor')" class="px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-700 font-bold text-[11px] border border-amber-200 transition">Can thiệp</button>`
+                ? `<button onclick="openInterventionDrawer('mentor')" class="px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-700 font-bold text-xs border border-amber-200 transition whitespace-nowrap">Can thiệp</button>`
                 : (nh.blocked
-                    ? `<button onclick="openInterventionDrawer('it')" class="px-2.5 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-[11px] border border-rose-200 transition">Xử lý IT</button>`
-                    : `<a href="newhire-onboarding-dashboard.html" onclick="sessionStorage.setItem('isImpersonating', 'hr')" class="px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-[11px] border border-slate-200 transition inline-block">Xem chi tiết</a>`)
+                    ? `<button onclick="openInterventionDrawer('it')" class="px-2.5 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs border border-rose-200 transition whitespace-nowrap">Xử lý IT</button>`
+                    : `<a href="newhire-onboarding-dashboard.html" onclick="sessionStorage.setItem('isImpersonating', 'hr')" class="px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs border border-slate-200 transition inline-block whitespace-nowrap">Xem chi tiết</a>`)
             }
           </td>
         `;
@@ -750,7 +848,7 @@
 
     // ================= 5. KHỞI TẠO BIỂU ĐỒ CHART.JS =================
     function initCharts() {
-      // 1. Biểu đồ Cột: Tiến độ theo Phòng ban (duration 1200, easeOutQuart, rounded bars)
+      // 1. Biểu đồ Cột: Tiến độ theo Phòng ban (cột mọc lần lượt 150ms theo mục 3.2)
       const ctxBar = document.getElementById('deptBarChart').getContext('2d');
       new Chart(ctxBar, {
         type: 'bar',
@@ -773,8 +871,9 @@
           responsive: true,
           maintainAspectRatio: false,
           animation: {
-            duration: 1200,
-            easing: 'easeOutQuart'
+            duration: 1000,
+            easing: 'easeOutQuart',
+            delay: (ctx) => (ctx.type === 'data' && ctx.mode === 'default') ? ctx.dataIndex * 150 : 0
           },
           plugins: {
             legend: { display: false },
@@ -792,8 +891,8 @@
               max: 100,
               grid: { color: '#F1F1F5' },
               ticks: {
-                font: { size: 10, family: 'Inter' },
-                color: '#94A3B8',
+                font: { size: 11, family: 'Inter' },
+                color: '#64748B',
                 callback: v => v + '%'
               }
             },
@@ -813,7 +912,7 @@
       new Chart(ctxDoughnut, {
         type: 'doughnut',
         data: {
-          labels: ['Đúng tiến độ (On Track)', 'Có nguy cơ (At Risk)', 'Đã hoàn thành (Done)'],
+          labels: ['Đúng tiến độ', 'Có rủi ro', 'Hoàn thành'],
           datasets: [{
             data: [2, 1, 1],
             backgroundColor: [
@@ -830,7 +929,7 @@
           maintainAspectRatio: false,
           cutout: '75%',
           animation: {
-            duration: 1200,
+            duration: 1000,
             easing: 'easeOutQuart'
           },
           plugins: {
@@ -877,6 +976,20 @@
         } catch (e) {}
       }
 
+      countUp(document.getElementById('kpiTotalOnboarding'), 4);
+      countUp(document.getElementById('kpiAvgProgress'), 58, { suffix: '%' });
+      countUp(document.getElementById('kpiAtRisk'), 1);
+      countUp(document.getElementById('kpiBlockedIt'), 1);
+
+      const avgBar = document.getElementById('kpiAvgProgressBar');
+      if (avgBar && !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+        avgBar.style.width = '0%';
+        requestAnimationFrame(() => {
+          setTimeout(() => { avgBar.style.width = '57.5%'; }, 50);
+        });
+      }
+
+      updateFilterTabCounts();
       renderTable();
       initCharts();
       lucide.createIcons();

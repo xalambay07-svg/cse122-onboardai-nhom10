@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="OnboardAI">
+  <!-- OnboardAI logo mark – Concept C (full detail).
+       Dotted path = the onboarding steps still ahead, solid arc = progress made,
+       mint sparkle = the AI assistant guiding the journey. -->
+  <defs>
+    <linearGradient id="oa-arc" x1="32" y1="54" x2="50" y2="10" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4F46E5"/>
+      <stop offset="1" stop-color="#1F5AFE"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Steps ahead: dots fade in as they approach the solid progress arc -->
+  <g fill="#4F46E5">
+    <circle cx="23.76" cy="52.40" r="2.3" opacity="0.40"/>
+    <circle cx="17.86" cy="48.85" r="2.3" opacity="0.47"/>
+    <circle cx="13.34" cy="43.66" r="2.3" opacity="0.54"/>
+    <circle cx="10.65" cy="37.32" r="2.3" opacity="0.61"/>
+    <circle cx="10.05" cy="30.46" r="2.3" opacity="0.68"/>
+    <circle cx="11.60" cy="23.76" r="2.3" opacity="0.75"/>
+    <circle cx="15.15" cy="17.86" r="2.3" opacity="0.82"/>
+    <circle cx="20.34" cy="13.34" r="2.3" opacity="0.90"/>
+    <circle cx="26.68" cy="10.65" r="2.3"/>
+  </g>
+
+  <!-- Progress made: two solid arc segments with a gap for the sparkle -->
+  <g fill="none" stroke="url(#oa-arc)" stroke-width="5" stroke-linecap="round">
+    <path d="M33.54 10.05 A22 22 0 0 1 44.30 13.76"/>
+    <path d="M53.15 25.94 A22 22 0 0 1 31.23 53.99"/>
+  </g>
+
+  <!-- AI sparkle -->
+  <path fill="#00B67A" d="M49.8 12.07 Q49.8 19.07 56.8 19.07 Q49.8 19.07 49.8 26.07 Q49.8 19.07 42.8 19.07 Q49.8 19.07 49.8 12.07 Z"/>
+</svg>

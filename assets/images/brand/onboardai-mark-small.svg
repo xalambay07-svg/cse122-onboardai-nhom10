@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="OnboardAI">
+  <!-- OnboardAI logo mark – Concept C, simplified for favicon / very small sizes (16–32px).
+       Fewer, larger dots and a bigger sparkle so the mark stays readable when tiny. -->
+  <defs>
+    <linearGradient id="oa-arc-s" x1="16" y1="27" x2="26" y2="6" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4F46E5"/>
+      <stop offset="1" stop-color="#1F5AFE"/>
+    </linearGradient>
+  </defs>
+
+  <g fill="#4F46E5">
+    <circle cx="8.22" cy="23.78" r="2" opacity="0.55"/>
+    <circle cx="5.04" cy="16.96" r="2" opacity="0.70"/>
+    <circle cx="6.99" cy="9.69" r="2" opacity="0.85"/>
+    <circle cx="13.15" cy="5.37" r="2"/>
+  </g>
+
+  <path d="M26.63 13.15 A11 11 0 0 1 14.09 26.83" fill="none" stroke="url(#oa-arc-s)" stroke-width="4" stroke-linecap="round"/>
+
+  <path fill="#00B67A" d="M22.77 2.33 Q22.77 7.33 27.77 7.33 Q22.77 7.33 22.77 12.33 Q22.77 7.33 17.77 7.33 Q22.77 7.33 22.77 2.33 Z"/>
+</svg>
