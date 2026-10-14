@@ -67,6 +67,17 @@
   </style>
 </head>
 <body class="bg-[#F1F5F9] text-[#1E293B] font-sans antialiased h-full flex flex-col">
+  <!-- Thanh Thị sát của Quản trị viên (Admin View-as Bar - Mặc định ẩn, chỉ hiện khi Admin thị sát HR) -->
+  <div id="adminImpersonateBar" class="hidden bg-slate-900 text-white px-4 py-2.5 text-xs font-medium flex flex-wrap items-center justify-between gap-2 z-50 border-b border-violet-500/40 shrink-0">
+    <div class="flex items-center gap-2">
+      <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-violet-600 text-white">Chế độ thị sát</span>
+      <span class="text-slate-300">Đang xem giao diện dưới góc nhìn của <strong class="text-white">Lê Hoàng Nam (HR Specialist)</strong></span>
+    </div>
+    <button onclick="exitImpersonation('admin-user-management.html')" class="px-3 py-1.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-600 text-white text-xs font-bold transition shadow-xs">
+      Thoát chế độ xem & Quay lại Quản trị tài khoản
+    </button>
+  </div>
+
   <!-- Toast thông báo nổi -->
   <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
@@ -829,8 +840,28 @@
       });
     }
 
+    function checkAdminImpersonation() {
+      const isImpersonating = sessionStorage.getItem('isImpersonating');
+      const bar = document.getElementById('adminImpersonateBar');
+      if (isImpersonating === 'admin' && bar) {
+        bar.classList.remove('hidden');
+        const customName = sessionStorage.getItem('impersonatedUserName');
+        const strongEl = bar.querySelector('strong');
+        if (customName && strongEl) strongEl.textContent = customName;
+      }
+    }
+
+    function exitImpersonation(returnUrl = 'admin-user-management.html') {
+      const savedReturn = sessionStorage.getItem('impersonateReturnUrl');
+      sessionStorage.removeItem('isImpersonating');
+      sessionStorage.removeItem('impersonateReturnUrl');
+      sessionStorage.removeItem('impersonatedUserName');
+      window.location.href = savedReturn || returnUrl;
+    }
+
     // ================= KHỞI CHẠY TRANG =================
     document.addEventListener('DOMContentLoaded', async () => {
+      checkAdminImpersonation();
       // Đọc API mock nếu có
       if (window.API) {
         try {

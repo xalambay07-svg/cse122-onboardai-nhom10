@@ -1105,12 +1105,23 @@
       const bar = document.getElementById('adminImpersonateBar');
       if (isImpersonating && bar) {
         bar.classList.remove('hidden');
+        const customName = sessionStorage.getItem('impersonatedUserName');
+        const strongEl = bar.querySelector('strong');
+        if (customName && strongEl) strongEl.textContent = customName;
+        const btn = bar.querySelector('button');
+        if (isImpersonating === 'admin' && btn) {
+          btn.textContent = 'Thoát chế độ xem & Quay lại Quản trị tài khoản';
+        }
       }
     }
 
     function exitImpersonation(returnUrl = 'hr-dashboard.html') {
+      const savedReturn = sessionStorage.getItem('impersonateReturnUrl');
+      const isImpersonating = sessionStorage.getItem('isImpersonating');
       sessionStorage.removeItem('isImpersonating');
-      window.location.href = returnUrl;
+      sessionStorage.removeItem('impersonateReturnUrl');
+      sessionStorage.removeItem('impersonatedUserName');
+      window.location.href = savedReturn || (isImpersonating === 'admin' ? 'admin-user-management.html' : returnUrl);
     }
 
     // Khởi tạo trang khi DOM sẵn sàng

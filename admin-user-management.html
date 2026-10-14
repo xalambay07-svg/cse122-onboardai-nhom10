@@ -3,49 +3,2751 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quản trị Hệ thống & Phân quyền | OnboardAI Enterprise</title>
+  <title>Quản trị Tài khoản & Phân quyền (AD02) | OnboardAI Enterprise</title>
+
+  <!-- Font Inter Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- CSS Design System with Onboard.io SaaS Tokens & Animations -->
   <link rel="stylesheet" href="css/style.css">
+
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#1F5AFE', 600: '#1F5AFE', 700: '#1748cc' },
+            onboard: {
+              bg: '#F1F5F9',
+              surface: '#FFFFFF',
+              border: '#E2E8F0',
+              blue: '#1F5AFE',
+              mint: '#00B67A'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Vector Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* Hiệu ứng hiện so le khi tải trang (Mục 7) */
+    @keyframes fadeInSlideUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .stagger-row {
+      animation: fadeInSlideUp 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    /* Hiệu ứng nhấp sáng vàng nhẹ rồi mờ dần cho dòng vừa thêm/sửa (Mục 7) */
+    @keyframes highlightFlash {
+      0% { background-color: #FEF9C3; }
+      35% { background-color: #FEF08A; }
+      100% { background-color: transparent; }
+    }
+    .row-highlight-flash {
+      animation: highlightFlash 2.4s ease-out forwards;
+    }
+
+    /* Hiệu ứng thu gọn + mờ dần khi xóa dòng (Mục 7) */
+    .row-collapsing {
+      opacity: 0 !important;
+      transform: translateX(16px) scale(0.98);
+      transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Hiệu ứng rung nhẹ (Shake) khi bấm lưu mà form còn lỗi (Mục 7) */
+    @keyframes formShake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+    .animate-shake {
+      animation: formShake 0.38s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+
+    /* Hiệu ứng mờ dần khi chuyển 3 tab (Mục 7) */
+    .tab-panel {
+      animation: fadeInSlideUp 0.24s ease-out;
+    }
+
+    /* Thanh đếm ngược 5 giây cho thông báo Hoàn tác (Mục 5.3 & 7) */
+    @keyframes undoCountdown {
+      from { width: 100%; }
+      to { width: 0%; }
+    }
+    .undo-progress-bar {
+      animation: undoCountdown 5s linear forwards;
+    }
+  </style>
 </head>
-<body class="bg-[#F1F5F9] text-[#1E293B] font-sans antialiased h-full flex flex-col items-center justify-center p-4">
-  <div class="max-w-xl w-full bg-white rounded-3xl border border-[#E2E8F0] p-8 text-center shadow-lg space-y-5 animate-fade-in">
-    <div class="w-14 h-14 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center mx-auto">
-      <i data-lucide="shield-check" class="w-7 h-7"></i>
-    </div>
-    <span class="text-xs font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-3 py-1 rounded-full border border-purple-200">
-      Phân hệ Quản trị viên &bull; SV3 đảm nhiệm
-    </span>
-    <h1 class="text-xl font-extrabold text-slate-900">Quản trị Người dùng & Phân quyền (AD01)</h1>
-    <p class="text-xs text-slate-600 leading-relaxed">
-      Màn hình này đang trong giai đoạn phát triển theo phân công nhiệm vụ của <strong>SV3</strong> (gồm Quản trị phòng ban, phân quyền tài khoản & kiểm toán hệ thống).
-    </p>
-    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 text-xs text-slate-700 text-left space-y-2">
-      <div class="font-semibold text-slate-900 flex items-center gap-1.5">
-        <i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Các phân hệ đã hoàn thiện sẵn sàng trải nghiệm:
+<body class="bg-[#F1F5F9] text-[#1E293B] font-sans antialiased h-full flex flex-col">
+  <!-- Toast thông báo nổi -->
+  <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2.5 pointer-events-none max-w-md w-full px-4 sm:px-0"></div>
+
+  <div class="flex h-full min-h-screen">
+    <!-- ================= 1. SIDEBAR ĐIỀU HƯỚNG DÙNG CHUNG ================= -->
+    <aside id="appSidebar" class="w-64 bg-white border-r border-[#E2E8F0] flex flex-col shrink-0 fixed inset-y-0 left-0 z-40 md:static transition-transform duration-300 -translate-x-full md:translate-x-0">
+      <!-- Logo Header -->
+      <div class="h-16 flex items-center gap-3 px-6 border-b border-slate-100">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-violet-600 to-[#1F5AFE] flex items-center justify-center text-white shadow-xs">
+          <i data-lucide="shield-check" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="text-base font-bold tracking-tight text-slate-900">Onboard<span class="text-[#1F5AFE]">AI</span></span>
+          <span class="block text-[10px] uppercase font-semibold tracking-wider text-violet-600 font-mono">System Admin</span>
+        </div>
       </div>
-      <ul class="space-y-1 text-slate-600 pl-5 list-disc">
-        <li><strong>Phân hệ New Hire (SV1 - Huy):</strong> Bảng điều khiển, Checklist động, AI-1 Policy Q&A.</li>
-        <li><strong>Phân hệ Mentor (SV2 - Hoàng):</strong> Danh sách Mentee M01 & kết nối dữ liệu chung.</li>
-      </ul>
-    </div>
-    <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
-      <a href="newhire-onboarding-dashboard.html" class="px-4 py-2.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold transition shadow-xs">
-        Khám phá Phân hệ New Hire &rarr;
-      </a>
-      <a href="mentor-mentee-list.html" class="px-4 py-2.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold border border-indigo-200 transition">
-        Xem Phân hệ Mentor
-      </a>
-      <a href="index.html" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
-        Về Trang chủ
-      </a>
+
+      <!-- Navigation Links -->
+      <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+        <div class="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+          Phân hệ Quản trị hệ thống
+        </div>
+        <a href="admin-user-management.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold bg-violet-50 text-violet-700 border border-violet-200/70 transition-colors">
+          <i data-lucide="users-round" class="w-4 h-4 text-violet-600"></i>
+          <span>Tài khoản & Phân quyền</span>
+        </a>
+        <a href="hr-dashboard.html" onclick="startImpersonation('hr-dashboard.html', 'Lê Hoàng Nam (HR Specialist)')" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+          <i data-lucide="pie-chart" class="w-4 h-4 text-amber-600"></i>
+          <span>Bảng điều khiển HR</span>
+        </a>
+
+        <div class="pt-4 px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+          Chế độ thị sát (View-As)
+        </div>
+        <a href="newhire-onboarding-dashboard.html" onclick="startImpersonation('newhire-onboarding-dashboard.html', 'Nguyễn Văn An (New Hire)')" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+          <i data-lucide="user-check" class="w-4 h-4 text-blue-600"></i>
+          <span>Thị sát Nhân sự mới</span>
+        </a>
+        <a href="mentor-mentee-list.html" onclick="startImpersonation('mentor-mentee-list.html', 'Trần Thị Mai (Mentor)')" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+          <i data-lucide="award" class="w-4 h-4 text-indigo-600"></i>
+          <span>Thị sát Người hướng dẫn</span>
+        </a>
+
+        <div class="pt-5 px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+          Tài khoản & Hệ thống
+        </div>
+        <a href="profile.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+          <i data-lucide="user-cog" class="w-4 h-4 text-slate-500"></i>
+          <span>Hồ sơ cá nhân</span>
+        </a>
+        <a href="index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+          <i data-lucide="home" class="w-4 h-4 text-slate-500"></i>
+          <span>Trang chủ OnboardAI</span>
+        </a>
+        <a href="login.html" onclick="logout()" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-rose-600 hover:bg-rose-50 transition-colors">
+          <i data-lucide="log-out" class="w-4 h-4"></i>
+          <span>Đăng xuất</span>
+        </a>
+      </nav>
+
+      <!-- Security Status Box -->
+      <div class="p-3.5 m-3 rounded-2xl bg-gradient-to-br from-violet-50 to-indigo-50/70 border border-violet-200/80">
+        <div class="flex items-center gap-2 mb-1.5">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-violet-600"></span>
+          </span>
+          <span class="text-xs font-bold text-violet-950">RBAC Guardrails v2.0</span>
+        </div>
+        <p class="text-[11px] text-violet-800 leading-relaxed">Rào chắn bảo vệ Admin cuối cùng, kiểm tra bàn giao Mentee và nhật ký kiểm toán đang kích hoạt.</p>
+      </div>
+    </aside>
+
+    <!-- Overlay cho Mobile khi mở Sidebar -->
+    <div id="sidebarOverlay" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-slate-900/20 backdrop-blur-xs z-30 hidden md:hidden"></div>
+
+    <!-- ================= 2. MAIN CONTENT ================= -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+      <!-- Topbar Header -->
+      <header class="h-16 bg-white border-b border-[#E2E8F0] px-4 md:px-8 flex items-center justify-between shrink-0 sticky top-0 z-20">
+        <div class="flex items-center gap-3">
+          <button onclick="toggleMobileSidebar()" class="p-2 -ml-2 text-slate-500 hover:text-slate-700 md:hidden rounded-lg hover:bg-slate-100">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-base font-bold text-slate-900">Quản trị Tài khoản & Phân quyền</h1>
+              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-violet-50 text-violet-700 ring-1 ring-inset ring-violet-600/20">Mã AD02</span>
+            </div>
+            <p class="text-[11px] text-slate-500 hidden sm:block">Quản lý vòng đời tài khoản, ma trận phân quyền RBAC 4 tầng và nhật ký kiểm toán toàn hệ thống</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2.5">
+          <button onclick="resetDemoDatabase()" title="Khôi phục dữ liệu mẫu ban đầu" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-[#E2E8F0] text-xs font-semibold text-slate-700 transition">
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5 text-slate-500"></i>
+            <span>Khôi phục dữ liệu mẫu</span>
+          </button>
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-[#E2E8F0]">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin Avatar" class="w-6 h-6 rounded-full bg-white border border-slate-200">
+            <span class="text-xs font-semibold text-slate-800 hidden sm:inline">Vũ Quản Trị</span>
+            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-violet-50 text-violet-700 ring-1 ring-inset ring-violet-600/20">Admin</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Body -->
+      <main class="flex-1 p-4 md:p-8 max-w-7xl w-full mx-auto space-y-6 pb-24">
+
+        <!-- ================= TIÊU ĐỀ & THANH ĐIỀU HƯỚNG 3 TAB (MỤC 3) ================= -->
+        <div class="bg-white rounded-2xl border border-[#E2E8F0] p-4 sm:p-6 shadow-2xs">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-200">
+            <div>
+              <div class="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-violet-700 bg-violet-50 px-2.5 py-0.5 rounded-md ring-1 ring-inset ring-violet-600/20 mb-2">
+                <i data-lucide="key-round" class="w-3.5 h-3.5"></i>
+                <span>Identity & Access Management (IAM)</span>
+              </div>
+              <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight">Quản trị tài khoản (AD02)</h2>
+              <p class="text-xs text-slate-600 mt-0.5">Đồng bộ trực tiếp với CSDL nhân sự mới (<code class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-800 font-mono text-[11px]">newHires</code>) và chế độ thị sát phân quyền View-As.</p>
+            </div>
+            <div class="flex items-center gap-2.5 shrink-0">
+              <button onclick="openUserDrawer('create')" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition active:scale-95">
+                <i data-lucide="user-plus" class="w-4 h-4"></i>
+                <span>Thêm tài khoản</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3 Tabs Navigation -->
+          <div class="flex flex-wrap items-center gap-2 pt-4" role="tablist">
+            <button id="tabBtn-users" onclick="switchTab('users')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition bg-slate-900 text-white shadow-2xs">
+              <i data-lucide="users" class="w-4 h-4"></i>
+              <span>Danh sách tài khoản</span>
+              <span id="tabCountUsers" class="px-1.5 py-0.5 rounded-md text-[11px] bg-white/20 text-white tabular-nums">9</span>
+            </button>
+            <button id="tabBtn-matrix" onclick="switchTab('matrix')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+              <i data-lucide="shield" class="w-4 h-4"></i>
+              <span>Ma trận phân quyền</span>
+              <span class="px-1.5 py-0.5 rounded-md text-[10px] bg-violet-50 text-violet-700 font-bold ring-1 ring-inset ring-violet-600/20">RBAC</span>
+            </button>
+            <button id="tabBtn-logs" onclick="switchTab('logs')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+              <i data-lucide="history" class="w-4 h-4"></i>
+              <span>Nhật ký hoạt động</span>
+              <span id="tabCountLogs" class="px-1.5 py-0.5 rounded-md text-[11px] bg-slate-100 text-slate-700 tabular-nums">3</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ================= TAB 1: DANH SÁCH TÀI KHOẢN ================= -->
+        <section id="tabPanel-users" class="tab-panel space-y-5">
+
+          <!-- 4 Thẻ KPI Nhỏ (Mục 3) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Thẻ 1: Tổng tài khoản & Theo vai trò -->
+            <div class="bg-white rounded-2xl border border-[#E2E8F0] p-4 shadow-2xs">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-semibold text-slate-600">Tổng tài khoản</span>
+                <div class="w-8 h-8 rounded-xl bg-blue-50 text-[#1F5AFE] flex items-center justify-center">
+                  <i data-lucide="users" class="w-4 h-4"></i>
+                </div>
+              </div>
+              <div id="kpiTotalUsers" class="text-2xl font-extrabold text-slate-900 tabular-nums">9</div>
+              <div id="kpiRoleBreakdown" class="mt-2 text-[11px] text-slate-600 font-medium tabular-nums truncate">
+                1 Admin &bull; 1 HR &bull; 3 Mentor &bull; 4 New Hire
+              </div>
+            </div>
+
+            <!-- Thẻ 2: Đang hoạt động -->
+            <div class="bg-white rounded-2xl border border-[#E2E8F0] p-4 shadow-2xs">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-semibold text-slate-600">Đang hoạt động</span>
+                <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                  <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                </div>
+              </div>
+              <div class="flex items-baseline gap-2">
+                <span id="kpiActiveUsers" class="text-2xl font-extrabold text-emerald-700 tabular-nums">7</span>
+                <span class="text-xs font-semibold text-emerald-600">tài khoản</span>
+              </div>
+              <div class="mt-2 text-[11px] text-slate-600 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span>Truy cập bình thường vào hệ thống</span>
+              </div>
+            </div>
+
+            <!-- Thẻ 3: Đã khóa -->
+            <div class="bg-white rounded-2xl border border-[#E2E8F0] p-4 shadow-2xs">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-semibold text-slate-600">Đã khóa tạm thời</span>
+                <div class="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center">
+                  <i data-lucide="lock" class="w-4 h-4"></i>
+                </div>
+              </div>
+              <div class="flex items-baseline gap-2">
+                <span id="kpiLockedUsers" class="text-2xl font-extrabold text-rose-700 tabular-nums">1</span>
+                <span class="text-xs font-semibold text-rose-600">tài khoản</span>
+              </div>
+              <div class="mt-2 text-[11px] text-slate-600 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                <span>Giữ nguyên lịch sử & dữ liệu bàn giao</span>
+              </div>
+            </div>
+
+            <!-- Thẻ 4: Chờ kích hoạt -->
+            <div class="bg-white rounded-2xl border border-[#E2E8F0] p-4 shadow-2xs">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-semibold text-slate-600">Chờ kích hoạt</span>
+                <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center">
+                  <i data-lucide="clock" class="w-4 h-4"></i>
+                </div>
+              </div>
+              <div class="flex items-baseline gap-2">
+                <span id="kpiPendingUsers" class="text-2xl font-extrabold text-slate-800 tabular-nums">1</span>
+                <span class="text-xs font-semibold text-slate-500">chưa đăng nhập</span>
+              </div>
+              <div class="mt-2 text-[11px] text-slate-600 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full border-2 border-slate-400"></span>
+                <span>Cần kích hoạt hoặc gửi lời nhắc</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ô Kiểm tra sức khỏe tài khoản (Mục 5.6 - Quy tắc kiểm tra tự động) -->
+          <div id="healthCheckContainer" class="bg-white rounded-2xl border border-[#E2E8F0] p-4 shadow-2xs">
+            <!-- Nội dung được render tự động bằng JS -->
+          </div>
+
+          <!-- Thanh công cụ 1 hàng kiểu shadcn/ui (Mục 2.1 & 3) -->
+          <div class="bg-white rounded-2xl border border-[#E2E8F0] p-3.5 shadow-2xs">
+            <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+              <!-- Cụm Tìm kiếm + 3 Bộ lọc -->
+              <div class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2.5 flex-1">
+                <!-- Ô tìm kiếm real-time -->
+                <div class="relative flex-1 min-w-[220px]">
+                  <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                  <input
+                    id="searchInput"
+                    type="text"
+                    placeholder="Tìm tên, email, chức danh..."
+                    oninput="handleFilterChange()"
+                    class="w-full pl-9 pr-8 py-2 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] focus:bg-white text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1F5AFE]/20 focus:border-[#1F5AFE] transition"
+                  >
+                  <button id="clearSearchBtn" onclick="clearSearchInput()" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5">
+                    <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                  </button>
+                </div>
+
+                <!-- Bộ lọc 1: Vai trò -->
+                <div class="relative">
+                  <select id="filterRole" onchange="handleFilterChange()" class="w-full sm:w-auto appearance-none pl-3 pr-8 py-2 rounded-xl border border-[#E2E8F0] bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#1F5AFE]/20 focus:border-[#1F5AFE] transition cursor-pointer">
+                    <option value="all">Vai trò: Tất cả</option>
+                    <option value="admin">Admin (Quản trị viên)</option>
+                    <option value="hr">HR Specialist</option>
+                    <option value="mentor">Mentor (Hướng dẫn)</option>
+                    <option value="newhire">New Hire (Nhân sự mới)</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                </div>
+
+                <!-- Bộ lọc 2: Phòng ban -->
+                <div class="relative">
+                  <select id="filterDept" onchange="handleFilterChange()" class="w-full sm:w-auto appearance-none pl-3 pr-8 py-2 rounded-xl border border-[#E2E8F0] bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#1F5AFE]/20 focus:border-[#1F5AFE] transition cursor-pointer">
+                    <option value="all">Phòng ban: Tất cả</option>
+                    <option value="DEP01">Kỹ thuật Công nghệ</option>
+                    <option value="DEP02">Marketing & Truyền thông</option>
+                    <option value="DEP03">Nhân sự & Vận hành</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                </div>
+
+                <!-- Bộ lọc 3: Trạng thái -->
+                <div class="relative">
+                  <select id="filterStatus" onchange="handleFilterChange()" class="w-full sm:w-auto appearance-none pl-3 pr-8 py-2 rounded-xl border border-[#E2E8F0] bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#1F5AFE]/20 focus:border-[#1F5AFE] transition cursor-pointer">
+                    <option value="all">Trạng thái: Tất cả</option>
+                    <option value="active">Đang hoạt động</option>
+                    <option value="locked">Đã khóa</option>
+                    <option value="pending">Chờ kích hoạt</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                </div>
+
+                <!-- Nút Xóa bộ lọc -->
+                <button id="resetFiltersBtn" onclick="resetAllFilters()" class="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition">
+                  <i data-lucide="filter-x" class="w-3.5 h-3.5"></i>
+                  <span>Xóa bộ lọc</span>
+                </button>
+              </div>
+
+              <!-- Thống kê dòng hiển thị -->
+              <div class="text-xs text-slate-500 font-medium shrink-0 flex items-center justify-end gap-1.5 border-t lg:border-t-0 pt-2 lg:pt-0 border-slate-100">
+                <span>Hiển thị</span>
+                <strong id="visibleRowCount" class="text-slate-900 tabular-nums">9</strong>
+                <span>/</span>
+                <span id="totalRowCount" class="tabular-nums">9</span>
+                <span>tài khoản</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bảng Danh sách Tài khoản (Kiểu Tailwind Plus: 1 khung viền duy nhất, divide-y divide-slate-200) -->
+          <div class="bg-white rounded-2xl border border-[#E2E8F0] shadow-2xs overflow-hidden">
+            <div class="overflow-x-auto min-h-[320px]">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-[#F8FAFC] border-b border-slate-200 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                    <th class="py-3.5 pl-5 pr-2 w-10">
+                      <input
+                        id="selectAllCheckbox"
+                        type="checkbox"
+                        onchange="toggleSelectAll(this.checked)"
+                        class="w-4 h-4 rounded border-slate-300 text-[#1F5AFE] focus:ring-[#1F5AFE] cursor-pointer"
+                        title="Chọn tất cả tài khoản"
+                      >
+                    </th>
+                    <th class="py-3.5 px-4">Người dùng</th>
+                    <th class="py-3.5 px-4">Vai trò</th>
+                    <th class="py-3.5 px-4">Phòng ban & Phụ trách</th>
+                    <th class="py-3.5 px-4 hidden md:table-cell">Đăng nhập gần nhất</th>
+                    <th class="py-3.5 px-4">Trạng thái</th>
+                    <th class="py-3.5 pl-4 pr-5 text-right">Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody id="userTableBody" class="divide-y divide-slate-200 text-xs">
+                  <!-- Render bằng JavaScript -->
+                </tbody>
+              </table>
+
+              <!-- Trạng thái Không tìm thấy kết quả lọc / Bảng trống (Mục 4.3) -->
+              <div id="tableEmptyState" class="hidden py-14 px-4 text-center">
+                <!-- Render bằng JavaScript -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= TAB 2: MA TRẬN PHÂN QUYỀN (RBAC MATRIX - MỤC 5.1) ================= -->
+        <section id="tabPanel-matrix" class="tab-panel hidden space-y-5">
+          <div class="bg-white rounded-2xl border border-[#E2E8F0] p-5 sm:p-6 shadow-2xs">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-slate-200">
+              <div>
+                <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                  <i data-lucide="shield-check" class="w-5 h-5 text-violet-600"></i>
+                  <span>Ma trận Phân quyền theo Vai trò (Role-Based Access Control)</span>
+                </h3>
+                <p class="text-xs text-slate-600 mt-1">
+                  Bảng đối chiếu phạm vi quyền hạn giữa 4 nhóm vai trò trên OnboardAI, liên kết trực tiếp với cơ chế bảo vệ đường dẫn và chế độ thị sát (View-As Mode).
+                </p>
+              </div>
+              <div class="flex flex-wrap items-center gap-3 text-xs">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200/60">
+                  <i data-lucide="check" class="w-3.5 h-3.5"></i> Có quyền thực thi
+                </span>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 font-medium">
+                  <i data-lucide="minus" class="w-3.5 h-3.5"></i> Không áp dụng / Bị giới hạn
+                </span>
+              </div>
+            </div>
+
+            <!-- Bảng Ma trận quyền kiểu GitHub Docs -->
+            <div class="mt-5 overflow-x-auto rounded-xl border border-[#E2E8F0]">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-[#F8FAFC] border-b border-slate-200 text-xs">
+                    <th class="py-3.5 px-5 font-bold text-slate-800 w-2/5">Chức năng / Quyền hạn trên hệ thống</th>
+                    <th class="py-3.5 px-4 text-center">
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-600/20">New Hire</span>
+                    </th>
+                    <th class="py-3.5 px-4 text-center">
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 ring-1 ring-inset ring-indigo-600/20">Mentor</span>
+                    </th>
+                    <th class="py-3.5 px-4 text-center">
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 ring-1 ring-inset ring-amber-600/20">HR</span>
+                    </th>
+                    <th class="py-3.5 px-4 text-center">
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-violet-50 text-violet-700 ring-1 ring-inset ring-violet-600/20">Admin</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="rbacMatrixBody" class="divide-y divide-slate-200 text-xs">
+                  <!-- Render bằng JavaScript từ cấu hình RBAC_PERMISSIONS -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Giải thích cơ chế View-As -->
+            <div class="mt-5 p-4 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div class="flex items-start gap-3">
+                <div class="w-9 h-9 rounded-xl bg-violet-100 text-violet-700 flex items-center justify-center shrink-0 mt-0.5">
+                  <i data-lucide="eye" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="text-xs font-bold text-slate-900">Liên kết với Chế độ Thị sát (View-As Mode)</h4>
+                  <p class="text-xs text-slate-600 mt-0.5 leading-relaxed">
+                    Mặc dù <strong>HR</strong> và <strong>Admin</strong> không trực tiếp làm bài tập Checklist của New Hire, hai vai trò này được cấp quyền <em>Dùng chế độ thị sát (View-As)</em> để kiểm tra giao diện thực tế của bất kỳ nhân sự nào kèm thanh cảnh báo trên cùng màn hình.
+                  </p>
+                </div>
+              </div>
+              <button onclick="switchTab('users')" class="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-slate-300 hover:bg-slate-50 text-xs font-bold text-slate-800 transition">
+                <span>Thử View-As trong bảng</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= TAB 3: NHẬT KÝ HOẠT ĐỘNG (AUDIT LOGS - MỤC 5.4) ================= -->
+        <section id="tabPanel-logs" class="tab-panel hidden space-y-5">
+          <div class="bg-white rounded-2xl border border-[#E2E8F0] p-5 sm:p-6 shadow-2xs">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-200">
+              <div>
+                <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                  <i data-lucide="history" class="w-5 h-5 text-[#1F5AFE]"></i>
+                  <span>Nhật ký Hoạt động Quản trị (Audit Trail)</span>
+                </h3>
+                <p class="text-xs text-slate-600 mt-1">
+                  Ghi nhận tự động mọi thao tác thêm mới, chỉnh sửa, đổi vai trò, khóa/mở khóa và xóa tài khoản vào khóa <code class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-800 font-mono text-[11px]">auditLogs</code> trong LocalStorage.
+                </p>
+              </div>
+              <div class="flex items-center gap-2">
+                <select id="filterLogAction" onchange="renderAuditLogs()" class="px-3 py-2 rounded-xl border border-[#E2E8F0] bg-white text-xs font-semibold text-slate-700 focus:outline-none focus:border-[#1F5AFE]">
+                  <option value="all">Tất cả thao tác</option>
+                  <option value="create_user">Tạo tài khoản</option>
+                  <option value="update_user">Cập nhật thông tin</option>
+                  <option value="change_role">Đổi vai trò</option>
+                  <option value="lock_user">Khóa / Mở khóa</option>
+                  <option value="delete_user">Xóa tài khoản</option>
+                  <option value="impersonate">Thị sát (View-As)</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="auditLogsList" class="mt-5 divide-y divide-slate-200">
+              <!-- Render bằng JavaScript -->
+            </div>
+          </div>
+        </section>
+
+      </main>
     </div>
   </div>
-  <script>lucide.createIcons();</script>
+
+  <!-- ================= THANH THAO TÁC HÀNG LOẠT NỔI (MỤC 3 & 8) ================= -->
+  <div id="bulkActionBar" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-30 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl border border-slate-700 flex flex-wrap items-center gap-3 animate-fade-in">
+    <div class="flex items-center gap-2 pr-2 border-r border-slate-700">
+      <span class="w-5 h-5 rounded-md bg-[#1F5AFE] text-white text-xs font-bold flex items-center justify-center tabular-nums" id="bulkSelectedCount">0</span>
+      <span class="text-xs font-semibold">tài khoản đã chọn</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <button onclick="bulkChangeRolePrompt()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-100 transition">
+        <i data-lucide="repeat" class="w-3.5 h-3.5 text-indigo-400"></i>
+        <span>Đổi vai trò</span>
+      </button>
+      <button onclick="bulkLockAccounts()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-100 transition">
+        <i data-lucide="lock" class="w-3.5 h-3.5 text-amber-400"></i>
+        <span>Khóa / Mở khóa</span>
+      </button>
+      <button onclick="bulkDeleteAccounts()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-600/90 hover:bg-rose-600 text-xs font-semibold text-white transition">
+        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+        <span>Xóa</span>
+      </button>
+      <button onclick="clearBulkSelection()" class="px-2.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white transition">
+        Bỏ chọn
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= MENU DROPDOWN [⋯] DÙNG CHUNG CHO BẢNG ================= -->
+  <div id="rowActionMenu" class="hidden fixed z-50 w-60 bg-white rounded-2xl border border-[#E2E8F0] shadow-xl py-1.5 text-xs text-slate-700 divide-y divide-slate-100">
+    <!-- Render động theo dòng được bấm -->
+  </div>
+
+  <!-- ================= NGĂN TRƯỢT PHẢI (SLIDE-OVER DRAWER): THÊM / SỬA TÀI KHOẢN (MỤC 4.1, 4.2, 5.5) ================= -->
+  <div id="userDrawerBackdrop" onclick="closeUserDrawer()" class="hidden fixed inset-0 bg-slate-900/30 backdrop-blur-xs z-40 transition-opacity"></div>
+  <aside id="userDrawer" class="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white border-l border-[#E2E8F0] shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 ease-in-out">
+    <!-- Drawer Header -->
+    <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-[#F8FAFC]">
+      <div>
+        <span id="drawerBadge" class="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-blue-50 text-[#1F5AFE] ring-1 ring-inset ring-blue-600/20">
+          Tạo mới thông minh
+        </span>
+        <h3 id="drawerTitle" class="text-base font-extrabold text-slate-900 mt-1">Thêm tài khoản nhân sự</h3>
+      </div>
+      <button onclick="closeUserDrawer()" class="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+
+    <!-- Drawer Form Body -->
+    <form id="userForm" onsubmit="saveUserForm(event)" novalidate class="flex-1 overflow-y-auto p-6 space-y-4">
+      <input type="hidden" id="formUserId" value="">
+
+      <!-- Họ và tên -->
+      <div>
+        <label for="formName" class="block text-xs font-bold text-slate-800 mb-1.5">
+          Họ và tên nhân sự <span class="text-rose-600">*</span>
+        </label>
+        <input
+          id="formName"
+          type="text"
+          placeholder="VD: Nguyễn Văn An"
+          oninput="handleNameInputForSmartEmail()"
+          class="w-full px-3.5 py-2.5 rounded-xl border border-[#E2E8F0] bg-white text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1F5AFE]/20 focus:border-[#1F5AFE] transition"
+        >
+        <p id="errName" class="hidden mt-1.5 text-[11px] font-semibold text-rose-600 flex items-center gap-1">
+          <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i>
+          <span>Vui lòng nhập họ tên</span>
+        </p>
+      </div>
+
+      <!-- Email công ty (@onboardai.vn) + Gợi ý tự động (Mục 5.5) -->
+      <div>
+        <div class="flex items-center justify-between mb-1.5">
+          <label for="formEmail" class="block text-xs font-bold text-slate-800">
+            Email định danh <span class="text-rose-600">*</span>
+          </label>
+          <button type="button" onclick="forceGenerateEmailFromName()" class="text-[11px] font-semibold text-[#1F5AFE] hover:underline flex items-center gap-1">
+            <i data-lucide="wand-2" class="w-3 h-3"></i>
+            <span>Gợi ý từ họ tên</span>
+          </button>
+        </div>
+        <input
+          id="formEmail"
+          type="email"
+          placeholder="ten.ho@onboardai.vn"
+          oninput="window.emailManuallyEdited = true; clearFieldError('errEmail', 'formEmail')"
+          class="w-full px-3.5 py-2.5 rounded-xl border border-[#E2E8F0] bg-white text-xs text-slate-900 font-mono focus:outline-none focus:ring-2 focus:ring-[#1F5AFE]/20 focus:border-[#1F5AFE] transition"
+        >
+        <p class="mt-1 text-[11px] text-slate-500">Quy ước bắt buộc: sử dụng tên miền nội bộ <code class="text-slate-700 font-semibold">@onboardai.vn</code></p>
+        <p id="errEmail" class="hidden mt-1.5 text-[11px] font-semibold text-rose-600 flex items-center gap-1">
+          <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i>
+          <span id="errEmailText">Email phải có đuôi @onboardai.vn</span>
+        </p>
+      </div>
+
+      <!-- Vai trò & Trạng thái -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+        <div>
+          <label for="formRole" class="block text-xs font-bold text-slate-800 mb-1.5">
+            Vai trò phân quyền <span class="text-rose-600">*</span>
+          </label>
+          <select
+            id="formRole"
+            onchange="handleRoleOrDeptChangeInForm()"
+            class="w-full px-3 py-2.5 rounded-xl border border-[#E2E8F0] bg-white text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#1F5AFE]/20 focus:border-[#1F5AFE]"
+          >
+            <option value="">-- Chọn vai trò --</option>
+            <option value="newhire">New Hire (Nhân sự mới)</option>
+            <option value="mentor">Mentor (Người hướng dẫn)</option>
+            <option value="hr">HR Specialist (Nhân sự)</option>
+            <option value="admin">Admin (Quản trị viên)</option>
+          </select>
+          <p id="errRole" class="hidden mt-1.5 text-[11px] font-semibold text-rose-600 flex items-center gap-1">
+            <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i>
+            <span>Vui lòng chọn vai trò</span>
+          </p>
+        </div>
+
+        <div>
+          <label for="formStatus" class="block text-xs font-bold text-slate-800 mb-1.5">
+            Trạng thái tài khoản
+          </label>
+          <select
+            id="formStatus"
+            class="w-full px-3 py-2.5 rounded-xl border border-[#E2E8F0] bg-white text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#1F5AFE]/20 focus:border-[#1F5AFE]"
+          >
+            <option value="active">Hoạt động (Active)</option>
+            <option value="pending">Chờ kích hoạt (Pending)</option>
+            <option value="locked">Đã khóa (Locked)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Phòng ban -->
+      <div id="formDeptGroup">
+        <label for="formDept" class="block text-xs font-bold text-slate-800 mb-1.5">
+          Phòng ban trực thuộc <span id="reqDeptStar" class="text-rose-600">*</span>
+        </label>
+        <select
+          id="formDept"
+          onchange="handleRoleOrDeptChangeInForm()"
+          class="w-full px-3.5 py-2.5 rounded-xl border border-[#E2E8F0] bg-white text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#1F5AFE]/20 focus:border-[#1F5AFE]"
+        >
+          <option value="">-- Chọn phòng ban --</option>
+          <option value="DEP01">Kỹ thuật Công nghệ</option>
+          <option value="DEP02">Marketing & Truyền thông</option>
+          <option value="DEP03">Nhân sự & Vận hành</option>
+        </select>
+        <p id="errDept" class="hidden mt-1.5 text-[11px] font-semibold text-rose-600 flex items-center gap-1">
+          <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i>
+          <span>Vui lòng chọn phòng ban</span>
+        </p>
+      </div>
+
+      <!-- Chức danh công việc -->
+      <div>
+        <label for="formPosition" class="block text-xs font-bold text-slate-800 mb-1.5">
+          Chức danh / Vị trí chuyên môn
+        </label>
+        <input
+          id="formPosition"
+          type="text"
+          placeholder="VD: Frontend Developer, Product Designer..."
+          class="w-full px-3.5 py-2.5 rounded-xl border border-[#E2E8F0] bg-white text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1F5AFE]/20 focus:border-[#1F5AFE] transition"
+        >
+      </div>
+
+      <!-- Mentor phụ trách (Hiển thị & bắt buộc khi Vai trò = New Hire - Mục 4.2 & 5.5) -->
+      <div id="formMentorGroup" class="p-4 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0] space-y-2">
+        <div class="flex items-center justify-between">
+          <label for="formMentor" class="block text-xs font-bold text-slate-800">
+            Mentor hướng dẫn trực tiếp <span class="text-rose-600">*</span>
+          </label>
+          <span class="text-[10px] font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded ring-1 ring-inset ring-indigo-600/20">Gợi ý theo phòng ban</span>
+        </div>
+        <select
+          id="formMentor"
+          onchange="clearFieldError('errMentor', 'formMentor')"
+          class="w-full px-3.5 py-2.5 rounded-xl border border-[#E2E8F0] bg-white text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#1F5AFE]/20 focus:border-[#1F5AFE]"
+        >
+          <!-- Render danh sách Mentor ưu tiên cùng phòng ban -->
+        </select>
+        <p id="mentorRecommendationHint" class="text-[11px] text-slate-500 leading-relaxed">
+          Hệ thống tự động lọc các Mentor đang hoạt động thuộc cùng phòng ban để tối ưu lộ trình kèm cặp 1-on-1.
+        </p>
+        <p id="errMentor" class="hidden mt-1.5 text-[11px] font-semibold text-rose-600 flex items-center gap-1">
+          <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i>
+          <span>Nhân sự mới cần có Mentor phụ trách</span>
+        </p>
+      </div>
+
+      <!-- Thông báo đồng bộ tự động sang HR Dashboard -->
+      <div id="newHireSyncNotice" class="p-3.5 rounded-xl bg-blue-50/70 border border-blue-200/70 text-xs text-blue-950 flex items-start gap-2.5">
+        <i data-lucide="sparkles" class="w-4 h-4 text-[#1F5AFE] shrink-0 mt-0.5"></i>
+        <div class="leading-relaxed">
+          <strong class="font-bold">Đồng bộ liên trang tự động:</strong> Khi tạo tài khoản <em>New Hire</em>, hệ thống tự động khởi tạo hồ sơ trong <code class="font-mono text-[11px]">newHires</code> để nhân sự hiển thị ngay trên <strong>HR Dashboard</strong> và danh sách của <strong>Mentor</strong>.
+        </div>
+      </div>
+    </form>
+
+    <!-- Drawer Footer -->
+    <div class="px-6 py-4 border-t border-slate-200 bg-[#F8FAFC] flex items-center justify-end gap-2.5">
+      <button type="button" onclick="closeUserDrawer()" class="px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 transition">
+        Hủy bỏ
+      </button>
+      <button type="submit" form="userForm" class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition active:scale-95">
+        <i data-lucide="check" class="w-4 h-4"></i>
+        <span id="drawerSubmitText">Lưu tài khoản</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ================= HỘP THOẠI 1: XÁC NHẬN ĐỔI VAI TRÒ & SO SÁNH QUYỀN (MỤC 4.1) ================= -->
+  <div id="roleChangeModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
+    <div class="bg-white rounded-2xl border border-[#E2E8F0] shadow-2xl max-w-lg w-full overflow-hidden animate-fade-in">
+      <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-[#F8FAFC]">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+            <i data-lucide="repeat" class="w-4 h-4"></i>
+          </div>
+          <h3 class="text-sm font-extrabold text-slate-900">Đổi vai trò & Đối chiếu quyền hạn</h3>
+        </div>
+        <button onclick="closeRoleChangeModal()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/50">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="p-6 space-y-4 text-xs">
+        <div class="flex items-center justify-between p-3.5 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0]">
+          <div>
+            <div class="text-[11px] text-slate-500">Tài khoản áp dụng</div>
+            <div id="roleModalUserName" class="text-sm font-bold text-slate-900 mt-0.5">Nguyễn Văn An</div>
+            <div id="roleModalUserEmail" class="text-[11px] text-slate-500 font-mono">an.nguyen@onboardai.vn</div>
+          </div>
+          <div id="roleModalCurrentBadge"></div>
+        </div>
+
+        <div>
+          <label for="roleModalSelect" class="block text-xs font-bold text-slate-800 mb-1.5">Chọn vai trò mới muốn cấp:</label>
+          <select id="roleModalSelect" onchange="updateRoleDiffPreview()" class="w-full px-3.5 py-2.5 rounded-xl border border-[#E2E8F0] bg-white text-xs font-bold text-slate-900 focus:outline-none focus:border-[#1F5AFE]">
+            <option value="newhire">New Hire (Nhân sự mới)</option>
+            <option value="mentor">Mentor (Người hướng dẫn)</option>
+            <option value="hr">HR Specialist (Quản trị Nhân sự)</option>
+            <option value="admin">Admin (Quản trị hệ thống)</option>
+          </select>
+        </div>
+
+        <!-- Bảng so sánh Quyền được thêm / Quyền bị thu hồi -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-200/80">
+            <div class="font-bold text-emerald-900 flex items-center gap-1.5 mb-2">
+              <i data-lucide="plus-circle" class="w-3.5 h-3.5 text-emerald-600"></i>
+              <span>Quyền được cấp thêm</span>
+            </div>
+            <ul id="roleDiffAdded" class="space-y-1.5 text-[11px] text-emerald-800"></ul>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-rose-50/70 border border-rose-200/80">
+            <div class="font-bold text-rose-900 flex items-center gap-1.5 mb-2">
+              <i data-lucide="minus-circle" class="w-3.5 h-3.5 text-rose-600"></i>
+              <span>Quyền bị thu hồi</span>
+            </div>
+            <ul id="roleDiffRemoved" class="space-y-1.5 text-[11px] text-rose-800"></ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="px-6 py-4 border-t border-slate-200 bg-[#F8FAFC] flex items-center justify-end gap-2.5">
+        <button onclick="closeRoleChangeModal()" class="px-4 py-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700">
+          Hủy
+        </button>
+        <button onclick="confirmRoleChange()" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition">
+          <i data-lucide="shield-check" class="w-4 h-4"></i>
+          <span>Xác nhận đổi vai trò</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= HỘP THOẠI 2: RÀO CHẮN BÀN GIAO MENTEE TRƯỚC KHI KHÓA / XÓA / ĐỔI VAI TRÒ MENTOR (MỤC 5.2) ================= -->
+  <div id="reassignMentorModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
+    <div class="bg-white rounded-2xl border border-[#E2E8F0] shadow-2xl max-w-md w-full overflow-hidden animate-fade-in">
+      <div class="px-6 py-4 border-b border-amber-200 bg-amber-50 flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+          <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+        </div>
+        <div>
+          <h3 class="text-sm font-extrabold text-amber-950">Rào chắn an toàn: Cần bàn giao Mentee</h3>
+          <p class="text-[11px] text-amber-800">Không thể để nhân sự mới bơ vơ khi khóa hoặc gỡ quyền Mentor</p>
+        </div>
+      </div>
+
+      <div class="p-6 space-y-4 text-xs">
+        <p id="reassignModalDesc" class="text-slate-700 leading-relaxed"></p>
+
+        <div class="p-3 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0]">
+          <div class="text-[11px] font-bold text-slate-600 mb-1.5">Danh sách nhân sự mới đang phụ trách:</div>
+          <ul id="reassignMenteeList" class="space-y-1 text-xs font-semibold text-slate-900 list-disc pl-4"></ul>
+        </div>
+
+        <div>
+          <label for="reassignTargetMentor" class="block text-xs font-bold text-slate-800 mb-1.5">
+            Chọn Mentor tiếp nhận bàn giao <span class="text-rose-600">*</span>
+          </label>
+          <select id="reassignTargetMentor" class="w-full px-3.5 py-2.5 rounded-xl border border-[#E2E8F0] bg-white text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#1F5AFE]">
+          </select>
+        </div>
+      </div>
+
+      <div class="px-6 py-4 border-t border-slate-200 bg-[#F8FAFC] flex items-center justify-end gap-2.5">
+        <button onclick="closeReassignModal()" class="px-4 py-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700">
+          Hủy thao tác
+        </button>
+        <button onclick="confirmMentorReassignment()" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shadow-xs transition">
+          <i data-lucide="arrow-left-right" class="w-4 h-4"></i>
+          <span>Bàn giao & Tiếp tục</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= HỘP THOẠI 3: XÁC NHẬN XÓA KIỂU GITHUB - GÕ LẠI EMAIL (MỤC 5.2) ================= -->
+  <div id="deleteConfirmModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
+    <div id="deleteModalCard" class="bg-white rounded-2xl border border-[#E2E8F0] shadow-2xl max-w-md w-full overflow-hidden animate-fade-in">
+      <div class="px-6 py-4 border-b border-rose-200 bg-rose-50 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center shrink-0">
+            <i data-lucide="trash-2" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-extrabold text-rose-950">Xác nhận xóa tài khoản</h3>
+            <p class="text-[11px] text-rose-700">Rào chắn bảo mật: yêu cầu nhập chính xác email</p>
+          </div>
+        </div>
+        <button onclick="closeDeleteModal()" class="p-1.5 rounded-lg text-rose-400 hover:text-rose-700">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="p-6 space-y-4 text-xs">
+        <div class="p-3 rounded-xl bg-amber-50 border border-amber-200/80 text-amber-900 leading-relaxed">
+          <strong>Khuyến nghị:</strong> Bạn nên dùng chức năng <strong>Khóa tài khoản</strong> để giữ lại lịch sử hội nhập. Nếu vẫn muốn xóa, vui lòng gõ lại chính xác địa chỉ email bên dưới.
+        </div>
+
+        <div>
+          <p class="text-slate-700 mb-2">
+            Nhập <code id="deleteTargetEmailCode" class="px-1.5 py-0.5 rounded bg-slate-100 text-rose-700 font-mono font-bold select-all">email@onboardai.vn</code> để mở khóa nút xóa:
+          </p>
+          <input
+            id="deleteConfirmEmailInput"
+            type="text"
+            placeholder="Nhập chính xác email..."
+            oninput="validateDeleteEmailConfirmation()"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-[#E2E8F0] bg-white text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500"
+          >
+        </div>
+      </div>
+
+      <div class="px-6 py-4 border-t border-slate-200 bg-[#F8FAFC] flex items-center justify-end gap-2.5">
+        <button onclick="closeDeleteModal()" class="px-4 py-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700">
+          Giữ lại tài khoản
+        </button>
+        <button id="deleteConfirmSubmitBtn" onclick="executeConfirmedDelete()" disabled class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-rose-600 text-white text-xs font-bold shadow-xs transition disabled:opacity-40 disabled:cursor-not-allowed hover:bg-rose-700">
+          <i data-lucide="trash-2" class="w-4 h-4"></i>
+          <span>Xóa tài khoản này</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= NẠP API & LOGIC ĐIỀU KHIỂN AD02 ================= -->
+  <script src="js/api.js"></script>
+  <script>
+    // Dữ liệu mặc định dự phòng (Fail-safe) nếu chạy trực tiếp qua giao thức file://
+    const FALLBACK_DEPARTMENTS = [
+      { id: 'DEP01', name: 'Kỹ thuật Công nghệ', memberCount: 24, manager: 'Vũ Đình Trọng' },
+      { id: 'DEP02', name: 'Marketing & Truyền thông', memberCount: 12, manager: 'Lê Minh Tuấn' },
+      { id: 'DEP03', name: 'Nhân sự & Vận hành', memberCount: 8, manager: 'Phạm Quang Huy' }
+    ];
+
+    const FALLBACK_USERS = [
+      {
+        id: 'USR01', profileId: 'AD01', name: 'Vũ Quản Trị', email: 'admin@onboardai.vn',
+        role: 'admin', departmentId: 'DEP01', department: 'Kỹ thuật Công nghệ',
+        position: 'System Administrator', status: 'active',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Admin',
+        lastLogin: '2026-10-14T08:15:00', createdAt: '2026-08-01'
+      },
+      {
+        id: 'USR02', profileId: 'HR01', name: 'Lê Hoàng Nam', email: 'hr@onboardai.vn',
+        role: 'hr', departmentId: 'DEP03', department: 'Nhân sự & Vận hành',
+        position: 'HR Specialist', status: 'active',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Nam',
+        lastLogin: '2026-10-14T08:40:00', createdAt: '2026-08-10'
+      },
+      {
+        id: 'USR03', profileId: 'MT01', name: 'Trần Thị Mai', email: 'mentor@onboardai.vn',
+        role: 'mentor', departmentId: 'DEP01', department: 'Kỹ thuật Công nghệ',
+        position: 'Tech Lead & Mentor', status: 'active',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Mai',
+        lastLogin: '2026-10-14T09:05:00', createdAt: '2026-08-15'
+      },
+      {
+        id: 'USR04', profileId: 'NH01', name: 'Nguyễn Văn An', email: 'an.nguyen@onboardai.vn',
+        role: 'newhire', departmentId: 'DEP01', department: 'Kỹ thuật Công nghệ',
+        position: 'Frontend Developer', mentorId: 'MT01', mentorName: 'Trần Thị Mai',
+        status: 'active', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=An',
+        lastLogin: '2026-10-14T09:12:00', createdAt: '2026-09-15'
+      },
+      {
+        id: 'USR05', profileId: 'MT02', name: 'Lê Minh Tuấn', email: 'tuan.le@onboardai.vn',
+        role: 'mentor', departmentId: 'DEP02', department: 'Marketing & Truyền thông',
+        position: 'Marketing Lead & Mentor', status: 'active',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Tuan',
+        lastLogin: '2026-10-13T17:20:00', createdAt: '2026-08-18'
+      },
+      {
+        id: 'USR06', profileId: 'NH02', name: 'Trần Thị Bình', email: 'binh.tran@onboardai.vn',
+        role: 'newhire', departmentId: 'DEP02', department: 'Marketing & Truyền thông',
+        position: 'Content Creator', mentorId: 'MT02', mentorName: 'Lê Minh Tuấn',
+        status: 'active', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Binh',
+        lastLogin: '2026-10-11T14:30:00', createdAt: '2026-09-08'
+      },
+      {
+        id: 'USR07', profileId: 'NH03', name: 'Lê Hoàng Long', email: 'long.le@onboardai.vn',
+        role: 'newhire', departmentId: 'DEP01', department: 'Kỹ thuật Công nghệ',
+        position: 'Backend Developer', mentorId: 'MT01', mentorName: 'Trần Thị Mai',
+        status: 'pending', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Long',
+        lastLogin: null, createdAt: '2026-09-20'
+      },
+      {
+        id: 'USR08', profileId: 'NH04', name: 'Phạm Minh Thư', email: 'thu.pham@onboardai.vn',
+        role: 'newhire', departmentId: 'DEP03', department: 'Nhân sự & Vận hành',
+        position: 'HR Executive', mentorId: 'MT01', mentorName: 'Trần Thị Mai',
+        status: 'active', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Thu',
+        lastLogin: '2026-10-13T16:45:00', createdAt: '2026-09-01'
+      },
+      {
+        id: 'USR09', profileId: 'MT04', name: 'Đỗ Hoàng Sơn', email: 'son.do@onboardai.vn',
+        role: 'mentor', departmentId: 'DEP01', department: 'Kỹ thuật Công nghệ',
+        position: 'Senior QA Engineer', status: 'locked',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Son',
+        lastLogin: '2026-09-28T11:00:00', createdAt: '2026-08-05'
+      }
+    ];
+
+    const FALLBACK_AUDIT_LOGS = [
+      {
+        id: 'LOG01', time: '2026-10-14T09:15:00', actor: 'Vũ Quản Trị (Admin)',
+        action: 'lock_user', target: 'Đỗ Hoàng Sơn (son.do@onboardai.vn)',
+        detail: 'Tạm khóa tài khoản do nhân sự nghỉ phép dài hạn, đã bàn giao toàn bộ Mentee'
+      },
+      {
+        id: 'LOG02', time: '2026-10-13T15:30:00', actor: 'Vũ Quản Trị (Admin)',
+        action: 'create_user', target: 'Lê Hoàng Long (long.le@onboardai.vn)',
+        detail: 'Khởi tạo tài khoản New Hire và tự động đồng bộ hồ sơ NH03 sang HR Dashboard'
+      },
+      {
+        id: 'LOG03', time: '2026-10-12T10:20:00', actor: 'Vũ Quản Trị (Admin)',
+        action: 'change_role', target: 'Trần Thị Mai (mentor@onboardai.vn)',
+        before: 'newhire', after: 'mentor',
+        detail: 'Cấp quyền Mentor phụ trách kèm cặp nhân sự mới khối Kỹ thuật Công nghệ'
+      }
+    ];
+
+    // Cấu hình Ma trận phân quyền 10 quyền chuẩn Mục 5.1
+    const RBAC_PERMISSIONS = [
+      {
+        id: 'p1',
+        title: 'Xem Dashboard & Checklist hội nhập của mình',
+        desc: 'Theo dõi tiến độ cá nhân, đánh dấu hoàn thành nhiệm vụ theo tuần',
+        roles: { newhire: true, mentor: false, hr: false, admin: false }
+      },
+      {
+        id: 'p2',
+        title: 'Hỏi đáp Trợ lý AI-1 (Policy Q&A Engine)',
+        desc: 'Tra cứu sổ tay nhân viên, phúc lợi, quy trình IT có trích dẫn nguồn',
+        roles: { newhire: true, mentor: true, hr: true, admin: true }
+      },
+      {
+        id: 'p3',
+        title: 'Xem danh sách Mentee được giao kèm cặp',
+        desc: 'Giám sát tiến độ các nhân sự mới thuộc phạm vi hướng dẫn trực tiếp',
+        roles: { newhire: false, mentor: true, hr: false, admin: false }
+      },
+      {
+        id: 'p4',
+        title: 'Ghi phiếu đánh giá Check-in 1-on-1',
+        desc: 'Lưu nhận xét định kỳ 7 ngày / 30 ngày / 60 ngày cho từng Mentee',
+        roles: { newhire: false, mentor: true, hr: false, admin: false }
+      },
+      {
+        id: 'p5',
+        title: 'Giao việc & dùng AI-2 Checklist Personalizer',
+        desc: 'Tạo nhiệm vụ cá nhân hóa theo vị trí chuyên môn của Mentee',
+        roles: { newhire: false, mentor: true, hr: false, admin: false }
+      },
+      {
+        id: 'p6',
+        title: 'Xem HR Dashboard toàn công ty & cảnh báo AI-3',
+        desc: 'Phân tích tỷ lệ hoàn thành theo phòng ban và phát hiện nhân sự có nguy cơ trễ hạn',
+        roles: { newhire: false, mentor: false, hr: true, admin: true }
+      },
+      {
+        id: 'p7',
+        title: 'Can thiệp nhân sự trễ hạn (Gửi nhắc việc / Đổi hạn)',
+        desc: 'Thực thi các biện pháp hỗ trợ nhân sự đang bị kẹt nhiệm vụ (Blocked)',
+        roles: { newhire: false, mentor: false, hr: true, admin: false }
+      },
+      {
+        id: 'p8',
+        title: 'Dùng chế độ thị sát (View-As Mode)',
+        desc: 'Xem trực tiếp giao diện dưới góc nhìn của New Hire hoặc Mentor để hỗ trợ',
+        roles: { newhire: false, mentor: false, hr: true, admin: true }
+      },
+      {
+        id: 'p9',
+        title: 'Quản lý tài khoản, phân quyền RBAC & Nhật ký kiểm toán',
+        desc: 'Thêm, sửa, khóa, xóa tài khoản và cấu hình ma trận phân quyền hệ thống',
+        roles: { newhire: false, mentor: false, hr: false, admin: true }
+      },
+      {
+        id: 'p10',
+        title: 'Sửa hồ sơ cá nhân & Đổi mật khẩu của mình',
+        desc: 'Cập nhật thông tin liên hệ và bảo mật tài khoản cá nhân',
+        roles: { newhire: true, mentor: true, hr: true, admin: true }
+      }
+    ];
+
+    const ROLE_META = {
+      admin: {
+        label: 'Admin',
+        badgeClass: 'bg-violet-50 text-violet-700 ring-1 ring-inset ring-violet-600/20'
+      },
+      hr: {
+        label: 'HR',
+        badgeClass: 'bg-amber-50 text-amber-800 ring-1 ring-inset ring-amber-600/20'
+      },
+      mentor: {
+        label: 'Mentor',
+        badgeClass: 'bg-indigo-50 text-indigo-700 ring-1 ring-inset ring-indigo-600/20'
+      },
+      newhire: {
+        label: 'New Hire',
+        badgeClass: 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-600/20'
+      }
+    };
+
+    // State toàn cục của màn hình AD02
+    let usersList = [];
+    let departmentsList = [];
+    let auditLogsList = [];
+    let selectedUserIds = new Set();
+    let activeTab = 'users';
+    let lastHighlightedUserId = null;
+    let activeDropdownUserId = null;
+    let roleChangeTargetUserId = null;
+    let deleteTargetUserId = null;
+    let pendingReassignContext = null; // { mentorUser, nextAction: 'lock' | 'delete' | 'change_role', newRole }
+    let pendingUndoDeletions = new Map(); // userId -> { user, index, timeoutId, toastEl }
+    window.emailManuallyEdited = false;
+
+    const CURRENT_ADMIN_ID = 'USR01';
+
+    // ================= TIỆN ÍCH CHUNG =================
+    function toggleMobileSidebar() {
+      const sidebar = document.getElementById('appSidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      sidebar.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+    }
+
+    function logout() {
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('isLoggedIn');
+    }
+
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      const colorClasses =
+        type === 'error'
+          ? 'bg-rose-600 text-white'
+          : type === 'warning'
+          ? 'bg-amber-600 text-white'
+          : 'bg-slate-900 text-white';
+      const iconName =
+        type === 'error'
+          ? 'shield-alert'
+          : type === 'warning'
+          ? 'alert-triangle'
+          : 'check-circle-2';
+
+      toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-2xl shadow-xl text-xs font-semibold transition-all duration-300 animate-fade-in ${colorClasses}`;
+      toast.innerHTML = `
+        <i data-lucide="${iconName}" class="w-4 h-4 shrink-0 ${type === 'success' ? 'text-emerald-400' : 'text-white'}"></i>
+        <span class="leading-snug">${message}</span>
+      `;
+      container.appendChild(toast);
+      lucide.createIcons();
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-8px)';
+        setTimeout(() => toast.remove(), 280);
+      }, 3400);
+    }
+
+    // Chuẩn hóa tiếng Việt không dấu để tìm kiếm & tạo email thông minh (Mục 5.5)
+    function removeVietnameseTones(str) {
+      return (str || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd')
+        .replace(/Đ/g, 'D')
+        .toLowerCase()
+        .trim();
+    }
+
+    // Gợi ý email chuẩn ten.ho@onboardai.vn từ Họ và tên (Mục 5.5: "Nguyễn Văn An" -> "an.nguyen@onboardai.vn")
+    function generateSmartEmailFromFullName(fullName) {
+      const clean = removeVietnameseTones(fullName).replace(/[^a-z0-9\s]/g, '');
+      const parts = clean.split(/\s+/).filter(Boolean);
+      if (parts.length === 0) return '';
+      if (parts.length === 1) return `${parts[0]}@onboardai.vn`;
+      const firstName = parts[parts.length - 1];
+      const lastName = parts[0];
+      return `${firstName}.${lastName}@onboardai.vn`;
+    }
+
+    function formatDateTime(isoStr) {
+      if (!isoStr) return null;
+      try {
+        const d = new Date(isoStr);
+        if (isNaN(d.getTime())) return isoStr;
+        const pad = (n) => String(n).padStart(2, '0');
+        return `${pad(d.getHours())}:${pad(d.getMinutes())} · ${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`;
+      } catch (e) {
+        return isoStr;
+      }
+    }
+
+    function getRoleBadgeHtml(role) {
+      const meta = ROLE_META[role] || ROLE_META.newhire;
+      return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${meta.badgeClass}">${meta.label}</span>`;
+    }
+
+    function getStatusHtml(status) {
+      if (status === 'active') {
+        return `
+          <span class="inline-flex items-center gap-1.5 text-emerald-700 font-semibold">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span>Hoạt động</span>
+          </span>
+        `;
+      }
+      if (status === 'locked') {
+        return `
+          <span class="inline-flex items-center gap-1.5 text-rose-700 font-semibold">
+            <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+            <span>Đã khóa</span>
+          </span>
+        `;
+      }
+      return `
+        <span class="inline-flex items-center gap-1.5 text-slate-500 font-semibold">
+          <span class="w-2 h-2 rounded-full border-2 border-slate-400"></span>
+          <span>Chờ kích hoạt</span>
+        </span>
+      `;
+    }
+
+    // Đếm số Mentee đang được một Mentor phụ trách
+    function getMenteesForMentor(mentorUser) {
+      if (!mentorUser) return [];
+      const mentorProfileId = mentorUser.profileId || mentorUser.id;
+      return usersList.filter(
+        (u) =>
+          u.role === 'newhire' &&
+          (u.mentorId === mentorProfileId ||
+            u.mentorId === mentorUser.id ||
+            (u.mentorName && u.mentorName === mentorUser.name))
+      );
+    }
+
+    // Kiểm tra xem có phải Admin đang hoạt động cuối cùng không (Mục 5.2)
+    function isLastActiveAdmin(userId) {
+      const activeAdmins = usersList.filter((u) => u.role === 'admin' && u.status === 'active');
+      return activeAdmins.length <= 1 && activeAdmins.some((u) => u.id === userId);
+    }
+
+    // Lưu thay đổi vào LocalStorage qua API.js
+    function persistAllData() {
+      if (window.API) {
+        const db = API.getDB() || {};
+        db.users = usersList;
+        db.departments = departmentsList;
+        db.auditLogs = auditLogsList;
+        API.saveDB(db);
+      }
+    }
+
+    // Ghi thêm 1 dòng vào Nhật ký hoạt động (Mục 5.4)
+    function addAuditLog({ action, target, detail, before, after }) {
+      const newLog = {
+        id: 'LOG_' + Date.now(),
+        time: new Date().toISOString(),
+        actor: 'Vũ Quản Trị (Admin)',
+        action,
+        target,
+        before: before || null,
+        after: after || null,
+        detail: detail || ''
+      };
+      auditLogsList.unshift(newLog);
+      persistAllData();
+      updateTabCounters();
+      if (activeTab === 'logs') {
+        renderAuditLogs();
+      }
+    }
+
+    // ================= KHỞI TẠO DỮ LIỆU =================
+    async function loadInitialData() {
+      let db = null;
+      if (window.API) {
+        db = await API.init();
+      }
+      if (db && Array.isArray(db.users) && db.users.length > 0 && db.users[0].status) {
+        usersList = db.users;
+        departmentsList = Array.isArray(db.departments) && db.departments.length > 0 ? db.departments : FALLBACK_DEPARTMENTS;
+        auditLogsList = Array.isArray(db.auditLogs) && db.auditLogs.length > 0 ? db.auditLogs : [...FALLBACK_AUDIT_LOGS];
+      } else {
+        usersList = JSON.parse(JSON.stringify(FALLBACK_USERS));
+        departmentsList = JSON.parse(JSON.stringify(FALLBACK_DEPARTMENTS));
+        auditLogsList = JSON.parse(JSON.stringify(FALLBACK_AUDIT_LOGS));
+        persistAllData();
+      }
+
+      renderAll();
+    }
+
+    function renderAll() {
+      updateKpiCards();
+      updateTabCounters();
+      renderHealthCheck();
+      renderUserTable();
+      renderRbacMatrix();
+      renderAuditLogs();
+      updateBulkActionBar();
+      lucide.createIcons();
+    }
+
+    function updateTabCounters() {
+      document.getElementById('tabCountUsers').textContent = usersList.length;
+      document.getElementById('tabCountLogs').textContent = auditLogsList.length;
+    }
+
+    function updateKpiCards() {
+      const total = usersList.length;
+      const activeCount = usersList.filter((u) => u.status === 'active').length;
+      const lockedCount = usersList.filter((u) => u.status === 'locked').length;
+      const pendingCount = usersList.filter((u) => u.status === 'pending').length;
+
+      const adminCount = usersList.filter((u) => u.role === 'admin').length;
+      const hrCount = usersList.filter((u) => u.role === 'hr').length;
+      const mentorCount = usersList.filter((u) => u.role === 'mentor').length;
+      const nhCount = usersList.filter((u) => u.role === 'newhire').length;
+
+      document.getElementById('kpiTotalUsers').textContent = total;
+      document.getElementById('kpiRoleBreakdown').innerHTML = `${adminCount} Admin &bull; ${hrCount} HR &bull; ${mentorCount} Mentor &bull; ${nhCount} New Hire`;
+      document.getElementById('kpiActiveUsers').textContent = activeCount;
+      document.getElementById('kpiLockedUsers').textContent = lockedCount;
+      document.getElementById('kpiPendingUsers').textContent = pendingCount;
+    }
+
+    // ================= KIỂM TRA SỨC KHỎE TÀI KHOẢN (MỤC 5.6) =================
+    function renderHealthCheck() {
+      const container = document.getElementById('healthCheckContainer');
+      const issues = [];
+
+      // Quy tắc 1: New Hire chưa có Mentor phụ trách
+      const nhWithoutMentor = usersList.filter((u) => u.role === 'newhire' && (!u.mentorId || !u.mentorName));
+      nhWithoutMentor.forEach((u) => {
+        issues.push({
+          type: 'no_mentor',
+          severity: 'amber',
+          text: `Nhân sự mới <strong>${u.name}</strong> (${u.department || 'Chưa rõ phòng ban'}) chưa có Mentor phụ trách.`,
+          actionLabel: 'Gán Mentor ngay',
+          onClick: `openUserDrawer('edit', '${u.id}')`
+        });
+      });
+
+      // Quy tắc 2: Mentor đang kèm quá 5 người
+      const mentors = usersList.filter((u) => u.role === 'mentor' && u.status === 'active');
+      mentors.forEach((m) => {
+        const count = getMenteesForMentor(m).length;
+        if (count > 5) {
+          issues.push({
+            type: 'overloaded_mentor',
+            severity: 'rose',
+            text: `Mentor <strong>${m.name}</strong> đang kèm <strong>${count} nhân sự</strong> (vượt ngưỡng khuyến nghị 5 người/Mentor).`,
+            actionLabel: 'Lọc Mentee để điều phối',
+            onClick: `quickFilterByRole('newhire')`
+          });
+        }
+      });
+
+      // Quy tắc 3: Tài khoản chưa đăng nhập lần nào / chờ kích hoạt
+      const neverLoggedIn = usersList.filter((u) => !u.lastLogin || u.status === 'pending');
+      neverLoggedIn.forEach((u) => {
+        issues.push({
+          type: 'never_logged_in',
+          severity: 'blue',
+          text: `Tài khoản <strong>${u.name}</strong> (<code class="font-mono text-[11px]">${u.email}</code>) chưa đăng nhập lần nào kể từ ngày cấp (${u.createdAt || 'gần đây'}).`,
+          actionLabel: 'Kích hoạt & Gửi nhắc',
+          onClick: `activatePendingUser('${u.id}')`
+        });
+      });
+
+      if (issues.length === 0) {
+        container.innerHTML = `
+          <div class="flex items-center justify-between gap-3 text-xs">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+              </div>
+              <div>
+                <span class="font-bold text-slate-900">Kiểm tra sức khỏe tài khoản:</span>
+                <span class="text-slate-600 ml-1">Tất cả tài khoản đều đã có Mentor phụ trách, tải kèm cặp cân bằng và đã kích hoạt đầy đủ.</span>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20 shrink-0">Đạt chuẩn 100%</span>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = `
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-100">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
+              <i data-lucide="clipboard-check" class="w-4 h-4"></i>
+            </div>
+            <h3 class="text-xs font-extrabold text-slate-900 uppercase tracking-wider">Kiểm tra sức khỏe tài khoản</h3>
+            <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 text-amber-800 ring-1 ring-inset ring-amber-600/20 tabular-nums">${issues.length} cần lưu ý</span>
+          </div>
+          <span class="text-[11px] text-slate-500">Quy tắc tự động: kiểm tra gán Mentor, tải kèm cặp (&le;5 người) và kích hoạt đăng nhập</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+          ${issues
+            .map(
+              (item) => `
+            <div class="flex items-center justify-between gap-3 p-3 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] text-xs">
+              <div class="flex items-start gap-2 min-w-0">
+                <span class="w-2 h-2 rounded-full mt-1.5 shrink-0 ${
+                  item.severity === 'rose' ? 'bg-rose-500' : item.severity === 'amber' ? 'bg-amber-500' : 'bg-[#1F5AFE]'
+                }"></span>
+                <span class="text-slate-700 leading-relaxed">${item.text}</span>
+              </div>
+              <button onclick="${item.onClick}" class="shrink-0 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 border border-slate-300 text-[11px] font-bold text-slate-800 transition shadow-2xs">
+                ${item.actionLabel}
+              </button>
+            </div>
+          `
+            )
+            .join('')}
+        </div>
+      `;
+    }
+
+    function activatePendingUser(userId) {
+      const u = usersList.find((item) => item.id === userId);
+      if (!u) return;
+      u.status = 'active';
+      u.lastLogin = new Date().toISOString();
+      lastHighlightedUserId = u.id;
+      addAuditLog({
+        action: 'update_user',
+        target: `${u.name} (${u.email})`,
+        detail: 'Kích hoạt tài khoản chờ và gửi email nhắc đăng nhập lần đầu'
+      });
+      renderAll();
+      showToast(`Đã kích hoạt tài khoản và gửi thông báo tới ${u.email}`, 'success');
+    }
+
+    function quickFilterByRole(role) {
+      document.getElementById('filterRole').value = role;
+      handleFilterChange();
+    }
+
+    // ================= BỘ LỌC & RENDER BẢNG TÀI KHOẢN (MỤC 3 & 4.1) =================
+    function getFilteredUsers() {
+      const q = removeVietnameseTones(document.getElementById('searchInput').value);
+      const roleVal = document.getElementById('filterRole').value;
+      const deptVal = document.getElementById('filterDept').value;
+      const statusVal = document.getElementById('filterStatus').value;
+
+      return usersList.filter((u) => {
+        if (roleVal !== 'all' && u.role !== roleVal) return false;
+        if (deptVal !== 'all' && u.departmentId !== deptVal) return false;
+        if (statusVal !== 'all' && u.status !== statusVal) return false;
+        if (q) {
+          const haystack = removeVietnameseTones(`${u.name} ${u.email} ${u.position || ''} ${u.department || ''}`);
+          if (!haystack.includes(q)) return false;
+        }
+        return true;
+      });
+    }
+
+    function handleFilterChange() {
+      const searchVal = document.getElementById('searchInput').value;
+      const clearBtn = document.getElementById('clearSearchBtn');
+      if (searchVal.trim().length > 0) {
+        clearBtn.classList.remove('hidden');
+      } else {
+        clearBtn.classList.add('hidden');
+      }
+      renderUserTable();
+      lucide.createIcons();
+    }
+
+    function clearSearchInput() {
+      document.getElementById('searchInput').value = '';
+      handleFilterChange();
+    }
+
+    function resetAllFilters() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('filterRole').value = 'all';
+      document.getElementById('filterDept').value = 'all';
+      document.getElementById('filterStatus').value = 'all';
+      handleFilterChange();
+      showToast('Đã đặt lại toàn bộ bộ lọc tìm kiếm', 'success');
+    }
+
+    function renderUserTable() {
+      const tbody = document.getElementById('userTableBody');
+      const emptyState = document.getElementById('tableEmptyState');
+      const filtered = getFilteredUsers();
+
+      document.getElementById('visibleRowCount').textContent = filtered.length;
+      document.getElementById('totalRowCount').textContent = usersList.length;
+
+      if (usersList.length === 0) {
+        tbody.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        emptyState.innerHTML = `
+          <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-500 flex items-center justify-center mx-auto mb-3">
+            <i data-lucide="user-plus" class="w-6 h-6"></i>
+          </div>
+          <h4 class="text-sm font-bold text-slate-900">Chưa có tài khoản nào trong hệ thống</h4>
+          <p class="text-xs text-slate-500 mt-1 mb-4">Hãy tạo tài khoản đầu tiên để bắt đầu phân quyền hội nhập.</p>
+          <button onclick="openUserDrawer('create')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1F5AFE] text-white text-xs font-bold">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            <span>Thêm tài khoản đầu tiên</span>
+          </button>
+        `;
+        return;
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        emptyState.innerHTML = `
+          <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-500 flex items-center justify-center mx-auto mb-3">
+            <i data-lucide="search-x" class="w-6 h-6"></i>
+          </div>
+          <h4 class="text-sm font-bold text-slate-900">Không tìm thấy tài khoản phù hợp</h4>
+          <p class="text-xs text-slate-500 mt-1 mb-4">Không có nhân sự nào khớp với từ khóa hoặc tổ hợp bộ lọc hiện tại.</p>
+          <button onclick="resetAllFilters()" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition">
+            <i data-lucide="filter-x" class="w-3.5 h-3.5"></i>
+            <span>Xóa bộ lọc</span>
+          </button>
+        `;
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+
+      tbody.innerHTML = filtered
+        .map((u, idx) => {
+          const isChecked = selectedUserIds.has(u.id);
+          const isSelf = u.id === CURRENT_ADMIN_ID;
+          const isHighlighted = u.id === lastHighlightedUserId;
+
+          // Dòng phụ của cột Phòng ban thay đổi linh hoạt theo Vai trò (Mục 3)
+          let deptSublineHtml = '';
+          if (u.role === 'newhire') {
+            if (u.mentorName) {
+              deptSublineHtml = `
+                <div class="text-[11px] text-slate-500 mt-0.5 flex items-center gap-1">
+                  <span>Mentor:</span>
+                  <strong class="text-slate-700 font-semibold">${u.mentorName}</strong>
+                </div>
+              `;
+            } else {
+              deptSublineHtml = `
+                <div class="text-[11px] text-amber-700 font-semibold mt-0.5 flex items-center gap-1">
+                  <i data-lucide="alert-triangle" class="w-3 h-3"></i>
+                  <span>Chưa gán Mentor</span>
+                </div>
+              `;
+            }
+          } else if (u.role === 'mentor') {
+            const menteeCount = getMenteesForMentor(u).length;
+            deptSublineHtml = `
+              <div class="text-[11px] text-indigo-700 font-medium mt-0.5 tabular-nums">
+                Đang kèm: <strong>${menteeCount} người</strong>
+              </div>
+            `;
+          } else {
+            deptSublineHtml = `
+              <div class="text-[11px] text-slate-500 mt-0.5">${u.position || 'Toàn hệ thống'}</div>
+            `;
+          }
+
+          const lastLoginFormatted = formatDateTime(u.lastLogin);
+
+          return `
+            <tr id="userRow-${u.id}" style="animation-delay: ${Math.min(idx * 35, 250)}ms" class="stagger-row group hover:bg-slate-50/90 transition-colors ${
+            isHighlighted ? 'row-highlight-flash' : ''
+          } ${u.status === 'locked' ? 'bg-slate-50/40' : ''}">
+              <!-- Checkbox -->
+              <td class="py-3.5 pl-5 pr-2 align-middle">
+                <input
+                  type="checkbox"
+                  ${isChecked ? 'checked' : ''}
+                  onchange="toggleSelectRow('${u.id}', this.checked)"
+                  class="w-4 h-4 rounded border-slate-300 text-[#1F5AFE] focus:ring-[#1F5AFE] cursor-pointer"
+                >
+              </td>
+
+              <!-- Người dùng (Avatar + Tên đậm + Email mờ - Kiểu Tailwind Plus) -->
+              <td class="py-3.5 px-4 align-middle">
+                <div class="flex items-center gap-3">
+                  <img
+                    src="${u.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + encodeURIComponent(u.name)}"
+                    alt="${u.name}"
+                    class="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 shrink-0 object-cover ${u.status === 'locked' ? 'grayscale opacity-75' : ''}"
+                  >
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-1.5">
+                      <span class="text-sm font-bold text-slate-900 truncate ${u.status === 'locked' ? 'line-through text-slate-500' : ''}">${u.name}</span>
+                      ${
+                        isSelf
+                          ? `<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200">Bạn</span>`
+                          : ''
+                      }
+                    </div>
+                    <div class="text-xs text-slate-500 font-mono truncate">${u.email}</div>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Vai trò -->
+              <td class="py-3.5 px-4 align-middle whitespace-nowrap">
+                ${getRoleBadgeHtml(u.role)}
+              </td>
+
+              <!-- Phòng ban & Phụ trách -->
+              <td class="py-3.5 px-4 align-middle">
+                <div class="text-xs font-semibold text-slate-800">${u.department || 'Toàn công ty'}</div>
+                ${deptSublineHtml}
+              </td>
+
+              <!-- Đăng nhập gần nhất -->
+              <td class="py-3.5 px-4 align-middle hidden md:table-cell whitespace-nowrap tabular-nums">
+                ${
+                  lastLoginFormatted
+                    ? `<span class="text-xs text-slate-600 font-medium">${lastLoginFormatted}</span>`
+                    : `<span class="inline-flex items-center gap-1 text-[11px] text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200/60 font-medium">Chưa đăng nhập</span>`
+                }
+              </td>
+
+              <!-- Trạng thái -->
+              <td class="py-3.5 px-4 align-middle whitespace-nowrap">
+                ${getStatusHtml(u.status)}
+              </td>
+
+              <!-- Thao tác: Nút Sửa + Menu [⋯] -->
+              <td class="py-3.5 pl-4 pr-5 align-middle text-right whitespace-nowrap">
+                <div class="inline-flex items-center justify-end gap-1.5">
+                  <button
+                    onclick="openUserDrawer('edit', '${u.id}')"
+                    class="px-2.5 py-1.5 rounded-lg border border-[#E2E8F0] bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 hover:text-slate-900 transition shadow-2xs"
+                  >
+                    Sửa
+                  </button>
+                  <button
+                    onclick="openRowActionMenu(event, '${u.id}')"
+                    class="p-1.5 rounded-lg border border-transparent hover:border-[#E2E8F0] hover:bg-slate-100 text-slate-500 hover:text-slate-900 transition"
+                    title="Thêm thao tác"
+                  >
+                    <i data-lucide="more-horizontal" class="w-4 h-4"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+        })
+        .join('');
+
+      // Đồng bộ trạng thái checkbox chọn tất cả
+      const selectAllEl = document.getElementById('selectAllCheckbox');
+      if (selectAllEl) {
+        selectAllEl.checked = filtered.length > 0 && filtered.every((u) => selectedUserIds.has(u.id));
+      }
+    }
+
+    // ================= MENU [⋯] CUỐI MỖI DÒNG (MỤC 3) =================
+    function openRowActionMenu(event, userId) {
+      event.stopPropagation();
+      const menu = document.getElementById('rowActionMenu');
+      const user = usersList.find((u) => u.id === userId);
+      if (!user) return;
+
+      activeDropdownUserId = userId;
+      const isLocked = user.status === 'locked';
+      const isSelf = user.id === CURRENT_ADMIN_ID;
+
+      menu.innerHTML = `
+        <div class="px-3.5 py-2 bg-[#F8FAFC]">
+          <div class="text-[11px] font-bold text-slate-900 truncate">${user.name}</div>
+          <div class="text-[10px] text-slate-500 font-mono truncate">${user.email}</div>
+        </div>
+        <div class="py-1">
+          <button onclick="closeRowActionMenu(); openUserDrawer('edit', '${user.id}')" class="w-full px-3.5 py-2 text-left flex items-center gap-2.5 hover:bg-slate-50 text-slate-700 font-medium">
+            <i data-lucide="pencil" class="w-3.5 h-3.5 text-slate-500"></i>
+            <span>Sửa thông tin</span>
+          </button>
+          <button onclick="closeRowActionMenu(); openRoleChangeModal('${user.id}')" class="w-full px-3.5 py-2 text-left flex items-center gap-2.5 hover:bg-slate-50 text-slate-700 font-medium">
+            <i data-lucide="repeat" class="w-3.5 h-3.5 text-indigo-600"></i>
+            <span>Đổi vai trò</span>
+          </button>
+          <button onclick="closeRowActionMenu(); resetUserPassword('${user.id}')" class="w-full px-3.5 py-2 text-left flex items-center gap-2.5 hover:bg-slate-50 text-slate-700 font-medium">
+            <i data-lucide="key-round" class="w-3.5 h-3.5 text-amber-600"></i>
+            <span>Đặt lại mật khẩu</span>
+          </button>
+          <button onclick="closeRowActionMenu(); handleToggleLockUser('${user.id}')" class="w-full px-3.5 py-2 text-left flex items-center gap-2.5 hover:bg-slate-50 text-slate-700 font-medium">
+            <i data-lucide="${isLocked ? 'unlock' : 'lock'}" class="w-3.5 h-3.5 ${isLocked ? 'text-emerald-600' : 'text-amber-600'}"></i>
+            <span>${isLocked ? 'Mở khóa tài khoản' : 'Khóa tài khoản'}</span>
+          </button>
+          <button onclick="closeRowActionMenu(); viewAsUser('${user.id}')" class="w-full px-3.5 py-2 text-left flex items-center gap-2.5 hover:bg-slate-50 text-slate-700 font-medium">
+            <i data-lucide="eye" class="w-3.5 h-3.5 text-[#1F5AFE]"></i>
+            <span>Xem dưới góc nhìn người này</span>
+          </button>
+        </div>
+        <div class="py-1">
+          <button onclick="closeRowActionMenu(); initiateDeleteUser('${user.id}')" class="w-full px-3.5 py-2 text-left flex items-center gap-2.5 hover:bg-rose-50 text-rose-600 font-semibold">
+            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+            <span>Xóa tài khoản${isSelf ? ' (Đang đăng nhập)' : ''}</span>
+          </button>
+        </div>
+      `;
+
+      menu.classList.remove('hidden');
+      lucide.createIcons();
+
+      // Định vị thông minh cạnh nút bấm
+      const rect = event.currentTarget.getBoundingClientRect();
+      const menuWidth = 240;
+      const menuHeight = 265;
+      let left = rect.right - menuWidth;
+      let top = rect.bottom + 6;
+      if (left < 12) left = 12;
+      if (top + menuHeight > window.innerHeight - 12) {
+        top = rect.top - menuHeight - 6;
+      }
+      menu.style.left = `${left}px`;
+      menu.style.top = `${top}px`;
+    }
+
+    function closeRowActionMenu() {
+      const menu = document.getElementById('rowActionMenu');
+      if (menu) menu.classList.add('hidden');
+      activeDropdownUserId = null;
+    }
+
+    document.addEventListener('click', () => {
+      closeRowActionMenu();
+    });
+
+    // ================= CHẾ ĐỘ THỊ SÁT VIEW-AS (MỤC 3 & 5.1) =================
+    function startImpersonation(targetUrl, displayLabel) {
+      sessionStorage.setItem('isImpersonating', 'admin');
+      sessionStorage.setItem('impersonateReturnUrl', 'admin-user-management.html');
+      sessionStorage.setItem('impersonatedUserName', displayLabel);
+    }
+
+    function viewAsUser(userId) {
+      const user = usersList.find((u) => u.id === userId);
+      if (!user) return;
+
+      if (user.status === 'locked') {
+        showToast('Tài khoản này đang bị khóa. Hãy mở khóa trước khi thị sát.', 'warning');
+        return;
+      }
+
+      if (user.role === 'admin') {
+        showToast('Bạn đang ở trong phân hệ Quản trị viên (Admin).', 'success');
+        return;
+      }
+
+      let targetPage = 'newhire-onboarding-dashboard.html';
+      if (user.role === 'mentor') targetPage = 'mentor-mentee-list.html';
+      if (user.role === 'hr') targetPage = 'hr-dashboard.html';
+
+      const roleLabel = ROLE_META[user.role]?.label || user.role;
+      const label = `${user.name} (${roleLabel} - ${user.position || user.department || 'OnboardAI'})`;
+
+      addAuditLog({
+        action: 'impersonate',
+        target: `${user.name} (${user.email})`,
+        detail: `Kích hoạt Chế độ thị sát (View-As) sang màn hình ${targetPage}`
+      });
+
+      startImpersonation(targetPage, label);
+      window.location.href = targetPage;
+    }
+
+    function resetUserPassword(userId) {
+      const user = usersList.find((u) => u.id === userId);
+      if (!user) return;
+      addAuditLog({
+        action: 'update_user',
+        target: `${user.name} (${user.email})`,
+        detail: 'Đặt lại mật khẩu mặc định và gửi liên kết xác thực 2FA qua email'
+      });
+      showToast(`Đã gửi liên kết đặt lại mật khẩu tới ${user.email}`, 'success');
+    }
+
+    // ================= NGĂN TRƯỢT THÊM / SỬA TÀI KHOẢN & KIỂM TRA DỮ LIỆU (MỤC 4.1, 4.2, 5.5) =================
+    function openUserDrawer(mode, userId = null) {
+      const drawer = document.getElementById('userDrawer');
+      const backdrop = document.getElementById('userDrawerBackdrop');
+      const form = document.getElementById('userForm');
+      form.reset();
+      clearAllFormErrors();
+
+      if (mode === 'create') {
+        window.emailManuallyEdited = false;
+        document.getElementById('formUserId').value = '';
+        document.getElementById('drawerBadge').textContent = 'Tạo mới thông minh';
+        document.getElementById('drawerTitle').textContent = 'Thêm tài khoản nhân sự';
+        document.getElementById('drawerSubmitText').textContent = 'Tạo tài khoản';
+        document.getElementById('formRole').value = 'newhire';
+        document.getElementById('formStatus').value = 'active';
+        document.getElementById('formDept').value = 'DEP01';
+        handleRoleOrDeptChangeInForm();
+      } else {
+        const user = usersList.find((u) => u.id === userId);
+        if (!user) return;
+        window.emailManuallyEdited = true;
+        document.getElementById('formUserId').value = user.id;
+        document.getElementById('drawerBadge').textContent = `Cập nhật hồ sơ • ${user.id}`;
+        document.getElementById('drawerTitle').textContent = `Chỉnh sửa: ${user.name}`;
+        document.getElementById('drawerSubmitText').textContent = 'Lưu thay đổi';
+        document.getElementById('formName').value = user.name || '';
+        document.getElementById('formEmail').value = user.email || '';
+        document.getElementById('formRole').value = user.role || 'newhire';
+        document.getElementById('formStatus').value = user.status || 'active';
+        document.getElementById('formDept').value = user.departmentId || 'DEP01';
+        document.getElementById('formPosition').value = user.position || '';
+        handleRoleOrDeptChangeInForm(user.mentorId);
+      }
+
+      backdrop.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        drawer.classList.remove('translate-x-full');
+      });
+      lucide.createIcons();
+    }
+
+    function closeUserDrawer() {
+      const drawer = document.getElementById('userDrawer');
+      const backdrop = document.getElementById('userDrawerBackdrop');
+      drawer.classList.add('translate-x-full');
+      setTimeout(() => {
+        backdrop.classList.add('hidden');
+      }, 280);
+    }
+
+    function handleNameInputForSmartEmail() {
+      clearFieldError('errName', 'formName');
+      const isCreate = !document.getElementById('formUserId').value;
+      if (isCreate && !window.emailManuallyEdited) {
+        const nameVal = document.getElementById('formName').value;
+        document.getElementById('formEmail').value = generateSmartEmailFromFullName(nameVal);
+        clearFieldError('errEmail', 'formEmail');
+      }
+    }
+
+    function forceGenerateEmailFromName() {
+      const nameVal = document.getElementById('formName').value;
+      if (!nameVal.trim()) {
+        showToast('Hãy nhập Họ và tên trước để hệ thống gợi ý email', 'warning');
+        return;
+      }
+      document.getElementById('formEmail').value = generateSmartEmailFromFullName(nameVal);
+      clearFieldError('errEmail', 'formEmail');
+    }
+
+    // Tự động gợi ý Mentor thuộc phòng ban đã chọn (Mục 5.5)
+    function handleRoleOrDeptChangeInForm(preferredMentorId = null) {
+      clearFieldError('errRole', 'formRole');
+      clearFieldError('errDept', 'formDept');
+
+      const role = document.getElementById('formRole').value;
+      const deptId = document.getElementById('formDept').value;
+      const mentorGroup = document.getElementById('formMentorGroup');
+      const syncNotice = document.getElementById('newHireSyncNotice');
+      const reqDeptStar = document.getElementById('reqDeptStar');
+
+      // Phòng ban bắt buộc với Mentor và New Hire (Mục 4.2)
+      if (role === 'mentor' || role === 'newhire') {
+        reqDeptStar.classList.remove('hidden');
+      } else {
+        reqDeptStar.classList.add('hidden');
+      }
+
+      // Mentor bắt buộc với New Hire (Mục 4.2)
+      if (role === 'newhire') {
+        mentorGroup.classList.remove('hidden');
+        syncNotice.classList.remove('hidden');
+        populateMentorSelectByDepartment(deptId, preferredMentorId);
+      } else {
+        mentorGroup.classList.add('hidden');
+        syncNotice.classList.add('hidden');
+      }
+    }
+
+    function populateMentorSelectByDepartment(deptId, selectedMentorId = null) {
+      const select = document.getElementById('formMentor');
+      const activeMentors = usersList.filter((u) => u.role === 'mentor' && u.status === 'active');
+
+      // Xếp Mentor cùng phòng ban lên đầu
+      const sorted = [...activeMentors].sort((a, b) => {
+        const aSame = a.departmentId === deptId ? 0 : 1;
+        const bSame = b.departmentId === deptId ? 0 : 1;
+        return aSame - bSame;
+      });
+
+      let optionsHtml = `<option value="">-- Chọn Mentor phụ trách --</option>`;
+      sorted.forEach((m) => {
+        const mKey = m.profileId || m.id;
+        const isSameDept = deptId && m.departmentId === deptId;
+        const menteeCount = getMenteesForMentor(m).length;
+        optionsHtml += `
+          <option value="${mKey}" data-name="${m.name}">
+            ${m.name} (${m.department || 'Mentor'}) ${isSameDept ? '• Cùng phòng ban' : ''} [Đang kèm ${menteeCount}]
+          </option>
+        `;
+      });
+
+      select.innerHTML = optionsHtml;
+
+      if (selectedMentorId) {
+        select.value = selectedMentorId;
+      } else if (deptId) {
+        // Tự động chọn Mentor đầu tiên cùng phòng ban
+        const sameDeptMentor = sorted.find((m) => m.departmentId === deptId);
+        if (sameDeptMentor) {
+          select.value = sameDeptMentor.profileId || sameDeptMentor.id;
+        }
+      }
+    }
+
+    function showFieldError(errId, inputId, customMessage = null) {
+      const errEl = document.getElementById(errId);
+      const inputEl = document.getElementById(inputId);
+      if (customMessage && errId === 'errEmail') {
+        document.getElementById('errEmailText').textContent = customMessage;
+      }
+      if (errEl) errEl.classList.remove('hidden');
+      if (inputEl) {
+        inputEl.classList.add('border-rose-500', 'bg-rose-50/30');
+      }
+    }
+
+    function clearFieldError(errId, inputId) {
+      const errEl = document.getElementById(errId);
+      const inputEl = document.getElementById(inputId);
+      if (errEl) errEl.classList.add('hidden');
+      if (inputEl) {
+        inputEl.classList.remove('border-rose-500', 'bg-rose-50/30');
+      }
+    }
+
+    function clearAllFormErrors() {
+      ['Name', 'Email', 'Role', 'Dept', 'Mentor'].forEach((f) => {
+        clearFieldError('err' + f, 'form' + f);
+      });
+    }
+
+    function triggerFormShake() {
+      const form = document.getElementById('userForm');
+      form.classList.remove('animate-shake');
+      void form.offsetWidth;
+      form.classList.add('animate-shake');
+    }
+
+    // Lưu Form Thêm / Sửa Tài khoản (Mục 4.1, 4.2, 5.2, 5.5)
+    function saveUserForm(event) {
+      event.preventDefault();
+      clearAllFormErrors();
+
+      const editingId = document.getElementById('formUserId').value;
+      const name = document.getElementById('formName').value.trim();
+      const email = document.getElementById('formEmail').value.trim().toLowerCase();
+      const role = document.getElementById('formRole').value;
+      const status = document.getElementById('formStatus').value;
+      const deptId = document.getElementById('formDept').value;
+      const position = document.getElementById('formPosition').value.trim();
+      const mentorSelect = document.getElementById('formMentor');
+      const mentorId = mentorSelect.value;
+
+      let hasError = false;
+
+      // 1. Kiểm tra Họ tên
+      if (!name) {
+        showFieldError('errName', 'formName');
+        hasError = true;
+      }
+
+      // 2. Kiểm tra Email (@onboardai.vn & không trùng)
+      const emailRegex = /^[^\s@]+@onboardai\.vn$/i;
+      if (!email || !emailRegex.test(email)) {
+        showFieldError('errEmail', 'formEmail', 'Email phải có đuôi @onboardai.vn');
+        hasError = true;
+      } else {
+        const duplicate = usersList.find((u) => u.email.toLowerCase() === email && u.id !== editingId);
+        if (duplicate) {
+          showFieldError('errEmail', 'formEmail', 'Email này đã được sử dụng');
+          hasError = true;
+        }
+      }
+
+      // 3. Kiểm tra Vai trò
+      if (!role) {
+        showFieldError('errRole', 'formRole');
+        hasError = true;
+      }
+
+      // 4. Kiểm tra Phòng ban (Bắt buộc với Mentor và New Hire)
+      if ((role === 'mentor' || role === 'newhire') && !deptId) {
+        showFieldError('errDept', 'formDept');
+        hasError = true;
+      }
+
+      // 5. Kiểm tra Mentor (Bắt buộc với New Hire)
+      if (role === 'newhire' && !mentorId) {
+        showFieldError('errMentor', 'formMentor');
+        hasError = true;
+      }
+
+      if (hasError) {
+        triggerFormShake();
+        lucide.createIcons();
+        return;
+      }
+
+      // Rào chắn an toàn (Mục 5.2): Không cho phép tự khóa hoặc tự hạ quyền Admin hiện tại / Admin cuối cùng
+      if (editingId) {
+        const existingUser = usersList.find((u) => u.id === editingId);
+        if (existingUser) {
+          if (editingId === CURRENT_ADMIN_ID && (role !== 'admin' || status !== 'active')) {
+            triggerFormShake();
+            showToast('Rào chắn an toàn: Admin không được tự hạ quyền hoặc tự khóa tài khoản của chính mình.', 'error');
+            return;
+          }
+          if (isLastActiveAdmin(editingId) && (role !== 'admin' || status !== 'active')) {
+            triggerFormShake();
+            showToast('Rào chắn an toàn: Hệ thống luôn phải còn ít nhất 1 Admin đang hoạt động.', 'error');
+            return;
+          }
+        }
+      }
+
+      const deptObj = departmentsList.find((d) => d.id === deptId);
+      const deptName = deptObj ? deptObj.name : 'Toàn công ty';
+
+      let mentorName = '';
+      if (role === 'newhire' && mentorId) {
+        const mentorUser = usersList.find((u) => u.profileId === mentorId || u.id === mentorId);
+        mentorName = mentorUser ? mentorUser.name : '';
+      }
+
+      if (!editingId) {
+        // Tạo tài khoản mới
+        const nextNum = usersList.length + 1;
+        const newUserId = 'USR' + String(nextNum).padStart(2, '0');
+        const profilePrefix = role === 'newhire' ? 'NH' : role === 'mentor' ? 'MT' : role === 'hr' ? 'HR' : 'AD';
+        const newProfileId = profilePrefix + String(Date.now()).slice(-3);
+
+        const newUser = {
+          id: newUserId,
+          profileId: newProfileId,
+          name,
+          email,
+          role,
+          departmentId: deptId || 'DEP01',
+          department: deptName,
+          position: position || (role === 'newhire' ? 'Nhân sự mới' : ROLE_META[role]?.label),
+          mentorId: role === 'newhire' ? mentorId : undefined,
+          mentorName: role === 'newhire' ? mentorName : undefined,
+          status,
+          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name)}`,
+          lastLogin: status === 'active' ? new Date().toISOString() : null,
+          createdAt: new Date().toISOString().slice(0, 10)
+        };
+
+        usersList.unshift(newUser);
+        lastHighlightedUserId = newUser.id;
+
+        // Mục 5.5: Tự động tạo hồ sơ trong newHires để nhân sự hiện ngay trên HR Dashboard
+        if (role === 'newhire' && window.API) {
+          const db = API.getDB() || {};
+          if (!Array.isArray(db.newHires)) db.newHires = [];
+          db.newHires.unshift({
+            id: newProfileId,
+            name: newUser.name,
+            email: newUser.email,
+            departmentId: newUser.departmentId,
+            department: newUser.department,
+            position: newUser.position,
+            joinDate: newUser.createdAt,
+            mentorId: newUser.mentorId,
+            mentorName: newUser.mentorName,
+            progress: 0,
+            status: 'on_track',
+            avatar: newUser.avatar
+          });
+          API.saveDB(db);
+        }
+
+        addAuditLog({
+          action: 'create_user',
+          target: `${newUser.name} (${newUser.email})`,
+          detail:
+            role === 'newhire'
+              ? `Tạo tài khoản New Hire (${newUser.department}) và tự động đồng bộ hồ sơ ${newProfileId} sang HR Dashboard`
+              : `Tạo tài khoản vai trò ${ROLE_META[role]?.label} thuộc ${newUser.department}`
+        });
+
+        closeUserDrawer();
+        renderAll();
+        showToast(`Đã tạo tài khoản ${newUser.name} thành công!`, 'success');
+      } else {
+        // Cập nhật tài khoản hiện có
+        const idx = usersList.findIndex((u) => u.id === editingId);
+        if (idx === -1) return;
+        const oldUser = usersList[idx];
+        const previousRole = oldUser.role;
+
+        // Nếu đang là Mentor có kèm người mà bị khóa hoặc đổi sang vai trò khác -> mở hộp bàn giao Mentee (Mục 5.2)
+        const mentees = getMenteesForMentor(oldUser);
+        if (oldUser.role === 'mentor' && mentees.length > 0 && (role !== 'mentor' || status === 'locked')) {
+          closeUserDrawer();
+          openReassignModal(oldUser, role !== 'mentor' ? 'change_role' : 'lock', role);
+          return;
+        }
+
+        usersList[idx] = {
+          ...oldUser,
+          name,
+          email,
+          role,
+          status,
+          departmentId: deptId || oldUser.departmentId,
+          department: deptName,
+          position: position || oldUser.position,
+          mentorId: role === 'newhire' ? mentorId : undefined,
+          mentorName: role === 'newhire' ? mentorName : undefined
+        };
+
+        // Đồng bộ tên / mentor sang bảng newHires nếu là New Hire
+        if (window.API && usersList[idx].profileId) {
+          const db = API.getDB() || {};
+          if (Array.isArray(db.newHires)) {
+            const nhIdx = db.newHires.findIndex((n) => n.id === usersList[idx].profileId || n.email === oldUser.email);
+            if (nhIdx !== -1) {
+              db.newHires[nhIdx] = {
+                ...db.newHires[nhIdx],
+                name,
+                email,
+                departmentId: deptId || db.newHires[nhIdx].departmentId,
+                department: deptName,
+                position: position || db.newHires[nhIdx].position,
+                mentorId: role === 'newhire' ? mentorId : db.newHires[nhIdx].mentorId,
+                mentorName: role === 'newhire' ? mentorName : db.newHires[nhIdx].mentorName
+              };
+              API.saveDB(db);
+            }
+          }
+        }
+
+        lastHighlightedUserId = editingId;
+
+        if (previousRole !== role) {
+          addAuditLog({
+            action: 'change_role',
+            target: `${name} (${email})`,
+            before: previousRole,
+            after: role,
+            detail: `Cập nhật hồ sơ và chuyển vai trò từ ${ROLE_META[previousRole]?.label} sang ${ROLE_META[role]?.label}`
+          });
+        } else {
+          addAuditLog({
+            action: 'update_user',
+            target: `${name} (${email})`,
+            detail: `Cập nhật thông tin hồ sơ (${deptName} • ${position || 'Nhân sự'})`
+          });
+        }
+
+        closeUserDrawer();
+        renderAll();
+        showToast(`Đã cập nhật tài khoản ${name}`, 'success');
+      }
+    }
+
+    // ================= ĐỔI VAI TRÒ & SO SÁNH QUYỀN (MỤC 4.1) =================
+    function openRoleChangeModal(userId) {
+      const user = usersList.find((u) => u.id === userId);
+      if (!user) return;
+
+      if (user.id === CURRENT_ADMIN_ID) {
+        showToast('Rào chắn an toàn: Admin không được tự hạ quyền chính mình.', 'error');
+        return;
+      }
+      if (isLastActiveAdmin(user.id)) {
+        showToast('Rào chắn an toàn: Hệ thống luôn phải còn ít nhất 1 Admin đang hoạt động.', 'error');
+        return;
+      }
+
+      roleChangeTargetUserId = userId;
+      document.getElementById('roleModalUserName').textContent = user.name;
+      document.getElementById('roleModalUserEmail').textContent = user.email;
+      document.getElementById('roleModalCurrentBadge').innerHTML = getRoleBadgeHtml(user.role);
+
+      const select = document.getElementById('roleModalSelect');
+      select.value = user.role === 'newhire' ? 'mentor' : user.role === 'mentor' ? 'hr' : 'newhire';
+      updateRoleDiffPreview();
+
+      document.getElementById('roleChangeModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeRoleChangeModal() {
+      document.getElementById('roleChangeModal').classList.add('hidden');
+      roleChangeTargetUserId = null;
+    }
+
+    function updateRoleDiffPreview() {
+      const user = usersList.find((u) => u.id === roleChangeTargetUserId);
+      if (!user) return;
+      const oldRole = user.role;
+      const newRole = document.getElementById('roleModalSelect').value;
+
+      const added = [];
+      const removed = [];
+
+      RBAC_PERMISSIONS.forEach((perm) => {
+        const hadBefore = !!perm.roles[oldRole];
+        const hasAfter = !!perm.roles[newRole];
+        if (!hadBefore && hasAfter) added.push(perm.title);
+        if (hadBefore && !hasAfter) removed.push(perm.title);
+      });
+
+      const addedEl = document.getElementById('roleDiffAdded');
+      const removedEl = document.getElementById('roleDiffRemoved');
+
+      addedEl.innerHTML =
+        added.length > 0
+          ? added.map((t) => `<li class="flex items-start gap-1.5"><span class="font-bold">+</span><span>${t}</span></li>`).join('')
+          : `<li class="text-slate-500 italic">Không có quyền mới được thêm</li>`;
+
+      removedEl.innerHTML =
+        removed.length > 0
+          ? removed.map((t) => `<li class="flex items-start gap-1.5"><span class="font-bold">&minus;</span><span>${t}</span></li>`).join('')
+          : `<li class="text-slate-500 italic">Giữ nguyên các quyền hiện tại</li>`;
+    }
+
+    function confirmRoleChange() {
+      const user = usersList.find((u) => u.id === roleChangeTargetUserId);
+      if (!user) return;
+      const newRole = document.getElementById('roleModalSelect').value;
+      const oldRole = user.role;
+
+      if (oldRole === newRole) {
+        closeRoleChangeModal();
+        showToast('Vai trò không thay đổi', 'warning');
+        return;
+      }
+
+      // Kiểm tra nếu Mentor đang kèm nhân sự thì bắt buộc bàn giao trước (Mục 5.2)
+      const mentees = getMenteesForMentor(user);
+      if (oldRole === 'mentor' && mentees.length > 0 && newRole !== 'mentor') {
+        closeRoleChangeModal();
+        openReassignModal(user, 'change_role', newRole);
+        return;
+      }
+
+      applyRoleChange(user, newRole);
+      closeRoleChangeModal();
+    }
+
+    function applyRoleChange(user, newRole) {
+      const oldRole = user.role;
+      user.role = newRole;
+      lastHighlightedUserId = user.id;
+
+      addAuditLog({
+        action: 'change_role',
+        target: `${user.name} (${user.email})`,
+        before: oldRole,
+        after: newRole,
+        detail: `Đổi vai trò từ ${ROLE_META[oldRole]?.label} sang ${ROLE_META[newRole]?.label}`
+      });
+
+      renderAll();
+      showToast(`Đã đổi vai trò ${user.name}: ${ROLE_META[oldRole]?.label} → ${ROLE_META[newRole]?.label}`, 'success');
+    }
+
+    // ================= KHÓA / MỞ KHÓA & BÀN GIAO MENTOR (MỤC 4.1 & 5.2) =================
+    function handleToggleLockUser(userId) {
+      const user = usersList.find((u) => u.id === userId);
+      if (!user) return;
+
+      if (user.status !== 'locked') {
+        // Đang muốn Khóa
+        if (user.id === CURRENT_ADMIN_ID) {
+          showToast('Rào chắn an toàn: Bạn không thể tự khóa tài khoản Admin đang đăng nhập.', 'error');
+          return;
+        }
+        if (isLastActiveAdmin(user.id)) {
+          showToast('Rào chắn an toàn: Hệ thống luôn phải còn ít nhất 1 Admin đang hoạt động.', 'error');
+          return;
+        }
+
+        // Nếu là Mentor đang kèm nhân sự -> Bắt buộc chuyển nhân sự cho Mentor khác trước (Mục 5.2)
+        const mentees = getMenteesForMentor(user);
+        if (user.role === 'mentor' && mentees.length > 0) {
+          openReassignModal(user, 'lock');
+          return;
+        }
+
+        user.status = 'locked';
+        lastHighlightedUserId = user.id;
+        addAuditLog({
+          action: 'lock_user',
+          target: `${user.name} (${user.email})`,
+          detail: 'Khóa tạm thời quyền truy cập tài khoản (bảo toàn lịch sử hội nhập)'
+        });
+        renderAll();
+        showToast(`Đã khóa tài khoản ${user.name}`, 'warning');
+      } else {
+        // Mở khóa
+        user.status = 'active';
+        lastHighlightedUserId = user.id;
+        addAuditLog({
+          action: 'lock_user',
+          target: `${user.name} (${user.email})`,
+          detail: 'Mở khóa tài khoản trở lại trạng thái Đang hoạt động'
+        });
+        renderAll();
+        showToast(`Đã mở khóa tài khoản ${user.name}`, 'success');
+      }
+    }
+
+    function openReassignModal(mentorUser, nextAction, newRole = null) {
+      const mentees = getMenteesForMentor(mentorUser);
+      const otherMentors = usersList.filter(
+        (u) => u.role === 'mentor' && u.status === 'active' && u.id !== mentorUser.id
+      );
+
+      if (otherMentors.length === 0) {
+        showToast('Không còn Mentor nào khác đang hoạt động để tiếp nhận bàn giao!', 'error');
+        return;
+      }
+
+      pendingReassignContext = { mentorUser, nextAction, newRole };
+
+      const actionText =
+        nextAction === 'lock'
+          ? 'khóa tài khoản'
+          : nextAction === 'delete'
+          ? 'xóa tài khoản'
+          : `đổi vai trò sang ${ROLE_META[newRole]?.label || newRole}`;
+
+      document.getElementById('reassignModalDesc').innerHTML = `
+        Mentor <strong>${mentorUser.name}</strong> hiện đang trực tiếp kèm cặp <strong>${mentees.length} nhân sự mới</strong>.
+        Theo quy tắc an toàn hệ thống, bạn cần chọn một Mentor khác tiếp nhận trước khi <strong>${actionText}</strong>.
+      `;
+
+      document.getElementById('reassignMenteeList').innerHTML = mentees
+        .map((m) => `<li>${m.name} <span class="text-slate-500 font-normal">(${m.department || 'New Hire'})</span></li>`)
+        .join('');
+
+      document.getElementById('reassignTargetMentor').innerHTML = otherMentors
+        .map(
+          (m) => `
+          <option value="${m.id}">
+            ${m.name} (${m.department || 'Mentor'} • Đang kèm ${getMenteesForMentor(m).length} người)
+          </option>
+        `
+        )
+        .join('');
+
+      document.getElementById('reassignMentorModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeReassignModal() {
+      document.getElementById('reassignMentorModal').classList.add('hidden');
+      pendingReassignContext = null;
+    }
+
+    function confirmMentorReassignment() {
+      if (!pendingReassignContext) return;
+      const { mentorUser, nextAction, newRole } = pendingReassignContext;
+      const targetMentorId = document.getElementById('reassignTargetMentor').value;
+      const targetMentor = usersList.find((u) => u.id === targetMentorId);
+      if (!targetMentor) return;
+
+      const newMentorProfileId = targetMentor.profileId || targetMentor.id;
+      const mentees = getMenteesForMentor(mentorUser);
+
+      // Chuyển toàn bộ Mentee sang Mentor mới
+      mentees.forEach((nh) => {
+        nh.mentorId = newMentorProfileId;
+        nh.mentorName = targetMentor.name;
+      });
+
+      // Đồng bộ sang bảng newHires trong LocalStorage
+      if (window.API) {
+        const db = API.getDB() || {};
+        if (Array.isArray(db.newHires)) {
+          db.newHires.forEach((nh) => {
+            if (nh.mentorId === mentorUser.profileId || nh.mentorName === mentorUser.name) {
+              nh.mentorId = newMentorProfileId;
+              nh.mentorName = targetMentor.name;
+            }
+          });
+          API.saveDB(db);
+        }
+      }
+
+      addAuditLog({
+        action: 'update_user',
+        target: `${mentorUser.name} → ${targetMentor.name}`,
+        detail: `Bàn giao ${mentees.length} Mentee từ ${mentorUser.name} sang Mentor ${targetMentor.name}`
+      });
+
+      closeReassignModal();
+
+      // Thực thi thao tác tiếp theo sau khi đã bàn giao xong
+      if (nextAction === 'lock') {
+        mentorUser.status = 'locked';
+        lastHighlightedUserId = mentorUser.id;
+        addAuditLog({
+          action: 'lock_user',
+          target: `${mentorUser.name} (${mentorUser.email})`,
+          detail: `Khóa tài khoản sau khi đã bàn giao ${mentees.length} Mentee cho ${targetMentor.name}`
+        });
+        renderAll();
+        showToast(`Đã bàn giao ${mentees.length} Mentee cho ${targetMentor.name} và khóa ${mentorUser.name}`, 'success');
+      } else if (nextAction === 'change_role') {
+        applyRoleChange(mentorUser, newRole);
+      } else if (nextAction === 'delete') {
+        openDeleteConfirmModal(mentorUser.id);
+      }
+    }
+
+    // ================= XÓA TÀI KHOẢN (XÁC NHẬN GÕ EMAIL + HOÀN TÁC 5 GIÂY KIỂU GMAIL - MỤC 5.2 & 5.3) =================
+    function initiateDeleteUser(userId) {
+      const user = usersList.find((u) => u.id === userId);
+      if (!user) return;
+
+      // Rào chắn 1: Không cho Admin tự xóa chính mình
+      if (user.id === CURRENT_ADMIN_ID) {
+        showToast('Rào chắn an toàn: Bạn không được tự xóa tài khoản Admin của chính mình!', 'error');
+        return;
+      }
+
+      // Rào chắn 2: Không cho xóa Admin cuối cùng
+      if (isLastActiveAdmin(user.id)) {
+        showToast('Rào chắn an toàn: Hệ thống luôn phải còn ít nhất 1 Admin đang hoạt động.', 'error');
+        return;
+      }
+
+      // Rào chắn 3: Nếu Mentor đang kèm nhân sự -> bắt buộc bàn giao trước
+      const mentees = getMenteesForMentor(user);
+      if (user.role === 'mentor' && mentees.length > 0) {
+        openReassignModal(user, 'delete');
+        return;
+      }
+
+      openDeleteConfirmModal(userId);
+    }
+
+    function openDeleteConfirmModal(userId) {
+      const user = usersList.find((u) => u.id === userId);
+      if (!user) return;
+      deleteTargetUserId = userId;
+      document.getElementById('deleteTargetEmailCode').textContent = user.email;
+      const input = document.getElementById('deleteConfirmEmailInput');
+      input.value = '';
+      document.getElementById('deleteConfirmSubmitBtn').disabled = true;
+      document.getElementById('deleteConfirmModal').classList.remove('hidden');
+      setTimeout(() => input.focus(), 80);
+      lucide.createIcons();
+    }
+
+    function closeDeleteModal() {
+      document.getElementById('deleteConfirmModal').classList.add('hidden');
+      deleteTargetUserId = null;
+    }
+
+    function validateDeleteEmailConfirmation() {
+      const user = usersList.find((u) => u.id === deleteTargetUserId);
+      if (!user) return;
+      const typed = document.getElementById('deleteConfirmEmailInput').value.trim().toLowerCase();
+      document.getElementById('deleteConfirmSubmitBtn').disabled = typed !== user.email.toLowerCase();
+    }
+
+    function executeConfirmedDelete() {
+      const userId = deleteTargetUserId;
+      closeDeleteModal();
+      performSoftDeleteWithUndo(userId);
+    }
+
+    // Mục 5.3 & 7: Thu gọn dòng + Hiện thanh đếm ngược Hoàn tác 5 giây kiểu Gmail
+    function performSoftDeleteWithUndo(userId) {
+      const idx = usersList.findIndex((u) => u.id === userId);
+      if (idx === -1) return;
+      const user = usersList[idx];
+
+      // Hiệu ứng thu gọn + mờ dần dòng trên bảng (Mục 7)
+      const rowEl = document.getElementById(`userRow-${userId}`);
+      if (rowEl) {
+        rowEl.classList.add('row-collapsing');
+      }
+
+      setTimeout(() => {
+        const currentIdx = usersList.findIndex((u) => u.id === userId);
+        if (currentIdx === -1) return;
+        const [removedUser] = usersList.splice(currentIdx, 1);
+        selectedUserIds.delete(userId);
+        renderAll();
+
+        // Tạo thông báo Hoàn tác kèm thanh đếm ngược 5 giây
+        const container = document.getElementById('toast-container');
+        const toastEl = document.createElement('div');
+        toastEl.className =
+          'pointer-events-auto relative overflow-hidden bg-slate-900 text-white px-4 py-3.5 rounded-2xl shadow-2xl border border-slate-700 flex items-center justify-between gap-4 text-xs animate-fade-in';
+        toastEl.innerHTML = `
+          <div class="flex items-center gap-2.5 min-w-0">
+            <i data-lucide="trash-2" class="w-4 h-4 text-rose-400 shrink-0"></i>
+            <span class="truncate">Đã xóa tài khoản <strong>${removedUser.name}</strong></span>
+          </div>
+          <button onclick="undoUserDeletion('${removedUser.id}')" class="shrink-0 px-3 py-1 rounded-lg bg-[#1F5AFE] hover:bg-blue-500 text-white font-bold transition">
+            Hoàn tác
+          </button>
+          <div class="absolute bottom-0 left-0 right-0 h-1 bg-slate-800">
+            <div class="h-full bg-[#1F5AFE] undo-progress-bar"></div>
+          </div>
+        `;
+        container.appendChild(toastEl);
+        lucide.createIcons();
+
+        // Hết 5 giây mới xóa thật khỏi LocalStorage (Mục 5.3)
+        const timeoutId = setTimeout(() => {
+          pendingUndoDeletions.delete(removedUser.id);
+          toastEl.style.opacity = '0';
+          setTimeout(() => toastEl.remove(), 250);
+
+          // Đồng bộ xóa thật vào LocalStorage & ghi Audit Log
+          addAuditLog({
+            action: 'delete_user',
+            target: `${removedUser.name} (${removedUser.email})`,
+            detail: `Xóa vĩnh viễn tài khoản vai trò ${ROLE_META[removedUser.role]?.label} khỏi hệ thống`
+          });
+        }, 5000);
+
+        pendingUndoDeletions.set(removedUser.id, {
+          user: removedUser,
+          index: currentIdx,
+          timeoutId,
+          toastEl
+        });
+      }, 240);
+    }
+
+    function undoUserDeletion(userId) {
+      const pending = pendingUndoDeletions.get(userId);
+      if (!pending) return;
+
+      clearTimeout(pending.timeoutId);
+      pendingUndoDeletions.delete(userId);
+      if (pending.toastEl) pending.toastEl.remove();
+
+      const insertIdx = Math.min(pending.index, usersList.length);
+      usersList.splice(insertIdx, 0, pending.user);
+      lastHighlightedUserId = pending.user.id;
+      persistAllData();
+      renderAll();
+      showToast(`Đã hoàn tác và khôi phục tài khoản ${pending.user.name}!`, 'success');
+    }
+
+    // ================= THAO TÁC HÀNG LOẠT (BULK ACTIONS - MỤC 3 & 8) =================
+    function toggleSelectRow(userId, checked) {
+      if (checked) {
+        selectedUserIds.add(userId);
+      } else {
+        selectedUserIds.delete(userId);
+      }
+      updateBulkActionBar();
+      const filtered = getFilteredUsers();
+      const selectAllEl = document.getElementById('selectAllCheckbox');
+      if (selectAllEl) {
+        selectAllEl.checked = filtered.length > 0 && filtered.every((u) => selectedUserIds.has(u.id));
+      }
+    }
+
+    function toggleSelectAll(checked) {
+      const filtered = getFilteredUsers();
+      filtered.forEach((u) => {
+        if (checked) selectedUserIds.add(u.id);
+        else selectedUserIds.delete(u.id);
+      });
+      renderUserTable();
+      updateBulkActionBar();
+      lucide.createIcons();
+    }
+
+    function clearBulkSelection() {
+      selectedUserIds.clear();
+      renderUserTable();
+      updateBulkActionBar();
+      lucide.createIcons();
+    }
+
+    function updateBulkActionBar() {
+      const bar = document.getElementById('bulkActionBar');
+      const countEl = document.getElementById('bulkSelectedCount');
+      countEl.textContent = selectedUserIds.size;
+      if (selectedUserIds.size > 0 && activeTab === 'users') {
+        bar.classList.remove('hidden');
+      } else {
+        bar.classList.add('hidden');
+      }
+    }
+
+    function bulkLockAccounts() {
+      let changed = 0;
+      selectedUserIds.forEach((id) => {
+        if (id === CURRENT_ADMIN_ID || isLastActiveAdmin(id)) return;
+        const u = usersList.find((item) => item.id === id);
+        if (!u) return;
+        if (u.role === 'mentor' && getMenteesForMentor(u).length > 0) return;
+        u.status = u.status === 'locked' ? 'active' : 'locked';
+        changed++;
+      });
+
+      if (changed > 0) {
+        addAuditLog({
+          action: 'lock_user',
+          target: `${changed} tài khoản được chọn`,
+          detail: 'Thực hiện khóa / mở khóa hàng loạt từ thanh công cụ nổi'
+        });
+        clearBulkSelection();
+        renderAll();
+        showToast(`Đã cập nhật trạng thái cho ${changed} tài khoản (bảo vệ Admin & Mentor đang kèm người)`, 'success');
+      } else {
+        showToast('Các tài khoản đã chọn thuộc diện bảo vệ (Admin hoặc Mentor đang kèm Mentee).', 'warning');
+      }
+    }
+
+    function bulkChangeRolePrompt() {
+      const firstId = Array.from(selectedUserIds).find((id) => id !== CURRENT_ADMIN_ID);
+      if (!firstId) {
+        showToast('Không thể đổi vai trò của tài khoản Admin đang đăng nhập.', 'error');
+        return;
+      }
+      openRoleChangeModal(firstId);
+    }
+
+    function bulkDeleteAccounts() {
+      const firstDeletable = Array.from(selectedUserIds).find((id) => id !== CURRENT_ADMIN_ID && !isLastActiveAdmin(id));
+      if (!firstDeletable) {
+        showToast('Rào chắn an toàn: Không thể xóa tài khoản Admin của chính mình.', 'error');
+        return;
+      }
+      initiateDeleteUser(firstDeletable);
+    }
+
+    // ================= RENDER TAB 2: MA TRẬN PHÂN QUYỀN (MỤC 5.1) =================
+    function renderRbacMatrix() {
+      const tbody = document.getElementById('rbacMatrixBody');
+      if (!tbody) return;
+
+      const renderCell = (allowed) =>
+        allowed
+          ? `<span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-emerald-50 text-emerald-600 ring-1 ring-inset ring-emerald-600/20" title="Được cấp quyền"><i data-lucide="check" class="w-4 h-4"></i></span>`
+          : `<span class="inline-flex items-center justify-center w-6 h-6 rounded-lg text-slate-300" title="Không áp dụng"><i data-lucide="minus" class="w-4 h-4"></i></span>`;
+
+      tbody.innerHTML = RBAC_PERMISSIONS.map(
+        (p) => `
+        <tr class="hover:bg-slate-50/80 transition-colors">
+          <td class="py-3.5 px-5">
+            <div class="font-bold text-slate-900">${p.title}</div>
+            <div class="text-[11px] text-slate-500 mt-0.5">${p.desc}</div>
+          </td>
+          <td class="py-3.5 px-4 text-center">${renderCell(p.roles.newhire)}</td>
+          <td class="py-3.5 px-4 text-center">${renderCell(p.roles.mentor)}</td>
+          <td class="py-3.5 px-4 text-center">${renderCell(p.roles.hr)}</td>
+          <td class="py-3.5 px-4 text-center">${renderCell(p.roles.admin)}</td>
+        </tr>
+      `
+      ).join('');
+    }
+
+    // ================= RENDER TAB 3: NHẬT KÝ HOẠT ĐỘNG (MỤC 5.4) =================
+    function renderAuditLogs() {
+      const container = document.getElementById('auditLogsList');
+      if (!container) return;
+      const filterVal = document.getElementById('filterLogAction').value;
+      const filtered = auditLogsList.filter((l) => filterVal === 'all' || l.action === filterVal);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="py-12 text-center text-xs text-slate-500">
+            Chưa có bản ghi nhật ký nào thuộc nhóm thao tác này.
+          </div>
+        `;
+        return;
+      }
+
+      const actionMeta = {
+        create_user: { label: 'Tạo tài khoản', icon: 'user-plus', color: 'bg-emerald-50 text-emerald-700 ring-emerald-600/20' },
+        update_user: { label: 'Cập nhật hồ sơ', icon: 'pencil', color: 'bg-blue-50 text-blue-700 ring-blue-600/20' },
+        change_role: { label: 'Đổi vai trò', icon: 'repeat', color: 'bg-indigo-50 text-indigo-700 ring-indigo-600/20' },
+        lock_user: { label: 'Khóa / Mở khóa', icon: 'lock', color: 'bg-amber-50 text-amber-800 ring-amber-600/20' },
+        delete_user: { label: 'Xóa tài khoản', icon: 'trash-2', color: 'bg-rose-50 text-rose-700 ring-rose-600/20' },
+        impersonate: { label: 'Thị sát View-As', icon: 'eye', color: 'bg-violet-50 text-violet-700 ring-violet-600/20' }
+      };
+
+      container.innerHTML = filtered
+        .map((log) => {
+          const meta = actionMeta[log.action] || actionMeta.update_user;
+          const timeStr = formatDateTime(log.time) || log.time;
+          const roleChangePill =
+            log.action === 'change_role' && log.before && log.after
+              ? `
+                <div class="inline-flex items-center gap-1.5 mt-1.5 px-2.5 py-1 rounded-lg bg-[#F8FAFC] border border-[#E2E8F0]">
+                  ${getRoleBadgeHtml(log.before)}
+                  <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-slate-400"></i>
+                  ${getRoleBadgeHtml(log.after)}
+                </div>
+              `
+              : '';
+
+          return `
+            <div class="py-4 flex items-start gap-3.5 text-xs">
+              <div class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ring-1 ring-inset ${meta.color}">
+                <i data-lucide="${meta.icon}" class="w-4 h-4"></i>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="font-bold text-slate-900">${log.actor}</span>
+                  <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold ring-1 ring-inset ${meta.color}">${meta.label}</span>
+                  <span class="font-semibold text-slate-800">${log.target}</span>
+                </div>
+                <p class="text-slate-600 mt-1 leading-relaxed">${log.detail || ''}</p>
+                ${roleChangePill}
+              </div>
+              <div class="text-[11px] text-slate-400 font-medium tabular-nums shrink-0">
+                ${timeStr}
+              </div>
+            </div>
+          `;
+        })
+        .join('');
+
+      lucide.createIcons();
+    }
+
+    // ================= CHUYỂN TAB (MỤC 3 & 7) =================
+    function switchTab(tabName) {
+      activeTab = tabName;
+      ['users', 'matrix', 'logs'].forEach((t) => {
+        const panel = document.getElementById(`tabPanel-${t}`);
+        const btn = document.getElementById(`tabBtn-${t}`);
+        if (t === tabName) {
+          panel.classList.remove('hidden');
+          btn.className =
+            'inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition bg-slate-900 text-white shadow-2xs';
+        } else {
+          panel.classList.add('hidden');
+          btn.className =
+            'inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition text-slate-600 hover:bg-slate-100 hover:text-slate-900';
+        }
+      });
+      updateBulkActionBar();
+      lucide.createIcons();
+    }
+
+    async function resetDemoDatabase() {
+      if (window.API) {
+        await API.resetDB();
+      }
+      await loadInitialData();
+      showToast('Đã khôi phục toàn bộ dữ liệu mẫu AD02 về trạng thái chuẩn!', 'success');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadInitialData();
+    });
+  </script>
 </body>
 </html>
-
-
