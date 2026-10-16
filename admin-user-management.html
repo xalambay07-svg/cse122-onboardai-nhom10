@@ -1103,8 +1103,10 @@
     }
 
     function logout() {
-      localStorage.removeItem('currentUser');
-      localStorage.removeItem('isLoggedIn');
+      ['currentUser', 'ONBOARDAI_CURRENT_USER', 'isLoggedIn', 'userRole']
+        .forEach(k => localStorage.removeItem(k));
+      ['isImpersonating', 'impersonatedUserName', 'impersonateReturnUrl']
+        .forEach(k => sessionStorage.removeItem(k));
     }
 
     function showToast(message, type = 'success') {
@@ -1255,7 +1257,8 @@
     async function loadInitialData() {
       let db = null;
       if (window.API) {
-        db = await API.init();
+        await API.init();
+        db = API.getDB();
       }
       if (db && Array.isArray(db.users) && db.users.length > 0 && db.users[0].status) {
         usersList = db.users;
@@ -2758,8 +2761,18 @@
     }
 
     async function resetDemoDatabase() {
+      if (!confirm('Khôi phục toàn bộ CSDL (bao gồm danh sách tài khoản, tiến độ checklist của New Hire và dữ liệu Mentor) về trạng thái mẫu ban đầu?')) {
+        return;
+      }
       if (window.API) {
-        await API.resetDB();
+        if (typeof API.resetDB === 'function') {
+          await API.resetDB();
+        } else {
+          localStorage.removeItem('ONBOARDAI_DB_V4');
+          await API.init();
+        }
+      } else {
+        localStorage.removeItem('ONBOARDAI_DB_V4');
       }
       await loadInitialData();
       showToast('Đã khôi phục toàn bộ dữ liệu mẫu AD02 về trạng thái chuẩn!', 'success');

@@ -196,7 +196,7 @@
         </div>
 
         <div class="flex items-center gap-3">
-          <button onclick="filterTable('all')" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700 transition">
+          <button onclick="refreshDashboardData()" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700 transition">
             <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-slate-500"></i>
             <span>Làm mới số liệu</span>
           </button>
@@ -645,8 +645,10 @@
     }
 
     function logout() {
-      localStorage.removeItem('currentUser');
-      localStorage.removeItem('isLoggedIn');
+      ['currentUser', 'ONBOARDAI_CURRENT_USER', 'isLoggedIn', 'userRole']
+        .forEach(k => localStorage.removeItem(k));
+      ['isImpersonating', 'impersonatedUserName', 'impersonateReturnUrl']
+        .forEach(k => sessionStorage.removeItem(k));
     }
 
     // ================= DRAWER LOGIC =================
@@ -719,6 +721,44 @@
       if (elOnTrack) elOnTrack.textContent = onTrackCount;
     }
 
+    // Tính toán và cập nhật 4 thẻ KPI từ dữ liệu thật (Lỗi 3)
+    function updateKpiMetrics(animate = true) {
+      const totalOnboarding = newHiresData.filter(d => d.status !== 'completed').length;
+      const avgProgress = newHiresData.length > 0
+        ? Math.round(newHiresData.reduce((sum, d) => sum + (Number(d.progress) || 0), 0) / newHiresData.length)
+        : 0;
+      const atRiskCount = newHiresData.filter(d => d.status === 'at_risk').length;
+      const blockedItCount = newHiresData.filter(d => d.blocked === true).length;
+
+      if (animate) {
+        countUp(document.getElementById('kpiTotalOnboarding'), totalOnboarding);
+        countUp(document.getElementById('kpiAvgProgress'), avgProgress, { suffix: '%' });
+        countUp(document.getElementById('kpiAtRisk'), atRiskCount);
+        countUp(document.getElementById('kpiBlockedIt'), blockedItCount);
+      } else {
+        const elTotal = document.getElementById('kpiTotalOnboarding');
+        const elAvg = document.getElementById('kpiAvgProgress');
+        const elRisk = document.getElementById('kpiAtRisk');
+        const elBlocked = document.getElementById('kpiBlockedIt');
+        if (elTotal) elTotal.textContent = totalOnboarding;
+        if (elAvg) elAvg.textContent = avgProgress + '%';
+        if (elRisk) elRisk.textContent = atRiskCount;
+        if (elBlocked) elBlocked.textContent = blockedItCount;
+      }
+
+      const avgBar = document.getElementById('kpiAvgProgressBar');
+      if (avgBar) {
+        if (animate && !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+          avgBar.style.width = '0%';
+          requestAnimationFrame(() => {
+            setTimeout(() => { avgBar.style.width = avgProgress + '%'; }, 50);
+          });
+        } else {
+          avgBar.style.width = avgProgress + '%';
+        }
+      }
+    }
+
     function confirmSendIntervention(type) {
       closeDrawer();
       if (type === 'mentor') {
@@ -730,6 +770,7 @@
         if (an) an.blocked = false;
         showToast('Đã đẩy Ticket #TK-IT-9021 sang mức độ Khẩn cấp tới Trưởng nhóm IT!', 'success');
       }
+      updateKpiMetrics(false);
       updateFilterTabCounts();
       renderTable();
     }
@@ -847,16 +888,32 @@
     }
 
     // ================= 5. KHỞI TẠO BIỂU ĐỒ CHART.JS =================
+    let deptBarChartInstance = null;
+    let statusDoughnutChartInstance = null;
+
     function initCharts() {
+      if (deptBarChartInstance) deptBarChartInstance.destroy();
+      if (statusDoughnutChartInstance) statusDoughnutChartInstance.destroy();
+
+      // Tính tiến độ TB theo từng phòng ban từ newHiresData
+      const calcDeptAvg = (deptKeyword, fallbackVal) => {
+        const members = newHiresData.filter(h => (h.department || '').includes(deptKeyword));
+        if (members.length === 0) return fallbackVal;
+        return Math.round(members.reduce((sum, h) => sum + (Number(h.progress) || 0), 0) / members.length);
+      };
+      const techAvg = calcDeptAvg('Kỹ thuật', 30);
+      const mktAvg = calcDeptAvg('Marketing', 0);
+      const hrAvg = calcDeptAvg('Nhân sự', 100);
+
       // 1. Biểu đồ Cột: Tiến độ theo Phòng ban (cột mọc lần lượt 150ms theo mục 3.2)
       const ctxBar = document.getElementById('deptBarChart').getContext('2d');
-      new Chart(ctxBar, {
+      deptBarChartInstance = new Chart(ctxBar, {
         type: 'bar',
         data: {
           labels: ['Kỹ thuật Công nghệ', 'Marketing & TT', 'Nhân sự & Vận hành'],
           datasets: [{
             label: 'Tiến độ TB',
-            data: [52.5, 25.0, 100.0],
+            data: [techAvg, mktAvg, hrAvg],
             backgroundColor: [
               '#1F5AFE',
               '#F59E0B',
@@ -907,14 +964,18 @@
         }
       });
 
+      const onTrackCount = newHiresData.filter(h => h.status === 'on_track').length;
+      const atRiskCount = newHiresData.filter(h => h.status === 'at_risk').length;
+      const completedCount = newHiresData.filter(h => h.status === 'completed').length;
+
       // 2. Biểu đồ Tròn Doughnut: Cơ cấu trạng thái (cutout: 75%)
       const ctxDoughnut = document.getElementById('statusDoughnutChart').getContext('2d');
-      new Chart(ctxDoughnut, {
+      statusDoughnutChartInstance = new Chart(ctxDoughnut, {
         type: 'doughnut',
         data: {
           labels: ['Đúng tiến độ', 'Có rủi ro', 'Hoàn thành'],
           datasets: [{
-            data: [2, 1, 1],
+            data: [onTrackCount, atRiskCount, completedCount],
             backgroundColor: [
               '#1F5AFE',
               '#F59E0B',
@@ -958,37 +1019,54 @@
       window.location.href = savedReturn || returnUrl;
     }
 
+    // Nạp dữ liệu thật từ API và tính lại % tiến độ theo công thức chung (Lỗi 3)
+    async function loadLiveHRData() {
+      if (!window.API) return;
+      try {
+        await API.init();
+        const liveHires = (typeof API.getNewHires === 'function')
+          ? await API.getNewHires()
+          : API.getAll('newHires');
+        const allTasks = API.getAll('tasks') || [];
+
+        if (liveHires && liveHires.length > 0) {
+          newHiresData = liveHires.map(h => {
+            const hireTasks = allTasks.filter(t => t.newHireId === h.id || t.userId === h.id);
+            const total = hireTasks.length;
+            const completed = hireTasks.filter(t => t.status === 'completed' || t.status === 'done').length;
+            const computedProgress = total > 0
+              ? Math.round((completed / total) * 100)
+              : (typeof h.progress === 'number' ? h.progress : 0);
+            const hasBlockedTask = hireTasks.some(t => t.status === 'blocked');
+            const isBlocked = typeof h.blocked === 'boolean'
+              ? h.blocked
+              : (total > 0 ? hasBlockedTask : h.id === 'NH01');
+
+            return {
+              ...h,
+              progress: computedProgress,
+              blocked: isBlocked,
+              blockedReason: h.blockedReason || (isBlocked ? 'Chờ IT bàn giao SSH Key & Repo' : '')
+            };
+          });
+        }
+      } catch (e) {}
+    }
+
+    async function refreshDashboardData() {
+      await loadLiveHRData();
+      updateKpiMetrics(true);
+      updateFilterTabCounts();
+      renderTable();
+      initCharts();
+      showToast('Đã đồng bộ số liệu mới nhất từ hệ thống!', 'success');
+    }
+
     // ================= KHỞI CHẠY TRANG =================
     document.addEventListener('DOMContentLoaded', async () => {
       checkAdminImpersonation();
-      // Đọc API mock nếu có
-      if (window.API) {
-        try {
-          await API.init();
-          const liveHires = await API.getNewHires();
-          if (liveHires && liveHires.length > 0) {
-            newHiresData = liveHires.map(h => ({
-              ...h,
-              blocked: h.id === 'NH01',
-              blockedReason: h.id === 'NH01' ? 'Chờ IT bàn giao SSH Key & Repo' : ''
-            }));
-          }
-        } catch (e) {}
-      }
-
-      countUp(document.getElementById('kpiTotalOnboarding'), 4);
-      countUp(document.getElementById('kpiAvgProgress'), 58, { suffix: '%' });
-      countUp(document.getElementById('kpiAtRisk'), 1);
-      countUp(document.getElementById('kpiBlockedIt'), 1);
-
-      const avgBar = document.getElementById('kpiAvgProgressBar');
-      if (avgBar && !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
-        avgBar.style.width = '0%';
-        requestAnimationFrame(() => {
-          setTimeout(() => { avgBar.style.width = '57.5%'; }, 50);
-        });
-      }
-
+      await loadLiveHRData();
+      updateKpiMetrics(true);
       updateFilterTabCounts();
       renderTable();
       initCharts();

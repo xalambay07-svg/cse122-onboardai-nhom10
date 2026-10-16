@@ -596,8 +596,10 @@
     };
 
     function logout() {
-      localStorage.removeItem('currentUser');
-      localStorage.removeItem('isLoggedIn');
+      ['currentUser', 'ONBOARDAI_CURRENT_USER', 'isLoggedIn', 'userRole']
+        .forEach(k => localStorage.removeItem(k));
+      ['isImpersonating', 'impersonatedUserName', 'impersonateReturnUrl']
+        .forEach(k => sessionStorage.removeItem(k));
     }
 
     // Hàm đếm số tăng dần (Mục 3.2)
