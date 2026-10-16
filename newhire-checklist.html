@@ -190,7 +190,7 @@
                 <i data-lucide="check-circle" class="w-4 h-4 text-[#00B67A] shrink-0"></i>
               </div>
               <div class="text-xs font-bold text-slate-900 truncate">Chào sân & Thủ tục</div>
-              <div class="text-xs text-emerald-700 mt-0.5 font-medium">Hoàn thành 100%</div>
+              <div id="tabDay1ProgressText" class="text-xs text-emerald-700 mt-0.5 font-medium tabular-nums">Hoàn thành 100%</div>
             </button>
 
             <!-- Chặng 2 (Mặc định - Sửa Lỗi #2: Tính % chặng động từ danh sách việc) -->
@@ -682,23 +682,195 @@
       }, 150);
     }
 
+    // Dữ liệu nhiệm vụ theo từng chặng (bổ sung cho Chặng 1, Chặng 3, Chặng 4 khi mock-data chỉ có Tuần 1)
+    const FALLBACK_PHASE_TASKS = {
+      'Day 1': [
+        {
+          id: 'D01',
+          phase: 'Day 1',
+          title: 'Nhận bàn giao thiết bị làm việc (MacBook Pro, Thẻ từ nhân viên & Bộ Welcome Kit)',
+          category: 'IT & Công cụ',
+          dueDate: 'Ngày 1, 09:30',
+          status: 'completed',
+          priority: 'Bắt buộc',
+          description: 'Kiểm tra cấu hình máy tính, ký biên bản bàn giao tài sản với bộ phận Hành chính - IT.',
+          aiActionType: 'guide_3_steps',
+          proof: ''
+        },
+        {
+          id: 'D02',
+          phase: 'Day 1',
+          title: 'Ký kết Hợp đồng thử việc, Cam kết bảo mật (NDA) và hoàn tất hồ sơ Nhân sự',
+          category: 'Đào tạo & Quy chuẩn',
+          dueDate: 'Ngày 1, 11:00',
+          status: 'completed',
+          priority: 'Bắt buộc',
+          description: 'Nộp bản sao công chứng giấy tờ tùy thân và ký xác nhận quy chế bảo mật thông tin OnboardAI.',
+          aiActionType: '',
+          proof: ''
+        },
+        {
+          id: 'D03',
+          phase: 'Day 1',
+          title: 'Tham quan văn phòng (Office Tour) và buổi chào sân cùng Phòng Kỹ thuật Công nghệ',
+          category: 'Gắn kết đội ngũ',
+          dueDate: 'Ngày 1, 14:30',
+          status: 'completed',
+          priority: 'Tiêu chuẩn',
+          description: 'Làm quen không gian làm việc, khu vực Pantry, phòng họp và gặp gỡ trực tiếp Mentor Trần Thị Mai.',
+          aiActionType: 'smart_template',
+          proof: ''
+        }
+      ],
+      'Tháng 1': [
+        {
+          id: 'M1_01',
+          phase: 'Tháng 1',
+          title: 'Hoàn thành Pull Request đầu tiên trên nhánh phát triển (Development Branch)',
+          category: 'Kỹ thuật',
+          dueDate: 'Tuần 2 - Tháng 1',
+          status: 'pending',
+          priority: 'Bắt buộc',
+          description: 'Thực hiện 1 tính năng giao diện hoàn chỉnh, vượt qua quy trình Code Review từ Tech Lead.',
+          aiActionType: 'guide_3_steps',
+          proof: ''
+        },
+        {
+          id: 'M1_02',
+          phase: 'Tháng 1',
+          title: 'Tham gia buổi Sprint Planning & Retrospective đầu tiên cùng đội dự án',
+          category: 'Gắn kết đội ngũ',
+          dueDate: 'Tuần 3 - Tháng 1',
+          status: 'pending',
+          priority: 'Tiêu chuẩn',
+          description: 'Nắm bắt quy trình ước lượng Story Points và báo cáo tiến độ Daily Standup.',
+          aiActionType: 'smart_template',
+          proof: ''
+        },
+        {
+          id: 'M1_03',
+          phase: 'Tháng 1',
+          title: 'Đánh giá định kỳ 30 ngày thử việc (Mid-Probation Check-in) cùng Mentor & HR',
+          category: 'Định hướng công việc',
+          dueDate: 'Ngày thứ 30',
+          status: 'pending',
+          priority: 'Ưu tiên cao',
+          description: 'Rà soát mức độ thích nghi văn hóa, chất lượng đầu việc tháng đầu và tinh chỉnh mục tiêu tháng thứ 2.',
+          aiActionType: 'smart_template',
+          proof: ''
+        }
+      ],
+      'Tháng 2': [
+        {
+          id: 'M2_01',
+          phase: 'Tháng 2',
+          title: 'Chủ trì triển khai 1 module tính năng độc lập trên môi trường Staging',
+          category: 'Kỹ thuật',
+          dueDate: 'Tuần 6',
+          status: 'pending',
+          priority: 'Bắt buộc',
+          description: 'Đảm bảo hiệu năng giao diện, viết tài liệu hướng dẫn kỹ thuật và phối hợp kiểm thử cùng QA.',
+          aiActionType: 'guide_3_steps',
+          proof: ''
+        },
+        {
+          id: 'M2_02',
+          phase: 'Tháng 2',
+          title: 'Hoàn thiện Báo cáo tổng kết 60 ngày thử việc & Tự đánh giá OKRs cá nhân',
+          category: 'Định hướng công việc',
+          dueDate: 'Ngày thứ 55',
+          status: 'pending',
+          priority: 'Bắt buộc',
+          description: 'Tổng hợp các kết quả đạt được, minh chứng dự án và đề xuất lộ trình phát triển sau thử việc.',
+          aiActionType: 'smart_template',
+          proof: ''
+        },
+        {
+          id: 'M2_03',
+          phase: 'Tháng 2',
+          title: 'Tham gia Hội đồng đánh giá chính thức & Ký Hợp đồng lao động chính thức',
+          category: 'Đào tạo & Quy chuẩn',
+          dueDate: 'Ngày thứ 60',
+          status: 'pending',
+          priority: 'Ưu tiên cao',
+          description: 'Buổi tổng kết cùng Trưởng bộ phận, Mentor và Phòng Nhân sự để chính thức trở thành nhân viên OnboardAI.',
+          aiActionType: '',
+          proof: ''
+        }
+      ]
+    };
+
+    // Lấy danh sách task của một chặng cụ thể (ưu tiên dữ liệu từ API, nếu chặng phụ chưa có trong mock-data thì dùng FALLBACK_PHASE_TASKS)
+    function getTasksForPhase(phaseName, currentUser, allTasks) {
+      if (phaseName === 'Tuần 1') {
+        return allTasks.filter(t => t.newHireId === currentUser.id && (t.phase === 'Tuần 1' || !t.phase));
+      }
+      const dbPhaseTasks = allTasks.filter(t => t.newHireId === currentUser.id && t.phase === phaseName);
+      if (dbPhaseTasks.length > 0) return dbPhaseTasks;
+      return FALLBACK_PHASE_TASKS[phaseName] || [];
+    }
+
     // Chuyển chặng Stepper
     function switchPhase(phaseName) {
       currentActivePhase = phaseName;
-      document.querySelectorAll('.phase-tab').forEach(tab => {
-        tab.classList.remove('border-2', 'border-[#1F5AFE]', 'bg-blue-50/60', 'shadow-xs');
-      });
-      
       const tabIdMap = {
         'Day 1': 'tab-day1',
         'Tuần 1': 'tab-tuan1',
         'Tháng 1': 'tab-thang1',
         'Tháng 2': 'tab-thang2'
       };
+
+      // Reset tất cả các tab về trạng thái viền mặc định (tránh mất border trên Chặng 2 khi chuyển sang Chặng 1)
+      Object.entries(tabIdMap).forEach(([phase, id]) => {
+        const btn = document.getElementById(id);
+        if (!btn) return;
+        btn.classList.remove(
+          'active',
+          'border-2',
+          'border-[#1F5AFE]',
+          'bg-blue-50/60',
+          'bg-blue-50/20',
+          'border-blue-200',
+          'shadow-xs',
+          'border-[#00B67A]',
+          'bg-emerald-50/80',
+          'border',
+          'border-[#E2E8F0]',
+          'border-emerald-200/80',
+          'bg-emerald-50/50',
+          'bg-white',
+          'hover:bg-slate-50',
+          'hover:bg-emerald-50',
+          'hover:bg-blue-50/40'
+        );
+        if (phase === 'Day 1') {
+          btn.classList.add('border', 'border-emerald-200/80', 'bg-emerald-50/50', 'hover:bg-emerald-50');
+        } else if (phase === 'Tuần 1') {
+          btn.classList.add('border', 'border-blue-200', 'bg-blue-50/20', 'hover:bg-blue-50/40');
+        } else {
+          btn.classList.add('border', 'border-[#E2E8F0]', 'bg-white', 'hover:bg-slate-50');
+        }
+      });
+
+      // Áp dụng trạng thái active nổi bật cho tab đang chọn
       const activeBtn = document.getElementById(tabIdMap[phaseName]);
       if (activeBtn) {
-        activeBtn.classList.add('border-2', 'border-[#1F5AFE]', 'bg-blue-50/60', 'shadow-xs');
+        activeBtn.classList.remove(
+          'border',
+          'border-[#E2E8F0]',
+          'border-emerald-200/80',
+          'border-blue-200',
+          'bg-white',
+          'bg-emerald-50/50',
+          'bg-blue-50/20'
+        );
+        if (phaseName === 'Day 1') {
+          activeBtn.classList.add('active', 'border-2', 'border-[#00B67A]', 'bg-emerald-50/80', 'shadow-xs');
+        } else {
+          activeBtn.classList.add('active', 'border-2', 'border-[#1F5AFE]', 'bg-blue-50/60', 'shadow-xs');
+        }
       }
+
       renderTasksList();
       updatePhaseStats();
     }
@@ -714,6 +886,9 @@
 
     // Focus một task cụ thể
     function focusTask(taskId) {
+      if (currentActivePhase !== 'Tuần 1') {
+        switchPhase('Tuần 1');
+      }
       const el = document.getElementById(`task-card-${taskId}`);
       if (el) {
         el.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -755,7 +930,7 @@
     function renderTasksList() {
       const currentUser = API.getCurrentUser();
       const allTasks = API.getAll('tasks');
-      let tasks = allTasks.filter(t => t.newHireId === currentUser.id && (t.phase === currentActivePhase || currentActivePhase === 'Tuần 1'));
+      let tasks = [...getTasksForPhase(currentActivePhase, currentUser, allTasks)];
 
       const searchVal = document.getElementById('taskSearchInput').value.toLowerCase().trim();
       const catVal = document.getElementById('categoryFilter').value;
@@ -919,10 +1094,8 @@
           API.update('tasks', task.id, { status: newStatus });
           task.status = newStatus;
 
-          // Kiểm tra xem sau khi tick thì toàn bộ việc của chặng đã hoàn thành 100% chưa
-          const allAfter = API.getAll('tasks').filter(
-            (t) => t.newHireId === currentUser.id && (t.phase === currentActivePhase || currentActivePhase === 'Tuần 1')
-          );
+          // Kiểm tra xem sau khi tick thì toàn bộ việc của chặng đang xem đã hoàn thành 100% chưa
+          const allAfter = getTasksForPhase(currentActivePhase, currentUser, API.getAll('tasks'));
           const doneAfter = allAfter.filter((t) => t.status === 'completed').length;
           const justCompletedPhase = newStatus === 'completed' && allAfter.length > 0 && doneAfter === allAfter.length;
 
@@ -959,10 +1132,11 @@
     function updatePhaseStats() {
       const currentUser = API.getCurrentUser();
       const allTasks = API.getAll('tasks');
-      const userTasks = allTasks.filter(t => t.newHireId === currentUser.id && (t.phase === currentActivePhase || currentActivePhase === 'Tuần 1'));
-      
-      const total = userTasks.length;
-      const completed = userTasks.filter(t => t.status === 'completed').length;
+
+      // 1. Tính tiến độ của chặng ĐANG XEM (hiển thị ở góc phải trên "Tiến độ chặng hiện tại")
+      const activePhaseTasks = getTasksForPhase(currentActivePhase, currentUser, allTasks);
+      const total = activePhaseTasks.length;
+      const completed = activePhaseTasks.filter(t => t.status === 'completed').length;
       const remaining = Math.max(total - completed, 0);
       const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
 
@@ -979,16 +1153,32 @@
         document.getElementById('phaseProgressBar').style.width = `${percent}%`;
       });
 
-      // Sửa Lỗi #2: Cập nhật đúng % trên thẻ Chặng 2 (Tuần 1) thay vì viết cứng 60%
-      const tabTuan1Text = document.getElementById('tabTuan1ProgressText');
-      if (tabTuan1Text) {
-        tabTuan1Text.textContent = percent === 100 ? 'Hoàn thành 100%' : `Đang diễn ra (${percent}%)`;
+      // 2. Luôn tính riêng tiến độ của Chặng 1 (Day 1) và Chặng 2 (Tuần 1) để nhãn trên các thẻ Chặng và Sidebar KHÔNG bao giờ bị nhảy sai khi chuyển tab
+      const day1Tasks = getTasksForPhase('Day 1', currentUser, allTasks);
+      const day1Total = day1Tasks.length;
+      const day1Completed = day1Tasks.filter(t => t.status === 'completed').length;
+      const day1Percent = day1Total > 0 ? Math.round((day1Completed / day1Total) * 100) : 100;
+
+      const tabDay1Text = document.getElementById('tabDay1ProgressText');
+      if (tabDay1Text) {
+        tabDay1Text.textContent = day1Percent === 100 ? 'Hoàn thành 100%' : `Đang diễn ra (${day1Percent}%)`;
       }
 
-      // Hiện / ẩn thẻ chúc mừng Onbi vui khi hoàn thành 100% chặng (Mục 1.3 & 3.2)
+      const tuan1Tasks = getTasksForPhase('Tuần 1', currentUser, allTasks);
+      const tuan1Total = tuan1Tasks.length;
+      const tuan1Completed = tuan1Tasks.filter(t => t.status === 'completed').length;
+      const tuan1Remaining = Math.max(tuan1Total - tuan1Completed, 0);
+      const tuan1Percent = tuan1Total > 0 ? Math.round((tuan1Completed / tuan1Total) * 100) : 0;
+
+      const tabTuan1Text = document.getElementById('tabTuan1ProgressText');
+      if (tabTuan1Text) {
+        tabTuan1Text.textContent = tuan1Percent === 100 ? 'Hoàn thành 100%' : `Đang diễn ra (${tuan1Percent}%)`;
+      }
+
+      // Hiện / ẩn thẻ chúc mừng Onbi vui khi hoàn thành 100% Chặng 2 (Tuần 1)
       const celebCard = document.getElementById('phaseCelebrationCard');
       if (celebCard) {
-        if (total > 0 && remaining === 0) {
+        if (currentActivePhase === 'Tuần 1' && tuan1Total > 0 && tuan1Remaining === 0) {
           celebCard.classList.remove('hidden');
           celebCard.classList.add('flex');
         } else {
@@ -997,24 +1187,24 @@
         }
       }
 
-      // Cập nhật Cột mốc hành trình ở Sidebar (Mục 2)
+      // 3. Cập nhật Cột mốc hành trình ở Sidebar dựa trên tiến độ thực tế của Chặng 2 (Tuần 1)
       const sidebarBadge2 = document.getElementById('sidebarBadge2');
       const sidebarBadgeCount = document.getElementById('sidebarBadgeCount');
       const sidebarNextHint = document.getElementById('sidebarNextBadgeHint');
 
-      if (total > 0 && remaining === 0) {
+      if (tuan1Total > 0 && tuan1Remaining === 0) {
         sidebarBadge2.classList.remove('is-locked');
         sidebarBadge2.title = 'Tự lập – đã đạt';
         sidebarBadgeCount.textContent = '2/4';
         sidebarNextHint.innerHTML = `Tiếp theo: <b class="text-slate-900">Hòa nhập</b> &middot; chặng Tháng 1`;
       } else {
         sidebarBadge2.classList.add('is-locked');
-        sidebarBadge2.title = `Tự lập – còn ${remaining} việc`;
+        sidebarBadge2.title = `Tự lập – còn ${tuan1Remaining} việc`;
         sidebarBadgeCount.textContent = '1/4';
-        sidebarNextHint.innerHTML = `Tiếp theo: <b class="text-slate-900">Tự lập</b> &middot; còn ${remaining} việc`;
+        sidebarNextHint.innerHTML = `Tiếp theo: <b class="text-slate-900">Tự lập</b> &middot; còn ${tuan1Remaining} việc`;
       }
 
-      // Cập nhật Ô "Huy hiệu kế tiếp" theo chặng đang làm (Mục 2)
+      // 4. Cập nhật Ô "Huy hiệu kế tiếp" theo chặng đang xem
       const badgeMeta = PHASE_BADGE_MAP[currentActivePhase] || PHASE_BADGE_MAP['Tuần 1'];
       document.getElementById('nextBadgeImg').src = badgeMeta.img;
       document.getElementById('nextBadgeBackImg').src = badgeMeta.img;
@@ -1025,7 +1215,7 @@
 
       const frontIconWrap = document.getElementById('nextBadgeFrontIcon');
       const remainTextEl = document.getElementById('nextBadgeRemainText');
-      if (currentActivePhase === 'Day 1' || (total > 0 && remaining === 0)) {
+      if (total > 0 && remaining === 0) {
         frontIconWrap.classList.remove('is-locked');
         remainTextEl.innerHTML = `<strong class="text-emerald-700">Đã mở khóa cột mốc ${badgeMeta.name}!</strong>`;
       } else {
@@ -1062,6 +1252,13 @@
 
       inputEl.classList.remove('border-rose-500', 'ring-2', 'ring-rose-200');
       API.update('tasks', currentSelectedTaskId, { proof: url, status: 'completed' });
+      Object.values(FALLBACK_PHASE_TASKS).forEach(list => {
+        const found = list.find(t => t.id === currentSelectedTaskId);
+        if (found) {
+          found.proof = url;
+          found.status = 'completed';
+        }
+      });
       closeModal('proofModal');
       showToast('Đã nộp minh chứng thành công! Mentor sẽ nhận được thông báo.', 'success');
       renderTasksList();
