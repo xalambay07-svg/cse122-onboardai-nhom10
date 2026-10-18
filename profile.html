@@ -1,0 +1,2022 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hồ sơ cá nhân & Hồ sơ năng lực CV (COM03) | OnboardAI</title>
+  <link rel="icon" href="assets/images/brand/onboardai-mark-small.svg" type="image/svg+xml">
+
+  <!-- Font Inter Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- CSS Design System with Onboard.io SaaS Tokens & Animations -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#1F5AFE', 600: '#1F5AFE', 700: '#1748cc' },
+            onboard: {
+              bg: '#F1F5F9',
+              surface: '#FFFFFF',
+              border: '#E2E8F0',
+              blue: '#1F5AFE',
+              mint: '#00B67A'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Vector Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- API & LocalStorage Data Engine -->
+  <script src="js/api.js"></script>
+
+  <style>
+    @keyframes fadeInSlideUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .tab-panel {
+      animation: fadeInSlideUp 0.25s ease-out;
+    }
+    .avatar-option {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .avatar-option:hover {
+      transform: translateY(-2px);
+    }
+    .avatar-option.is-selected {
+      border-color: #1F5AFE;
+      box-shadow: 0 0 0 3px rgba(31, 90, 254, 0.2);
+    }
+    .micro-progress-track {
+      height: 6px;
+      background-color: #E2E8F0;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+    .micro-progress-fill {
+      height: 100%;
+      border-radius: 9999px;
+      transition: width 0.5s ease;
+    }
+    .input-error {
+      border-color: #ef4444 !important;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12) !important;
+    }
+    /* Workster Timeline Connector */
+    .cv-timeline-item {
+      position: relative;
+    }
+    .cv-timeline-item:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 19px;
+      top: 42px;
+      bottom: -20px;
+      width: 2px;
+      background: #E2E8F0;
+    }
+    @media print {
+      #appSidebar, header, #profileTabsNav, .no-print {
+        display: none !important;
+      }
+      body, main {
+        background: #fff !important;
+        padding: 0 !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-[#F1F5F9] text-slate-900 font-sans antialiased h-full flex flex-col">
+
+  <!-- Toast thông báo nổi -->
+  <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2.5 pointer-events-none max-w-sm w-full px-4 sm:px-0"></div>
+
+  <div class="flex h-full min-h-screen">
+    <!-- ================= 1. SIDEBAR ĐIỀU HƯỚNG DÙNG CHUNG ONBOARDAI ================= -->
+    <aside id="appSidebar" class="w-64 bg-white border-r border-[#E2E8F0] flex flex-col shrink-0 fixed inset-y-0 left-0 z-40 md:static transition-transform duration-300 -translate-x-full md:translate-x-0">
+      <!-- Logo Header -->
+      <div class="h-16 flex items-center px-6 border-b border-slate-100">
+        <a href="index.html" class="flex items-center gap-2.5 hover:no-underline">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#1F5AFE] to-indigo-600 flex items-center justify-center text-white shadow-xs">
+            <i data-lucide="compass" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="text-[17px] font-extrabold tracking-tight leading-tight text-slate-900">Onboard<span class="text-[#1F5AFE]">AI</span></div>
+            <div id="sidebarRoleSub" class="text-[10px] font-bold tracking-[.12em] text-slate-500 uppercase">ENTERPRISE</div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Navigation Links (Tự động đồng bộ theo vai trò đăng nhập) -->
+      <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+        <div id="sidebarMainTitle" class="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+          Không gian làm việc
+        </div>
+        <div id="sidebarRoleLinks" class="space-y-1">
+          <!-- Render tự động theo Role -->
+        </div>
+
+        <div class="pt-5 px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+          Tài khoản & Hệ thống
+        </div>
+        <a href="profile.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold bg-blue-50/70 text-[#1F5AFE] transition-colors hover:no-underline">
+          <i data-lucide="user-cog" class="w-4 h-4"></i>
+          <span>Hồ sơ cá nhân (CV)</span>
+        </a>
+        <a href="index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors hover:no-underline">
+          <i data-lucide="home" class="w-4 h-4"></i>
+          <span>Trang chủ OnboardAI</span>
+        </a>
+        <a href="login.html" onclick="logout(event)" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-rose-600 hover:bg-rose-50 transition-colors hover:no-underline">
+          <i data-lucide="log-out" class="w-4 h-4"></i>
+          <span>Đăng xuất</span>
+        </a>
+      </nav>
+
+      <!-- Thẻ Trạng thái Bảo mật Tài khoản ở chân Sidebar -->
+      <div class="m-3 rounded-2xl ring-1 ring-slate-200 bg-gradient-to-br from-slate-50 to-blue-50/40 p-4">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+            <i data-lucide="shield-check" class="w-4 h-4 text-[#00B67A]"></i>
+            <span>An toàn tài khoản</span>
+          </span>
+          <span id="securityScoreBadge" class="text-[11px] font-bold text-[#00B67A] bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">90%</span>
+        </div>
+        <div class="micro-progress-track mb-2.5">
+          <div id="securityScoreBar" class="micro-progress-fill bg-gradient-to-r from-[#1F5AFE] to-[#00B67A]" style="width: 90%"></div>
+        </div>
+        <p class="text-[11px] text-slate-500 leading-relaxed">
+          Phiên đăng nhập được bảo vệ bởi <b class="text-slate-700">OnboardAI SSO</b>.
+        </p>
+      </div>
+    </aside>
+
+    <!-- Overlay cho Mobile khi mở Sidebar -->
+    <div id="sidebarOverlay" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-slate-900/40 z-30 hidden md:hidden"></div>
+
+    <!-- ================= 2. MAIN CONTENT ================= -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+      <!-- Topbar Header đồng bộ chuẩn hệ thống -->
+      <header class="h-16 bg-white border-b border-[#E2E8F0] px-4 md:px-8 flex items-center justify-between shrink-0 sticky top-0 z-20">
+        <div class="flex items-center gap-3">
+          <button onclick="toggleMobileSidebar()" class="p-2 -ml-2 text-slate-500 hover:text-slate-700 md:hidden rounded-lg hover:bg-slate-100">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+          <div>
+            <h1 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <span>Hồ sơ Nhân sự & Lý lịch (Employee CV)</span>
+              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-[#1F5AFE] border border-blue-200 whitespace-nowrap">Mã COM03</span>
+            </h1>
+            <p class="text-xs text-slate-500 hidden sm:block">Hồ sơ năng lực chuẩn Workster CV kết hợp Quản lý tài khoản & Bảo mật OnboardAI</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <!-- Bộ chuyển nhanh vai trò để test (Demo Role Switcher) -->
+          <div class="hidden lg:flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200/80">
+            <span class="text-[11px] font-semibold text-slate-500 px-2">Xem với vai trò:</span>
+            <button type="button" onclick="switchDemoRole('newhire')" data-role-switch="newhire" class="role-switch-btn px-2.5 py-1 rounded-lg text-xs font-semibold transition">New Hire</button>
+            <button type="button" onclick="switchDemoRole('mentor')" data-role-switch="mentor" class="role-switch-btn px-2.5 py-1 rounded-lg text-xs font-semibold transition">Mentor</button>
+            <button type="button" onclick="switchDemoRole('hr')" data-role-switch="hr" class="role-switch-btn px-2.5 py-1 rounded-lg text-xs font-semibold transition">HR</button>
+            <button type="button" onclick="switchDemoRole('admin')" data-role-switch="admin" class="role-switch-btn px-2.5 py-1 rounded-lg text-xs font-semibold transition">Admin</button>
+          </div>
+
+          <div class="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-slate-50 border border-[#E2E8F0]">
+            <img id="topbarAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=An" alt="Avatar" class="w-6 h-6 rounded-full bg-white object-cover">
+            <span id="topbarName" class="text-xs font-semibold text-slate-800 hidden sm:inline">Nguyễn Văn An</span>
+            <span id="topbarRoleBadge" class="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-600/20 whitespace-nowrap">New Hire</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Nội dung chính -->
+      <main class="p-4 md:p-8 max-w-7xl mx-auto w-full space-y-6 pb-20">
+
+        <!-- ================= 2.1 WORKSTER EMPLOYEE PROFILE HEADER CARD ================= -->
+        <section class="relative bg-white border border-[#E2E8F0] rounded-2xl overflow-hidden shadow-xs">
+          <!-- Dải màu trang trí phía trên -->
+          <div class="h-28 sm:h-32 bg-gradient-to-r from-[#0b1b3a] via-[#1F5AFE] to-indigo-600 relative overflow-hidden">
+            <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 20px 20px;"></div>
+            <div class="absolute -right-10 -bottom-16 w-64 h-64 rounded-full bg-cyan-400/20 blur-2xl"></div>
+            <div class="absolute left-6 top-4 flex items-center gap-2 text-white/90 text-xs font-medium">
+              <a id="backToWorkspaceBtn" href="newhire-onboarding-dashboard.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/20 text-white text-xs font-semibold transition hover:no-underline no-print">
+                <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+                <span>Về Bảng điều khiển</span>
+              </a>
+            </div>
+            <div class="absolute right-6 top-4 hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-white text-xs font-semibold">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span id="heroAvailability">Full-time &bull; Đang hội nhập tích cực</span>
+            </div>
+          </div>
+
+          <div class="px-6 pb-6">
+            <!-- Hàng 1: Avatar + Tên + Chức danh + Cụm nút hành động chuẩn Workster -->
+            <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4 -mt-12 sm:-mt-14 relative z-10">
+              <div class="flex flex-col sm:flex-row sm:items-end gap-4">
+                <div class="relative group w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-white p-1.5 ring-4 ring-white shadow-md shrink-0">
+                  <img id="heroAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=An" alt="Avatar" class="w-full h-full rounded-xl bg-slate-50 object-cover">
+                  <span title="Nhân sự đã xác thực" class="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-[#00B67A] text-white flex items-center justify-center ring-2 ring-white shadow-xs">
+                    <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                  </span>
+                  <button type="button" onclick="openAvatarModal()" title="Đổi ảnh đại diện" class="no-print absolute -bottom-1.5 -right-1.5 w-8 h-8 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white flex items-center justify-center shadow-md transition">
+                    <i data-lucide="camera" class="w-4 h-4"></i>
+                  </button>
+                </div>
+
+                <div class="pt-1 sm:pb-1">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <h2 id="heroName" class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Nguyễn Văn An</h2>
+                    <span id="heroRoleBadge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-[#1F5AFE] border border-blue-200">Nhân sự mới</span>
+                    <span id="heroIdBadge" class="text-xs font-mono font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700">#NH01</span>
+                  </div>
+                  <p class="text-xs sm:text-sm text-slate-600 mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
+                    <span class="inline-flex items-center gap-1.5 font-semibold text-slate-800"><i data-lucide="briefcase" class="w-3.5 h-3.5 text-[#1F5AFE]"></i> <span id="heroPosition">Frontend Developer</span></span>
+                    <span class="text-slate-300">&bull;</span>
+                    <span class="inline-flex items-center gap-1.5"><i data-lucide="building-2" class="w-3.5 h-3.5 text-slate-400"></i> <span id="heroDepartment">Kỹ thuật Công nghệ</span></span>
+                    <span class="text-slate-300">&bull;</span>
+                    <span class="inline-flex items-center gap-1.5"><i data-lucide="map-pin" class="w-3.5 h-3.5 text-slate-400"></i> <span id="heroLocationShort">Hà Nội (Hybrid)</span></span>
+                  </p>
+                </div>
+              </div>
+
+              <!-- Cụm nút hành động kiểu Workster UI Kit (Tải CV, Chỉnh sửa hồ sơ, Đổi mật khẩu) -->
+              <div class="flex flex-wrap items-center gap-2.5 shrink-0 no-print">
+                <button type="button" onclick="handleDownloadCV()" class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl border border-[#E2E8F0] bg-white hover:bg-slate-50 text-xs font-bold text-slate-700 transition shadow-2xs">
+                  <i data-lucide="download" class="w-4 h-4 text-[#1F5AFE]"></i>
+                  <span>Tải / In CV (PDF)</span>
+                </button>
+                <button type="button" onclick="switchTab('edit')" class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl border border-blue-200 bg-blue-50/70 hover:bg-blue-100 text-xs font-bold text-[#1F5AFE] transition">
+                  <i data-lucide="pen-line" class="w-4 h-4"></i>
+                  <span>Chỉnh sửa hồ sơ</span>
+                </button>
+                <button type="button" onclick="switchTab('security')" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition">
+                  <i data-lucide="key-round" class="w-4 h-4"></i>
+                  <span>Đổi mật khẩu</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Hàng 2: 4 Ô Chỉ số Tóm tắt Năng lực & Hội nhập (Workster Metrics Strip) -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-5 border-t border-slate-100">
+              <div class="p-3.5 rounded-xl bg-slate-50/80 border border-slate-200/70 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-100/80 text-[#1F5AFE] flex items-center justify-center shrink-0">
+                  <i data-lucide="award" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <div class="text-[11px] font-medium text-slate-500">Kinh nghiệm chuyên môn</div>
+                  <div id="metricExpYears" class="text-sm font-extrabold text-slate-900">2+ Năm (Junior/Mid)</div>
+                </div>
+              </div>
+
+              <div class="p-3.5 rounded-xl bg-slate-50/80 border border-slate-200/70 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100/80 text-[#00B67A] flex items-center justify-center shrink-0">
+                  <i data-lucide="trending-up" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <div class="text-[11px] font-medium text-slate-500">Tiến độ Onboarding</div>
+                  <div id="metricOnboardingPct" class="text-sm font-extrabold text-[#00B67A]">65% Hoàn thành</div>
+                </div>
+              </div>
+
+              <div class="p-3.5 rounded-xl bg-slate-50/80 border border-slate-200/70 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-indigo-100/80 text-indigo-600 flex items-center justify-center shrink-0">
+                  <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <div class="text-[11px] font-medium text-slate-500">Học vấn & Bằng cấp</div>
+                  <div id="metricDegree" class="text-sm font-extrabold text-slate-900">Kỹ sư CNTT (GPA 3.5)</div>
+                </div>
+              </div>
+
+              <div class="p-3.5 rounded-xl bg-slate-50/80 border border-slate-200/70 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-100/80 text-amber-600 flex items-center justify-center shrink-0">
+                  <i data-lucide="star" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <div class="text-[11px] font-medium text-slate-500">Đánh giá 1-on-1 định kỳ</div>
+                  <div id="metricRating" class="text-sm font-extrabold text-slate-900">4.9 / 5.0 (Xuất sắc)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= 2.2 BỐ CỤC 2 CỘT CHUẨN WORKSTER CV + ONBOARDAI ================= -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+          <!-- ================= CỘT TRÁI (4/12): SIDEBAR HỒ SƠ CÁ NHÂN WORKSTER ================= -->
+          <div class="lg:col-span-4 space-y-6">
+
+            <!-- Thẻ 1: Thông tin Liên hệ & Định danh (Workster Contact & Personal Info) -->
+            <div class="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-xs space-y-4">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                  <i data-lucide="contact" class="w-4 h-4 text-[#1F5AFE]"></i>
+                  <span>Thông tin liên hệ & Công tác</span>
+                </h3>
+                <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Đã xác thực</span>
+              </div>
+
+              <!-- Các dòng liên hệ có icon kiểu Workster -->
+              <div class="space-y-3 text-xs">
+                <div class="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50/80 border border-slate-100">
+                  <div class="w-8 h-8 rounded-lg bg-white border border-slate-200/80 flex items-center justify-center text-[#1F5AFE] shrink-0">
+                    <i data-lucide="mail" class="w-4 h-4"></i>
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <div class="text-[11px] text-slate-400">Email doanh nghiệp</div>
+                    <div id="heroEmail" class="font-semibold text-slate-800 truncate">an.nguyen@onboardai.vn</div>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50/80 border border-slate-100">
+                  <div class="w-8 h-8 rounded-lg bg-white border border-slate-200/80 flex items-center justify-center text-emerald-600 shrink-0">
+                    <i data-lucide="phone" class="w-4 h-4"></i>
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <div class="text-[11px] text-slate-400">Số điện thoại</div>
+                    <div id="cardPhone" class="font-semibold text-slate-800">0912 345 678</div>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50/80 border border-slate-100">
+                  <div class="w-8 h-8 rounded-lg bg-white border border-slate-200/80 flex items-center justify-center text-indigo-600 shrink-0">
+                    <i data-lucide="github" class="w-4 h-4"></i>
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <div class="text-[11px] text-slate-400">GitHub / Portfolio</div>
+                    <div id="cardGithub" class="font-semibold text-[#1F5AFE] truncate">github.com/annguyen-fe</div>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50/80 border border-slate-100">
+                  <div class="w-8 h-8 rounded-lg bg-white border border-slate-200/80 flex items-center justify-center text-violet-600 shrink-0">
+                    <i data-lucide="message-square" class="w-4 h-4"></i>
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <div class="text-[11px] text-slate-400">Slack / MS Teams</div>
+                    <div id="cardSlack" class="font-semibold text-slate-800 truncate">@an.nguyen</div>
+                  </div>
+                </div>
+              </div>
+
+              <dl class="space-y-2.5 text-xs pt-2 border-t border-slate-100">
+                <div class="flex items-center justify-between py-1 border-b border-dashed border-slate-100">
+                  <dt class="text-slate-500">Mã định danh</dt>
+                  <dd id="cardEmpId" class="font-mono font-bold text-slate-900">NH01</dd>
+                </div>
+                <div class="flex items-center justify-between py-1 border-b border-dashed border-slate-100">
+                  <dt class="text-slate-500">Phòng ban</dt>
+                  <dd id="cardDept" class="font-semibold text-slate-800">Kỹ thuật Công nghệ</dd>
+                </div>
+                <div class="flex items-center justify-between py-1 border-b border-dashed border-slate-100">
+                  <dt class="text-slate-500">Chức danh</dt>
+                  <dd id="cardPosition" class="font-semibold text-slate-800">Frontend Developer</dd>
+                </div>
+                <div class="flex items-center justify-between py-1 border-b border-dashed border-slate-100">
+                  <dt class="text-slate-500">Ngày gia nhập</dt>
+                  <dd id="cardJoinDate" class="font-semibold text-slate-800 tabular-nums">15/09/2026</dd>
+                </div>
+                <div class="flex items-center justify-between py-1">
+                  <dt class="text-slate-500">Hình thức làm việc</dt>
+                  <dd id="cardWorkMode" class="font-semibold text-slate-800">Hà Nội – Hybrid</dd>
+                </div>
+              </dl>
+            </div>
+
+            <!-- Thẻ 2: Khối thông tin chuyên biệt theo Vai trò (Tiến độ Onboarding / Danh sách Mentee / Quyền hạn) -->
+            <div id="roleSpecificCard" class="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-xs">
+              <!-- Nội dung được render tự động theo role -->
+            </div>
+
+            <!-- Thẻ 3: Kỹ năng & Ngôn ngữ (Workster Skills & Languages Card) -->
+            <div class="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-xs space-y-4">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                  <i data-lucide="cpu" class="w-4 h-4 text-[#1F5AFE]"></i>
+                  <span>Kỹ năng chuyên môn (Skills)</span>
+                </h3>
+                <button type="button" onclick="switchTab('edit')" class="no-print text-[11px] font-semibold text-[#1F5AFE] hover:underline">Sửa</button>
+              </div>
+
+              <!-- Tag Cloud Kỹ năng -->
+              <div id="sidebarSkillChips" class="flex flex-wrap gap-1.5">
+                <!-- Render tự động -->
+              </div>
+
+              <!-- Thanh mức độ thành thạo (Workster Skill Bars) -->
+              <div id="sidebarSkillBars" class="space-y-2.5 pt-2 border-t border-slate-100 text-xs">
+                <!-- Render tự động -->
+              </div>
+
+              <!-- Ngôn ngữ -->
+              <div class="pt-3 border-t border-slate-100">
+                <div class="text-xs font-bold text-slate-800 mb-2 flex items-center gap-1.5">
+                  <i data-lucide="languages" class="w-3.5 h-3.5 text-slate-400"></i>
+                  <span>Ngoại ngữ</span>
+                </div>
+                <div class="space-y-1.5 text-xs">
+                  <div class="flex items-center justify-between">
+                    <span class="text-slate-600">Tiếng Việt</span>
+                    <span class="font-semibold text-slate-800">Bản ngữ (Native)</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-slate-600">Tiếng Anh (TOEIC / IELTS)</span>
+                    <span class="font-semibold text-[#1F5AFE]">Professional Working (B2/C1)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Thẻ 4: Chọn nhanh Avatar mẫu -->
+            <div class="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-xs no-print">
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                  <i data-lucide="sparkles" class="w-4 h-4 text-indigo-600"></i>
+                  <span>Đổi nhanh Ảnh đại diện</span>
+                </h3>
+                <button type="button" onclick="openAvatarModal()" class="text-xs font-semibold text-[#1F5AFE] hover:underline">Tùy chỉnh URL</button>
+              </div>
+              <p class="text-xs text-slate-500 mb-3">Chọn một mẫu avatar dưới đây để cập nhật tức thì trên toàn hệ thống:</p>
+              <div id="quickAvatarGrid" class="grid grid-cols-6 gap-2">
+                <!-- Render bằng JS -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ================= CỘT PHẢI (8/12): 4 TAB KẾT HỢP WORKSTER CV & ONBOARDAI ================= -->
+          <div class="lg:col-span-8 space-y-5">
+
+            <!-- Thanh điều hướng 4 Tab -->
+            <div id="profileTabsNav" class="bg-white rounded-2xl border border-[#E2E8F0] p-2 shadow-xs flex flex-wrap items-center gap-1.5" role="tablist">
+              <button type="button" id="tabBtn-cv" onclick="switchTab('cv')" class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition bg-[#1F5AFE] text-white shadow-xs">
+                <i data-lucide="file-badge" class="w-4 h-4"></i>
+                <span>Hồ sơ năng lực (CV)</span>
+              </button>
+              <button type="button" id="tabBtn-edit" onclick="switchTab('edit')" class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                <i data-lucide="user-pen" class="w-4 h-4"></i>
+                <span>Chỉnh sửa thông tin</span>
+              </button>
+              <button type="button" id="tabBtn-security" onclick="switchTab('security')" class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                <i data-lucide="lock-keyhole" class="w-4 h-4"></i>
+                <span>Đổi mật khẩu & Bảo mật</span>
+              </button>
+              <button type="button" id="tabBtn-preferences" onclick="switchTab('preferences')" class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                <i data-lucide="bell-ring" class="w-4 h-4"></i>
+                <span>Thông báo & AI</span>
+              </button>
+            </div>
+
+            <!-- ================= TAB 1: HỒ SƠ NĂNG LỰC & CV (WORKSTER EMPLOYEE PROFILE CV) ================= -->
+            <section id="tabPanel-cv" class="tab-panel space-y-6">
+
+              <!-- 1.1 Khối Giới thiệu bản thân & Mục tiêu (About / Bio Section) -->
+              <div class="bg-white border border-[#E2E8F0] rounded-2xl p-6 shadow-xs">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                  <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                    <i data-lucide="user-round-check" class="w-4 h-4 text-[#1F5AFE]"></i>
+                    <span>Giới thiệu bản thân & Mục tiêu hội nhập (About Me)</span>
+                  </h3>
+                  <button type="button" onclick="switchTab('edit')" class="no-print text-xs font-semibold text-[#1F5AFE] hover:underline flex items-center gap-1">
+                    <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                    <span>Cập nhật</span>
+                  </button>
+                </div>
+                <p id="cvBioText" class="mt-3.5 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  Lập trình viên Frontend đam mê xây dựng trải nghiệm người dùng mượt mà. Mục tiêu hoàn thành 100% lộ trình hội nhập trước hạn và đóng góp vào dự án OnboardAI Design System.
+                </p>
+              </div>
+
+              <!-- 1.2 Khối Kinh nghiệm làm việc (Workster Experience Timeline) -->
+              <div class="bg-white border border-[#E2E8F0] rounded-2xl p-6 shadow-xs">
+                <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-slate-100">
+                  <div>
+                    <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                      <i data-lucide="briefcase-business" class="w-4 h-4 text-[#1F5AFE]"></i>
+                      <span>Kinh nghiệm làm việc (Work Experience)</span>
+                    </h3>
+                    <p class="text-xs text-slate-500 mt-0.5">Quá trình công tác và các dự án tiêu biểu trước & trong khi gia nhập OnboardAI</p>
+                  </div>
+                  <button type="button" onclick="openExpModal()" class="no-print inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#1F5AFE] text-xs font-bold transition">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                    <span>Thêm kinh nghiệm</span>
+                  </button>
+                </div>
+
+                <div id="cvExperienceList" class="mt-5 space-y-5">
+                  <!-- Render tự động bằng JS -->
+                </div>
+              </div>
+
+              <!-- 1.3 Khối Học vấn & Chứng chỉ chuyên môn (Workster Education & Certifications) -->
+              <div class="bg-white border border-[#E2E8F0] rounded-2xl p-6 shadow-xs">
+                <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-slate-100">
+                  <div>
+                    <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                      <i data-lucide="graduation-cap" class="w-4 h-4 text-indigo-600"></i>
+                      <span>Học vấn & Chứng chỉ (Education & Certifications)</span>
+                    </h3>
+                    <p class="text-xs text-slate-500 mt-0.5">Bằng cấp đại học, chứng chỉ quốc tế và khóa đào tạo nội bộ đã hoàn thành</p>
+                  </div>
+                  <button type="button" onclick="openEduModal()" class="no-print inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold transition">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                    <span>Thêm học vấn</span>
+                  </button>
+                </div>
+
+                <div id="cvEducationList" class="mt-5 space-y-4">
+                  <!-- Render tự động bằng JS -->
+                </div>
+              </div>
+
+              <!-- 1.4 Khối Tài liệu & Hồ sơ đính kèm (Workster Attachments / Portfolio) -->
+              <div class="bg-white border border-[#E2E8F0] rounded-2xl p-6 shadow-xs">
+                <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-slate-100">
+                  <div>
+                    <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                      <i data-lucide="paperclip" class="w-4 h-4 text-[#00B67A]"></i>
+                      <span>Tài liệu & Hồ sơ đính kèm (CV & Attachments)</span>
+                    </h3>
+                    <p class="text-xs text-slate-500 mt-0.5">Bản cứng CV, bằng tốt nghiệp, chứng chỉ và cam kết bảo mật NDA đã nộp cho phòng HR</p>
+                  </div>
+                  <button type="button" onclick="handleAddAttachment()" class="no-print inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold transition">
+                    <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i>
+                    <span>Tải thêm tài liệu</span>
+                  </button>
+                </div>
+
+                <div id="cvAttachmentsList" class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <!-- Render tự động bằng JS -->
+                </div>
+              </div>
+
+            </section>
+
+            <!-- ================= TAB 2: CHỈNH SỬA THÔNG TIN CÁ NHÂN ================= -->
+            <section id="tabPanel-edit" class="tab-panel hidden bg-white border border-[#E2E8F0] rounded-2xl p-6 shadow-xs">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-5 border-b border-slate-100">
+                <div>
+                  <h3 class="text-base font-bold text-slate-900">Chỉnh sửa Thông tin Hồ sơ Cá nhân</h3>
+                  <p class="text-xs text-slate-500 mt-0.5">Mọi thay đổi sẽ được lưu bền vững vào CSDL LocalStorage và cập nhật sang Tab Hồ sơ năng lực (CV)</p>
+                </div>
+                <span id="lastSavedHint" class="text-[11px] text-slate-400 font-medium">Đã đồng bộ với LocalStorage</span>
+              </div>
+
+              <form id="profileForm" onsubmit="handleSaveProfile(event)" class="mt-5 space-y-5" novalidate>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <!-- Họ và tên -->
+                  <div>
+                    <label for="profName" class="block text-xs font-semibold text-slate-700 mb-1.5">
+                      Họ và tên <span class="text-rose-500">*</span>
+                    </label>
+                    <div class="relative">
+                      <i data-lucide="user" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                      <input type="text" id="profName" required placeholder="Nhập họ và tên đầy đủ"
+                             class="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-[#E2E8F0] bg-white text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1F5AFE]/20 focus:border-[#1F5AFE] transition">
+                    </div>
+                    <p id="profNameError" class="hidden mt-1 text-[11px] text-rose-600">Vui lòng nhập họ và tên hợp lệ.</p>
+                  </div>
+
+                  <!-- Email công ty -->
+                  <div>
+                    <label for="profEmail" class="block text-xs font-semibold text-slate-700 mb-1.5">
+                      Email doanh nghiệp <span class="text-rose-500">*</span>
+                    </label>
+                    <div class="relative">
+                      <i data-lucide="mail" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                      <input type="email" id="profEmail" required placeholder="ten@onboardai.vn"
+                             class="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-[#E2E8F0] bg-white text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1F5AFE]/20 focus:border-[#1F5AFE] transition">
+                    </div>
+                    <p id="profEmailError" class="hidden mt-1 text-[11px] text-rose-600">Vui lòng nhập địa chỉ email hợp lệ.</p>
+                  </div>
+
+                  <!-- Số điện thoại -->
+                  <div>
+                    <label for="profPhone" class="block text-xs font-semibold text-slate-700 mb-1.5">
+                      Số điện thoại liên hệ <span class="text-rose-500">*</span>
+                    </label>
+                    <div class="relative">
+                      <i data-lucide="phone" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                      <input type="tel" id="profPhone" placeholder="Ví dụ: 0912 345 678"
+                             class="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-[#E2E8F0] bg-white text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1F5AFE]/20 focus:border-[#1F5AFE] transition">
+                    </div>
+                    <p id="profPhoneError" class="hidden mt-1 text-[11px] text-rose-600">Số điện thoại cần từ 9–11 chữ số.</p>
+                  </div>
+
+                  <!-- Chức danh / Vị trí -->
+                  <div>
+                    <label for="profPosition" class="block text-xs font-semibold text-slate-700 mb-1.5">
+                      Chức danh công việc
+                    </label>
+                    <div class="relative">
+                      <i data-lucide="briefcase" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                      <input type="text" id="profPosition" placeholder="Ví dụ: Frontend Developer"
+                             class="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-[#E2E8F0] bg-white text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1F5AFE]/20 focus:border-[#1F5AFE] transition">
+                    </div>
+                  </div>
+
+                  <!-- Phòng ban -->
+                  <div>
+                    <label for="profDepartment" class="block text-xs font-semibold text-slate-700 mb-1.5">
+                      Phòng ban trực thuộc
+                    </label>
+                    <div class="relative">
+                      <i data-lucide="building-2" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                      <select id="profDepartment" class="w-full appearance-none pl-10 pr-8 py-2.5 rounded-xl border border-[#E2E8F0] bg-white text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1F5AFE]/20 focus:border-[#1F5AFE] transition cursor-pointer">
+                        <option value="Kỹ thuật Công nghệ">Kỹ thuật Công nghệ</option>
+                        <option value="Marketing & Truyền thông">Marketing & Truyền thông</option>
+                        <option value="Nhân sự & Vận hành">Nhân sự & Vận hành</option>
+                        <option value="Ban Công nghệ & Vận hành">Ban Công nghệ & Vận hành</option>
+                        <option value="Sản phẩm & Thiết kế">Sản phẩm & Thiết kế</option>
+                      </select>
+                      <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                    </div>
+                  </div>
+
+                  <!-- Hình thức làm việc -->
+                  <div>
+                    <label for="profLocation" class="block text-xs font-semibold text-slate-700 mb-1.5">
+                      Địa điểm & Hình thức làm việc
+                    </label>
+                    <div class="relative">
+                      <i data-lucide="map-pin" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                      <select id="profLocation" class="w-full appearance-none pl-10 pr-8 py-2.5 rounded-xl border border-[#E2E8F0] bg-white text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1F5AFE]/20 focus:border-[#1F5AFE] transition cursor-pointer">
+                        <option value="Hà Nội – Hybrid (Văn phòng & Từ xa)">Hà Nội – Hybrid (Văn phòng & Từ xa)</option>
+                        <option value="TP. Hồ Chí Minh – On-site">TP. Hồ Chí Minh – On-site</option>
+                        <option value="Đà Nẵng – Hybrid">Đà Nẵng – Hybrid</option>
+                        <option value="Làm việc từ xa hoàn toàn (Remote)">Làm việc từ xa hoàn toàn (Remote)</option>
+                      </select>
+                      <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Kỹ năng chuyên môn (Tags) -->
+                <div>
+                  <label for="profSkills" class="block text-xs font-semibold text-slate-700 mb-1.5">
+                    Kỹ năng chuyên môn & Công cụ (cách nhau bằng dấu phẩy)
+                  </label>
+                  <div class="relative">
+                    <i data-lucide="code-2" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                    <input type="text" id="profSkills" placeholder="Ví dụ: ReactJS, TypeScript, Tailwind CSS, Git, Agile Scrum"
+                           oninput="renderSkillTagsPreview()"
+                           class="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-[#E2E8F0] bg-white text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1F5AFE]/20 focus:border-[#1F5AFE] transition">
+                  </div>
+                  <div id="skillTagsPreview" class="flex flex-wrap gap-1.5 mt-2"></div>
+                </div>
+
+                <!-- Giới thiệu bản thân & Mục tiêu hội nhập -->
+                <div>
+                  <label for="profBio" class="block text-xs font-semibold text-slate-700 mb-1.5">
+                    Giới thiệu bản thân & Mục tiêu phát triển (Hiển thị trên đầu CV)
+                  </label>
+                  <textarea id="profBio" rows="3" placeholder="Chia sẻ đôi nét về kinh nghiệm, sở thích hoặc mục tiêu trong 90 ngày đầu tại OnboardAI..."
+                            class="w-full p-3.5 rounded-xl border border-[#E2E8F0] bg-white text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1F5AFE]/20 focus:border-[#1F5AFE] transition resize-y"></textarea>
+                </div>
+
+                <!-- Liên kết mạng xã hội nội bộ -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                  <div>
+                    <label for="profGithub" class="block text-xs font-semibold text-slate-700 mb-1.5">GitHub / Portfolio</label>
+                    <div class="relative">
+                      <i data-lucide="github" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                      <input type="text" id="profGithub" placeholder="github.com/username"
+                             class="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-[#E2E8F0] bg-white text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1F5AFE]/20 focus:border-[#1F5AFE] transition">
+                    </div>
+                  </div>
+                  <div>
+                    <label for="profSlack" class="block text-xs font-semibold text-slate-700 mb-1.5">Tài khoản Slack / Microsoft Teams</label>
+                    <div class="relative">
+                      <i data-lucide="message-square" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                      <input type="text" id="profSlack" placeholder="@an.nguyen"
+                             class="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-[#E2E8F0] bg-white text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1F5AFE]/20 focus:border-[#1F5AFE] transition">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Nút Lưu & Khôi phục -->
+                <div class="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-end gap-3">
+                  <button type="button" onclick="resetProfileForm()" class="px-4 py-2.5 rounded-xl border border-[#E2E8F0] bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 transition">
+                    Hoàn tác thay đổi
+                  </button>
+                  <button type="submit" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition active:scale-95">
+                    <i data-lucide="save" class="w-4 h-4"></i>
+                    <span>Lưu thông tin hồ sơ</span>
+                  </button>
+                </div>
+              </form>
+            </section>
+
+            <!-- ================= TAB 3: ĐỔI MẬT KHẨU & BẢO MẬT ================= -->
+            <section id="tabPanel-security" class="tab-panel hidden space-y-6">
+              <!-- Khối đổi mật khẩu -->
+              <div class="bg-white border border-[#E2E8F0] rounded-2xl p-6 shadow-xs">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-5 border-b border-slate-100">
+                  <div>
+                    <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                      <i data-lucide="key-round" class="w-4 h-4 text-[#1F5AFE]"></i>
+                      <span>Đổi mật khẩu đăng nhập</span>
+                    </h3>
+                    <p class="text-xs text-slate-500 mt-0.5">Mật khẩu mới sẽ được áp dụng ngay cho lần đăng nhập tiếp theo tại <code class="text-slate-700 font-semibold">login.html</code></p>
+                  </div>
+                  <span class="text-[11px] font-medium px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600">
+                    Mật khẩu mặc định ban đầu: <strong class="font-mono text-slate-900">123456</strong>
+                  </span>
+                </div>
+
+                <form id="passwordForm" onsubmit="handleChangePassword(event)" class="mt-5 space-y-4 max-w-xl" novalidate>
+                  <!-- Mật khẩu hiện tại -->
+                  <div>
+                    <label for="curPassword" class="block text-xs font-semibold text-slate-700 mb-1.5">
+                      Mật khẩu hiện tại <span class="text-rose-500">*</span>
+                    </label>
+                    <div class="relative">
+                      <i data-lucide="lock" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                      <input type="password" id="curPassword" placeholder="Nhập mật khẩu đang sử dụng"
+                             class="w-full pl-10 pr-10 py-2.5 rounded-xl border border-[#E2E8F0] bg-white text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1F5AFE]/20 focus:border-[#1F5AFE] transition">
+                      <button type="button" onclick="togglePwdField('curPassword', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                        <i data-lucide="eye" class="w-4 h-4"></i>
+                      </button>
+                    </div>
+                    <p id="curPasswordError" class="hidden mt-1 text-[11px] text-rose-600">Mật khẩu hiện tại không chính xác.</p>
+                  </div>
+
+                  <!-- Mật khẩu mới -->
+                  <div>
+                    <label for="newPassword" class="block text-xs font-semibold text-slate-700 mb-1.5">
+                      Mật khẩu mới <span class="text-rose-500">*</span>
+                    </label>
+                    <div class="relative">
+                      <i data-lucide="shield-lock" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                      <input type="password" id="newPassword" placeholder="Tối thiểu 6 ký tự, nên có chữ hoa & số"
+                             oninput="evaluatePasswordStrength()"
+                             class="w-full pl-10 pr-10 py-2.5 rounded-xl border border-[#E2E8F0] bg-white text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1F5AFE]/20 focus:border-[#1F5AFE] transition">
+                      <button type="button" onclick="togglePwdField('newPassword', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                        <i data-lucide="eye" class="w-4 h-4"></i>
+                      </button>
+                    </div>
+                    <p id="newPasswordError" class="hidden mt-1 text-[11px] text-rose-600">Mật khẩu mới phải từ 6 ký tự trở lên và khác mật khẩu cũ.</p>
+
+                    <!-- Thanh đo độ mạnh mật khẩu -->
+                    <div class="mt-2.5 space-y-1.5">
+                      <div class="grid grid-cols-4 gap-1.5">
+                        <div id="pwdBar1" class="h-1.5 rounded-full bg-slate-200 transition-colors"></div>
+                        <div id="pwdBar2" class="h-1.5 rounded-full bg-slate-200 transition-colors"></div>
+                        <div id="pwdBar3" class="h-1.5 rounded-full bg-slate-200 transition-colors"></div>
+                        <div id="pwdBar4" class="h-1.5 rounded-full bg-slate-200 transition-colors"></div>
+                      </div>
+                      <div class="flex items-center justify-between text-[11px]">
+                        <span class="text-slate-500">Độ mạnh mật khẩu: <strong id="pwdStrengthLabel" class="text-slate-700">Chưa nhập</strong></span>
+                        <span class="text-slate-400">Gợi ý: Chữ hoa + chữ thường + số + ký tự đặc biệt</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Xác nhận mật khẩu mới -->
+                  <div>
+                    <label for="confirmPassword" class="block text-xs font-semibold text-slate-700 mb-1.5">
+                      Xác nhận mật khẩu mới <span class="text-rose-500">*</span>
+                    </label>
+                    <div class="relative">
+                      <i data-lucide="check-circle-2" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                      <input type="password" id="confirmPassword" placeholder="Nhập lại mật khẩu mới"
+                             class="w-full pl-10 pr-10 py-2.5 rounded-xl border border-[#E2E8F0] bg-white text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1F5AFE]/20 focus:border-[#1F5AFE] transition">
+                      <button type="button" onclick="togglePwdField('confirmPassword', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                        <i data-lucide="eye" class="w-4 h-4"></i>
+                      </button>
+                    </div>
+                    <p id="confirmPasswordError" class="hidden mt-1 text-[11px] text-rose-600">Mật khẩu xác nhận không khớp.</p>
+                  </div>
+
+                  <div class="pt-2 flex items-center gap-3">
+                    <button type="submit" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition active:scale-95">
+                      <i data-lucide="shield-check" class="w-4 h-4"></i>
+                      <span>Cập nhật mật khẩu</span>
+                    </button>
+                    <button type="button" onclick="fillDefaultCurrentPwd()" class="text-xs font-semibold text-slate-500 hover:text-[#1F5AFE]">
+                      Điền nhanh MK hiện tại
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Khối Bảo mật 2 lớp (2FA) & Phiên đăng nhập -->
+              <div class="bg-white border border-[#E2E8F0] rounded-2xl p-6 shadow-xs space-y-4">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-50 text-[#00B67A] flex items-center justify-center shrink-0">
+                      <i data-lucide="smartphone" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                      <h4 class="text-sm font-bold text-slate-900">Xác thực bảo mật 2 lớp (2FA Authenticator)</h4>
+                      <p class="text-xs text-slate-500 mt-0.5">Bảo vệ tài khoản doanh nghiệp bằng mã OTP từ ứng dụng Google Authenticator</p>
+                    </div>
+                  </div>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="toggle2FA" checked onchange="handleToggle2FA(this.checked)" class="sr-only peer">
+                    <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#00B67A]"></div>
+                  </label>
+                </div>
+
+                <div class="pt-4 border-t border-slate-100">
+                  <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Phiên thiết bị đang đăng nhập</h4>
+                  <div class="space-y-2.5 text-xs">
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+                      <div class="flex items-center gap-3">
+                        <i data-lucide="laptop" class="w-5 h-5 text-[#1F5AFE]"></i>
+                        <div>
+                          <div class="font-semibold text-slate-900">Windows PC &bull; Trình duyệt hiện tại</div>
+                          <div id="currentSessionTime" class="text-[11px] text-slate-500">Hà Nội, Việt Nam &bull; Vừa đăng nhập</div>
+                        </div>
+                      </div>
+                      <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Thiết bị này</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- ================= TAB 4: THÔNG BÁO & TÙY CHỌN AI ================= -->
+            <section id="tabPanel-preferences" class="tab-panel hidden bg-white border border-[#E2E8F0] rounded-2xl p-6 shadow-xs space-y-5">
+              <div class="pb-4 border-b border-slate-100">
+                <h3 class="text-base font-bold text-slate-900">Cài đặt Thông báo & Cá nhân hóa Trợ lý AI</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Tùy chỉnh tần suất nhắc việc và cách 3 mô-đun AI (AI-1, AI-2, AI-3) hỗ trợ bạn mỗi ngày</p>
+              </div>
+
+              <div class="space-y-4 divide-y divide-slate-100 text-xs">
+                <div class="flex items-center justify-between pt-2">
+                  <div class="pr-4">
+                    <div class="font-bold text-slate-900">Bản tin tóm tắt AI mỗi sáng (AI Daily Briefing)</div>
+                    <div class="text-slate-500 mt-0.5">Tổng hợp các nhiệm vụ ưu tiên cao, lịch hẹn 1-on-1 cùng Mentor và nhắc hạn hoàn thành</div>
+                  </div>
+                  <input type="checkbox" id="prefAiBriefing" checked class="w-4 h-4 rounded text-[#1F5AFE] focus:ring-[#1F5AFE] cursor-pointer">
+                </div>
+
+                <div class="flex items-center justify-between pt-4">
+                  <div class="pr-4">
+                    <div class="font-bold text-slate-900">Thông báo Email khi có nhiệm vụ mới hoặc phản hồi 1-on-1</div>
+                    <div class="text-slate-500 mt-0.5">Nhận thông báo tức thì khi Mentor giao thêm checklist (AI-2) hoặc ghi nhận phiếu đánh giá</div>
+                  </div>
+                  <input type="checkbox" id="prefEmailNoti" checked class="w-4 h-4 rounded text-[#1F5AFE] focus:ring-[#1F5AFE] cursor-pointer">
+                </div>
+
+                <div class="flex items-center justify-between pt-4">
+                  <div class="pr-4">
+                    <div class="font-bold text-slate-900">Cảnh báo sớm nguy cơ trễ hạn (AI-3 Risk Radar)</div>
+                    <div class="text-slate-500 mt-0.5">Tự động nhắc nhở trước 24 giờ khi có nhiệm vụ bị kẹt (Blocked) hoặc sắp quá hạn</div>
+                  </div>
+                  <input type="checkbox" id="prefRiskAlert" checked class="w-4 h-4 rounded text-[#1F5AFE] focus:ring-[#1F5AFE] cursor-pointer">
+                </div>
+              </div>
+
+              <div class="pt-4 border-t border-slate-100 flex justify-end">
+                <button type="button" onclick="savePreferences()" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition">
+                  <i data-lucide="check" class="w-4 h-4"></i>
+                  <span>Lưu tùy chọn</span>
+                </button>
+              </div>
+            </section>
+
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 1: CHỌN / NHẬP URL ẢNH ĐẠI DIỆN ================= -->
+  <div id="avatarModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl border border-[#E2E8F0] max-w-md w-full p-6 shadow-xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+          <i data-lucide="image" class="w-4 h-4 text-[#1F5AFE]"></i>
+          <span>Cập nhật Ảnh đại diện</span>
+        </h3>
+        <button type="button" onclick="closeAvatarModal()" class="text-slate-400 hover:text-slate-600">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div>
+        <label for="customAvatarUrl" class="block text-xs font-semibold text-slate-700 mb-1.5">Dán đường dẫn ảnh (URL) hoặc chọn mẫu ở cột trái</label>
+        <input type="url" id="customAvatarUrl" placeholder="https://api.dicebear.com/7.x/avataaars/svg?seed=..."
+               class="w-full px-3.5 py-2.5 rounded-xl border border-[#E2E8F0] text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1F5AFE]/20 focus:border-[#1F5AFE]">
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2">
+        <button type="button" onclick="closeAvatarModal()" class="px-4 py-2 rounded-xl border border-[#E2E8F0] text-xs font-semibold text-slate-600 hover:bg-slate-50">Hủy</button>
+        <button type="button" onclick="applyCustomAvatar()" class="px-4 py-2 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold">Áp dụng</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 2: THÊM KINH NGHIỆM LÀM VIỆC (WORKSTER CV) ================= -->
+  <div id="expModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl border border-[#E2E8F0] max-w-lg w-full p-6 shadow-xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+          <i data-lucide="briefcase-business" class="w-4 h-4 text-[#1F5AFE]"></i>
+          <span>Thêm Kinh nghiệm làm việc vào CV</span>
+        </h3>
+        <button type="button" onclick="closeExpModal()" class="text-slate-400 hover:text-slate-600">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <form id="expForm" onsubmit="handleAddExperience(event)" class="space-y-3.5 text-xs">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Chức danh / Vị trí *</label>
+            <input type="text" id="expTitle" required placeholder="VD: Frontend Engineer" class="w-full px-3 py-2 rounded-xl border border-[#E2E8F0] focus:outline-none focus:border-[#1F5AFE]">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Công ty / Tổ chức *</label>
+            <input type="text" id="expCompany" required placeholder="VD: FPT Software" class="w-full px-3 py-2 rounded-xl border border-[#E2E8F0] focus:outline-none focus:border-[#1F5AFE]">
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Thời gian công tác *</label>
+            <input type="text" id="expPeriod" required placeholder="VD: 06/2024 – 08/2026" class="w-full px-3 py-2 rounded-xl border border-[#E2E8F0] focus:outline-none focus:border-[#1F5AFE]">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Loại hình</label>
+            <select id="expType" class="w-full px-3 py-2 rounded-xl border border-[#E2E8F0] focus:outline-none focus:border-[#1F5AFE]">
+              <option value="Full-time">Full-time</option>
+              <option value="Internship">Internship</option>
+              <option value="Part-time / Freelance">Part-time / Freelance</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Mô tả công việc & Thành tựu chính *</label>
+          <textarea id="expDesc" rows="3" required placeholder="Mô tả các dự án, công nghệ sử dụng và kết quả đạt được..." class="w-full p-3 rounded-xl border border-[#E2E8F0] focus:outline-none focus:border-[#1F5AFE]"></textarea>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeExpModal()" class="px-4 py-2 rounded-xl border border-[#E2E8F0] font-semibold text-slate-600 hover:bg-slate-50">Hủy</button>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white font-bold">Lưu vào CV</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 3: THÊM HỌC VẤN / CHỨNG CHỈ (WORKSTER CV) ================= -->
+  <div id="eduModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl border border-[#E2E8F0] max-w-lg w-full p-6 shadow-xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+          <i data-lucide="graduation-cap" class="w-4 h-4 text-indigo-600"></i>
+          <span>Thêm Học vấn & Chứng chỉ vào CV</span>
+        </h3>
+        <button type="button" onclick="closeEduModal()" class="text-slate-400 hover:text-slate-600">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <form id="eduForm" onsubmit="handleAddEducation(event)" class="space-y-3.5 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Bằng cấp / Tên chứng chỉ *</label>
+          <input type="text" id="eduDegree" required placeholder="VD: Cử nhân Kỹ thuật Phần mềm / IELTS 7.5" class="w-full px-3 py-2 rounded-xl border border-[#E2E8F0] focus:outline-none focus:border-[#1F5AFE]">
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Trường / Tổ chức cấp *</label>
+            <input type="text" id="eduSchool" required placeholder="VD: Đại học Bách Khoa Hà Nội" class="w-full px-3 py-2 rounded-xl border border-[#E2E8F0] focus:outline-none focus:border-[#1F5AFE]">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Niên khóa / Năm cấp *</label>
+            <input type="text" id="eduYear" required placeholder="VD: 2022 – 2026" class="w-full px-3 py-2 rounded-xl border border-[#E2E8F0] focus:outline-none focus:border-[#1F5AFE]">
+          </div>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Điểm GPA / Thành tích nổi bật</label>
+          <input type="text" id="eduNote" placeholder="VD: GPA 3.52/4.0 • Học bổng khuyến khích học tập" class="w-full px-3 py-2 rounded-xl border border-[#E2E8F0] focus:outline-none focus:border-[#1F5AFE]">
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeEduModal()" class="px-4 py-2 rounded-xl border border-[#E2E8F0] font-semibold text-slate-600 hover:bg-slate-50">Hủy</button>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold">Lưu vào CV</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= JAVASCRIPT XỬ LÝ DỮ LIỆU & LOCALSTORAGE ================= -->
+  <script>
+    // 1. DỮ LIỆU MẶC ĐỊNH ĐỒNG BỘ 100% VỚI MOCK-DATA.JSON + BỔ SUNG DỮ LIỆU CV WORKSTER
+    const DEFAULT_PROFILES = {
+      newhire: {
+        id: 'NH01',
+        name: 'Nguyễn Văn An',
+        email: 'an.nguyen@onboardai.vn',
+        role: 'newhire',
+        roleLabel: 'New Hire',
+        roleTitleVi: 'Nhân sự mới',
+        department: 'Kỹ thuật Công nghệ',
+        position: 'Frontend Developer',
+        joinDate: '15/09/2026',
+        phone: '0912 345 678',
+        location: 'Hà Nội – Hybrid (Văn phòng & Từ xa)',
+        expYears: '2+ Năm (Junior/Mid)',
+        degreeShort: 'Kỹ sư CNTT (GPA 3.5)',
+        ratingShort: '4.9 / 5.0 (Xuất sắc)',
+        skills: 'ReactJS, TypeScript, Tailwind CSS, Next.js, Git, RESTful API, Figma UI',
+        bio: 'Lập trình viên Frontend đam mê xây dựng trải nghiệm người dùng chuẩn SaaS hiện đại. Mục tiêu hoàn thành 100% lộ trình hội nhập trước hạn và đóng góp trực tiếp vào kiến trúc OnboardAI Design System.',
+        github: 'github.com/annguyen-fe',
+        slack: '@an.nguyen',
+        mentorName: 'Trần Thị Mai (MT01)',
+        progress: 65,
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=An',
+        dashboardUrl: 'newhire-onboarding-dashboard.html',
+        experiences: [
+          {
+            title: 'Frontend Developer (New Hire)',
+            company: 'OnboardAI Enterprise Vietnam',
+            period: '09/2026 – Hiện tại',
+            type: 'Full-time',
+            desc: 'Tham gia phát triển giao diện Bảng điều khiển nhân sự mới (NH01) và Hệ thống Design System bằng Tailwind CSS. Phối hợp chặt chẽ cùng Mentor Trần Thị Mai trong các phiên Code Review hàng tuần.'
+          },
+          {
+            title: 'Junior Web Developer',
+            company: 'TechNova Digital Studio',
+            period: '06/2024 – 08/2026',
+            type: 'Full-time',
+            desc: 'Xây dựng hơn 12 ứng dụng web SPA với ReactJS & TypeScript. Tối ưu hóa tốc độ tải trang (Core Web Vitals đạt 96/100) và chuẩn hóa thư viện UI Component nội bộ.'
+          },
+          {
+            title: 'Frontend Developer Intern',
+            company: 'VNG Cloud Lab',
+            period: '01/2024 – 05/2024',
+            type: 'Internship',
+            desc: 'Tham gia chương trình thực tập sinh tài năng, chuyển đổi hơn 30 màn hình thiết kế từ Figma sang HTML5/CSS3 chuẩn Responsive.'
+          }
+        ],
+        educations: [
+          {
+            degree: 'Kỹ sư Công nghệ Thông tin (Chuyên ngành Kỹ thuật Phần mềm)',
+            school: 'Đại học Thủy Lợi / Đại học Công nghệ',
+            year: '2022 – 2026',
+            note: 'GPA: 3.52 / 4.0 • Đồ án tốt nghiệp Xuất sắc về Hệ thống Quản trị Doanh nghiệp'
+          },
+          {
+            degree: 'Chứng chỉ Meta Front-End Developer Professional',
+            school: 'Coursera & Meta',
+            year: '2025',
+            note: 'Hoàn thành 9 học phần chuyên sâu về React, UX/UI & Kiến trúc Web hiện đại'
+          }
+        ],
+        attachments: [
+          { name: 'CV_NguyenVanAn_Frontend_Developer.pdf', size: '1.4 MB', date: '15/09/2026', type: 'PDF' },
+          { name: 'Bang_Tot_Nghiep_Dai_Hoc_CNTT.pdf', size: '2.1 MB', date: '15/09/2026', type: 'PDF' },
+          { name: 'Chung_Chi_Meta_Frontend_Pro.pdf', size: '850 KB', date: '16/09/2026', type: 'PDF' },
+          { name: 'Cam_Ket_Bao_Mat_NDA_DaKy.pdf', size: '520 KB', date: '15/09/2026', type: 'SIGNED' }
+        ]
+      },
+      mentor: {
+        id: 'M01',
+        name: 'Trần Thị Mai',
+        email: 'mai.tran@onboardai.vn',
+        role: 'mentor',
+        roleLabel: 'Mentor',
+        roleTitleVi: 'Người hướng dẫn (Mentor)',
+        department: 'Kỹ thuật Công nghệ',
+        position: 'Tech Lead & Mentor',
+        joinDate: '10/03/2023',
+        phone: '0987 654 321',
+        location: 'Hà Nội – Hybrid (Văn phòng & Từ xa)',
+        expYears: '7+ Năm (Tech Lead)',
+        degreeShort: 'Thạc sĩ KHMT',
+        ratingShort: '5.0 / 5.0 (Top Mentor)',
+        skills: 'System Architecture, Code Review, Technical Mentoring, Agile Scrum, AI-2 Personalizer, Microservices',
+        bio: 'Tech Lead phụ trách kèm cặp các kỹ sư mới tại khối Kỹ thuật Công nghệ. Đồng hành 1-on-1 hàng tuần giúp nhân sự mới hòa nhập văn hóa và làm chủ quy trình kỹ thuật.',
+        github: 'github.com/maitran-techlead',
+        slack: '@mai.tran',
+        menteeCount: 3,
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Mai',
+        dashboardUrl: 'mentor-mentee-list.html',
+        experiences: [
+          {
+            title: 'Tech Lead & Engineering Mentor',
+            company: 'OnboardAI Enterprise Vietnam',
+            period: '03/2023 – Hiện tại',
+            type: 'Full-time',
+            desc: 'Dẫn dắt đội ngũ 15 kỹ sư phát triển sản phẩm và trực tiếp kèm cặp các nhân sự mới (NH01, NH03) thông qua mô-đun AI-2 Checklist Personalizer.'
+          },
+          {
+            title: 'Senior Fullstack Engineer',
+            company: 'FPT Software Enterprise',
+            period: '2019 – 2023',
+            type: 'Full-time',
+            desc: 'Thiết kế kiến trúc hệ thống SaaS phục vụ hơn 50.000 người dùng doanh nghiệp tại khu vực APAC.'
+          }
+        ],
+        educations: [
+          {
+            degree: 'Thạc sĩ Khoa học Máy tính',
+            school: 'Đại học Bách Khoa Hà Nội',
+            year: '2019 – 2021',
+            note: 'Nghiên cứu chuyên sâu về Hệ thống phân tán & Trí tuệ nhân tạo ứng dụng'
+          }
+        ],
+        attachments: [
+          { name: 'Profile_TranThiMai_TechLead.pdf', size: '1.8 MB', date: '10/03/2023', type: 'PDF' },
+          { name: 'AWS_Solutions_Architect_Associate.pdf', size: '940 KB', date: '12/08/2024', type: 'PDF' }
+        ]
+      },
+      hr: {
+        id: 'HR01',
+        name: 'Lê Hoàng Nam',
+        email: 'nam.le@onboardai.vn',
+        role: 'hr',
+        roleLabel: 'HR Specialist',
+        roleTitleVi: 'Chuyên viên Nhân sự (HR)',
+        department: 'Nhân sự & Vận hành',
+        position: 'People Operations & Onboarding Lead',
+        joinDate: '05/01/2024',
+        phone: '0903 222 888',
+        location: 'Hà Nội – Hybrid (Văn phòng & Từ xa)',
+        expYears: '5+ Năm (HR Lead)',
+        degreeShort: 'Cử nhân QT Nhân lực',
+        ratingShort: '4.9 / 5.0 (Tận tâm)',
+        skills: 'Talent Onboarding, People Analytics, HR Policy, Employee Experience, AI-3 Risk Radar, SHRM-CP',
+        bio: 'Chuyên viên phụ trách chương trình Hội nhập nhân sự mới toàn công ty, chuẩn hóa thư viện sổ tay nội bộ và giám sát tiến độ hội nhập qua hệ thống OnboardAI.',
+        github: 'linkedin.com/in/namle-hr',
+        slack: '@nam.le.hr',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Nam',
+        dashboardUrl: 'hr-dashboard.html',
+        experiences: [
+          {
+            title: 'People Operations & Onboarding Lead',
+            company: 'OnboardAI Enterprise Vietnam',
+            period: '01/2024 – Hiện tại',
+            type: 'Full-time',
+            desc: 'Xây dựng quy trình hội nhập chuẩn hóa 90 ngày, vận hành thư viện tài liệu nội bộ (HR03) và hệ thống cảnh báo sớm AI-3 Risk Radar.'
+          }
+        ],
+        educations: [
+          {
+            degree: 'Cử nhân Quản trị Nhân lực Doanh nghiệp',
+            school: 'Đại học Kinh tế Quốc dân (NEU)',
+            year: '2017 – 2021',
+            note: 'Tốt nghiệp loại Giỏi • Chứng chỉ Nhân sự Quốc tế SHRM-CP'
+          }
+        ],
+        attachments: [
+          { name: 'Ho_So_Chuyen_Vien_HR_LeHoangNam.pdf', size: '1.2 MB', date: '05/01/2024', type: 'PDF' },
+          { name: 'Chung_Chi_SHRM_CP_International.pdf', size: '1.1 MB', date: '20/05/2024', type: 'PDF' }
+        ]
+      },
+      admin: {
+        id: 'AD01',
+        name: 'Vũ Quản Trị',
+        email: 'admin@onboardai.vn',
+        role: 'admin',
+        roleLabel: 'Admin',
+        roleTitleVi: 'Quản trị viên Hệ thống',
+        department: 'Ban Công nghệ & Vận hành',
+        position: 'System Administrator',
+        joinDate: '01/06/2022',
+        phone: '0939 999 000',
+        location: 'Hà Nội – Hybrid (Văn phòng & Từ xa)',
+        expYears: '8+ Năm (SecOps)',
+        degreeShort: 'Kỹ sư An toàn TT',
+        ratingShort: '99.9% SLA Uptime',
+        skills: 'RBAC Security, IAM, Cloud Infrastructure, Audit Logging, DevSecOps, Zero Trust',
+        bio: 'Quản trị viên hệ thống OnboardAI Enterprise, quản lý phân quyền RBAC 4 tầng, bảo mật tài khoản và duy trì tính toàn vẹn dữ liệu toàn hệ thống.',
+        github: 'github.com/onboardai-admin',
+        slack: '@sysadmin',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Admin',
+        dashboardUrl: 'admin-user-management.html',
+        experiences: [
+          {
+            title: 'Principal System Administrator',
+            company: 'OnboardAI Enterprise Vietnam',
+            period: '06/2022 – Hiện tại',
+            type: 'Full-time',
+            desc: 'Quản trị hạ tầng đám mây, phân quyền truy cập RBAC (AD02) và giám sát an toàn thông tin chuẩn ISO/IEC 27001.'
+          }
+        ],
+        educations: [
+          {
+            degree: 'Kỹ sư An toàn Thông tin',
+            school: 'Học viện Kỹ thuật Mật mã',
+            year: '2014 – 2019',
+            note: 'Chứng chỉ bảo mật quốc tế CISSP & CompTIA Security+'
+          }
+        ],
+        attachments: [
+          { name: 'Chung_Chi_ISO27001_Lead_Auditor.pdf', size: '1.5 MB', date: '01/06/2022', type: 'PDF' }
+        ]
+      }
+    };
+
+    const AVATAR_SEEDS = ['An', 'Mai', 'Nam', 'Admin', 'Long', 'Binh', 'Thu', 'Felix', 'Aneka', 'Sophia', 'Liam', 'Mia'];
+    let activeUser = null;
+
+    // 2. KHỞI TẠO TRANG KHI TẢI XONG
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (window.API && typeof API.init === 'function') {
+        await API.init();
+      }
+      loadCurrentUserProfile();
+      renderQuickAvatarList();
+      lucide.createIcons();
+    });
+
+    // Đọc thông tin người dùng từ LocalStorage
+    function loadCurrentUserProfile() {
+      let stored = null;
+      try {
+        stored = JSON.parse(localStorage.getItem('currentUser'));
+      } catch (_) {}
+
+      const roleKey = (stored && stored.role && DEFAULT_PROFILES[stored.role])
+        ? stored.role
+        : (localStorage.getItem('userRole') || 'newhire');
+
+      const base = DEFAULT_PROFILES[roleKey] || DEFAULT_PROFILES.newhire;
+
+      let savedProfiles = {};
+      try {
+        savedProfiles = JSON.parse(localStorage.getItem('onboardai_profiles_v1')) || {};
+      } catch (_) {}
+
+      const saved = savedProfiles[base.id] || {};
+
+      activeUser = {
+        ...base,
+        ...(stored || {}),
+        ...saved,
+        experiences: Array.isArray(saved.experiences) ? saved.experiences : base.experiences,
+        educations: Array.isArray(saved.educations) ? saved.educations : base.educations,
+        attachments: Array.isArray(saved.attachments) ? saved.attachments : base.attachments
+      };
+
+      activeUser.role = roleKey;
+      activeUser.id = activeUser.id || base.id;
+      activeUser.roleLabel = base.roleLabel;
+      activeUser.roleTitleVi = base.roleTitleVi;
+      activeUser.dashboardUrl = base.dashboardUrl;
+
+      syncUIFromActiveUser();
+    }
+
+    // 3. ĐỒNG BỘ GIAO DIỆN THEO NGƯỜI DÙNG HIỆN TẠI
+    function syncUIFromActiveUser() {
+      // Topbar
+      document.getElementById('topbarAvatar').src = activeUser.avatar;
+      document.getElementById('topbarName').textContent = activeUser.name;
+      document.getElementById('topbarRoleBadge').textContent = activeUser.roleLabel;
+
+      // Tính tiến độ thực tế từ LocalStorage nếu có
+      let pct = activeUser.progress || 65;
+      if (window.API && typeof API.getAll === 'function' && activeUser.role === 'newhire') {
+        const tasks = API.getAll('tasks').filter(t => t.newHireId === activeUser.id);
+        if (tasks.length > 0) {
+          const done = tasks.filter(t => t.status === 'completed').length;
+          pct = Math.round((done / tasks.length) * 100);
+        }
+      }
+
+      // Banner chính & 4 ô chỉ số Workster
+      document.getElementById('heroAvatar').src = activeUser.avatar;
+      document.getElementById('heroName').textContent = activeUser.name;
+      document.getElementById('heroRoleBadge').textContent = activeUser.roleTitleVi;
+      document.getElementById('heroIdBadge').textContent = '#' + activeUser.id;
+      document.getElementById('heroPosition').textContent = activeUser.position;
+      document.getElementById('heroDepartment').textContent = activeUser.department;
+      document.getElementById('heroLocationShort').textContent = (activeUser.location || 'Hà Nội – Hybrid').split('–')[0].trim() + ' (Hybrid)';
+      document.getElementById('backToWorkspaceBtn').href = activeUser.dashboardUrl;
+
+      document.getElementById('metricExpYears').textContent = activeUser.expYears || '2+ Năm';
+      document.getElementById('metricOnboardingPct').textContent = activeUser.role === 'newhire' ? `${pct}% Hoàn thành` : '100% Đã kích hoạt';
+      document.getElementById('metricDegree').textContent = activeUser.degreeShort || 'Đại học CNTT';
+      document.getElementById('metricRating').textContent = activeUser.ratingShort || '4.9 / 5.0';
+
+      // Cột trái: Liên hệ & Công tác
+      document.getElementById('heroEmail').textContent = activeUser.email;
+      document.getElementById('cardPhone').textContent = activeUser.phone || '0912 345 678';
+      document.getElementById('cardGithub').textContent = activeUser.github || 'github.com/onboardai';
+      document.getElementById('cardSlack').textContent = activeUser.slack || '@onboardai';
+      document.getElementById('cardEmpId').textContent = activeUser.id;
+      document.getElementById('cardDept').textContent = activeUser.department;
+      document.getElementById('cardPosition').textContent = activeUser.position;
+      document.getElementById('cardJoinDate').textContent = activeUser.joinDate || '15/09/2026';
+      document.getElementById('cardWorkMode').textContent = activeUser.location || 'Hà Nội – Hybrid';
+
+      // Tab 1 (Workster CV): Bio, Kinh nghiệm, Học vấn, Tài liệu đính kèm
+      document.getElementById('cvBioText').textContent = activeUser.bio || '';
+      renderCVExperienceList();
+      renderCVEducationList();
+      renderCVAttachmentsList();
+      renderSidebarSkills();
+
+      // Tab 2 (Form chỉnh sửa)
+      document.getElementById('profName').value = activeUser.name || '';
+      document.getElementById('profEmail').value = activeUser.email || '';
+      document.getElementById('profPhone').value = activeUser.phone || '';
+      document.getElementById('profPosition').value = activeUser.position || '';
+      setSelectValue('profDepartment', activeUser.department);
+      setSelectValue('profLocation', activeUser.location);
+      document.getElementById('profSkills').value = activeUser.skills || '';
+      document.getElementById('profBio').value = activeUser.bio || '';
+      document.getElementById('profGithub').value = activeUser.github || '';
+      document.getElementById('profSlack').value = activeUser.slack || '';
+
+      renderSkillTagsPreview();
+      renderSidebarByRole(activeUser.role);
+      renderRoleSpecificCard(activeUser.role, pct);
+      highlightActiveRoleSwitch(activeUser.role);
+      highlightSelectedAvatar();
+      lucide.createIcons();
+    }
+
+    // Render Kỹ năng ở cột trái theo phong cách Workster (Tag Cloud + Thanh mức độ thành thạo)
+    function renderSidebarSkills() {
+      const raw = activeUser.skills || '';
+      const skills = raw.split(',').map(s => s.trim()).filter(Boolean);
+
+      const chipBox = document.getElementById('sidebarSkillChips');
+      chipBox.innerHTML = skills.map(s => `
+        <span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-[#1F5AFE] border border-slate-200/80 text-[11px] font-semibold transition">
+          ${escapeHtml(s)}
+        </span>
+      `).join('');
+
+      const barBox = document.getElementById('sidebarSkillBars');
+      const topSkills = skills.slice(0, 4);
+      const percents = [92, 85, 88, 78];
+      barBox.innerHTML = topSkills.map((s, idx) => {
+        const p = percents[idx % percents.length];
+        return `
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-semibold text-slate-700">${escapeHtml(s)}</span>
+              <span class="text-[11px] font-bold text-[#1F5AFE] tabular-nums">${p}%</span>
+            </div>
+            <div class="micro-progress-track">
+              <div class="micro-progress-fill bg-[#1F5AFE]" style="width:${p}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Render Timeline Kinh nghiệm làm việc (Workster Experience Section)
+    function renderCVExperienceList() {
+      const box = document.getElementById('cvExperienceList');
+      const list = activeUser.experiences || [];
+      if (list.length === 0) {
+        box.innerHTML = `<p class="text-xs text-slate-400 italic">Chưa có thông tin kinh nghiệm làm việc.</p>`;
+        return;
+      }
+      box.innerHTML = list.map((item, idx) => `
+        <div class="cv-timeline-item flex items-start gap-4">
+          <div class="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200/70 text-[#1F5AFE] flex items-center justify-center shrink-0 mt-0.5">
+            <i data-lucide="building" class="w-5 h-5"></i>
+          </div>
+          <div class="flex-1 min-w-0 p-4 rounded-2xl bg-slate-50/70 border border-slate-200/80 hover:border-blue-200 transition">
+            <div class="flex flex-wrap items-start justify-between gap-2">
+              <div>
+                <h4 class="text-sm font-bold text-slate-900">${escapeHtml(item.title)}</h4>
+                <div class="text-xs font-semibold text-[#1F5AFE] mt-0.5">${escapeHtml(item.company)}</div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[11px] font-semibold text-slate-600">${escapeHtml(item.period)}</span>
+                <span class="px-2 py-0.5 rounded-md bg-emerald-50 text-[#00B67A] text-[10px] font-bold">${escapeHtml(item.type || 'Full-time')}</span>
+                <button type="button" onclick="removeExperience(${idx})" title="Xóa mục này" class="no-print text-slate-400 hover:text-rose-600 p-1">
+                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            </div>
+            <p class="mt-2 text-xs text-slate-600 leading-relaxed">${escapeHtml(item.desc)}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Render Danh sách Học vấn & Chứng chỉ (Workster Education Section)
+    function renderCVEducationList() {
+      const box = document.getElementById('cvEducationList');
+      const list = activeUser.educations || [];
+      if (list.length === 0) {
+        box.innerHTML = `<p class="text-xs text-slate-400 italic">Chưa có thông tin học vấn.</p>`;
+        return;
+      }
+      box.innerHTML = list.map((edu, idx) => `
+        <div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50/70 border border-slate-200/80 hover:border-indigo-200 transition">
+          <div class="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-200/70 text-indigo-600 flex items-center justify-center shrink-0">
+            <i data-lucide="Award" class="w-5 h-5"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex flex-wrap items-start justify-between gap-2">
+              <div>
+                <h4 class="text-sm font-bold text-slate-900">${escapeHtml(edu.degree)}</h4>
+                <div class="text-xs font-semibold text-indigo-600 mt-0.5">${escapeHtml(edu.school)}</div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[11px] font-semibold text-slate-600">${escapeHtml(edu.year)}</span>
+                <button type="button" onclick="removeEducation(${idx})" title="Xóa mục này" class="no-print text-slate-400 hover:text-rose-600 p-1">
+                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            </div>
+            ${edu.note ? `<p class="mt-1.5 text-xs text-slate-600">${escapeHtml(edu.note)}</p>` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Render Danh sách Tài liệu đính kèm (Workster Attachments Section)
+    function renderCVAttachmentsList() {
+      const box = document.getElementById('cvAttachmentsList');
+      const list = activeUser.attachments || [];
+      box.innerHTML = list.map((file, idx) => `
+        <div class="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 hover:border-[#1F5AFE]/40 transition group">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-9 h-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-[#1F5AFE] shrink-0">
+              <i data-lucide="file-text" class="w-4 h-4"></i>
+            </div>
+            <div class="min-w-0">
+              <div class="text-xs font-bold text-slate-800 truncate">${escapeHtml(file.name)}</div>
+              <div class="text-[11px] text-slate-400">${escapeHtml(file.size)} &bull; Nộp ngày ${escapeHtml(file.date)}</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-1 shrink-0 ml-2 no-print">
+            <button type="button" onclick="showToast('Đang mở bản xem trước: ${escapeHtml(file.name)}', 'info')" title="Tải xuống / Xem" class="p-1.5 rounded-lg text-slate-500 hover:text-[#1F5AFE] hover:bg-white transition">
+              <i data-lucide="download" class="w-4 h-4"></i>
+            </button>
+            <button type="button" onclick="removeAttachment(${idx})" title="Xóa tài liệu" class="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-white transition">
+              <i data-lucide="x" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function setSelectValue(selectId, value) {
+      const sel = document.getElementById(selectId);
+      if (!sel || !value) return;
+      const exists = Array.from(sel.options).some(opt => opt.value === value);
+      if (!exists) {
+        const opt = document.createElement('option');
+        opt.value = value;
+        opt.textContent = value;
+        sel.appendChild(opt);
+      }
+      sel.value = value;
+    }
+
+    // Render menu Sidebar khớp với đúng phân hệ của người đang đăng nhập
+    function renderSidebarByRole(role) {
+      const container = document.getElementById('sidebarRoleLinks');
+      const title = document.getElementById('sidebarMainTitle');
+      const sub = document.getElementById('sidebarRoleSub');
+
+      const configs = {
+        newhire: {
+          sub: 'ENTERPRISE',
+          title: 'Không gian Nhân sự mới',
+          links: [
+            { href: 'newhire-onboarding-dashboard.html', icon: 'layout-dashboard', label: 'Bảng điều khiển' },
+            { href: 'newhire-checklist.html', icon: 'check-square', label: 'Checklist hội nhập' },
+            { href: 'newhire-ai-help.html', icon: 'bot', label: 'Trợ lý AI Hỏi đáp' }
+          ]
+        },
+        mentor: {
+          sub: 'MENTOR SPACE',
+          title: 'Không gian Người hướng dẫn',
+          links: [
+            { href: 'mentor-mentee-list.html', icon: 'users', label: 'Danh sách Mentee' },
+            { href: 'mentor-checkin-note.html', icon: 'clipboard-check', label: 'Phiếu Check-in 1-on-1' },
+            { href: 'mentor-task-assignment.html', icon: 'sparkles', label: 'Giao việc & Gợi ý AI-2' }
+          ]
+        },
+        hr: {
+          sub: 'HR SPECIALIST',
+          title: 'Không gian Quản trị HR',
+          links: [
+            { href: 'hr-dashboard.html', icon: 'pie-chart', label: 'Bảng điều khiển HR' },
+            { href: 'hr-document-library.html', icon: 'book-open', label: 'Thư viện Tài liệu' },
+            { href: 'newhire-onboarding-dashboard.html', icon: 'user-check', label: 'Thị sát Nhân sự mới' }
+          ]
+        },
+        admin: {
+          sub: 'SYSTEM ADMIN',
+          title: 'Phân hệ Quản trị hệ thống',
+          links: [
+            { href: 'admin-user-management.html', icon: 'users-round', label: 'Tài khoản & Phân quyền' },
+            { href: 'hr-dashboard.html', icon: 'pie-chart', label: 'Bảng điều khiển HR' }
+          ]
+        }
+      };
+
+      const cfg = configs[role] || configs.newhire;
+      sub.textContent = cfg.sub;
+      title.textContent = cfg.title;
+      container.innerHTML = cfg.links.map(item => `
+        <a href="${item.href}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors hover:no-underline">
+          <i data-lucide="${item.icon}" class="w-4 h-4"></i>
+          <span>${item.label}</span>
+        </a>
+      `).join('');
+    }
+
+    // Render thẻ thông tin chuyên biệt theo từng vai trò ở cột trái
+    function renderRoleSpecificCard(role, pct = 65) {
+      const box = document.getElementById('roleSpecificCard');
+      if (role === 'newhire') {
+        box.innerHTML = `
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <i data-lucide="rocket" class="w-4 h-4 text-[#1F5AFE]"></i>
+              <span>Tiến độ Hội nhập</span>
+            </h3>
+            <span class="text-xs font-extrabold text-[#1F5AFE] tabular-nums">${pct}%</span>
+          </div>
+          <div class="micro-progress-track mb-3">
+            <div class="micro-progress-fill bg-gradient-to-r from-[#1F5AFE] to-[#00B67A]" style="width:${pct}%"></div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/70 text-xs space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-slate-500">Người hướng dẫn (Mentor):</span>
+              <strong class="text-slate-800">${activeUser.mentorName || 'Trần Thị Mai'}</strong>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slate-500">Giai đoạn hiện tại:</span>
+              <span class="font-semibold text-emerald-700">Tuần 1 – Làm quen công cụ</span>
+            </div>
+          </div>
+          <a href="newhire-checklist.html" class="no-print mt-3 w-full inline-flex items-center justify-center gap-1.5 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#1F5AFE] text-xs font-bold transition hover:no-underline">
+            <span>Mở Checklist công việc</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </a>
+        `;
+      } else if (role === 'mentor') {
+        box.innerHTML = `
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <i data-lucide="users" class="w-4 h-4 text-indigo-600"></i>
+              <span>Phụ trách Kèm cặp</span>
+            </h3>
+            <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700">3 Mentee</span>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed mb-3">
+            Bạn đang hướng dẫn trực tiếp cho <strong>Nguyễn Văn An (NH01)</strong> và <strong>Lê Hoàng Long (NH03)</strong> tại phòng Kỹ thuật Công nghệ.
+          </p>
+          <div class="grid grid-cols-2 gap-2 no-print">
+            <a href="mentor-mentee-list.html" class="inline-flex items-center justify-center gap-1.5 py-2 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold transition hover:no-underline">
+              <span>DS Mentee</span>
+            </a>
+            <a href="mentor-task-assignment.html" class="inline-flex items-center justify-center gap-1.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition hover:no-underline">
+              <span>Giao việc AI-2</span>
+            </a>
+          </div>
+        `;
+      } else {
+        box.innerHTML = `
+          <div class="flex items-center justify-between mb-2.5">
+            <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <i data-lucide="shield" class="w-4 h-4 text-violet-600"></i>
+              <span>Phạm vi Quyền hạn Hệ thống</span>
+            </h3>
+            <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-violet-50 text-violet-700">Toàn quyền</span>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed mb-3">
+            Tài khoản của bạn được cấp quyền truy cập bảng điều khiển quản trị và chế độ Thị sát (View-As Mode) để giám sát chất lượng hội nhập.
+          </p>
+          <a href="${activeUser.dashboardUrl}" class="no-print w-full inline-flex items-center justify-center gap-1.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition hover:no-underline">
+            <span>Mở Bảng điều khiển Quản trị</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </a>
+        `;
+      }
+    }
+
+    // 4. THÊM / XÓA KINH NGHIỆM, HỌC VẤN & TÀI LIỆU TRONG WORKSTER CV
+    function openExpModal() {
+      document.getElementById('expForm').reset();
+      const m = document.getElementById('expModal');
+      m.classList.remove('hidden');
+      m.classList.add('flex');
+    }
+    function closeExpModal() {
+      const m = document.getElementById('expModal');
+      m.classList.add('hidden');
+      m.classList.remove('flex');
+    }
+    function handleAddExperience(e) {
+      e.preventDefault();
+      const item = {
+        title: document.getElementById('expTitle').value.trim(),
+        company: document.getElementById('expCompany').value.trim(),
+        period: document.getElementById('expPeriod').value.trim(),
+        type: document.getElementById('expType').value,
+        desc: document.getElementById('expDesc').value.trim()
+      };
+      activeUser.experiences = [item, ...(activeUser.experiences || [])];
+      persistActiveUser();
+      syncUIFromActiveUser();
+      closeExpModal();
+      showToast('Đã thêm kinh nghiệm làm việc mới vào CV!', 'success');
+    }
+    function removeExperience(idx) {
+      activeUser.experiences.splice(idx, 1);
+      persistActiveUser();
+      syncUIFromActiveUser();
+      showToast('Đã xóa mục kinh nghiệm làm việc.', 'info');
+    }
+
+    function openEduModal() {
+      document.getElementById('eduForm').reset();
+      const m = document.getElementById('eduModal');
+      m.classList.remove('hidden');
+      m.classList.add('flex');
+    }
+    function closeEduModal() {
+      const m = document.getElementById('eduModal');
+      m.classList.add('hidden');
+      m.classList.remove('flex');
+    }
+    function handleAddEducation(e) {
+      e.preventDefault();
+      const item = {
+        degree: document.getElementById('eduDegree').value.trim(),
+        school: document.getElementById('eduSchool').value.trim(),
+        year: document.getElementById('eduYear').value.trim(),
+        note: document.getElementById('eduNote').value.trim()
+      };
+      activeUser.educations = [item, ...(activeUser.educations || [])];
+      persistActiveUser();
+      syncUIFromActiveUser();
+      closeEduModal();
+      showToast('Đã thêm thông tin học vấn / chứng chỉ vào CV!', 'success');
+    }
+    function removeEducation(idx) {
+      activeUser.educations.splice(idx, 1);
+      persistActiveUser();
+      syncUIFromActiveUser();
+      showToast('Đã xóa mục học vấn.', 'info');
+    }
+
+    function handleAddAttachment() {
+      const fileName = prompt('Nhập tên tài liệu đính kèm (VD: Chung_Chi_TOEIC_850.pdf):', 'Chung_Chi_Chuyen_Mon_2026.pdf');
+      if (!fileName || !fileName.trim()) return;
+      const today = new Date().toLocaleDateString('vi-VN');
+      activeUser.attachments = [
+        ...(activeUser.attachments || []),
+        { name: fileName.trim(), size: '1.1 MB', date: today, type: 'PDF' }
+      ];
+      persistActiveUser();
+      syncUIFromActiveUser();
+      showToast('Đã đính kèm tài liệu mới vào hồ sơ CV!', 'success');
+    }
+    function removeAttachment(idx) {
+      activeUser.attachments.splice(idx, 1);
+      persistActiveUser();
+      syncUIFromActiveUser();
+      showToast('Đã gỡ tài liệu đính kèm.', 'info');
+    }
+
+    function handleDownloadCV() {
+      switchTab('cv');
+      showToast('Đang chuẩn bị bản in / xuất PDF Hồ sơ năng lực (CV)...', 'info');
+      setTimeout(() => window.print(), 400);
+    }
+
+    // 5. XỬ LÝ LƯU THÔNG TIN HỒ SƠ CÁ NHÂN
+    function handleSaveProfile(e) {
+      e.preventDefault();
+
+      const nameEl = document.getElementById('profName');
+      const emailEl = document.getElementById('profEmail');
+      const phoneEl = document.getElementById('profPhone');
+
+      const name = nameEl.value.trim();
+      const email = emailEl.value.trim();
+      const phone = phoneEl.value.trim();
+
+      let valid = true;
+      toggleError(nameEl, 'profNameError', !name);
+      if (!name) valid = false;
+
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      toggleError(emailEl, 'profEmailError', !emailOk);
+      if (!emailOk) valid = false;
+
+      const phoneDigits = phone.replace(/\D/g, '');
+      const phoneOk = !phone || (phoneDigits.length >= 9 && phoneDigits.length <= 11);
+      toggleError(phoneEl, 'profPhoneError', !phoneOk);
+      if (!phoneOk) valid = false;
+
+      if (!valid) {
+        showToast('Vui lòng kiểm tra lại các trường thông tin báo đỏ.', 'error');
+        return;
+      }
+
+      activeUser = {
+        ...activeUser,
+        name,
+        email,
+        phone,
+        position: document.getElementById('profPosition').value.trim() || activeUser.position,
+        department: document.getElementById('profDepartment').value,
+        location: document.getElementById('profLocation').value,
+        skills: document.getElementById('profSkills').value.trim(),
+        bio: document.getElementById('profBio').value.trim(),
+        github: document.getElementById('profGithub').value.trim(),
+        slack: document.getElementById('profSlack').value.trim(),
+        updatedAt: new Date().toISOString()
+      };
+
+      persistActiveUser();
+      syncUIFromActiveUser();
+
+      const nowStr = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('lastSavedHint').textContent = `Đã lưu lúc ${nowStr}`;
+      showToast('Đã cập nhật hồ sơ cá nhân & đồng bộ sang CV!', 'success');
+    }
+
+    function persistActiveUser() {
+      localStorage.setItem('currentUser', JSON.stringify(activeUser));
+      localStorage.setItem('userRole', activeUser.role);
+      if (window.API && typeof API.setCurrentUser === 'function') {
+        API.setCurrentUser(activeUser);
+      }
+
+      let savedProfiles = {};
+      try {
+        savedProfiles = JSON.parse(localStorage.getItem('onboardai_profiles_v1')) || {};
+      } catch (_) {}
+      savedProfiles[activeUser.id] = activeUser;
+      localStorage.setItem('onboardai_profiles_v1', JSON.stringify(savedProfiles));
+
+      if (window.API && typeof API.getDB === 'function') {
+        const db = API.getDB();
+        if (Array.isArray(db.newHires)) {
+          const idx = db.newHires.findIndex(n => n.id === activeUser.id);
+          if (idx !== -1) {
+            db.newHires[idx] = {
+              ...db.newHires[idx],
+              name: activeUser.name,
+              email: activeUser.email,
+              department: activeUser.department,
+              position: activeUser.position,
+              avatar: activeUser.avatar
+            };
+            API.saveDB(db);
+          }
+        }
+      }
+    }
+
+    function resetProfileForm() {
+      syncUIFromActiveUser();
+      showToast('Đã khôi phục thông tin về bản lưu gần nhất.', 'info');
+    }
+
+    function renderSkillTagsPreview() {
+      const raw = document.getElementById('profSkills').value || '';
+      const box = document.getElementById('skillTagsPreview');
+      const skills = raw.split(',').map(s => s.trim()).filter(Boolean);
+      box.innerHTML = skills.map(s => `
+        <span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-blue-50 text-[#1F5AFE] border border-blue-200/70 text-[11px] font-semibold">
+          ${escapeHtml(s)}
+        </span>
+      `).join('');
+    }
+
+    // 6. ĐỔI MẬT KHẨU & KIỂM TRA ĐỘ MẠNH
+    function getStoredPasswordForUser(userId) {
+      try {
+        const pwdMap = JSON.parse(localStorage.getItem('onboardai_passwords_v1')) || {};
+        return pwdMap[userId] || '123456';
+      } catch (_) {
+        return '123456';
+      }
+    }
+
+    function saveStoredPasswordForUser(userId, newPwd) {
+      let pwdMap = {};
+      try {
+        pwdMap = JSON.parse(localStorage.getItem('onboardai_passwords_v1')) || {};
+      } catch (_) {}
+      pwdMap[userId] = newPwd;
+      localStorage.setItem('onboardai_passwords_v1', JSON.stringify(pwdMap));
+    }
+
+    function evaluatePasswordStrength() {
+      const val = document.getElementById('newPassword').value;
+      let score = 0;
+      if (val.length >= 6) score++;
+      if (val.length >= 10) score++;
+      if (/[A-Z]/.test(val) && /[a-z]/.test(val)) score++;
+      if (/\d/.test(val) || /[^A-Za-z0-9]/.test(val)) score++;
+
+      const colors = ['bg-slate-200', 'bg-rose-500', 'bg-amber-400', 'bg-blue-500', 'bg-[#00B67A]'];
+      const labels = ['Chưa nhập', 'Yếu', 'Trung bình', 'Khá mạnh', 'Rất mạnh'];
+
+      for (let i = 1; i <= 4; i++) {
+        const bar = document.getElementById('pwdBar' + i);
+        bar.className = 'h-1.5 rounded-full transition-colors ' + (i <= score ? colors[score] : 'bg-slate-200');
+      }
+      document.getElementById('pwdStrengthLabel').textContent = val ? labels[score] : 'Chưa nhập';
+    }
+
+    function handleChangePassword(e) {
+      e.preventDefault();
+      const curEl = document.getElementById('curPassword');
+      const newEl = document.getElementById('newPassword');
+      const cfmEl = document.getElementById('confirmPassword');
+
+      const expectedPwd = getStoredPasswordForUser(activeUser.id);
+      const curOk = curEl.value === expectedPwd;
+      const newOk = newEl.value.length >= 6 && newEl.value !== curEl.value;
+      const cfmOk = cfmEl.value === newEl.value && cfmEl.value.length > 0;
+
+      toggleError(curEl, 'curPasswordError', !curOk);
+      toggleError(newEl, 'newPasswordError', !newOk);
+      toggleError(cfmEl, 'confirmPasswordError', !cfmOk);
+
+      if (!curOk || !newOk || !cfmOk) {
+        showToast('Vui lòng kiểm tra lại thông tin mật khẩu.', 'error');
+        return;
+      }
+
+      saveStoredPasswordForUser(activeUser.id, newEl.value);
+      document.getElementById('passwordForm').reset();
+      evaluatePasswordStrength();
+      showToast('Đã đổi mật khẩu thành công!', 'success');
+    }
+
+    function fillDefaultCurrentPwd() {
+      document.getElementById('curPassword').value = getStoredPasswordForUser(activeUser.id);
+      toggleError(document.getElementById('curPassword'), 'curPasswordError', false);
+    }
+
+    function togglePwdField(inputId, btn) {
+      const input = document.getElementById(inputId);
+      const isPwd = input.type === 'password';
+      input.type = isPwd ? 'text' : 'password';
+      btn.innerHTML = `<i data-lucide="${isPwd ? 'eye-off' : 'eye'}" class="w-4 h-4"></i>`;
+      lucide.createIcons();
+    }
+
+    function handleToggle2FA(enabled) {
+      const scoreBadge = document.getElementById('securityScoreBadge');
+      const scoreBar = document.getElementById('securityScoreBar');
+      const pct = enabled ? '90%' : '65%';
+      scoreBadge.textContent = pct;
+      scoreBar.style.width = pct;
+      showToast(enabled ? 'Đã bật xác thực bảo mật 2 lớp (2FA).' : 'Đã tạm tắt xác thực 2 lớp.', enabled ? 'success' : 'info');
+    }
+
+    // 7. CHỌN NHANH AVATAR & MODAL TÙY CHỈNH
+    function renderQuickAvatarList() {
+      const grid = document.getElementById('quickAvatarGrid');
+      grid.innerHTML = AVATAR_SEEDS.map(seed => {
+        const url = `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}`;
+        return `
+          <button type="button" onclick="selectAvatar('${url}')" data-avatar-url="${url}"
+                  class="avatar-option p-1 rounded-xl border-2 border-slate-200 bg-slate-50 hover:bg-white">
+            <img src="${url}" alt="${seed}" class="w-full aspect-square rounded-lg">
+          </button>
+        `;
+      }).join('');
+      highlightSelectedAvatar();
+    }
+
+    function selectAvatar(url) {
+      activeUser.avatar = url;
+      persistActiveUser();
+      syncUIFromActiveUser();
+      showToast('Đã cập nhật ảnh đại diện mới!', 'success');
+    }
+
+    function highlightSelectedAvatar() {
+      document.querySelectorAll('[data-avatar-url]').forEach(btn => {
+        btn.classList.toggle('is-selected', btn.dataset.avatarUrl === activeUser.avatar);
+      });
+    }
+
+    function openAvatarModal() {
+      document.getElementById('customAvatarUrl').value = activeUser.avatar || '';
+      const modal = document.getElementById('avatarModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeAvatarModal() {
+      const modal = document.getElementById('avatarModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function applyCustomAvatar() {
+      const url = document.getElementById('customAvatarUrl').value.trim();
+      if (!url) return;
+      selectAvatar(url);
+      closeAvatarModal();
+    }
+
+    // 8. CHUYỂN TAB, CHUYỂN VAI TRÒ DEMO & TIỆN ÍCH
+    function switchTab(tabKey) {
+      ['cv', 'edit', 'security', 'preferences'].forEach(k => {
+        const panel = document.getElementById('tabPanel-' + k);
+        const btn = document.getElementById('tabBtn-' + k);
+        if (!panel || !btn) return;
+        const active = k === tabKey;
+        panel.classList.toggle('hidden', !active);
+        btn.className = active
+          ? 'flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition bg-[#1F5AFE] text-white shadow-xs'
+          : 'flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition text-slate-600 hover:bg-slate-100 hover:text-slate-900';
+      });
+    }
+
+    function switchDemoRole(roleKey) {
+      const base = DEFAULT_PROFILES[roleKey];
+      if (!base) return;
+      localStorage.setItem('currentUser', JSON.stringify(base));
+      localStorage.setItem('userRole', roleKey);
+      loadCurrentUserProfile();
+      showToast(`Đang xem hồ sơ & CV với vai trò: ${base.roleTitleVi} (${base.id})`, 'info');
+    }
+
+    function highlightActiveRoleSwitch(roleKey) {
+      document.querySelectorAll('[data-role-switch]').forEach(btn => {
+        const active = btn.dataset.roleSwitch === roleKey;
+        btn.className = active
+          ? 'role-switch-btn px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-[#1F5AFE] shadow-xs transition'
+          : 'role-switch-btn px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition';
+      });
+    }
+
+    function savePreferences() {
+      const prefs = {
+        aiBriefing: document.getElementById('prefAiBriefing').checked,
+        emailNoti: document.getElementById('prefEmailNoti').checked,
+        riskAlert: document.getElementById('prefRiskAlert').checked
+      };
+      localStorage.setItem('onboardai_prefs_' + activeUser.id, JSON.stringify(prefs));
+      showToast('Đã lưu cài đặt thông báo & tùy chọn AI!', 'success');
+    }
+
+    function toggleMobileSidebar() {
+      const sb = document.getElementById('appSidebar');
+      const ov = document.getElementById('sidebarOverlay');
+      sb.classList.toggle('-translate-x-full');
+      ov.classList.toggle('hidden');
+    }
+
+    function logout(e) {
+      if (e) e.preventDefault();
+      localStorage.removeItem('isLoggedIn');
+      window.location.href = 'login.html';
+    }
+
+    function toggleError(inputEl, errorId, hasError) {
+      inputEl.classList.toggle('input-error', hasError);
+      document.getElementById(errorId).classList.toggle('hidden', !hasError);
+    }
+
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      const palette = {
+        success: 'bg-emerald-600 text-white',
+        error: 'bg-rose-600 text-white',
+        info: 'bg-slate-900 text-white'
+      };
+      const icons = {
+        success: 'check-circle-2',
+        error: 'alert-triangle',
+        info: 'info'
+      };
+      toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-xl text-xs font-semibold shadow-lg transition-all ${palette[type] || palette.success}`;
+      toast.innerHTML = `<i data-lucide="${icons[type] || 'check-circle-2'}" class="w-4 h-4 shrink-0"></i><span>${message}</span>`;
+      container.appendChild(toast);
+      lucide.createIcons();
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 250);
+      }, 2800);
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+    }
+  </script>
+</body>
+</html>
