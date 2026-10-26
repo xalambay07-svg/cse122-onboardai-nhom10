@@ -580,6 +580,9 @@
       </nav>
     </div>
     <div class="trello-nav-right">
+      <button id="autoCreateTrelloWebBtn" style="background:#10B981;color:#FFFFFF;border:none;border-radius:6px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;box-shadow:0 2px 6px rgba(16,185,129,0.35);">
+        Copy Mã Tạo Tự Động Trên Web Trello.com
+      </button>
       <span>Thành viên Nhóm 10:</span>
       <div class="member-avatars">
         <span class="avatar-circle" style="background:#4F46E5;" title="SV1 - Huy (UI/UX & New Hire)">SV1</span>
@@ -1405,6 +1408,23 @@
     document.getElementById('memberFilter').addEventListener('change', (e) => {
       activeMember = e.target.value;
       renderBoard();
+    });
+
+    document.getElementById('autoCreateTrelloWebBtn').addEventListener('click', async () => {
+      try {
+        const res = await fetch('scripts/trello-auto-create-console.js');
+        const scriptCode = await res.text();
+        await navigator.clipboard.writeText(scriptCode);
+        alert(
+          '✅ ĐÃ COPY MÃ TỰ ĐỘNG TẠO BẢNG TRELLO VÀO CLIPBOARD!\n\n' +
+          'Anh chỉ cần làm 3 bước (15 giây):\n' +
+          '1. Mở trang https://trello.com (đã đăng nhập tài khoản của anh).\n' +
+          '2. Nhấn phím F12 -> Chọn tab "Console".\n' +
+          '3. Nhấn Ctrl + V để dán mã và nhấn Enter -> Toàn bộ 6 cột, 7 nhãn màu, 25 thẻ công việc & Checklist sẽ tự động được tạo trên Trello.com!'
+        );
+      } catch (err) {
+        alert('Anh hãy mở file scripts/trello-auto-create-console.js để copy mã nhé!');
+      }
     });
 
     renderBoard();
