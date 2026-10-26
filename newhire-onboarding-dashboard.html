@@ -216,6 +216,9 @@
             <a href="newhire-ai-help.html" class="inline-flex items-center px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs border border-[#E2E8F0] transition active:scale-95 hover:no-underline">
               <span>Hỏi nhanh Onbi</span>
             </a>
+            <button type="button" onclick="showQuickProgressSummary()" class="inline-flex items-center px-3.5 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold text-xs border border-emerald-200 transition cursor-pointer">
+              <span>Báo cáo nhanh tiến độ (SV1 - Nguyễn Gia Huy)</span>
+            </button>
           </div>
         </section>
 
@@ -1993,6 +1996,15 @@
         window.openMentorExplorerModal();
       }
     });
+    function showQuickProgressSummary() {
+      const currentNewHireId = getEffectiveNewHireProfile().id;
+      const allTasks = (window.API && window.API.getAll) ? window.API.getAll('tasks') : [];
+      const myTasks = allTasks.filter(t => t.newHireId === currentNewHireId);
+      const completedCount = myTasks.filter(t => t.status === 'completed').length;
+      const pendingCount = myTasks.length - completedCount;
+      const percent = myTasks.length > 0 ? Math.round((completedCount / myTasks.length) * 100) : 0;
+      alert(`BÁO CÁO TIẾN ĐỘ (SV1 - Nguyễn Gia Huy - 2551170897):\n- Nhân sự: ${currentNewHireId}\n- Đã hoàn thành: ${completedCount}/${myTasks.length} nhiệm vụ (${percent}%)\n- Còn lại cần làm: ${pendingCount} nhiệm vụ`);
+    }
   </script>
 </body>
 </html>

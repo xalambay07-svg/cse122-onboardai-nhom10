@@ -2146,6 +2146,14 @@
         showFieldError('errName', 'formName');
         hasError = true;
       }
+      else if (name.split(/\s+/).length < 2 || name.length < 5) {
+        const errEl = document.getElementById('errName');
+        if (errEl) {
+          errEl.textContent = 'Họ tên phải gồm ít nhất 2 từ (tối thiểu 5 ký tự)';
+        }
+        showFieldError('errName', 'formName');
+        hasError = true;
+      }
 
       // 2. Kiểm tra Email (@onboardai.vn & không trùng)
       const emailRegex = /^[^\s@]+@onboardai\.vn$/i;

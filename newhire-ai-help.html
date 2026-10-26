@@ -319,6 +319,16 @@
 
     // 5. CƠ SỞ TRI THỨC TOÀN DIỆN (KNOWLEDGE BASE: Policy + Personal + Smalltalk)
     const KNOWLEDGE_BASE = [
+      {
+        id: 'parking-card-policy',
+        type: 'policy',
+        title:'Đăng ký vé gửi xe hầm B1 & B2',
+        keywords: ['gửi xe', 'vé xe', 'hầm gửi xe', 'gui xe', 've xe', 'bãi xe' ],
+        synonyms: ['đỗ xe', 'xe máy', 'ô tô', 'phí gửi xe', 'the gui xe'],
+        answer: 'Nhân viên đăng ký thẻ gửi xe tại <strong>Quầy lễ tân tầng 1</strong> (cung cấp biển số xe và mã nhân viên). Công ty tài trợ <strong>100% phí gửi xe tháng</strong> tại hầm B1 & B2 của toà nhà.',
+        source: 'Sổ tay Hành chính OnboardAI - Mục 2.5 ',
+        followUps: ['working-hours', 'lunch-allowance']
+      },
       // === NHÓM 1: QUY CHẾ VÀ CHÍNH SÁCH DOANH NGHIỆP (POLICY) ===
       {
         id: 'annual-leave',
@@ -359,16 +369,6 @@
         answer: 'Thời gian thử việc tiêu chuẩn là <strong>60 ngày (02 tháng)</strong>. Vào ngày thứ 50, phòng Nhân sự sẽ tự động mở đợt Đánh giá 1-on-1 giữa Mentor và Mentee. Mức lương thử việc nhận tối thiểu <strong>85%</strong> mức lương chính thức theo thỏa thuận.',
         source: 'Quy chế Tiếp nhận & Bổ nhiệm Nhân sự – Điều 6.1 (Trang 24)',
         followUps: ['annual-leave', 'remote-work', 'salary-payroll']
-      },
-      {
-        id: 'parking',
-        type: 'policy',
-        title: 'Quy định gửi xe & Thẻ ra vào tòa nhà',
-        keywords: ['gửi xe', 'thẻ ra vào', 'thẻ tòa nhà', 'hầm xe', 'bãi xe', 'gui xe'],
-        synonyms: ['vé xe', 'đỗ xe', 'xe máy', 'ô tô', 'thẻ nhân viên', 'hầm b2', 'giữ xe', 'mất tiền', 'gui xe co mat tien khong', 'phi gui xe'],
-        answer: 'Công ty hỗ trợ <strong>100% chi phí gửi xe</strong> tại Hầm B2 của Tòa nhà Trụ sở. Bạn cần mang CCCD và đăng ký biển số xe tại quầy Lễ tân Tầng 1 trong ngày đầu tiên để kích hoạt mã chip trên Thẻ nhân viên.',
-        source: 'Nội quy Cơ sở vật chất & An ninh Tòa nhà – Mục 2.4 (Trang 8)',
-        followUps: ['working-hours', 'it-equipment']
       },
       {
         id: 'health-insurance',
@@ -727,6 +727,11 @@
     function scoreEntry(normQuery, entry) {
       let score = 0;
       const hits = [];
+
+      if (entry.title && normalize(entry.title) === normQuery) {
+        score += 10;
+        hits.push(entry.title);
+      }
 
       (entry._normKeywords || []).forEach((k, i) => {
         if (k && containsPhrase(normQuery, k)) {

@@ -36,7 +36,7 @@
 | Mốc thời gian | Thao tác trong VS Code | Lời thoại giải thích code |
 | :--- | :--- | :--- |
 | **2:30 – 3:30** | • Nhấn **`Alt + Tab`** sang **VS Code**, mở tab [`index.html`](file:///C:/Users/admin/.gemini/antigravity/scratch/onboardai-btl20/index.html).<br>• Nhấn **`Ctrl + G`**, gõ **`108`** rồi nhấn `Enter`.<br>• Chỉ chuột giải thích dòng `108` (`grid-cols-1 lg:grid-cols-12`), dòng `117` (thẻ `<h1>` chia 2 dòng `block`), dòng `137` (lưới 3 cột chỉ số `grid-cols-3`) và dòng `156` (khung cửa sổ mô phỏng Dashboard). | *"Bây giờ em xin giải thích cấu trúc mã nguồn trong VS Code. Tại file `index.html` dòng 108, em sử dụng CSS Grid 12 cột của Tailwind (`grid-cols-1 lg:grid-cols-12`) để chia đôi màn hình trên Desktop và tự động xếp chồng 1 cột trên Mobile. Ở dòng 117, thẻ `h1` được tách thành 2 thẻ `span` có class `block` để giữ trọn vẹn cụm từ tiếng Việt. Bên dưới dòng 137 là lưới `grid-cols-3` hiển thị 3 chỉ số cốt lõi, còn từ dòng 156 là khung cửa sổ trình duyệt mô phỏng Live UI."* |
-| **3:30 – 5:00** | • Chuyển sang tab [`newhire-onboarding-dashboard.html`](file:///C:/Users/admin/.gemini/antigravity/scratch/onboardai-btl20/newhire-onboarding-dashboard.html).<br>• Nhấn **`Ctrl + G`**, gõ **`1215`** $\rightarrow$ chỉ vào hàm `buildPersonalizedMentorCatalog()`.<br>• Nhấn **`Ctrl + G`**, gõ **`1482`** $\rightarrow$ chỉ vào hàm `generateSmartMentorReply()` và `saveMentorChatHistory()`. | *"Trong file `newhire-onboarding-dashboard.html`, tại dòng 1215 là hàm `buildPersonalizedMentorCatalog()`. Hàm này đọc thông tin phòng ban và vị trí của nhân sự đang đăng nhập, sau đó duyệt qua danh sách 8 Mentor để tính điểm tương thích `matchScore` và sắp xếp Mentor phù hợp nhất lên đầu. Còn tại dòng 1482, hàm `generateSmartMentorReply()` phân tích nội dung tin nhắn của nhân viên mới để tạo câu trả lời tự động sát với chuyên môn và gọi hàm `saveMentorChatHistory()` lưu vào LocalStorage."* |
+| **3:30 – 5:00** | • Chuyển sang tab [`newhire-onboarding-dashboard.html`](file:///C:/Users/admin/.gemini/antigravity/scratch/onboardai-btl20/newhire-onboarding-dashboard.html).<br>• Nhấn **`Ctrl + G`**, gõ **`1215`** $\rightarrow$ chỉ vào hàm `buildPersonalizedMentorCatalog()`, rồi nhìn xuống ngay **dòng `1270`** là hàm `saveMentorChatHistory()`.<br>• Nhấn **`Ctrl + G`**, gõ **`1482`** $\rightarrow$ chỉ vào hàm `generateSmartMentorReply()`, và cuộn nhẹ xuống **dòng `1524`–`1533`** (`appendAndReplyMentorMessage` gọi `saveMentorChatHistory`). | *"Trong file `newhire-onboarding-dashboard.html`, tại dòng 1215 là hàm `buildPersonalizedMentorCatalog()` tính điểm tương thích `matchScore` cho 8 Mentor, và ngay bên dưới tại dòng 1270 là hàm `saveMentorChatHistory()` lưu hội thoại vào LocalStorage. Còn tại dòng 1482, hàm `generateSmartMentorReply()` phân tích tin nhắn của nhân viên mới để tạo câu trả lời tự động và hàm `appendAndReplyMentorMessage()` ở dòng 1524 sẽ hiển thị tin nhắn lên khung chat."* |
 
 ---
 
@@ -55,27 +55,26 @@
 - **Lời thoại vừa gõ vừa nói (Phút 5:00 – 6:30):**
   > *"Bây giờ em xin trực tiếp code thêm một chức năng mới ngay trên màn hình Dashboard Nhân sự mới: đó là nút 'Báo cáo nhanh tiến độ' giúp thống kê tức thì số nhiệm vụ đã hoàn thành và số nhiệm vụ còn lại từ LocalStorage. Tại dòng 219 trong khối nút hành động của AI Daily Briefing, em gõ thẻ `<button type="button">` gắn sự kiện `onclick="showQuickProgressSummary()"`. Về định dạng giao diện, em sử dụng các class của Tailwind CSS gồm `inline-flex items-center` để căn giữa nội dung theo chiều dọc, `px-3.5 py-2 rounded-xl` để tạo khoảng đệm và bo tròn góc 12px đồng bộ với các nút bên cạnh, kết hợp tông màu xanh ngọc `bg-emerald-50 text-emerald-700 font-bold text-xs border border-emerald-200`. Bên trong em đặt thẻ `<span>` ghi rõ 'Báo cáo nhanh tiến độ (SV1 - Nguyễn Gia Huy)'."*
 
-#### Bước B (Phút 6:30 – 8:30): Trực tiếp gõ hàm JavaScript `showQuickProgressSummary()` ở cuối file
-1. Nhấn **`Ctrl + G`**, gõ **`1990`** rồi nhấn `Enter` (ngay phía trên thẻ đóng `</script>` ở cuối file `newhire-onboarding-dashboard.html`).
-2. Nhấn `Enter` tạo dòng trống và **vừa gõ chậm rãi hàm JavaScript (9 dòng) sau đây vừa giải thích từng dòng**:
+#### Bước B (Phút 6:30 – 8:30): Trực tiếp gõ hàm JavaScript `showQuickProgressSummary()` ở dòng `1998` (ngay sau `});` và ngay trên `</script>`)
+1. Nhìn vào ảnh màn hình cuối file `newhire-onboarding-dashboard.html`: anh đặt chuột vào **cuối dòng `1998`** (ngay sau dấu `});`), nhấn **`Enter`** để tạo dòng trống mới (nằm giữa `});` và `</script>`).
+2. Tại dòng mới vừa tạo (dòng `1999`, ngay phía trên `</script>`), anh **vừa gõ chậm rãi hàm JavaScript (7 dòng) sau đây vừa giải thích từng dòng**:
    ```javascript
-    // Hàm thống kê nhanh tiến độ trực tiếp từ LocalStorage (Code trực tiếp bởi SV1 - Nguyễn Gia Huy)
     function showQuickProgressSummary() {
-      const allTasks = (window.API && window.API.getAll) ? window.API.getAll('tasks') : [];
-      const myTasks = allTasks.filter(t => t.newHireId === currentNewHireId);
+      const profile = getEffectiveNewHireProfile();
+      const allTasks = API.getAll('tasks') || [];
+      const myTasks = allTasks.filter(t => t.newHireId === profile.id);
       const completedCount = myTasks.filter(t => t.status === 'completed').length;
-      const pendingCount = myTasks.length - completedCount;
       const percent = myTasks.length > 0 ? Math.round((completedCount / myTasks.length) * 100) : 0;
-      alert(`📊 BÁO CÁO TIẾN ĐỘ (SV1 - Nguyễn Gia Huy - 2551170897):\n- Nhân sự: ${currentNewHireId}\n- Đã hoàn thành: ${completedCount}/${myTasks.length} nhiệm vụ (${percent}%)\n- Còn lại cần làm: ${pendingCount} nhiệm vụ`);
+      alert(`BÁO CÁO TIẾN ĐỘ (SV1 - Nguyễn Gia Huy - 2551170897):\n- Nhân sự: ${profile.name} (${profile.id})\n- Đã hoàn thành: ${completedCount}/${myTasks.length} nhiệm vụ (${percent}%)`);
     }
    ```
 - **Lời thoại vừa gõ vừa nói (Phút 6:30 – 8:30):**
-  > *"Tiếp theo, em di chuyển xuống cuối thẻ `<script>` tại dòng 1990 để trực tiếp viết hàm `showQuickProgressSummary()`.
-  > - Ở dòng đầu tiên trong thân hàm, em khai báo biến `allTasks` gọi qua `window.API.getAll('tasks')` để lấy toàn bộ danh sách công việc đang lưu trong LocalStorage.
-  > - Ở dòng thứ hai, em dùng phương thức `.filter(t => t.newHireId === currentNewHireId)` để lọc ra đúng các nhiệm vụ thuộc về nhân sự mới đang đăng nhập hiện tại.
-  > - Ở dòng thứ ba, em tiếp tục dùng `.filter(t => t.status === 'completed').length` để đếm chính xác số lượng nhiệm vụ đã hoàn thành.
-  > - Ở dòng thứ tư và thứ năm, em tính số nhiệm vụ còn lại `pendingCount` bằng tổng số nhiệm vụ trừ đi số đã xong, đồng thời dùng hàm `Math.round()` để tính tỷ lệ phần trăm hoàn thành.
-  > - Cuối cùng, em hiển thị kết quả tổng hợp kèm tên và mã sinh viên Nguyễn Gia Huy – 2551170897 lên màn hình."*
+  > *"Tiếp theo, em đặt con trỏ ngay sau dấu đóng `});` ở dòng 1998 (ngay phía trên thẻ `</script>`) để trực tiếp viết hàm toàn cục `showQuickProgressSummary()`.
+  > - Ở dòng đầu tiên trong thân hàm, em gọi `const profile = getEffectiveNewHireProfile()` để lấy thông tin hồ sơ nhân sự mới đang đăng nhập hiện tại.
+  > - Ở dòng thứ hai, em gọi `API.getAll('tasks')` để lấy toàn bộ danh sách công việc đang lưu trong LocalStorage.
+  > - Ở dòng thứ ba, em dùng phương thức `.filter(t => t.newHireId === profile.id)` để lọc ra đúng các nhiệm vụ thuộc về nhân sự đó.
+  > - Ở dòng thứ tư và thứ năm, em dùng `.filter(t => t.status === 'completed').length` để đếm số nhiệm vụ đã hoàn thành và dùng `Math.round()` tính tỷ lệ phần trăm.
+  > - Cuối cùng, em dùng hàm `alert()` hiển thị kết quả tổng hợp kèm họ tên Nguyễn Gia Huy và mã sinh viên 2551170897 lên màn hình."*
 
 ---
 
