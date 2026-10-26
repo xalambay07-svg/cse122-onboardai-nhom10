@@ -38,15 +38,42 @@
 
   <!-- Lucide Vector Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .mentor-scroll-area {
+      scroll-behavior: smooth;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+      will-change: scroll-position;
+      transform: translateZ(0);
+    }
+    .mentor-scroll-area::-webkit-scrollbar {
+      width: 7px;
+    }
+    .mentor-scroll-area::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 9999px;
+    }
+    .mentor-scroll-area::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    .mentor-scroll-area::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
 </head>
 <body class="bg-[#F1F5F9] text-slate-900 font-sans antialiased h-full flex flex-col">
   <!-- Thanh Thị sát của Quản trị viên (Admin View-as Bar - Mặc định ẩn, chỉ hiện khi HR/Admin truy cập) -->
   <div id="adminImpersonateBar" class="hidden bg-slate-900 text-white px-4 py-2.5 text-xs font-medium flex flex-wrap items-center justify-between gap-2 z-50 border-b border-indigo-500/40 shrink-0">
-    <div class="flex items-center gap-2">
+    <div class="flex flex-wrap items-center gap-2.5">
       <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-500 text-slate-950">Chế độ thị sát</span>
-      <span class="text-slate-300">Đang xem giao diện dưới góc nhìn của <strong class="text-white">Nguyễn Văn An (NH01 - Frontend Developer)</strong></span>
+      <span class="text-slate-300">Đang xem góc nhìn của <strong id="impersonateNewHireLabel" class="text-white">Nguyễn Văn An (NH01 - Frontend Developer)</strong></span>
+      <div class="flex items-center gap-1.5 ml-1">
+        <span class="text-[11px] text-slate-400">Đổi Nhân sự mới:</span>
+        <select id="impersonateNewHireSelect" onchange="switchImpersonatedNewHire(this.value)" class="bg-slate-800 text-white border border-slate-700 rounded-lg px-2.5 py-1 text-xs font-semibold focus:outline-none focus:border-amber-400 cursor-pointer"></select>
+      </div>
     </div>
-    <button onclick="exitImpersonation('hr-dashboard.html')" class="px-3 py-1.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-600 text-white text-xs font-bold transition shadow-xs">
+    <button id="exitImpersonateBtn" onclick="exitImpersonation('hr-dashboard.html')" class="px-3 py-1.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-600 text-white text-xs font-bold transition shadow-xs cursor-pointer">
       Thoát chế độ xem & Quay lại Bảng điều khiển HR
     </button>
   </div>
@@ -139,9 +166,9 @@
           <div>
             <h1 class="text-base font-bold text-slate-900 flex items-center gap-2">
               <span>Bảng điều khiển Hội nhập Cá nhân</span>
-              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-[#1F5AFE] border border-blue-200 whitespace-nowrap">Mã NH01</span>
+              <span id="headerNewHireCodeBadge" class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-[#1F5AFE] border border-blue-200 whitespace-nowrap">Mã NH01</span>
             </h1>
-            <p class="text-xs text-slate-500 hidden sm:block">Theo dõi lộ trình hội nhập, việc cần làm hôm nay và kết nối cùng Mentor</p>
+            <p id="headerNewHireDeptSub" class="text-xs text-slate-500 hidden sm:block">Theo dõi lộ trình hội nhập, việc cần làm hôm nay và kết nối cùng Mentor</p>
           </div>
         </div>
 
@@ -162,20 +189,15 @@
           <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#1F5AFE] via-indigo-500 to-[#00B67A]"></div>
           
           <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-            <div class="flex items-start gap-3.5">
-              <div class="w-11 h-11 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold border border-indigo-100 shadow-xs shrink-0">
-                <i data-lucide="sparkles" class="w-5 h-5 text-indigo-600"></i>
+            <div>
+              <div class="flex flex-wrap items-center gap-2 mb-1">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-100">Gợi ý từ Onbi</span>
+                <span class="text-xs text-slate-500">&bull; Ngày 3 trong lộ trình</span>
               </div>
-              <div>
-                <div class="flex flex-wrap items-center gap-2 mb-1">
-                  <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-100">Gợi ý từ Onbi</span>
-                  <span class="text-xs text-slate-500">&bull; Ngày 3 trong lộ trình</span>
-                </div>
-                <h2 id="welcomeTitle" class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Chào Nguyễn Văn An, hôm nay là ngày tăng tốc!</h2>
-                <p class="text-xs md:text-sm text-slate-600 mt-2 leading-relaxed max-w-2xl">
-                  Mục tiêu chính hôm nay: Hoàn tất <strong>Clone repo & Cài đặt Node.js</strong> trước 14:00 để kịp tham gia buổi review kỹ thuật với Mentor Trần Thị Mai lúc 15:00.
-                </p>
-              </div>
+              <h2 id="welcomeTitle" class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Chào Nguyễn Văn An, hôm nay là ngày tăng tốc!</h2>
+              <p class="text-xs md:text-sm text-slate-600 mt-2 leading-relaxed max-w-2xl">
+                Mục tiêu chính hôm nay: Hoàn tất <strong>Clone repo & Cài đặt Node.js</strong> trước 14:00 để kịp tham gia buổi review kỹ thuật với Mentor Trần Thị Mai lúc 15:00.
+              </p>
             </div>
 
             <!-- Nhãn trạng thái người dùng tiếng Việt & không xuống dòng (Mục 4 Lỗi #4 & Mục 5) -->
@@ -188,12 +210,10 @@
           </div>
 
           <div class="flex flex-wrap items-center gap-3 mt-4 pt-4 border-t border-slate-100">
-            <a href="#tasksSection" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#1F5AFE] text-white font-semibold text-xs hover:bg-blue-700 transition shadow-xs active:scale-95 hover:no-underline">
+            <a href="#tasksSection" class="inline-flex items-center px-4 py-2 rounded-xl bg-[#1F5AFE] text-white font-semibold text-xs hover:bg-blue-700 transition shadow-xs active:scale-95 hover:no-underline">
               <span>Thực hiện ngay việc hôm nay</span>
-              <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i>
             </a>
-            <a href="newhire-ai-help.html" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs border border-[#E2E8F0] transition active:scale-95 hover:no-underline">
-              <i data-lucide="bot" class="w-3.5 h-3.5 text-indigo-600"></i>
+            <a href="newhire-ai-help.html" class="inline-flex items-center px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs border border-[#E2E8F0] transition active:scale-95 hover:no-underline">
               <span>Hỏi nhanh Onbi</span>
             </a>
           </div>
@@ -259,27 +279,18 @@
               <h3 class="text-base font-bold text-slate-900 mb-4">Tài liệu quan trọng cho tân binh</h3>
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div onclick="quickAsk('Thời gian làm việc trong Sổ tay nhân viên 2026 quy định thế nào?')" class="p-3.5 rounded-xl border border-[#E2E8F0] bg-slate-50/70 hover:bg-white hover:border-blue-200 hover:shadow-xs transition-all duration-200 group cursor-pointer">
-                  <div class="w-7 h-7 rounded-lg bg-blue-100/80 text-[#1F5AFE] flex items-center justify-center mb-2">
-                    <i data-lucide="book-open" class="w-4 h-4"></i>
-                  </div>
                   <h4 class="text-xs font-semibold text-slate-900 group-hover:text-[#1F5AFE] transition-colors">Sổ tay nhân viên 2026</h4>
-                  <p class="text-xs text-slate-500 mt-0.5">Văn hóa & thời gian làm việc</p>
+                  <p class="text-xs text-slate-500 mt-1">Văn hóa & thời gian làm việc</p>
                 </div>
 
                 <div onclick="quickAsk('Chính sách làm việc từ xa (WFH) quy định thế nào?')" class="p-3.5 rounded-xl border border-[#E2E8F0] bg-slate-50/70 hover:bg-white hover:border-blue-200 hover:shadow-xs transition-all duration-200 group cursor-pointer">
-                  <div class="w-7 h-7 rounded-lg bg-indigo-100/80 text-indigo-700 flex items-center justify-center mb-2">
-                    <i data-lucide="laptop" class="w-4 h-4"></i>
-                  </div>
                   <h4 class="text-xs font-semibold text-slate-900 group-hover:text-[#1F5AFE] transition-colors">Chính sách Remote (WFH)</h4>
-                  <p class="text-xs text-slate-500 mt-0.5">Tối đa 2 ngày/tuần</p>
+                  <p class="text-xs text-slate-500 mt-1">Tối đa 2 ngày/tuần</p>
                 </div>
 
                 <div onclick="quickAsk('Hướng dẫn cài đặt VPN và xác thực bảo mật 2 lớp (2FA)?')" class="p-3.5 rounded-xl border border-[#E2E8F0] bg-slate-50/70 hover:bg-white hover:border-blue-200 hover:shadow-xs transition-all duration-200 group cursor-pointer">
-                  <div class="w-7 h-7 rounded-lg bg-emerald-100/80 text-[#00B67A] flex items-center justify-center mb-2">
-                    <i data-lucide="shield-check" class="w-4 h-4"></i>
-                  </div>
                   <h4 class="text-xs font-semibold text-slate-900 group-hover:text-[#1F5AFE] transition-colors">Quy định Bảo mật IT</h4>
-                  <p class="text-xs text-slate-500 mt-0.5">Xác thực 2 lớp & dữ liệu</p>
+                  <p class="text-xs text-slate-500 mt-1">Xác thực 2 lớp & dữ liệu</p>
                 </div>
               </div>
             </div>
@@ -288,37 +299,137 @@
           <!-- Cột phụ bên phải: Mentor & Thẻ Onbi Copilot -->
           <div class="lg:col-span-5 xl:col-span-4 space-y-6 min-w-0">
             
-            <!-- Thẻ Người hướng dẫn (Mentor Card) -->
-            <div class="bg-white rounded-2xl border border-[#E2E8F0] p-6 shadow-xs">
-              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4">Người đồng hành (Mentor)</h3>
-              <div class="flex items-center gap-3.5 p-3.5 rounded-xl bg-slate-50/80 border border-[#E2E8F0] mb-4">
-                <div class="relative shrink-0">
-                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mai" alt="Mentor" class="w-12 h-12 rounded-full bg-white ring-2 ring-slate-100 object-cover">
-                  <span class="absolute bottom-0 right-0 flex h-2.5 w-2.5">
-                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#00B67A] ring-2 ring-white"></span>
+            <!-- Thẻ Người đồng hành (Mentor Card - 2 trạng thái: AI Đề xuất khi chưa chọn & Hồ sơ Mentor khi đã chọn) -->
+            <div class="bg-white rounded-2xl border border-[#E2E8F0] p-6 shadow-xs space-y-4">
+              <!-- Header thẻ Mentor -->
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Người đồng hành (Mentor)</h3>
+                  <span id="mentorMatchBadge" class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 text-[#1F5AFE] border border-indigo-200/80">
+                    AI Đề xuất
                   </span>
                 </div>
-                <div class="flex-1 min-w-0">
-                  <h4 class="text-sm font-bold text-slate-900 truncate">Trần Thị Mai</h4>
-                  <p class="text-xs text-slate-500 truncate">Tech Lead &bull; Kỹ thuật</p>
-                  <span class="inline-flex items-center gap-1 text-xs font-semibold text-[#00B67A] mt-0.5">
-                    Đang trực tuyến
-                  </span>
-                </div>
+                <button onclick="openMentorExplorerModal()" class="text-[11px] font-bold text-[#1F5AFE] hover:underline cursor-pointer transition-all shrink-0">
+                  <span id="mentorHeaderActionLabel">Xem 8 Mentor</span>
+                </button>
               </div>
 
-              <!-- Lịch hẹn 1-on-1 sắp tới -->
-              <div class="p-3.5 rounded-xl bg-amber-50/80 border border-amber-200/60 text-xs text-amber-950 mb-4 space-y-1">
-                <div class="font-semibold flex items-center gap-1.5 text-amber-900">
-                  <i data-lucide="calendar" class="w-3.5 h-3.5"></i> Buổi gặp 1-on-1 tiếp theo:
+              <!-- TRẠNG THÁI 1: CHƯA CHỌN NGƯỜI ĐỒNG HÀNH -> HIỂN THỊ ĐỀ XUẤT TỪ AI ĐỂ NGƯỜI DÙNG TỰ LỰA CHỌN -->
+              <div id="mentorUnassignedState" class="space-y-3.5">
+                <div class="p-3.5 rounded-xl bg-gradient-to-br from-indigo-50/90 via-blue-50/60 to-white border border-indigo-200/80 space-y-1.5">
+                  <div class="text-xs font-extrabold text-slate-900">
+                    Gợi ý Người đồng hành từ Onbi AI
+                  </div>
+                  <p id="aiRecommendIntroText" class="text-xs text-slate-600 leading-relaxed">
+                    Tài khoản của bạn chưa có Người đồng hành chính thức. Dựa trên vị trí và phòng ban của bạn, AI đề xuất <strong>Top 3 Mentor phù hợp nhất</strong> dưới đây để bạn xem xét và tự quyết định:
+                  </p>
                 </div>
-                <div class="text-slate-700">15:00 Thứ Sáu tuần này (Check-in 7 ngày)</div>
+
+                <!-- Danh sách 3 Mentor được AI đề xuất hàng đầu -->
+                <div id="aiRecommendedMentorsList" class="space-y-2.5">
+                  <!-- Render động bằng JS -->
+                </div>
+
+                <button onclick="openMentorExplorerModal()" class="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-[#1F5AFE] text-white text-xs font-bold hover:bg-blue-700 transition-all active:scale-95 shadow-xs cursor-pointer">
+                  <span>Xem giới thiệu 8 Mentor & Tự lựa chọn</span>
+                </button>
               </div>
 
-              <button onclick="showToast('Đã mở kênh chat với Mentor Mai trên Slack!', 'success')" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all active:scale-95">
-                <i data-lucide="message-circle" class="w-4 h-4 text-slate-500"></i>
-                <span>Nhắn tin cho Mentor</span>
-              </button>
+              <!-- TRẠNG THÁI 2: ĐÃ CHỌN NGƯỜI ĐỒNG HÀNH -> HIỂN THỊ HỒ SƠ, LỊCH 1-ON-1 & CHAT TRỰC TIẾP -->
+              <div id="mentorAssignedState" class="hidden space-y-4">
+                <!-- Khối thông tin Mentor hiện tại -->
+                <div class="p-4 rounded-xl bg-slate-50/90 border border-[#E2E8F0] space-y-3">
+                  <div class="flex items-start gap-3.5">
+                    <div class="relative shrink-0">
+                      <img id="mentorCardAvatar" src="assets/images/mentors/mt01.jpg" alt="Mentor" class="w-12 h-12 rounded-full bg-white ring-2 ring-blue-100 object-cover">
+                      <span class="absolute bottom-0 right-0 flex h-3 w-3">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-[#00B67A] ring-2 ring-white"></span>
+                      </span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <div class="flex items-center justify-between gap-1">
+                        <h4 id="mentorCardName" class="text-sm font-extrabold text-slate-900 truncate">Trần Thị Mai</h4>
+                        <span id="mentorCardRating" class="inline-flex items-center text-[11px] font-bold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded-md border border-amber-200/70 shrink-0">
+                          4.9/5
+                        </span>
+                      </div>
+                      <p id="mentorCardRole" class="text-xs text-slate-600 font-medium truncate">Tech Lead &bull; Kỹ thuật Công nghệ</p>
+                      <div class="flex flex-wrap items-center gap-2 mt-1">
+                        <span class="inline-flex items-center text-[11px] font-semibold text-[#00B67A]">
+                          Đang trực tuyến
+                        </span>
+                        <span class="text-slate-300">&bull;</span>
+                        <span id="mentorCardExp" class="text-[11px] text-slate-500 font-medium">Phản hồi ~5 phút</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Kênh liên hệ trực tiếp: SĐT & Zalo của Người đồng hành -->
+                  <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-200/70">
+                    <button type="button" id="mentorCardPhoneBtn" onclick="copyMentorPhone()" class="flex items-center justify-center px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-blue-300 text-[11px] font-bold text-slate-700 hover:text-[#1F5AFE] transition-all cursor-pointer" title="Bấm để sao chép SĐT Mentor">
+                      <span id="mentorCardPhone" class="truncate">SĐT: 0904 682 115</span>
+                    </button>
+                    <button type="button" id="mentorCardZaloBtn" onclick="openMentorZalo()" class="flex items-center justify-center px-2.5 py-1.5 rounded-lg bg-[#0068FF]/10 border border-[#0068FF]/25 hover:bg-[#0068FF] text-[11px] font-bold text-[#0068FF] hover:text-white transition-all cursor-pointer" title="Nhắn tin Zalo trực tiếp với Mentor">
+                      <span id="mentorCardZalo" class="truncate">Zalo: 0904 682 115</span>
+                    </button>
+                  </div>
+
+                  <!-- Giới thiệu ngắn về người đồng hành -->
+                  <div class="pt-2.5 border-t border-slate-200/70">
+                    <p id="mentorCardBio" class="text-xs text-slate-600 leading-relaxed italic">
+                      "Đồng hành thiết lập kiến trúc Frontend, chuẩn hóa Git Flow và tháo gỡ nhanh các vướng mắc môi trường kỹ thuật trong 60 ngày đầu."
+                    </p>
+                    <div id="mentorCardTags" class="flex flex-wrap gap-1.5 mt-2.5"></div>
+                  </div>
+                </div>
+
+                <!-- Lịch hẹn 1-on-1 sắp tới (Cho phép đổi khung giờ nhanh) -->
+                <div class="p-3.5 rounded-xl bg-amber-50/80 border border-amber-200/70 text-xs text-amber-950 space-y-2">
+                  <div class="flex items-center justify-between gap-2">
+                    <div class="font-bold text-amber-900">
+                      Buổi gặp 1-on-1 tiếp theo:
+                    </div>
+                    <button onclick="toggleSchedulePicker()" class="text-[11px] font-bold text-amber-800 hover:text-amber-950 underline cursor-pointer">
+                      Đổi lịch hẹn
+                    </button>
+                  </div>
+                  <div id="mentorNextSessionText" class="text-slate-800 font-semibold">15:00 Thứ Sáu tuần này (Check-in 7 ngày)</div>
+                  <div class="flex items-center justify-between text-[11px] text-amber-800/90">
+                    <span id="mentorSessionLocation">Google Meet &bull; Phòng 302</span>
+                    <span class="font-semibold text-emerald-700">Đã xác nhận</span>
+                  </div>
+
+                  <!-- Khung chọn nhanh giờ hẹn 1-on-1 -->
+                  <div id="mentorSchedulePicker" class="hidden pt-2 mt-2 border-t border-amber-200/80 space-y-1.5">
+                    <div class="text-[11px] font-bold text-amber-900">Chọn khung giờ trống của Mentor:</div>
+                    <div id="mentorSlotButtons" class="grid grid-cols-1 gap-1.5"></div>
+                  </div>
+                </div>
+
+                <!-- Xem trước tin nhắn mới nhất từ Mentor -->
+                <div onclick="openMentorChatModal()" class="p-3 rounded-xl bg-blue-50/60 border border-blue-200/70 hover:bg-blue-50 transition-all cursor-pointer group">
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="text-[11px] font-bold text-[#1F5AFE]">
+                      Tin nhắn gần nhất từ Mentor
+                    </span>
+                    <span id="mentorUnreadBadge" class="px-1.5 py-0.2 rounded-full text-[10px] font-extrabold bg-[#1F5AFE] text-white">Mới</span>
+                  </div>
+                  <p id="mentorLastMessagePreview" class="text-xs text-slate-700 line-clamp-2 group-hover:text-slate-900">
+                    "Chào An, nếu vướng phần cấp quyền SSH Key hay cài đặt môi trường Local thì nhắn chị ngay nhé!"
+                  </p>
+                </div>
+
+                <!-- Cụm nút hành động: Nhắn tin trực tiếp & Xem giới thiệu / Chọn lại Mentor -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <button onclick="openMentorChatModal()" class="w-full inline-flex items-center justify-center px-3.5 py-2.5 rounded-xl bg-[#1F5AFE] text-white text-xs font-bold hover:bg-blue-700 transition-all active:scale-95 shadow-xs cursor-pointer">
+                    <span>Chat với Mentor</span>
+                  </button>
+                  <button onclick="openMentorExplorerModal()" class="w-full inline-flex items-center justify-center px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:border-blue-300 hover:text-[#1F5AFE] transition-all active:scale-95 cursor-pointer">
+                    <span>Đổi người đồng hành</span>
+                  </button>
+                </div>
+              </div>
             </div>
 
             <!-- Thẻ Trợ lý Onbi (Mục 1.3: dùng onbi-avatar-128.webp & đổi tên thành Onbi · Trợ lý hội nhập) -->
@@ -331,9 +442,8 @@
                     <div class="text-xs font-medium text-slate-500">Trợ lý hội nhập</div>
                   </div>
                 </div>
-                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100">
-                  <i data-lucide="sparkles" class="w-3 h-3 text-indigo-600"></i>
-                  <span>AI-1</span>
+                <span class="inline-flex items-center text-[11px] font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100">
+                  AI-1
                 </span>
               </div>
 
@@ -351,9 +461,8 @@
                 </button>
               </div>
 
-              <a href="newhire-ai-help.html" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#1F5AFE] text-white text-xs font-semibold hover:bg-blue-700 transition shadow-xs active:scale-95 hover:no-underline">
+              <a href="newhire-ai-help.html" class="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-[#1F5AFE] text-white text-xs font-semibold hover:bg-blue-700 transition shadow-xs active:scale-95 hover:no-underline">
                 <span>Trò chuyện cùng Onbi</span>
-                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
               </a>
             </div>
 
@@ -361,6 +470,197 @@
         </div>
 
       </main>
+    </div>
+  </div>
+
+  <!-- MODAL NỘP MINH CHỨNG (BẮT BUỘC TRƯỚC KHI HOÀN THÀNH NHIỆM VỤ) -->
+  <div id="dashboardProofModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(4px);">
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-md w-full p-6 relative animate-fade-in">
+      <div class="flex items-start justify-between gap-3 mb-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <h3 class="text-base font-bold text-slate-900">Nộp minh chứng hoàn thành</h3>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">Bắt buộc</span>
+          </div>
+          <p class="text-xs text-slate-500 font-medium line-clamp-1 mt-0.5" id="dashProofTaskTitle">Nhiệm vụ</p>
+        </div>
+        <button onclick="closeDashProofModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="mb-3.5 p-3 rounded-xl bg-amber-50/80 border border-amber-200/80 text-xs text-amber-900 font-medium">
+        Bạn cần cung cấp đường dẫn minh chứng kết quả (PR GitHub, ảnh chụp màn hình hoặc tài liệu) để hệ thống xác nhận <strong>Hoàn thành nhiệm vụ</strong>.
+      </div>
+
+      <div class="space-y-3 mb-5">
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-xs font-bold text-slate-700">Đường dẫn (URL) kết quả hoặc tài liệu minh chứng <span class="text-rose-600">*</span></label>
+            <button type="button" onclick="fillDashSampleProof()" class="text-[11px] font-bold text-[#1F5AFE] hover:underline cursor-pointer">
+              Điền mẫu nhanh
+            </button>
+          </div>
+          <input type="text" id="dashProofInputUrl" placeholder="Ví dụ: https://github.com/org/repo/pull/12 hoặc link ảnh chụp..." class="w-full px-3.5 py-2.5 text-xs font-medium bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#1F5AFE] focus:bg-white transition-all">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Ghi chú kết quả thực hiện (Tùy chọn)</label>
+          <textarea id="dashProofInputNote" rows="2" placeholder="Mô tả ngắn gọn kết quả bạn đã hoàn thành..." class="w-full px-3.5 py-2 text-xs font-medium bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#1F5AFE] focus:bg-white transition-all"></textarea>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2">
+        <button onclick="closeDashProofModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition-all cursor-pointer">Hủy</button>
+        <button onclick="submitDashTaskProof()" class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition-all shadow-xs cursor-pointer">
+          <span>Xác nhận nộp & Hoàn thành</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: CỬA SỔ TRÒ CHUYỆN TRỰC TIẾP VỚI NGƯỜI ĐỒNG HÀNH (MENTOR LIVE CHAT) -->
+  <div id="mentorChatModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60">
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-lg w-full flex flex-col overflow-hidden animate-fade-in" style="max-height: 86vh;">
+      <!-- Header Chat -->
+      <div class="px-5 py-4 bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white flex items-center justify-between gap-3 shrink-0">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="relative shrink-0">
+            <img id="chatMentorAvatar" src="assets/images/mentors/mt01.jpg" alt="Mentor" class="w-11 h-11 rounded-full bg-white ring-2 ring-white/30 object-cover">
+            <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-[#00B67A] ring-2 ring-slate-900"></span>
+          </div>
+          <div class="min-w-0">
+            <div class="flex items-center gap-2">
+              <h3 id="chatMentorName" class="text-sm font-extrabold truncate">Trần Thị Mai</h3>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">Mentor đồng hành</span>
+            </div>
+            <p id="chatMentorRole" class="text-xs text-slate-300 truncate">Tech Lead • Kỹ thuật Công nghệ • Đang trực tuyến</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-1.5 shrink-0">
+          <button onclick="closeMentorChatModal(); openMentorExplorerModal();" class="px-2.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-semibold text-white transition-all cursor-pointer" title="Xem giới thiệu & Đổi người đồng hành">
+            <span class="hidden sm:inline">Hồ sơ & Đổi</span>
+          </button>
+          <button onclick="closeMentorChatModal()" class="p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Thanh ghim lịch 1-on-1 & cam kết hỗ trợ -->
+      <div class="px-4 py-2.5 bg-amber-50/90 border-b border-amber-200/70 flex items-center justify-between gap-2 text-xs shrink-0">
+        <div class="text-amber-900 font-medium truncate">
+          <span id="chatPinnedSchedule" class="truncate">Lịch 1-on-1: 15:00 Thứ Sáu tuần này (Check-in 7 ngày)</span>
+        </div>
+        <button onclick="sendMentorQuickPrompt('Em muốn xác nhận lịch gặp 1-on-1 tuần này và các nội dung cần chuẩn bị ạ.')" class="text-[11px] font-bold text-[#1F5AFE] hover:underline shrink-0 cursor-pointer">
+          Xác nhận lịch
+        </button>
+      </div>
+
+      <!-- Danh sách tin nhắn -->
+      <div id="mentorChatMessages" class="flex-1 min-h-0 overflow-y-auto p-4 space-y-3 bg-slate-50/70 mentor-scroll-area" style="min-height: 290px; max-height: 360px;">
+        <!-- Render động bằng JS -->
+      </div>
+
+      <!-- Gợi ý câu hỏi nhanh với Mentor -->
+      <div class="px-4 py-2.5 bg-white border-t border-slate-100 shrink-0">
+        <div class="text-[11px] font-semibold text-slate-400 mb-1.5">Gợi ý trao đổi nhanh cùng Mentor:</div>
+        <div class="flex flex-wrap gap-1.5">
+          <button onclick="sendMentorQuickPrompt('Nhờ anh/chị hỗ trợ thúc đẩy phê duyệt quyền SSH Key cho nhiệm vụ T02 giúp em với ạ!')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-[#1F5AFE] text-[11px] font-medium text-slate-700 transition-colors cursor-pointer">
+            Hỗ trợ quyền SSH Key (T02)
+          </button>
+          <button onclick="sendMentorQuickPrompt('Em vừa nộp minh chứng hoàn thành nhiệm vụ, nhờ anh/chị kiểm tra và góp ý giúp em nhé!')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-[#1F5AFE] text-[11px] font-medium text-slate-700 transition-colors cursor-pointer">
+            Nhờ review minh chứng
+          </button>
+          <button onclick="sendMentorQuickPrompt('Anh/chị có thể chia sẻ giúp em các tiêu chí quan trọng nhất để đạt OKRs 60 ngày thử việc không ạ?')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-[#1F5AFE] text-[11px] font-medium text-slate-700 transition-colors cursor-pointer">
+            Kinh nghiệm đạt OKRs thử việc
+          </button>
+        </div>
+      </div>
+
+      <!-- Ô nhập tin nhắn -->
+      <form onsubmit="handleMentorChatSubmit(event)" class="p-3.5 bg-white border-t border-slate-200 flex items-center gap-2 shrink-0">
+        <input id="mentorChatInput" type="text" placeholder="Nhập tin nhắn trao đổi trực tiếp với Mentor..." class="flex-1 px-3.5 py-2.5 text-xs font-medium bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#1F5AFE] focus:bg-white transition-all">
+        <button type="submit" class="px-4 py-2.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold transition-all active:scale-95 shadow-xs cursor-pointer">
+          Gửi
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: GIỚI THIỆU & LỰA CHỌN NGƯỜI ĐỒNG HÀNH (TỐI ƯU CUỘN MƯỢT 60FPS & BỐ CỤC GỌN GÀNG) -->
+  <div id="mentorExplorerModal" onclick="if(event.target === this) closeMentorExplorerModal()" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-900/60">
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-5xl w-full h-[90vh] max-h-[820px] flex flex-col overflow-hidden animate-fade-in">
+      <!-- Header Modal (Cố định phía trên) -->
+      <div class="px-6 py-4 border-b border-slate-200 bg-gradient-to-r from-blue-50/80 via-white to-indigo-50/70 flex items-center justify-between gap-4 shrink-0">
+        <div class="min-w-0">
+          <div class="flex flex-wrap items-center gap-2">
+            <h3 class="text-base font-extrabold text-slate-900">Giới thiệu & Lựa chọn Người đồng hành (Mentor)</h3>
+            <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 text-[#1F5AFE]">AI Matching</span>
+          </div>
+          <p class="text-xs text-slate-600 mt-0.5 truncate">
+            Tìm hiểu năng lực, phong cách hướng dẫn và lịch 1-on-1 để chọn Người đồng hành phù hợp nhất với bạn.
+          </p>
+        </div>
+        <button onclick="closeMentorExplorerModal()" class="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer shrink-0">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Thanh bộ lọc & Tìm kiếm nhanh (Cố định phía trên vùng cuộn) -->
+      <div class="px-6 py-2.5 bg-slate-50 border-b border-slate-200/80 flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 shrink-0">
+        <div class="flex flex-wrap items-center gap-1.5" id="mentorFilterBar">
+          <button onclick="filterMentorCatalog('all')" data-filter="all" class="mentor-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#1F5AFE] text-white shadow-2xs transition-all cursor-pointer">
+            Tất cả Mentor (8)
+          </button>
+          <button onclick="filterMentorCatalog('ai_best')" data-filter="ai_best" class="mentor-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-white text-slate-700 border border-slate-200 hover:border-blue-300 transition-all cursor-pointer">
+            Đề xuất AI hàng đầu (≥90%)
+          </button>
+          <button onclick="filterMentorCatalog('tech')" data-filter="tech" class="mentor-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-white text-slate-700 border border-slate-200 hover:border-blue-300 transition-all cursor-pointer">
+            Kỹ thuật, AI & Bảo mật (5)
+          </button>
+          <button onclick="filterMentorCatalog('culture')" data-filter="culture" class="mentor-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-white text-slate-700 border border-slate-200 hover:border-blue-300 transition-all cursor-pointer">
+            Sản phẩm, Marketing & Nhân sự (3)
+          </button>
+        </div>
+
+        <div class="flex items-center justify-between lg:justify-end gap-2">
+          <!-- Ô tìm kiếm nhanh Mentor -->
+          <div class="relative w-48 sm:w-56">
+            <input id="mentorSearchInput" oninput="renderMentorExplorerCatalog()" type="text" placeholder="Tìm tên, SĐT, kỹ năng..." class="w-full px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs text-slate-800 focus:outline-none focus:border-[#1F5AFE]">
+          </div>
+          <div class="hidden sm:flex items-center gap-1.5 text-[11px] text-slate-500 font-medium shrink-0">
+            <strong id="explorerCurrentMentorLabel" class="text-slate-800">Chưa chọn</strong>
+            <button id="resetMentorSelectionBtn" onclick="resetMentorSelection()" class="hidden px-2 py-0.5 rounded-md border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 text-[10px] font-bold transition-colors cursor-pointer">
+              Hủy chọn
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vùng cuộn độc lập mượt mà 60fps -->
+      <div id="mentorCatalogScrollArea" class="flex-1 min-h-0 overflow-y-auto px-5 py-4 bg-slate-50/60 mentor-scroll-area">
+        <div id="mentorCatalogGrid" class="grid grid-cols-1 md:grid-cols-2 gap-3.5 items-stretch pb-2">
+          <!-- Render động bằng JS -->
+        </div>
+      </div>
+
+      <!-- Footer hướng dẫn & Nút cuộn nhanh lên/xuống -->
+      <div class="px-6 py-3 bg-white border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500 shrink-0">
+        <div>
+          <span>Onbi AI gợi ý theo vị trí của bạn; bạn có thể đọc thông tin và tự do lựa chọn Người đồng hành.</span>
+        </div>
+        <div class="flex items-center gap-2 ml-auto">
+          <button type="button" onclick="scrollMentorCatalog(-340)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-[11px] cursor-pointer transition-colors" title="Trượt lên trên">
+            Lên trên
+          </button>
+          <button type="button" onclick="scrollMentorCatalog(340)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-[11px] cursor-pointer transition-colors" title="Trượt xuống dưới">
+            Xem tiếp
+          </button>
+          <button onclick="closeMentorExplorerModal()" class="px-4 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition-all cursor-pointer">
+            Đóng
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -432,17 +732,63 @@
       });
     }
 
+    const NEWHIRE_VIEWAS_CATALOG = [
+      { id: 'NH01', name: 'Nguyễn Văn An', position: 'Frontend Developer', departmentId: 'DEP01', department: 'Kỹ thuật Công nghệ', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=An', defaultCompletedCount: 1 },
+      { id: 'NH02', name: 'Trần Thị Bình', position: 'Content Creator', departmentId: 'DEP02', department: 'Marketing & Truyền thông', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Binh', defaultCompletedCount: 1 },
+      { id: 'NH03', name: 'Lê Hoàng Long', position: 'Backend Developer', departmentId: 'DEP01', department: 'Kỹ thuật Công nghệ', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Long', defaultCompletedCount: 2 },
+      { id: 'NH04', name: 'Phạm Minh Thư', position: 'HR Executive', departmentId: 'DEP03', department: 'Nhân sự & Vận hành', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Thu', defaultCompletedCount: 5 },
+      { id: 'NH05', name: 'Nguyễn Quốc Bảo', position: 'UI/UX Frontend Engineer', departmentId: 'DEP01', department: 'Kỹ thuật Công nghệ', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Bao', defaultCompletedCount: 4 },
+      { id: 'NH06', name: 'Trần Quốc Khánh', position: 'DevOps & Cloud Engineer', departmentId: 'DEP01', department: 'Kỹ thuật Công nghệ', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Khanh', defaultCompletedCount: 3 }
+    ];
+
+    function getEffectiveNewHireProfile() {
+      const isImp = sessionStorage.getItem('isImpersonating');
+      const impRole = sessionStorage.getItem('impersonatedUserRole');
+      const impId = sessionStorage.getItem('impersonatedUserId');
+      if (isImp && (!impRole || impRole === 'newhire') && impId) {
+        const found = NEWHIRE_VIEWAS_CATALOG.find(n => n.id === impId);
+        if (found) return { ...found, role: 'newhire' };
+        try {
+          const obj = JSON.parse(sessionStorage.getItem('impersonatedUserObj') || 'null');
+          if (obj && obj.id) return obj;
+        } catch (_) {}
+      }
+      const base = API.getCurrentUser();
+      const matched = NEWHIRE_VIEWAS_CATALOG.find(n => n.id === base.id);
+      return matched ? { ...matched, ...base } : base;
+    }
+
+    function switchImpersonatedNewHire(nhId) {
+      const target = NEWHIRE_VIEWAS_CATALOG.find(n => n.id === nhId) || NEWHIRE_VIEWAS_CATALOG[0];
+      if (!target) return;
+      sessionStorage.setItem('impersonatedUserId', target.id);
+      sessionStorage.setItem('impersonatedUserRole', 'newhire');
+      sessionStorage.setItem('impersonatedUserName', `${target.name} (${target.id} - ${target.position})`);
+      sessionStorage.setItem('impersonatedUserObj', JSON.stringify({ ...target, role: 'newhire' }));
+      window.location.reload();
+    }
+
     function checkAdminImpersonation() {
       const isImpersonating = sessionStorage.getItem('isImpersonating');
       const bar = document.getElementById('adminImpersonateBar');
       if (isImpersonating && bar) {
         bar.classList.remove('hidden');
-        const customName = sessionStorage.getItem('impersonatedUserName');
-        const strongEl = bar.querySelector('strong');
-        if (customName && strongEl) strongEl.textContent = customName;
-        const btn = bar.querySelector('button');
+        const activeNh = getEffectiveNewHireProfile();
+        const labelEl = document.getElementById('impersonateNewHireLabel');
+        if (labelEl && activeNh) {
+          labelEl.textContent = `${activeNh.name} (${activeNh.id} - ${activeNh.position || 'New Hire'})`;
+        }
+        const selEl = document.getElementById('impersonateNewHireSelect');
+        if (selEl) {
+          selEl.innerHTML = NEWHIRE_VIEWAS_CATALOG.map(n =>
+            `<option value="${n.id}" ${n.id === (activeNh && activeNh.id) ? 'selected' : ''}>${n.name} (${n.id} - ${n.position})</option>`
+          ).join('');
+        }
+        const btn = document.getElementById('exitImpersonateBtn');
         if (isImpersonating === 'admin' && btn) {
           btn.textContent = 'Thoát chế độ xem & Quay lại Quản trị tài khoản';
+        } else if (isImpersonating === 'mentor' && btn) {
+          btn.textContent = 'Thoát chế độ xem & Quay lại Danh sách Mentee';
         }
       }
     }
@@ -450,23 +796,1004 @@
     function exitImpersonation(returnUrl = 'hr-dashboard.html') {
       const savedReturn = sessionStorage.getItem('impersonateReturnUrl');
       const isImpersonating = sessionStorage.getItem('isImpersonating');
-      sessionStorage.removeItem('isImpersonating');
-      sessionStorage.removeItem('impersonateReturnUrl');
-      sessionStorage.removeItem('impersonatedUserName');
+      ['isImpersonating', 'impersonateReturnUrl', 'impersonatedUserName', 'impersonatedUserId', 'impersonatedUserRole', 'impersonatedUserObj']
+        .forEach(k => sessionStorage.removeItem(k));
       window.location.href = savedReturn || (isImpersonating === 'admin' ? 'admin-user-management.html' : returnUrl);
     }
 
     // Khởi tạo Dashboard khi trang tải xong
     document.addEventListener('DOMContentLoaded', async () => {
-      checkAdminImpersonation();
       await API.init();
+      checkAdminImpersonation();
 
-      const currentUser = API.getCurrentUser();
+      const currentUser = getEffectiveNewHireProfile();
       const allTasks = API.getAll('tasks');
+
+      // Cập nhật Topbar & Hero theo nhân sự đang xem
+      const topAvatar = document.getElementById('userAvatar');
+      const topName = document.getElementById('userName');
+      const codeBadge = document.getElementById('headerNewHireCodeBadge');
+      const deptSub = document.getElementById('headerNewHireDeptSub');
+      const welcomeTitleEl = document.getElementById('welcomeTitle');
+      if (topAvatar && currentUser.avatar) topAvatar.src = currentUser.avatar;
+      if (topName && currentUser.name) topName.textContent = currentUser.name;
+      if (codeBadge && currentUser.id) codeBadge.textContent = `Mã ${currentUser.id}`;
+      if (deptSub && currentUser.department) {
+        deptSub.textContent = `${currentUser.position || 'Nhân sự mới'} • Phòng ${currentUser.department}`;
+      }
+      if (welcomeTitleEl && currentUser.name) {
+        welcomeTitleEl.textContent = `Chào ${currentUser.name}, hôm nay là ngày tăng tốc!`;
+      }
       
-      // Lọc nhiệm vụ thuộc về New Hire hiện tại
-      const userTasks = allTasks.filter(t => t.newHireId === currentUser.id);
+      // Lọc nhiệm vụ thuộc về New Hire hiện tại (nếu là NH02..NH06 chưa có bản ghi riêng thì khởi tạo từ mẫu NH01)
+      let userTasks = allTasks.filter(t => t.newHireId === currentUser.id);
+      if (userTasks.length === 0) {
+        const templateTasks = allTasks.filter(t => t.newHireId === 'NH01');
+        const targetCompleted = typeof currentUser.defaultCompletedCount === 'number' ? currentUser.defaultCompletedCount : 1;
+        userTasks = templateTasks.map((t, idx) => {
+          const isCompleted = idx < targetCompleted;
+          const cloned = {
+            ...t,
+            id: `${currentUser.id}_${t.id}`,
+            newHireId: currentUser.id,
+            status: isCompleted ? 'completed' : (idx === targetCompleted && t.status === 'blocked' ? 'blocked' : 'pending'),
+            proof: isCompleted ? `https://portal.onboardai.vn/verify/${currentUser.id.toLowerCase()}-${t.id.toLowerCase()}-completed` : ''
+          };
+          allTasks.push(cloned);
+          return cloned;
+        });
+        const db = API.getDB();
+        db.tasks = allTasks;
+        API.saveDB(db);
+      }
+      // Đảm bảo nhiệm vụ đã hoàn thành từ dữ liệu gốc có sẵn minh chứng hợp lệ
+      userTasks.forEach(t => {
+        if (t.status === 'completed' && (!t.proof || !t.proof.trim())) {
+          t.proof = `https://portal.onboardai.vn/verify/${t.id.toLowerCase()}-completed`;
+        }
+      });
       let isFirstProgressRender = true;
+      let activeDashProofTaskId = null;
+
+      window.openDashProofModal = function(taskId, taskTitle) {
+        activeDashProofTaskId = taskId;
+        const task = userTasks.find(t => t.id === taskId);
+        document.getElementById('dashProofTaskTitle').textContent = taskTitle || (task ? task.title : '');
+        const existingProof = task && task.proof ? task.proof : '';
+        document.getElementById('dashProofInputUrl').value = existingProof.includes(' — ') ? existingProof.split(' — ')[0] : existingProof;
+        document.getElementById('dashProofInputNote').value = existingProof.includes(' — ') ? existingProof.split(' — ').slice(1).join(' — ') : '';
+        document.getElementById('dashboardProofModal').classList.remove('hidden');
+        lucide.createIcons();
+      };
+
+      window.closeDashProofModal = function() {
+        document.getElementById('dashboardProofModal').classList.add('hidden');
+        activeDashProofTaskId = null;
+      };
+
+      window.fillDashSampleProof = function() {
+        const suffix = (activeDashProofTaskId || 'task').toLowerCase();
+        document.getElementById('dashProofInputUrl').value = `https://github.com/onboardai-corp/workspace/pull/${suffix}-proof`;
+        if (!document.getElementById('dashProofInputNote').value.trim()) {
+          document.getElementById('dashProofInputNote').value = 'Đã hoàn thành đầy đủ và đính kèm kết quả kiểm tra.';
+        }
+      };
+
+      window.submitDashTaskProof = function() {
+        const url = document.getElementById('dashProofInputUrl').value.trim();
+        const note = document.getElementById('dashProofInputNote').value.trim();
+        if (!url) {
+          showToast('Vui lòng nhập đường dẫn (URL) hoặc tên tài liệu minh chứng!', 'warning');
+          document.getElementById('dashProofInputUrl').focus();
+          return;
+        }
+        const finalProof = note ? `${url} — ${note}` : url;
+        const task = userTasks.find(t => t.id === activeDashProofTaskId);
+        if (task) {
+          task.proof = finalProof;
+          task.status = 'completed';
+          API.update('tasks', task.id, { proof: finalProof, status: 'completed' });
+        }
+        window.closeDashProofModal();
+        renderTodayTasks();
+        updateProgress();
+        lucide.createIcons();
+        showToast('Đã nộp minh chứng & xác nhận hoàn thành nhiệm vụ!', 'success');
+      };
+
+      // ================= DANH MỤC 8 HỒ SƠ NGƯỜI ĐỒNG HÀNH & HỆ THỐNG ĐỀ XUẤT AI / CHAT TRỰC TIẾP =================
+      const BASE_MENTOR_CATALOG = [
+        {
+          id: 'MT01',
+          name: 'Trần Thị Mai',
+          role: 'Tech Lead • Kỹ thuật Công nghệ',
+          departmentId: 'DEP01',
+          department: 'Kỹ thuật Công nghệ',
+          category: 'tech',
+          avatar: 'assets/images/mentors/mt01.jpg',
+          phone: '0904 682 115',
+          zalo: '0904 682 115',
+          zaloUrl: 'https://zalo.me/0904682115',
+          baseScore: 98,
+          matchReason: 'Cùng nhóm Kỹ thuật & phụ trách trực tiếp kiến trúc dự án bạn đang tham gia.',
+          rating: '4.9/5',
+          experience: '6 năm KN • Đã dẫn dắt 14 tân binh',
+          responseTime: 'Phản hồi ~5 phút',
+          capacity: 'Đang kèm 2/3 Mentee (Còn 1 chỗ)',
+          shortBio: 'Đồng hành thiết lập kiến trúc Frontend, chuẩn hóa Git Flow và tháo gỡ nhanh các vướng mắc môi trường kỹ thuật trong 60 ngày đầu.',
+          fullIntro: 'Chị Mai có hơn 6 năm kinh nghiệm xây dựng hệ thống Web quy mô lớn tại OnboardAI. Chị trực tiếp thiết kế lộ trình kỹ thuật cho nhân sự mới, hỗ trợ Pair Programming 1-1 và giúp bạn làm chủ quy trình CI/CD ngay từ tuần đầu tiên.',
+          style: 'Thực chiến, tỉ mỉ, hỗ trợ 1-1 qua Pair Programming & Code Review chi tiết.',
+          tags: ['React / Next.js', 'CI/CD & SSH', 'OKRs 60 ngày', 'System Architecture'],
+          nextSession: '15:00 Thứ Sáu tuần này (Check-in 7 ngày)',
+          location: 'Google Meet • Phòng 302',
+          slots: [
+            '15:00 Thứ Sáu tuần này (Check-in 7 ngày)',
+            '10:00 Thứ Tư tuần tới (Review kiến trúc Frontend)',
+            '14:30 Thứ Năm tuần tới (Pair Programming 1-on-1)'
+          ],
+          testimonial: '“Nhờ chị Mai hướng dẫn tận tình mà mình vượt qua kỳ đánh giá thử việc sớm hơn 2 tuần!” — Lê Hoàng Long (Backend Dev)',
+          welcomeMessages: [
+            {
+              sender: 'mentor',
+              time: '09:15',
+              text: `Chào ${currentUser.name}, chào mừng em gia nhập đội Kỹ thuật OnboardAI! Chị là Mai — rất vui được em tin tưởng lựa chọn làm Người đồng hành trong 60 ngày tới.`
+            },
+            {
+              sender: 'mentor',
+              time: '09:16',
+              text: 'Nếu vướng phần cấp quyền SSH Key (Task T02) hay cần gấp thì nhắn tại đây hoặc gọi/Zalo cho chị qua số 0904 682 115 nhé!'
+            }
+          ]
+        },
+        {
+          id: 'MT05',
+          name: 'Nguyễn Hoàng Minh',
+          role: 'Principal Frontend Architect • Kỹ thuật Công nghệ',
+          departmentId: 'DEP01',
+          department: 'Kỹ thuật Công nghệ',
+          category: 'tech',
+          avatar: 'assets/images/mentors/mt05.jpg',
+          phone: '0912 345 889',
+          zalo: '0912 345 889',
+          zaloUrl: 'https://zalo.me/0912345889',
+          baseScore: 95,
+          matchReason: 'Chuyên gia Design System & tối ưu hiệu năng giao diện Web hiện đại.',
+          rating: '5.0/5',
+          experience: '8 năm KN • Đã dẫn dắt 19 tân binh',
+          responseTime: 'Phản hồi ~10 phút',
+          capacity: 'Đang kèm 1/3 Mentee (Còn 2 chỗ)',
+          shortBio: 'Chuyên sâu Design System, tối ưu hiệu năng UI/UX và định hướng lộ trình phát triển kỹ sư Frontend chuyên nghiệp.',
+          fullIntro: 'Anh Minh phụ trách Design System và chuẩn mực giao diện trên toàn bộ sản phẩm của OnboardAI. Phù hợp với các bạn muốn đào sâu về kiến trúc Component, khả năng truy cập (Accessibility) và tối ưu hóa trải nghiệm người dùng.',
+          style: 'Truyền cảm hứng, định hướng tư duy sản phẩm & khuyến khích tính tự chủ.',
+          tags: ['Design System', 'UI/UX Engineering', 'Web Performance', 'TypeScript'],
+          nextSession: '10:30 Thứ Năm tuần này (Định hướng Design System)',
+          location: 'Google Meet • Phòng Lab Tầng 4',
+          slots: [
+            '10:30 Thứ Năm tuần này (Định hướng Design System)',
+            '16:00 Thứ Sáu tuần này (Check-in tiến độ Tuần 1)',
+            '09:30 Thứ Ba tuần tới (Review UI Component)'
+          ],
+          testimonial: '“Anh Minh chỉ cho mình rất nhiều mẹo tối ưu code và tư duy thiết kế hệ thống cực kỳ bài bản.” — Nguyễn Quốc Bảo (UI Engineer)',
+          welcomeMessages: [
+            {
+              sender: 'mentor',
+              time: '09:20',
+              text: `Chào ${currentUser.name}, anh là Hoàng Minh. Rất vui được đồng hành cùng em trong việc làm chủ Design System và kiến trúc Frontend tại OnboardAI!`
+            },
+            {
+              sender: 'mentor',
+              time: '09:21',
+              text: 'Em cứ thoải mái nhắn câu hỏi hoặc kết nối Zalo anh số 0912 345 889 để trao đổi nhanh nhé.'
+            }
+          ]
+        },
+        {
+          id: 'MT06',
+          name: 'Vũ Đình Trọng',
+          role: 'Backend & Cloud Engineering Lead • Kỹ thuật Công nghệ',
+          departmentId: 'DEP01',
+          department: 'Kỹ thuật Công nghệ',
+          category: 'tech',
+          avatar: 'assets/images/mentors/mt06.jpg',
+          phone: '0983 771 420',
+          zalo: '0983 771 420',
+          zaloUrl: 'https://zalo.me/0983771420',
+          baseScore: 93,
+          matchReason: 'Thế mạnh về kiến trúc API, hạ tầng Docker/Cloud và tích hợp hệ thống.',
+          rating: '4.9/5',
+          experience: '9 năm KN • Đã dẫn dắt 25 tân binh',
+          responseTime: 'Phản hồi ~8 phút',
+          capacity: 'Đang kèm 2/4 Mentee (Còn 2 chỗ)',
+          shortBio: 'Hướng dẫn làm chủ kiến trúc Microservices, chuẩn kết nối REST/GraphQL API và quy trình triển khai Cloud CI/CD.',
+          fullIntro: 'Anh Trọng là Trưởng nhóm Kỹ thuật Hạ tầng & Backend với 9 năm kinh nghiệm. Anh giúp các kỹ sư mới hiểu rõ luồng dữ liệu toàn hệ thống, cách debug môi trường staging và tối ưu hóa bảo mật API.',
+          style: 'Hệ thống hóa kiến thức bài bản, giải thích sâu nguyên lý gốc rễ.',
+          tags: ['Microservices & API', 'Docker / Cloud', 'Database Design', 'System Debugging'],
+          nextSession: '14:00 Thứ Năm tuần này (Tổng quan kiến trúc API & Cloud)',
+          location: 'Google Meet • Phòng Tech Hub 201',
+          slots: [
+            '14:00 Thứ Năm tuần này (Tổng quan kiến trúc API & Cloud)',
+            '11:00 Thứ Sáu tuần này (Check-in kỹ thuật Tuần 1)',
+            '15:00 Thứ Ba tuần tới (Hướng dẫn CI/CD Pipeline)'
+          ],
+          testimonial: '“Anh Trọng vẽ sơ đồ luồng dữ liệu cực kỳ dễ hiểu, giúp mình nắm bắt cả hệ thống lớn chỉ sau 1 buổi.” — Trần Quốc Khánh (Backend Dev)',
+          welcomeMessages: [
+            {
+              sender: 'mentor',
+              time: '09:25',
+              text: `Chào ${currentUser.name}, anh là Đình Trọng (SĐT/Zalo: 0983 771 420). Chào mừng em đến với khối Kỹ thuật Công nghệ! Anh sẽ hỗ trợ em nắm vững toàn bộ luồng API và môi trường kỹ thuật nhé.`
+            }
+          ]
+        },
+        {
+          id: 'MT07',
+          name: 'Hoàng Bảo Ngọc',
+          role: 'AI & Data Engineering Lead • Kỹ thuật Công nghệ',
+          departmentId: 'DEP01',
+          department: 'Kỹ thuật Công nghệ',
+          category: 'tech',
+          avatar: 'assets/images/mentors/mt07.jpg',
+          phone: '0936 519 208',
+          zalo: '0936 519 208',
+          zaloUrl: 'https://zalo.me/0936519208',
+          baseScore: 91,
+          matchReason: 'Chuyên gia tích hợp AI Copilot, RAG Pipeline và phân tích dữ liệu thông minh.',
+          rating: '5.0/5',
+          experience: '6 năm KN • Đã dẫn dắt 12 tân binh',
+          responseTime: 'Phản hồi ~7 phút',
+          capacity: 'Đang kèm 1/3 Mentee (Còn 2 chỗ)',
+          shortBio: 'Đồng hành nghiên cứu và tích hợp các mô hình LLM/RAG vào sản phẩm thực tế, chuẩn hóa dữ liệu và đánh giá chất lượng AI.',
+          fullIntro: 'Chị Bảo Ngọc dẫn dắt đội ngũ AI Core đứng sau trợ lý Onbi. Chị đặc biệt phù hợp với các thành viên mới muốn tìm hiểu sâu về kiến trúc AI Agent, tích hợp LLM vào giao diện người dùng và tối ưu độ trễ phản hồi.',
+          style: 'Sáng tạo, cập nhật công nghệ mới nhất, khuyến khích thử nghiệm thực tế.',
+          tags: ['LLM & RAG Pipeline', 'AI Product Integration', 'Python / FastAPI', 'Data Analytics'],
+          nextSession: '16:00 Thứ Năm tuần này (Kiến trúc Onbi AI & RAG)',
+          location: 'Google Meet • Phòng AI Studio',
+          slots: [
+            '16:00 Thứ Năm tuần này (Kiến trúc Onbi AI & RAG)',
+            '14:30 Thứ Sáu tuần này (Check-in 7 ngày)',
+            '10:00 Thứ Năm tuần tới (Workshop Prompt & RAG)'
+          ],
+          testimonial: '“Chị Ngọc cực kỳ nhiệt tình, luôn chia sẻ tài liệu AI mới nhất và hướng dẫn thực hành rất dễ hiểu.” — Đặng Minh Quân (AI Engineer)',
+          welcomeMessages: [
+            {
+              sender: 'mentor',
+              time: '09:18',
+              text: `Chào ${currentUser.name}, chị là Bảo Ngọc từ nhóm AI & Data (Zalo: 0936 519 208). Rất vui được đồng hành cùng em khám phá công nghệ cốt lõi tại OnboardAI!`
+            }
+          ]
+        },
+        {
+          id: 'MT04',
+          name: 'Đỗ Hoàng Sơn',
+          role: 'Senior QA & Security Lead • Kỹ thuật Công nghệ',
+          departmentId: 'DEP01',
+          department: 'Kỹ thuật Công nghệ',
+          category: 'tech',
+          avatar: 'assets/images/mentors/mt04.jpg',
+          phone: '0978 402 661',
+          zalo: '0978 402 661',
+          zaloUrl: 'https://zalo.me/0978402661',
+          baseScore: 89,
+          matchReason: 'Giúp bạn nắm vững tiêu chuẩn kiểm thử tự động, bảo mật 2FA/ISO và chất lượng code.',
+          rating: '4.8/5',
+          experience: '7 năm KN • Đã dẫn dắt 16 tân binh',
+          responseTime: 'Phản hồi ~9 phút',
+          capacity: 'Đang kèm 1/3 Mentee (Còn 2 chỗ)',
+          shortBio: 'Hướng dẫn quy chuẩn chất lượng phần mềm (DoD), Automation Testing và các nguyên tắc an toàn thông tin bắt buộc.',
+          fullIntro: 'Anh Sơn phụ trách Đảm bảo chất lượng (QA) và An toàn thông tin nội bộ. Anh sẽ giúp bạn tránh các lỗi bảo mật phổ biến, viết Unit/E2E Test chuẩn chỉnh để mọi PR gửi lên đều được duyệt nhanh chóng.',
+          style: 'Cẩn trọng, rõ ràng, chú trọng chất lượng và tính an toàn hệ thống.',
+          tags: ['Automation Testing', 'Security & 2FA', 'Code Quality', 'Release Process'],
+          nextSession: '15:00 Thứ Tư tuần này (Tiêu chuẩn chất lượng & Bảo mật)',
+          location: 'Google Meet • Phòng 305',
+          slots: [
+            '15:00 Thứ Tư tuần này (Tiêu chuẩn chất lượng & Bảo mật)',
+            '16:30 Thứ Sáu tuần này (Check-in 7 ngày)',
+            '10:30 Thứ Tư tuần tới (Hướng dẫn E2E Testing)'
+          ],
+          testimonial: '“Nhờ anh Sơn hướng dẫn checklist kiểm thử mà các bản release đầu tiên của mình không gặp bất kỳ lỗi hồi quy nào.” — Vũ Hải Đăng',
+          welcomeMessages: [
+            {
+              sender: 'mentor',
+              time: '09:22',
+              text: `Chào ${currentUser.name}, anh là Hoàng Sơn (SĐT/Zalo: 0978 402 661). Anh sẽ đồng hành hỗ trợ em về quy chuẩn chất lượng code, kiểm thử và bảo mật hệ thống nhé!`
+            }
+          ]
+        },
+        {
+          id: 'MT02',
+          name: 'Lê Minh Tuấn',
+          role: 'Product & Growth Lead • Sản phẩm & Truyền thông',
+          departmentId: 'DEP02',
+          department: 'Marketing & Truyền thông',
+          category: 'culture',
+          avatar: 'assets/images/mentors/mt02.jpg',
+          phone: '0945 812 330',
+          zalo: '0945 812 330',
+          zaloUrl: 'https://zalo.me/0945812330',
+          baseScore: 90,
+          matchReason: 'Giúp bạn hiểu sâu bài toán nghiệp vụ sản phẩm và phối hợp Agile đa phòng ban.',
+          rating: '4.8/5',
+          experience: '5 năm KN • Đã dẫn dắt 11 tân binh',
+          responseTime: 'Phản hồi ~12 phút',
+          capacity: 'Đang kèm 2/4 Mentee (Còn 2 chỗ)',
+          shortBio: 'Giúp thành viên mới nắm bắt nhanh bức tranh sản phẩm, quy trình Agile Scrum và kết nối hiệu quả giữa Tech - Product - Marketing.',
+          fullIntro: 'Anh Tuấn có thế mạnh kết nối các thành viên mới với mạng lưới liên phòng ban, giúp bạn hiểu rõ lý do đằng sau từng tính năng sản phẩm và tự tin trình bày kết quả trong các buổi Sprint Demo toàn công ty.',
+          style: 'Cởi mở, giàu năng lượng, kết nối mạng lưới đồng nghiệp nhanh chóng.',
+          tags: ['Product Mindset', 'Agile Scrum', 'Giao tiếp liên phòng ban', 'Sprint Demo'],
+          nextSession: '14:00 Thứ Sáu tuần này (Bức tranh Sản phẩm & Agile)',
+          location: 'Phòng họp Sáng Tạo • Tầng 3',
+          slots: [
+            '14:00 Thứ Sáu tuần này (Bức tranh Sản phẩm & Agile)',
+            '09:30 Thứ Tư tuần tới (Cà phê kết nối đội Product)',
+            '15:30 Thứ Năm tuần tới (Chuẩn bị Sprint Demo)'
+          ],
+          testimonial: '“Anh Tuấn giúp mình làm quen với mọi người trong các team rất nhanh, không còn cảm giác bỡ ngỡ ngày đầu.” — Trần Thị Bình',
+          welcomeMessages: [
+            {
+              sender: 'mentor',
+              time: '09:30',
+              text: `Chào mừng ${currentUser.name} đến với đại gia đình OnboardAI! Mình là Minh Tuấn (Zalo: 0945 812 330), sẵn sàng hỗ trợ bạn hòa nhập văn hóa và nắm bắt quy trình sản phẩm.`
+            }
+          ]
+        },
+        {
+          id: 'MT08',
+          name: 'Ngô Thanh Hà',
+          role: 'Brand & Digital Marketing Manager • Marketing & Truyền thông',
+          departmentId: 'DEP02',
+          department: 'Marketing & Truyền thông',
+          category: 'culture',
+          avatar: 'assets/images/mentors/mt08.jpg',
+          phone: '0962 198 745',
+          zalo: '0962 198 745',
+          zaloUrl: 'https://zalo.me/0962198745',
+          baseScore: 87,
+          matchReason: 'Chuyên gia định vị thương hiệu, truyền thông sản phẩm công nghệ và kỹ năng thuyết trình.',
+          rating: '4.9/5',
+          experience: '6 năm KN • Đã dẫn dắt 15 tân binh',
+          responseTime: 'Phản hồi ~6 phút',
+          capacity: 'Đang kèm 1/3 Mentee (Còn 2 chỗ)',
+          shortBio: 'Đồng hành phát triển kỹ năng giao tiếp chuyên nghiệp, xây dựng nội dung sáng tạo và nắm bắt tiếng nói thương hiệu OnboardAI.',
+          fullIntro: 'Chị Thanh Hà phụ trách Chiến lược Thương hiệu & Truyền thông số tại OnboardAI. Chị hỗ trợ nhân sự mới hiểu sâu chân dung khách hàng doanh nghiệp (B2B SaaS) và rèn luyện kỹ năng trình bày ý tưởng thuyết phục.',
+          style: 'Truyền cảm hứng, tinh tế, hỗ trợ phát triển kỹ năng mềm và tư duy khách hàng.',
+          tags: ['Brand Strategy', 'Content & Storytelling', 'Kỹ năng thuyết trình', 'B2B SaaS'],
+          nextSession: '10:00 Thứ Sáu tuần này (Định hướng Thương hiệu & Khách hàng)',
+          location: 'Google Meet • Phòng Creative Studio',
+          slots: [
+            '10:00 Thứ Sáu tuần này (Định hướng Thương hiệu & Khách hàng)',
+            '15:00 Thứ Tư tuần tới (Kỹ năng trình bày & Storytelling)',
+            '14:00 Thứ Năm tuần tới (Check-in hòa nhập)'
+          ],
+          testimonial: '“Chị Hà luôn lắng nghe và góp ý rất tinh tế, giúp mình tự tin hơn hẳn khi trình bày kế hoạch trước toàn team.” — Nguyễn Lan Anh',
+          welcomeMessages: [
+            {
+              sender: 'mentor',
+              time: '09:12',
+              text: `Chào ${currentUser.name}, chị là Thanh Hà (SĐT/Zalo: 0962 198 745). Rất vui được đồng hành cùng em trong hành trình hòa nhập và tỏa sáng tại OnboardAI!`
+            }
+          ]
+        },
+        {
+          id: 'MT03',
+          name: 'Phạm Quang Huy',
+          role: 'People & Culture Partner • Nhân sự & Vận hành',
+          departmentId: 'DEP03',
+          department: 'Nhân sự & Vận hành',
+          category: 'culture',
+          avatar: 'assets/images/mentors/mt03.jpg',
+          phone: '0918 905 512',
+          zalo: '0918 905 512',
+          zaloUrl: 'https://zalo.me/0918905512',
+          baseScore: 86,
+          matchReason: 'Chuyên gia tư vấn mục tiêu thử việc 60 ngày, phúc lợi và văn hóa doanh nghiệp.',
+          rating: '4.9/5',
+          experience: '7 năm KN • Đã dẫn dắt 22 tân binh',
+          responseTime: 'Phản hồi ~8 phút',
+          capacity: 'Đang kèm 1/3 Mentee (Còn 2 chỗ)',
+          shortBio: 'Đồng hành thiết lập OKRs 60 ngày rõ ràng, giải đáp chính sách đãi ngộ và xây dựng lộ trình phát triển bền vững tại công ty.',
+          fullIntro: 'Anh Huy đã đồng hành cùng hơn 20 nhân sự mới vượt qua giai đoạn thử việc với kết quả xuất sắc. Anh sẽ giúp bạn xây dựng bảng mục tiêu OKRs 60 ngày sát với tiêu chí đánh giá chính thức của công ty.',
+          style: 'Tận tâm, lắng nghe, theo sát từng cột mốc đánh giá 30 ngày & 60 ngày.',
+          tags: ['OKRs Thử việc', 'Văn hóa & Phúc lợi', 'Kỹ năng mềm', 'Đánh giá 60 ngày'],
+          nextSession: '15:30 Thứ Năm tuần này (Xây dựng OKRs 60 ngày)',
+          location: 'Google Meet • Phòng HR Lounge',
+          slots: [
+            '15:30 Thứ Năm tuần này (Xây dựng OKRs 60 ngày)',
+            '10:00 Thứ Sáu tuần này (Check-in hòa nhập Tuần 1)',
+            '14:00 Thứ Hai tuần tới (Tư vấn lộ trình cá nhân)'
+          ],
+          testimonial: '“Nhờ anh Huy tư vấn cách đặt mục tiêu OKRs rõ ràng từ tuần đầu mà kỳ đánh giá 60 ngày của mình đạt điểm tuyệt đối.” — Phạm Minh Thư',
+          welcomeMessages: [
+            {
+              sender: 'mentor',
+              time: '09:10',
+              text: `Chào ${currentUser.name}, anh là Quang Huy từ khối People & Culture (Zalo: 0918 905 512). Anh sẽ đồng hành cùng em thiết lập OKRs thử việc và giải đáp mọi thắc mắc về văn hóa, chế độ tại OnboardAI nhé!`
+            }
+          ]
+        }
+      ];
+
+      // Tính điểm tương thích AI (AI Matching Score) cá nhân hóa theo phòng ban và vị trí của tài khoản hiện tại
+      function buildPersonalizedMentorCatalog() {
+        const userDept = currentUser.departmentId || 'DEP01';
+        const userPos = (currentUser.position || '').toLowerCase();
+
+        return BASE_MENTOR_CATALOG.map(m => {
+          let score = m.baseScore;
+          if (userDept === 'DEP02') {
+            // Nếu nhân sự thuộc khối Marketing & Truyền thông -> ưu tiên Mentor Marketing & Product lên đầu
+            if (m.id === 'MT02') score = 98;
+            else if (m.id === 'MT08') score = 96;
+            else if (m.id === 'MT03') score = 91;
+            else score = Math.max(82, m.baseScore - 8);
+          } else if (userDept === 'DEP03') {
+            // Nếu nhân sự thuộc khối Nhân sự & Vận hành -> ưu tiên Mentor People & Culture lên đầu
+            if (m.id === 'MT03') score = 98;
+            else if (m.id === 'MT02') score = 93;
+            else if (m.id === 'MT08') score = 90;
+            else score = Math.max(82, m.baseScore - 8);
+          } else {
+            // Khối Kỹ thuật Công nghệ: tinh chỉnh theo vị trí cụ thể
+            if (userPos.includes('backend') && m.id === 'MT06') score = 99;
+            else if ((userPos.includes('ai') || userPos.includes('data')) && m.id === 'MT07') score = 99;
+            else if ((userPos.includes('qa') || userPos.includes('test')) && m.id === 'MT04') score = 98;
+          }
+          const matchLabel = score >= 95 ? `${score}% Phù hợp nhất` : score >= 90 ? `${score}% Rất phù hợp` : `${score}% Phù hợp`;
+          return { ...m, matchScore: score, matchLabel };
+        }).sort((a, b) => b.matchScore - a.matchScore);
+      }
+
+      const MENTOR_CATALOG = buildPersonalizedMentorCatalog();
+      let currentMentorFilter = 'all';
+
+      // MẶC ĐỊNH: Mỗi tài khoản khi tạo chưa có Người đồng hành ngay lập tức (selectedMentorId = null)
+      // Chỉ khi người dùng chủ động lựa chọn thì mới lưu vào ONBOARDAI_CONFIRMED_MENTOR_<id>
+      let selectedMentorId = localStorage.getItem(`ONBOARDAI_CONFIRMED_MENTOR_${currentUser.id}`) || null;
+
+      function getActiveMentor() {
+        if (!selectedMentorId) return null;
+        return MENTOR_CATALOG.find(m => m.id === selectedMentorId) || MENTOR_CATALOG[0];
+      }
+
+      function getMentorChatHistory(mentorId) {
+        const storageKey = `ONBOARDAI_MENTOR_CHAT_${currentUser.id}_${mentorId}`;
+        const saved = localStorage.getItem(storageKey);
+        if (saved) {
+          try {
+            return JSON.parse(saved);
+          } catch (e) {}
+        }
+        const mentor = MENTOR_CATALOG.find(m => m.id === mentorId) || MENTOR_CATALOG[0];
+        const initial = mentor.welcomeMessages ? [...mentor.welcomeMessages] : [];
+        localStorage.setItem(storageKey, JSON.stringify(initial));
+        return initial;
+      }
+
+      function saveMentorChatHistory(mentorId, messages) {
+        const storageKey = `ONBOARDAI_MENTOR_CHAT_${currentUser.id}_${mentorId}`;
+        localStorage.setItem(storageKey, JSON.stringify(messages));
+      }
+
+      function getMentorCustomSlot(mentor) {
+        return localStorage.getItem(`ONBOARDAI_MENTOR_SLOT_${currentUser.id}_${mentor.id}`) || mentor.nextSession;
+      }
+
+      function renderMentorCard() {
+        const unassignedEl = document.getElementById('mentorUnassignedState');
+        const assignedEl = document.getElementById('mentorAssignedState');
+        const matchBadgeEl = document.getElementById('mentorMatchBadge');
+        const headerActionLabel = document.getElementById('mentorHeaderActionLabel');
+        const explorerLabel = document.getElementById('explorerCurrentMentorLabel');
+        const resetBtn = document.getElementById('resetMentorSelectionBtn');
+
+        const mentor = getActiveMentor();
+
+        if (!mentor) {
+          // TRẠNG THÁI CHƯA CHỌN NGƯỜI ĐỒNG HÀNH -> HIỂN THỊ TOP 3 ĐỀ XUẤT TỪ ONBI AI
+          unassignedEl.classList.remove('hidden');
+          assignedEl.classList.add('hidden');
+
+          matchBadgeEl.className = 'inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200';
+          matchBadgeEl.textContent = 'Chưa chọn • AI Đề xuất';
+          if (headerActionLabel) headerActionLabel.textContent = `Xem tất cả (${MENTOR_CATALOG.length})`;
+          if (explorerLabel) explorerLabel.textContent = 'Chưa chọn (Đang xem đề xuất AI)';
+          if (resetBtn) resetBtn.classList.add('hidden');
+
+          const introEl = document.getElementById('aiRecommendIntroText');
+          if (introEl) {
+            introEl.innerHTML = `Tài khoản <strong>${currentUser.name}</strong> chưa có Người đồng hành chính thức. Dựa trên vị trí <strong>${currentUser.position || 'Nhân sự mới'}</strong> (${currentUser.department || 'Phòng ban'}), Onbi AI đề xuất <strong>Top 3 Mentor phù hợp nhất</strong> để bạn xem xét và tự lựa chọn:`;
+          }
+
+          const top3 = MENTOR_CATALOG.slice(0, 3);
+          const recList = document.getElementById('aiRecommendedMentorsList');
+          recList.innerHTML = top3.map((m, idx) => `
+            <div class="p-3 rounded-xl border ${idx === 0 ? 'border-blue-300 bg-blue-50/40' : 'border-slate-200 bg-slate-50/70'} hover:bg-white hover:border-[#1F5AFE] transition-all space-y-2">
+              <div class="flex items-start justify-between gap-2.5">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <img src="${m.avatar}" alt="${m.name}" class="w-10 h-10 rounded-full bg-white ring-2 ring-slate-200 shrink-0 object-cover">
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-1.5">
+                      <h4 class="text-xs font-extrabold text-slate-900 truncate">${m.name}</h4>
+                      <span class="text-[10px] font-bold text-amber-600">${m.rating}</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 truncate">${m.role}</p>
+                  </div>
+                </div>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold ${
+                  idx === 0 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-indigo-50 text-indigo-700 border border-indigo-200'
+                } shrink-0">
+                  ${m.matchScore}% hợp
+                </span>
+              </div>
+              <div class="flex flex-wrap items-center gap-1.5 text-[10px]">
+                <button type="button" onclick="copyMentorPhone('${m.phone}', '${m.name}')" class="inline-flex items-center px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-700 hover:border-[#1F5AFE] hover:text-[#1F5AFE] font-semibold cursor-pointer" title="Nhấn để sao chép SĐT">
+                  <span>SĐT: ${m.phone}</span>
+                </button>
+                <button type="button" onclick="openMentorZalo('${m.zalo}', '${m.name}', '${m.zaloUrl}')" class="inline-flex items-center px-2 py-0.5 rounded-md bg-blue-50/80 border border-blue-200 text-[#0068FF] hover:bg-blue-100 font-bold cursor-pointer" title="Nhấn để kết nối Zalo">
+                  <span>Zalo: ${m.zalo}</span>
+                </button>
+              </div>
+              <p class="text-[11px] text-slate-600 line-clamp-2 leading-snug">
+                <strong class="text-slate-700">Lý do AI gợi ý:</strong> ${m.matchReason}
+              </p>
+              <div class="flex items-center justify-between gap-2 pt-1">
+                <button onclick="openMentorExplorerModal('${m.id}')" class="text-[11px] font-semibold text-slate-600 hover:text-[#1F5AFE] hover:underline cursor-pointer">
+                  Xem giới thiệu chi tiết
+                </button>
+                <button onclick="selectMentor('${m.id}')" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-[#1F5AFE] text-white text-[11px] font-bold transition-all active:scale-95 cursor-pointer">
+                  Chọn đồng hành
+                </button>
+              </div>
+            </div>
+          `).join('');
+
+          return;
+        }
+
+        // TRẠNG THÁI ĐÃ CHỌN NGƯỜI ĐỒNG HÀNH
+        unassignedEl.classList.add('hidden');
+        assignedEl.classList.remove('hidden');
+
+        const activeSlot = getMentorCustomSlot(mentor);
+        const history = getMentorChatHistory(mentor.id);
+        const lastMsg = history.length > 0 ? history[history.length - 1] : null;
+
+        matchBadgeEl.className = 'inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/80';
+        matchBadgeEl.textContent = `Đã chọn (${mentor.matchScore}% hợp)`;
+        if (headerActionLabel) headerActionLabel.textContent = 'Giới thiệu & Đổi';
+
+        document.getElementById('mentorCardAvatar').src = mentor.avatar;
+        document.getElementById('mentorCardName').textContent = mentor.name;
+        document.getElementById('mentorCardRating').textContent = mentor.rating;
+        document.getElementById('mentorCardRole').textContent = mentor.role;
+        document.getElementById('mentorCardExp').textContent = mentor.responseTime;
+        document.getElementById('mentorCardBio').textContent = `"${mentor.shortBio}"`;
+
+        const phoneEl = document.getElementById('mentorCardPhone');
+        if (phoneEl) phoneEl.textContent = `SĐT: ${mentor.phone || '0904 682 115'}`;
+        const zaloEl = document.getElementById('mentorCardZalo');
+        if (zaloEl) zaloEl.textContent = `Zalo: ${mentor.zalo || mentor.phone || '0904 682 115'}`;
+        const phoneBtn = document.getElementById('mentorCardPhoneBtn');
+        if (phoneBtn) phoneBtn.onclick = () => window.copyMentorPhone(mentor.phone, mentor.name);
+        const zaloBtn = document.getElementById('mentorCardZaloBtn');
+        if (zaloBtn) zaloBtn.onclick = () => window.openMentorZalo(mentor.zalo, mentor.name, mentor.zaloUrl);
+
+        const tagsContainer = document.getElementById('mentorCardTags');
+        tagsContainer.innerHTML = mentor.tags.map(tag =>
+          `<span class="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-white border border-slate-200 text-slate-700">${tag}</span>`
+        ).join('');
+
+        document.getElementById('mentorNextSessionText').textContent = activeSlot;
+        document.getElementById('mentorSessionLocation').textContent = mentor.location;
+
+        const slotBtns = document.getElementById('mentorSlotButtons');
+        slotBtns.innerHTML = mentor.slots.map(slot => {
+          const isSelected = slot === activeSlot;
+          const safeSlot = slot.replace(/'/g, "\\'");
+          return `
+            <button onclick="selectMentorSlot('${safeSlot}')" class="w-full text-left px-2.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all flex items-center justify-between cursor-pointer ${
+              isSelected
+                ? 'bg-amber-600 text-white shadow-2xs'
+                : 'bg-white/90 text-amber-950 border border-amber-200 hover:bg-amber-100/70'
+            }">
+              <span class="truncate">${slot}</span>
+              ${isSelected ? '<span class="text-[10px] font-bold shrink-0">Đang chọn</span>' : ''}
+            </button>
+          `;
+        }).join('');
+
+        if (lastMsg) {
+          const prefix = lastMsg.sender === 'user' ? 'Bạn: ' : `${mentor.name.split(' ').slice(-1)[0]}: `;
+          document.getElementById('mentorLastMessagePreview').textContent = `"${prefix}${lastMsg.text}"`;
+        }
+
+        if (explorerLabel) explorerLabel.textContent = mentor.name;
+        if (resetBtn) resetBtn.classList.remove('hidden');
+      }
+
+      window.copyMentorPhone = function(phone, mentorName) {
+        const cleanPhone = phone || '0904 682 115';
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(cleanPhone.replace(/\s+/g, '')).catch(() => {});
+        }
+        showToast(`Đã sao chép SĐT của ${mentorName || 'Người đồng hành'}: ${cleanPhone}`, 'success');
+      };
+
+      window.openMentorZalo = function(zalo, mentorName, zaloUrl) {
+        const cleanZalo = zalo || '0904 682 115';
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(cleanZalo.replace(/\s+/g, '')).catch(() => {});
+        }
+        showToast(`Đã sao chép Zalo của ${mentorName || 'Người đồng hành'} (${cleanZalo}). Đang mở Zalo...`, 'success');
+        if (zaloUrl) {
+          window.open(zaloUrl, '_blank', 'noopener');
+        }
+      };
+
+      window.toggleSchedulePicker = function() {
+        const picker = document.getElementById('mentorSchedulePicker');
+        picker.classList.toggle('hidden');
+      };
+
+      window.selectMentorSlot = function(slotText) {
+        const mentor = getActiveMentor();
+        if (!mentor) return;
+        localStorage.setItem(`ONBOARDAI_MENTOR_SLOT_${currentUser.id}_${mentor.id}`, slotText);
+        document.getElementById('mentorSchedulePicker').classList.add('hidden');
+        renderMentorCard();
+        showToast(`Đã cập nhật lịch 1-on-1: ${slotText}`, 'success');
+      };
+
+      // ================= CỬA SỔ CHAT TRỰC TIẾP VỚI MENTOR =================
+      function renderMentorChatMessages() {
+        const mentor = getActiveMentor() || MENTOR_CATALOG[0];
+        const activeSlot = getMentorCustomSlot(mentor);
+        document.getElementById('chatMentorAvatar').src = mentor.avatar;
+        document.getElementById('chatMentorName').textContent = mentor.name;
+        document.getElementById('chatMentorRole').textContent = `${mentor.role} • SĐT/Zalo: ${mentor.phone} • Đang trực tuyến`;
+        document.getElementById('chatPinnedSchedule').textContent = `Lịch 1-on-1: ${activeSlot}`;
+
+        const messages = getMentorChatHistory(mentor.id);
+        const container = document.getElementById('mentorChatMessages');
+        container.innerHTML = messages.map(msg => {
+          if (msg.sender === 'user') {
+            return `
+              <div class="flex flex-col items-end">
+                <div class="max-w-[82%] px-3.5 py-2.5 rounded-2xl rounded-br-xs bg-[#1F5AFE] text-white text-xs leading-relaxed shadow-2xs">
+                  ${msg.text}
+                </div>
+                <span class="text-[10px] text-slate-400 mt-1 px-1">Bạn • ${msg.time}</span>
+              </div>
+            `;
+          }
+          return `
+            <div class="flex items-start gap-2.5">
+              <img src="${mentor.avatar}" alt="${mentor.name}" class="w-7 h-7 rounded-full bg-white ring-1 ring-slate-200 shrink-0 mt-0.5 object-cover">
+              <div class="flex flex-col items-start max-w-[82%]">
+                <div class="px-3.5 py-2.5 rounded-2xl rounded-bl-xs bg-white border border-slate-200/90 text-slate-800 text-xs leading-relaxed shadow-2xs">
+                  ${msg.text}
+                </div>
+                <span class="text-[10px] text-slate-400 mt-1 px-1">${mentor.name} • ${msg.time}</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+        container.scrollTop = container.scrollHeight;
+      }
+
+      function generateSmartMentorReply(userText, mentor) {
+        const lower = userText.toLowerCase();
+        const shortName = mentor.name.split(' ').slice(-1)[0];
+        if (lower.includes('ssh') || lower.includes('t02') || lower.includes('clone') || lower.includes('quyền')) {
+          return `Mình vừa nhắn trực tiếp cho anh Nguyễn Văn Hải (IT Helpdesk - Ext 104) để ưu tiên duyệt SSH Key cho ${currentUser.name} rồi nhé! Khoảng 10 phút nữa em thử clone lại repo rồi đính kèm link PR minh chứng vào nhiệm vụ T02 nha.`;
+        }
+        if (lower.includes('minh chứng') || lower.includes('review') || lower.includes('nộp')) {
+          return `Tuyệt vời quá! ${shortName} đã nhận được thông báo minh chứng của em. Cách trình bày rất rõ ràng, em cứ tiếp tục hoàn thành các đầu việc còn lại của Tuần 1 theo đúng đà này nhé!`;
+        }
+        if (lower.includes('1-on-1') || lower.includes('lịch') || lower.includes('gặp')) {
+          const slot = getMentorCustomSlot(mentor);
+          return `Đã chốt lịch hẹn 1-on-1 vào khung giờ "${slot}" tại ${mentor.location} nhé! Trước buổi gặp, em chỉ cần ghi chú lại 2-3 điểm thuận lợi hoặc vướng mắc trong tuần đầu là được.`;
+        }
+        if (lower.includes('okr') || lower.includes('thử việc') || lower.includes('60 ngày') || lower.includes('mục tiêu')) {
+          return `Để đạt kết quả xuất sắc trong 60 ngày thử việc, em nên tập trung vào 3 trụ cột: (1) Hoàn thành 100% nhiệm vụ có minh chứng đúng hạn, (2) Đóng góp ít nhất 2 PR/tài liệu chuẩn chỉ trong tháng đầu, và (3) Chủ động trao đổi trong các buổi Check-in cùng ${shortName} nhé!`;
+        }
+        return `Cảm ơn ${currentUser.name} đã nhắn tin! ${shortName} đã ghi nhận nội dung này và sẽ hỗ trợ em sát sao. Nếu cần tài liệu mẫu hoặc hướng dẫn trực tiếp, em cứ báo ${shortName} bất cứ lúc nào nhé!`;
+      }
+
+      window.openMentorChatModal = function(optionalMentorId) {
+        if (optionalMentorId && optionalMentorId !== selectedMentorId) {
+          window.selectMentor(optionalMentorId);
+        }
+        if (!selectedMentorId) {
+          showToast('Vui lòng chọn một Người đồng hành từ danh sách đề xuất AI trước khi bắt đầu trò chuyện!', 'warning');
+          window.openMentorExplorerModal();
+          return;
+        }
+        document.getElementById('mentorChatModal').classList.remove('hidden');
+        const unreadBadge = document.getElementById('mentorUnreadBadge');
+        if (unreadBadge) unreadBadge.classList.add('hidden');
+        renderMentorChatMessages();
+        setTimeout(() => {
+          const input = document.getElementById('mentorChatInput');
+          if (input) input.focus();
+        }, 100);
+      };
+
+      window.closeMentorChatModal = function() {
+        document.getElementById('mentorChatModal').classList.add('hidden');
+      };
+
+      function appendAndReplyMentorMessage(text) {
+        const clean = (text || '').trim();
+        if (!clean) return;
+        const mentor = getActiveMentor() || MENTOR_CATALOG[0];
+        const now = new Date();
+        const timeStr = now.toTimeString().slice(0, 5);
+
+        const history = getMentorChatHistory(mentor.id);
+        history.push({ sender: 'user', time: timeStr, text: clean });
+        saveMentorChatHistory(mentor.id, history);
+        renderMentorChatMessages();
+        renderMentorCard();
+
+        // Hiển thị trạng thái Mentor đang nhập phản hồi
+        const container = document.getElementById('mentorChatMessages');
+        const typingDiv = document.createElement('div');
+        typingDiv.id = 'mentorTypingIndicator';
+        typingDiv.className = 'flex items-center gap-2 text-xs text-slate-500 italic px-2 py-1';
+        typingDiv.innerHTML = `
+          <img src="${mentor.avatar}" class="w-5 h-5 rounded-full bg-white ring-1 ring-slate-200 object-cover">
+          <span>${mentor.name} đang soạn phản hồi...</span>
+        `;
+        container.appendChild(typingDiv);
+        container.scrollTop = container.scrollHeight;
+
+        setTimeout(() => {
+          const indicator = document.getElementById('mentorTypingIndicator');
+          if (indicator) indicator.remove();
+          const replyText = generateSmartMentorReply(clean, mentor);
+          const replyTime = new Date().toTimeString().slice(0, 5);
+          const updated = getMentorChatHistory(mentor.id);
+          updated.push({ sender: 'mentor', time: replyTime, text: replyText });
+          saveMentorChatHistory(mentor.id, updated);
+          renderMentorChatMessages();
+          renderMentorCard();
+        }, 900);
+      }
+
+      window.handleMentorChatSubmit = function(e) {
+        e.preventDefault();
+        const input = document.getElementById('mentorChatInput');
+        const text = input.value.trim();
+        if (!text) return;
+        input.value = '';
+        appendAndReplyMentorMessage(text);
+      };
+
+      window.sendMentorQuickPrompt = function(promptText) {
+        const modal = document.getElementById('mentorChatModal');
+        if (modal.classList.contains('hidden')) {
+          window.openMentorChatModal();
+        }
+        appendAndReplyMentorMessage(promptText);
+      };
+
+      // ================= GIỚI THIỆU & LỰA CHỌN NGƯỜI ĐỒNG HÀNH (8 MENTORS - TỐI ƯU CUỘN & ĐỌC MƯỢT MÀ) =================
+      const expandedMentorCards = new Set();
+
+      window.toggleMentorCardDetail = function(mentorId) {
+        if (expandedMentorCards.has(mentorId)) {
+          expandedMentorCards.delete(mentorId);
+        } else {
+          expandedMentorCards.add(mentorId);
+        }
+        renderMentorExplorerCatalog();
+      };
+
+      window.scrollMentorCatalog = function(deltaY) {
+        const scrollArea = document.getElementById('mentorCatalogScrollArea');
+        if (scrollArea) {
+          scrollArea.scrollBy({ top: deltaY, behavior: 'smooth' });
+        }
+      };
+
+      function renderMentorExplorerCatalog(highlightId = null) {
+        const grid = document.getElementById('mentorCatalogGrid');
+        const searchInput = document.getElementById('mentorSearchInput');
+        const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+        if (highlightId) {
+          expandedMentorCards.add(highlightId);
+        }
+
+        const filtered = MENTOR_CATALOG.filter(m => {
+          if (currentMentorFilter === 'ai_best' && m.matchScore < 90) return false;
+          if (currentMentorFilter === 'tech' && m.category !== 'tech') return false;
+          if (currentMentorFilter === 'culture' && m.category !== 'culture') return false;
+          if (query) {
+            const haystack = `${m.name} ${m.role} ${m.shortBio} ${m.phone || ''} ${m.zalo || ''} ${m.tags.join(' ')}`.toLowerCase();
+            if (!haystack.includes(query)) return false;
+          }
+          return true;
+        });
+
+        if (filtered.length === 0) {
+          grid.innerHTML = `
+            <div class="col-span-full py-10 text-center text-xs text-slate-500 bg-white rounded-2xl border border-slate-200">
+              Không tìm thấy Người đồng hành phù hợp với từ khóa. Hãy thử bộ lọc khác nhé!
+            </div>
+          `;
+          return;
+        }
+
+        grid.innerHTML = filtered.map((mentor, index) => {
+          const isCurrent = mentor.id === selectedMentorId;
+          const isTopAi = index === 0 && currentMentorFilter === 'all' && !query;
+          const isHighlighted = highlightId === mentor.id;
+          const isExpanded = expandedMentorCards.has(mentor.id);
+          return `
+            <div id="explorer-mentor-card-${mentor.id}" class="rounded-2xl border ${
+              isCurrent
+                ? 'border-[#1F5AFE] bg-blue-50/25 ring-2 ring-blue-500/15'
+                : isHighlighted
+                ? 'border-indigo-400 bg-indigo-50/20 ring-2 ring-indigo-400/20'
+                : 'border-slate-200 bg-white hover:border-blue-300'
+            } p-4 shadow-2xs flex flex-col justify-between gap-3 transition-colors">
+              <div class="space-y-2.5">
+                <!-- Header thẻ giới thiệu Mentor (Avatar chuẩn w-12 h-12) -->
+                <div class="flex items-start justify-between gap-2.5">
+                  <div class="flex items-center gap-3 min-w-0">
+                    <div class="relative shrink-0">
+                      <img src="${mentor.avatar}" alt="${mentor.name}" class="w-12 h-12 rounded-full bg-slate-50 ring-2 ${isCurrent ? 'ring-[#1F5AFE]' : 'ring-slate-100'} object-cover">
+                      <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-[#00B67A] ring-2 ring-white"></span>
+                    </div>
+                    <div class="min-w-0">
+                      <div class="flex items-center gap-1.5 flex-wrap">
+                        <h4 class="text-sm font-extrabold text-slate-900 truncate">${mentor.name}</h4>
+                        <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200/70">${mentor.rating}</span>
+                        ${isTopAi ? '<span class="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-blue-600 text-white">Top 1 AI</span>' : ''}
+                      </div>
+                      <p class="text-xs text-slate-600 font-medium truncate">${mentor.role}</p>
+                      <p class="text-[11px] text-slate-500 truncate">${mentor.experience} • ${mentor.responseTime}</p>
+                    </div>
+                  </div>
+                  <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold ${
+                    mentor.matchScore >= 95
+                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                      : 'bg-indigo-50 text-indigo-700 border border-indigo-200'
+                  } shrink-0">
+                    ${mentor.matchLabel}
+                  </span>
+                </div>
+
+                <!-- Liên hệ nhanh SĐT & Zalo -->
+                <div class="grid grid-cols-2 gap-2">
+                  <button type="button" onclick="copyMentorPhone('${mentor.phone}', '${mentor.name}')" class="px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/90 flex items-center justify-center text-[11px] font-bold text-slate-700 transition-all cursor-pointer" title="Nhấn để sao chép SĐT">
+                    <span class="truncate">SĐT: ${mentor.phone}</span>
+                  </button>
+                  <button type="button" onclick="openMentorZalo('${mentor.zalo}', '${mentor.name}', '${mentor.zaloUrl}')" class="px-2.5 py-1.5 rounded-xl bg-blue-50/70 hover:bg-blue-100/80 border border-blue-200/90 flex items-center justify-center text-[11px] font-bold text-[#0068FF] transition-all cursor-pointer" title="Nhấn để kết nối Zalo">
+                    <span class="truncate">Zalo: ${mentor.zalo}</span>
+                  </button>
+                </div>
+
+                <!-- Lý do gợi ý từ AI -->
+                <div class="px-3 py-2 rounded-xl bg-indigo-50/70 border border-indigo-100 text-[11px] text-indigo-950">
+                  <span class="line-clamp-2"><strong>Đề xuất từ AI:</strong> ${mentor.matchReason}</span>
+                </div>
+
+                <!-- Tóm tắt năng lực & Khung thông tin nhanh gọn gàng -->
+                <p class="text-xs text-slate-600 leading-relaxed ${isExpanded ? '' : 'line-clamp-2'}">
+                  ${isExpanded ? mentor.fullIntro : mentor.shortBio}
+                </p>
+
+                <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1 text-[11px]">
+                  <div class="truncate"><strong class="text-slate-800">Phong cách:</strong> ${mentor.style}</div>
+                  <div class="truncate"><strong class="text-slate-800">Lịch 1-on-1:</strong> ${mentor.nextSession}</div>
+                  <div class="flex items-center justify-between gap-2">
+                    <span><strong class="text-slate-800">Nhận kèm:</strong> <span class="text-emerald-700 font-semibold">${mentor.capacity}</span></span>
+                    <button type="button" onclick="toggleMentorCardDetail('${mentor.id}')" class="text-[11px] font-bold text-[#1F5AFE] hover:underline shrink-0 cursor-pointer">
+                      ${isExpanded ? 'Thu gọn' : 'Xem chi tiết & đánh giá'}
+                    </button>
+                  </div>
+                </div>
+
+                ${
+                  isExpanded
+                    ? `<div class="p-2.5 rounded-xl bg-blue-50/40 border border-blue-200/60 text-[11px] text-slate-600 italic">
+                         ${mentor.testimonial}
+                       </div>`
+                    : ''
+                }
+
+                <!-- Chuyên môn hỗ trợ -->
+                <div class="flex flex-wrap gap-1">
+                  ${mentor.tags.map(t => `<span class="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-100 text-slate-700">${t}</span>`).join('')}
+                </div>
+              </div>
+
+              <!-- Nút lựa chọn người đồng hành (Luôn hiển thị rõ ngay trong tầm mắt) -->
+              <div class="pt-2.5 border-t border-slate-200/70 flex items-center justify-between gap-2 mt-auto">
+                ${
+                  isCurrent
+                    ? `<span class="inline-flex items-center text-xs font-extrabold text-[#00B67A]">
+                         Đang đồng hành cùng bạn
+                       </span>
+                       <button onclick="closeMentorExplorerModal(); openMentorChatModal();" class="px-3.5 py-1.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold transition-all cursor-pointer">
+                         Nhắn tin ngay
+                       </button>`
+                    : `<span class="text-[11px] text-slate-500 font-medium">Sẵn sàng đồng hành</span>
+                       <button onclick="selectMentor('${mentor.id}')" class="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-[#1F5AFE] text-white text-xs font-bold transition-all shadow-xs active:scale-95 cursor-pointer">
+                         Chọn làm Người đồng hành
+                       </button>`
+                }
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        if (highlightId) {
+          setTimeout(() => {
+            const targetCard = document.getElementById(`explorer-mentor-card-${highlightId}`);
+            if (targetCard) targetCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, 60);
+        }
+      }
+
+      window.openMentorExplorerModal = function(highlightId = null) {
+        document.getElementById('mentorExplorerModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        renderMentorExplorerCatalog(highlightId);
+      };
+
+      window.closeMentorExplorerModal = function() {
+        document.getElementById('mentorExplorerModal').classList.add('hidden');
+        document.body.style.overflow = '';
+      };
+
+      window.filterMentorCatalog = function(filterKey) {
+        currentMentorFilter = filterKey;
+        document.querySelectorAll('.mentor-filter-btn').forEach(btn => {
+          if (btn.getAttribute('data-filter') === filterKey) {
+            btn.className = 'mentor-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#1F5AFE] text-white shadow-2xs transition-all cursor-pointer';
+          } else {
+            btn.className = 'mentor-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-white text-slate-700 border border-slate-200 hover:border-blue-300 transition-all cursor-pointer';
+          }
+        });
+        const scrollArea = document.getElementById('mentorCatalogScrollArea');
+        if (scrollArea) scrollArea.scrollTop = 0;
+        renderMentorExplorerCatalog();
+      };
+
+      window.selectMentor = function(mentorId) {
+        const chosen = MENTOR_CATALOG.find(m => m.id === mentorId);
+        if (!chosen) return;
+        selectedMentorId = chosen.id;
+        localStorage.setItem(`ONBOARDAI_CONFIRMED_MENTOR_${currentUser.id}`, chosen.id);
+        localStorage.setItem(`ONBOARDAI_SELECTED_MENTOR_${currentUser.id}`, chosen.id);
+
+        // Đồng bộ mentorId & mentorName vào CSDL newHires và users
+        API.update('newHires', currentUser.id, { mentorId: chosen.id, mentorName: chosen.name });
+        const allUsers = API.getAll('users');
+        const matchedUser = allUsers.find(u => u.profileId === currentUser.id || u.email === currentUser.email);
+        if (matchedUser) {
+          API.update('users', matchedUser.id, { mentorId: chosen.id, mentorName: chosen.name });
+        }
+
+        const unreadBadge = document.getElementById('mentorUnreadBadge');
+        if (unreadBadge) unreadBadge.classList.remove('hidden');
+
+        renderMentorCard();
+        renderMentorExplorerCatalog();
+        showToast(`Đã chọn ${chosen.name} làm Người đồng hành chính thức của bạn!`, 'success');
+      };
+
+      window.resetMentorSelection = function() {
+        selectedMentorId = null;
+        localStorage.removeItem(`ONBOARDAI_CONFIRMED_MENTOR_${currentUser.id}`);
+        localStorage.removeItem(`ONBOARDAI_SELECTED_MENTOR_${currentUser.id}`);
+        API.update('newHires', currentUser.id, { mentorId: '', mentorName: 'Chưa chọn (AI đề xuất)' });
+        renderMentorCard();
+        renderMentorExplorerCatalog();
+        showToast('Đã chuyển về trạng thái đề xuất AI để bạn lựa chọn lại Người đồng hành!', 'info');
+      };
 
       // Cập nhật thông tin Header & Banner
       document.getElementById('userName').innerText = currentUser.name;
@@ -572,15 +1899,24 @@
           let blockedSubtext = '';
           if (isBlocked && task.blockedReason) {
             blockedSubtext = `
-              <div class="mt-1.5 text-xs text-rose-800 bg-rose-50 p-2 rounded-xl border border-rose-200/60 flex items-center gap-1.5 font-medium">
-                <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0 text-rose-600"></i>
+              <div class="mt-1.5 text-xs text-rose-800 bg-rose-50 p-2 rounded-xl border border-rose-200/60 font-medium">
                 <span>${task.blockedReason}</span>
               </div>`;
           }
 
+          const hasProof = Boolean(task.proof && task.proof.trim() !== '');
+          const safeTitle = task.title.replace(/'/g, "\\'");
+          const proofActionHtml = hasProof
+            ? `<button onclick="openDashProofModal('${task.id}', '${safeTitle}')" class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/80 hover:bg-emerald-100 transition-colors cursor-pointer" title="${task.proof}">
+                 Đã nộp minh chứng
+               </button>`
+            : `<button onclick="openDashProofModal('${task.id}', '${safeTitle}')" class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold bg-blue-50 text-[#1F5AFE] border border-blue-200/80 hover:bg-blue-100 transition-colors cursor-pointer">
+                 Nộp minh chứng
+               </button>`;
+
           taskDiv.innerHTML = `
             <!-- Checkbox SVG dấu tick vẽ dần (Mục 3.2 & Mục 4 Lỗi #3) -->
-            <label class="relative flex items-center justify-center cursor-pointer shrink-0 mt-0.5 group/cb ${isDone ? 'is-done' : ''}" title="${isDone ? 'Đánh dấu chưa xong' : 'Đánh dấu hoàn thành'}">
+            <label class="relative flex items-center justify-center cursor-pointer shrink-0 mt-0.5 group/cb ${isDone ? 'is-done' : ''}" title="${isDone ? 'Đánh dấu chưa xong' : (hasProof ? 'Đánh dấu hoàn thành' : 'Cần nộp minh chứng trước khi hoàn thành')}">
               <input type="checkbox" class="task-checkbox peer sr-only" data-id="${task.id}" ${isDone ? 'checked' : ''}>
               <div class="w-5 h-5 rounded-md border-2 ${isDone ? 'border-[#00B67A] bg-[#00B67A]' : 'border-slate-400 group-hover/cb:border-blue-500'} flex items-center justify-center transition-all duration-200 active:scale-90 shadow-2xs">
                 <svg viewBox="0 0 24 24" class="w-3.5 h-3.5" aria-hidden="true">
@@ -601,18 +1937,27 @@
                 <span>Hạn chót: <strong class="text-slate-700 tabular-nums">${task.dueDate}</strong></span>
                 <span>&bull;</span>
                 <span class="text-slate-600">${task.phase || 'Tuần 1'}</span>
+                <span>&bull;</span>
+                ${proofActionHtml}
               </div>
               ${blockedSubtext}
             </div>
             
-            <button onclick="quickAsk('${task.title}')" title="Hỏi Onbi về nhiệm vụ này" class="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-[#1F5AFE] p-1 rounded-lg transition-all shrink-0 active:scale-90">
-              <i data-lucide="bot" class="w-4 h-4"></i>
+            <button onclick="quickAsk('${safeTitle}')" title="Hỏi Onbi về nhiệm vụ này" class="opacity-0 group-hover:opacity-100 text-[11px] font-semibold text-slate-500 hover:text-[#1F5AFE] px-2 py-1 rounded-lg transition-all shrink-0 active:scale-90">
+              Hỏi AI
             </button>
           `;
 
-          // Bắt sự kiện tích chọn
+          // Bắt sự kiện tích chọn (Yêu cầu bắt buộc nộp minh chứng trước khi hoàn thành)
           const checkbox = taskDiv.querySelector('.task-checkbox');
           checkbox.addEventListener('change', (e) => {
+            if (e.target.checked && (!task.proof || !task.proof.trim())) {
+              e.target.checked = false;
+              showToast('Vui lòng nộp minh chứng trước khi xác nhận hoàn thành nhiệm vụ!', 'warning');
+              window.openDashProofModal(task.id, task.title);
+              return;
+            }
+
             const newStatus = e.target.checked ? 'completed' : 'pending';
             API.update('tasks', task.id, { status: newStatus });
             task.status = newStatus;
@@ -635,7 +1980,18 @@
       // Khởi tạo ban đầu
       renderTodayTasks();
       updateProgress();
+      renderMentorCard();
       lucide.createIcons();
+
+      // Hỗ trợ mở nhanh cửa sổ Chat hoặc Chọn Mentor khi điều hướng từ trang Lộ trình
+      const pendingMentorAction = sessionStorage.getItem('OPEN_MENTOR_ACTION');
+      if (pendingMentorAction === 'chat') {
+        sessionStorage.removeItem('OPEN_MENTOR_ACTION');
+        window.openMentorChatModal();
+      } else if (pendingMentorAction === 'explore') {
+        sessionStorage.removeItem('OPEN_MENTOR_ACTION');
+        window.openMentorExplorerModal();
+      }
     });
   </script>
 </body>

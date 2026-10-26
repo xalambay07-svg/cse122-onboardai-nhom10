@@ -1,0 +1,15 @@
+# LIÊN KẾT THIẾT KẾ FIGMA / CANVA – DỰ ÁN BTL-20: ONBOARDAI (NHÓM 10)
+# Học phần: Phát triển Ứng dụng Web Cơ bản – CSE122
+
+1. Link Figma / Canva Design System & Wireframes (Điền link công khai của nhóm tại đây):
+https://www.figma.com/file/onboardai-btl20-cse122-nhom10
+
+2. Bảng Quản lý Công việc Trello Kanban:
+https://trello.com/b/J0c8nZ2l
+(Bản trực quan tích hợp trong kho mã nguồn: trello-kanban.html)
+
+3. Thành phần Thiết kế đã chuẩn hóa:
+- Bảng màu (Color Palette): Primary Indigo (#4F46E5), Secondary Emerald (#10B981), Warning Amber (#F59E0B), Danger Rose (#F43F5E), Surface Slate (#F8FAFC).
+- Typography: Plus Jakarta Sans (Heading) & Inter (Body).
+- Bố cục (Layout): Sidebar cố định 260px + Topbar + Bento Grid Responsive (Desktop 1440px, Tablet 768px, Mobile 375px).
+- Trạng thái bao phủ: Normal, Loading (Skeleton / AI Typing), Empty State + CTA, Error Validation, Success Toast.
