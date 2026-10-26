@@ -42,11 +42,15 @@
 <body class="bg-[#F1F5F9] text-[#1E293B] font-sans antialiased h-full flex flex-col">
   <!-- Thanh Thị sát của Quản trị viên (Admin View-as Bar - Mặc định ẩn, chỉ hiện khi HR/Admin truy cập) -->
   <div id="adminImpersonateBar" class="hidden bg-slate-900 text-white px-4 py-2.5 text-xs font-medium flex flex-wrap items-center justify-between gap-2 z-50 border-b border-indigo-500/40 shrink-0">
-    <div class="flex items-center gap-2">
+    <div class="flex flex-wrap items-center gap-2.5">
       <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-indigo-500 text-white">Chế độ thị sát</span>
-      <span class="text-slate-300">Đang xem giao diện dưới góc nhìn của <strong class="text-white">Trần Thị Mai (Mentor - Tech Lead)</strong></span>
+      <span class="text-slate-300">Đang xem góc nhìn của <strong id="impersonateMentorLabel" class="text-white">Trần Thị Mai (Mentor - Tech Lead)</strong></span>
+      <div class="flex items-center gap-1.5 ml-1">
+        <span class="text-[11px] text-slate-400">Đổi Người hướng dẫn:</span>
+        <select id="impersonateMentorSelect" onchange="switchActiveMentorView(this.value)" class="bg-slate-800 text-white border border-slate-700 rounded-lg px-2.5 py-1 text-xs font-semibold focus:outline-none focus:border-indigo-400 cursor-pointer"></select>
+      </div>
     </div>
-    <button onclick="exitImpersonation('hr-dashboard.html')" class="px-3 py-1.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-600 text-white text-xs font-bold transition shadow-xs">
+    <button id="exitImpersonateBtn" onclick="exitImpersonation('hr-dashboard.html')" class="px-3 py-1.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-600 text-white text-xs font-bold transition shadow-xs cursor-pointer">
       Thoát chế độ xem & Quay lại Bảng điều khiển HR
     </button>
   </div>
@@ -162,7 +166,7 @@
           <div class="bg-white p-4 rounded-2xl border border-[#E2E8F0] shadow-xs flex items-center justify-between">
             <div>
               <div class="text-xs text-slate-500 font-medium">Tổng số Mentee</div>
-              <div class="text-2xl font-extrabold text-slate-900 mt-1">2</div>
+              <div id="mentorStatTotal" class="text-2xl font-extrabold text-slate-900 mt-1">2</div>
             </div>
             <div class="w-10 h-10 rounded-xl bg-blue-50 text-[#1F5AFE] flex items-center justify-center">
               <i data-lucide="users" class="w-5 h-5"></i>
@@ -171,7 +175,7 @@
           <div class="bg-white p-4 rounded-2xl border border-[#E2E8F0] shadow-xs flex items-center justify-between">
             <div>
               <div class="text-xs text-slate-500 font-medium">Đang tiến triển tốt</div>
-              <div class="text-2xl font-extrabold text-[#00B67A] mt-1">2</div>
+              <div id="mentorStatOnTrack" class="text-2xl font-extrabold text-[#00B67A] mt-1">2</div>
             </div>
             <div class="w-10 h-10 rounded-xl bg-emerald-50 text-[#00B67A] flex items-center justify-center">
               <i data-lucide="check-circle" class="w-5 h-5"></i>
@@ -180,7 +184,7 @@
           <div class="bg-white p-4 rounded-2xl border border-[#E2E8F0] shadow-xs flex items-center justify-between">
             <div>
               <div class="text-xs text-slate-500 font-medium">Cần đánh giá 1-on-1 tuần này</div>
-              <div class="text-2xl font-extrabold text-amber-600 mt-1">1</div>
+              <div id="mentorStatCheckin" class="text-2xl font-extrabold text-amber-600 mt-1">1</div>
             </div>
             <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
               <i data-lucide="calendar" class="w-5 h-5"></i>
@@ -190,82 +194,18 @@
 
         <!-- Mentee Cards List -->
         <div class="space-y-4">
-          <div class="flex items-center justify-between">
-            <h2 class="text-sm font-bold text-slate-900">Danh sách nhân sự mới phụ trách trực tiếp</h2>
-            <span class="text-xs text-slate-500">Phòng Kỹ thuật Công nghệ</span>
-          </div>
-
-          <!-- Mentee 1: Nguyen Van An (Direct link to Huy's New Hire slice) -->
-          <div class="bg-white rounded-2xl border border-[#E2E8F0] p-5 shadow-xs hover:border-indigo-300 transition-all space-y-4">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div class="flex items-center gap-3.5">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=An" alt="An Avatar" class="w-12 h-12 rounded-2xl border border-slate-200 bg-slate-50">
-                <div>
-                  <div class="flex items-center gap-2">
-                    <h3 class="text-sm font-bold text-slate-900">Nguyễn Văn An</h3>
-                    <span class="pill-status pill-on-track">ON TRACK</span>
-                  </div>
-                  <div class="text-xs text-slate-500 mt-0.5">Frontend Developer &bull; Gia nhập: 15/09/2026 &bull; Mã: <span class="font-mono text-slate-700 font-semibold">NH01</span></div>
-                </div>
-              </div>
-
-              <div class="flex items-center gap-2">
-                <a href="newhire-onboarding-dashboard.html" class="px-3.5 py-2 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 active:scale-95">
-                  <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                  <span>Xem Dashboard New Hire &rarr;</span>
-                </a>
-                <a href="newhire-checklist.html" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition flex items-center gap-1.5">
-                  <i data-lucide="check-square" class="w-3.5 h-3.5"></i>
-                  <span>Kiểm tra Checklist</span>
-                </a>
-              </div>
-            </div>
-
-            <!-- Progress Bar -->
+          <div class="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <div class="flex items-center justify-between text-xs mb-1.5">
-                <span class="text-slate-500">Tiến độ hoàn thành nhiệm vụ</span>
-                <span class="font-bold text-[#1F5AFE]" id="anProgressText">20% (1/5 nhiệm vụ)</span>
-              </div>
-              <div class="progress-bar-micro">
-                <div id="anProgressBar" class="progress-fill-micro bg-gradient-to-r from-[#1F5AFE] to-[#00B67A]" style="width: 20%;"></div>
-              </div>
+              <h2 class="text-sm font-bold text-slate-900">Danh sách nhân sự mới phụ trách trực tiếp</h2>
+              <p id="mentorDeptSubtitle" class="text-xs text-slate-500 mt-0.5">Phòng Kỹ thuật Công nghệ • Người hướng dẫn: Trần Thị Mai</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <label for="pageMentorSwitcher" class="text-xs font-semibold text-slate-600">Xem theo Người hướng dẫn:</label>
+              <select id="pageMentorSwitcher" onchange="switchActiveMentorView(this.value)" class="px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-800 focus:outline-none focus:border-indigo-500 cursor-pointer shadow-2xs"></select>
             </div>
           </div>
 
-          <!-- Mentee 2: Le Hoang Long -->
-          <div class="bg-white rounded-2xl border border-[#E2E8F0] p-5 shadow-xs hover:border-indigo-300 transition-all space-y-4">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div class="flex items-center gap-3.5">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Long" alt="Long Avatar" class="w-12 h-12 rounded-2xl border border-slate-200 bg-slate-50">
-                <div>
-                  <div class="flex items-center gap-2">
-                    <h3 class="text-sm font-bold text-slate-900">Lê Hoàng Long</h3>
-                    <span class="pill-status pill-on-track">ON TRACK</span>
-                  </div>
-                  <div class="text-xs text-slate-500 mt-0.5">Backend Developer &bull; Gia nhập: 20/09/2026 &bull; Mã: <span class="font-mono text-slate-700 font-semibold">NH03</span></div>
-                </div>
-              </div>
-
-              <div class="flex items-center gap-2">
-                <button onclick="showToast('Tính năng Đánh giá 1-on-1 (M02) của SV2 sẽ mở trong sprint tiếp theo!', 'warning')" class="px-3.5 py-2 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold border border-indigo-200 transition flex items-center gap-1.5">
-                  <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
-                  <span>Ghi chú 1-on-1</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- Progress Bar -->
-            <div>
-              <div class="flex items-center justify-between text-xs mb-1.5">
-                <span class="text-slate-500">Tiến độ hoàn thành nhiệm vụ</span>
-                <span class="font-bold text-indigo-600">40% (8/20 nhiệm vụ)</span>
-              </div>
-              <div class="progress-bar-micro">
-                <div class="progress-fill-micro bg-gradient-to-r from-indigo-500 to-[#1F5AFE]" style="width: 40%;"></div>
-              </div>
-            </div>
-          </div>
+          <div id="mentorMenteesContainer" class="space-y-4"></div>
         </div>
       </main>
     </div>
@@ -296,11 +236,220 @@
       }, 3000);
     }
 
+    const MENTOR_PROFILES_DATA = [
+      {
+        id: 'MT01',
+        name: 'Trần Thị Mai',
+        position: 'Mentor (Tech Lead)',
+        department: 'Phòng Kỹ thuật Công nghệ',
+        avatar: 'assets/images/mentors/mt01.jpg',
+        mentees: [
+          { id: 'NH01', name: 'Nguyễn Văn An', position: 'Frontend Developer', department: 'Kỹ thuật Công nghệ', startDate: '15/09/2026', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=An', status: 'ON TRACK', progress: 20, doneTasks: 1, totalTasks: 5, needsCheckin: true },
+          { id: 'NH03', name: 'Lê Hoàng Long', position: 'Backend Developer', department: 'Kỹ thuật Công nghệ', startDate: '20/09/2026', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Long', status: 'ON TRACK', progress: 40, doneTasks: 2, totalTasks: 5, needsCheckin: false }
+        ]
+      },
+      {
+        id: 'MT05',
+        name: 'Nguyễn Hoàng Minh',
+        position: 'Principal Frontend Architect',
+        department: 'Phòng Kỹ thuật Công nghệ',
+        avatar: 'assets/images/mentors/mt05.jpg',
+        mentees: [
+          { id: 'NH01', name: 'Nguyễn Văn An', position: 'Frontend Developer', department: 'Kỹ thuật Công nghệ', startDate: '15/09/2026', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=An', status: 'ON TRACK', progress: 20, doneTasks: 1, totalTasks: 5, needsCheckin: true },
+          { id: 'NH05', name: 'Nguyễn Quốc Bảo', position: 'UI/UX Frontend Engineer', department: 'Kỹ thuật Công nghệ', startDate: '10/09/2026', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Bao', status: 'ON TRACK', progress: 80, doneTasks: 4, totalTasks: 5, needsCheckin: false }
+        ]
+      },
+      {
+        id: 'MT06',
+        name: 'Vũ Đình Trọng',
+        position: 'Backend & Cloud Lead',
+        department: 'Phòng Kỹ thuật Công nghệ',
+        avatar: 'assets/images/mentors/mt06.jpg',
+        mentees: [
+          { id: 'NH03', name: 'Lê Hoàng Long', position: 'Backend Developer', department: 'Kỹ thuật Công nghệ', startDate: '20/09/2026', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Long', status: 'ON TRACK', progress: 40, doneTasks: 2, totalTasks: 5, needsCheckin: true },
+          { id: 'NH06', name: 'Trần Quốc Khánh', position: 'DevOps & Cloud Engineer', department: 'Kỹ thuật Công nghệ', startDate: '12/09/2026', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Khanh', status: 'ON TRACK', progress: 60, doneTasks: 3, totalTasks: 5, needsCheckin: false }
+        ]
+      },
+      {
+        id: 'MT07',
+        name: 'Hoàng Bảo Ngọc',
+        position: 'AI & Data Lead',
+        department: 'Phòng Kỹ thuật Công nghệ',
+        avatar: 'assets/images/mentors/mt07.jpg',
+        mentees: [
+          { id: 'NH07', name: 'Đặng Minh Quân', position: 'AI & NLP Engineer', department: 'Kỹ thuật Công nghệ', startDate: '18/09/2026', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Quan', status: 'ON TRACK', progress: 60, doneTasks: 3, totalTasks: 5, needsCheckin: true }
+        ]
+      },
+      {
+        id: 'MT04',
+        name: 'Đỗ Hoàng Sơn',
+        position: 'Senior QA & Security Lead',
+        department: 'Phòng Kỹ thuật Công nghệ',
+        avatar: 'assets/images/mentors/mt04.jpg',
+        mentees: [
+          { id: 'NH08', name: 'Phạm Thu Trang', position: 'QA Automation Engineer', department: 'Kỹ thuật Công nghệ', startDate: '14/09/2026', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Trang', status: 'ON TRACK', progress: 80, doneTasks: 4, totalTasks: 5, needsCheckin: false }
+        ]
+      },
+      {
+        id: 'MT02',
+        name: 'Lê Minh Tuấn',
+        position: 'Product & Growth Lead',
+        department: 'Phòng Sản phẩm & Thiết kế',
+        avatar: 'assets/images/mentors/mt02.jpg',
+        mentees: [
+          { id: 'NH02', name: 'Trần Thị Bình', position: 'Content Creator', department: 'Marketing & Truyền thông', startDate: '08/09/2026', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Binh', status: 'AT RISK', progress: 20, doneTasks: 1, totalTasks: 5, needsCheckin: true },
+          { id: 'NH09', name: 'Lê Thùy Linh', position: 'Product Designer', department: 'Sản phẩm & Thiết kế', startDate: '16/09/2026', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Linh', status: 'ON TRACK', progress: 60, doneTasks: 3, totalTasks: 5, needsCheckin: false }
+        ]
+      },
+      {
+        id: 'MT08',
+        name: 'Ngô Thanh Hà',
+        position: 'Brand & Digital Marketing Manager',
+        department: 'Phòng Marketing & Truyền thông',
+        avatar: 'assets/images/mentors/mt08.jpg',
+        mentees: [
+          { id: 'NH02', name: 'Trần Thị Bình', position: 'Content Creator', department: 'Marketing & Truyền thông', startDate: '08/09/2026', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Binh', status: 'AT RISK', progress: 20, doneTasks: 1, totalTasks: 5, needsCheckin: true }
+        ]
+      },
+      {
+        id: 'MT03',
+        name: 'Phạm Quang Huy',
+        position: 'People & Culture Partner',
+        department: 'Phòng Nhân sự & Vận hành',
+        avatar: 'assets/images/mentors/mt03.jpg',
+        mentees: [
+          { id: 'NH04', name: 'Phạm Minh Thư', position: 'HR Executive', department: 'Nhân sự & Vận hành', startDate: '01/09/2026', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Thu', status: 'ON TRACK', progress: 100, doneTasks: 5, totalTasks: 5, needsCheckin: false }
+        ]
+      }
+    ];
+
+    let activeMentorId = 'MT01';
+
     function logout() {
       ['currentUser', 'ONBOARDAI_CURRENT_USER', 'isLoggedIn', 'userRole']
         .forEach(k => localStorage.removeItem(k));
-      ['isImpersonating', 'impersonatedUserName', 'impersonateReturnUrl']
+      ['isImpersonating', 'impersonatedUserName', 'impersonateReturnUrl', 'impersonatedUserId', 'impersonatedUserRole', 'impersonatedUserObj']
         .forEach(k => sessionStorage.removeItem(k));
+    }
+
+    function populateMentorSwitchers() {
+      const optionsHtml = MENTOR_PROFILES_DATA.map(m =>
+        `<option value="${m.id}" ${m.id === activeMentorId ? 'selected' : ''}>${m.name} (${m.id} - ${m.position.replace('Mentor (', '').replace(')', '')})</option>`
+      ).join('');
+      const barSel = document.getElementById('impersonateMentorSelect');
+      const pageSel = document.getElementById('pageMentorSwitcher');
+      if (barSel) barSel.innerHTML = optionsHtml;
+      if (pageSel) pageSel.innerHTML = optionsHtml;
+    }
+
+    function switchActiveMentorView(mentorId) {
+      const mentor = MENTOR_PROFILES_DATA.find(m => m.id === mentorId) || MENTOR_PROFILES_DATA[0];
+      if (!mentor) return;
+      activeMentorId = mentor.id;
+
+      if (sessionStorage.getItem('isImpersonating')) {
+        sessionStorage.setItem('impersonatedUserId', mentor.id);
+        sessionStorage.setItem('impersonatedUserRole', 'mentor');
+        sessionStorage.setItem('impersonatedUserName', `${mentor.name} (${mentor.id} - ${mentor.position})`);
+        sessionStorage.setItem('impersonatedUserObj', JSON.stringify({ ...mentor, role: 'mentor' }));
+      }
+
+      const labelEl = document.getElementById('impersonateMentorLabel');
+      if (labelEl) labelEl.textContent = `${mentor.name} (${mentor.id} - ${mentor.position})`;
+
+      const av = document.getElementById('mentorTopbarAvatar');
+      const nm = document.getElementById('mentorTopbarName');
+      const pos = document.getElementById('mentorTopbarPosition');
+      const sub = document.getElementById('mentorDeptSubtitle');
+      if (av) av.src = mentor.avatar;
+      if (nm) nm.textContent = mentor.name;
+      if (pos) pos.textContent = mentor.position;
+      if (sub) sub.textContent = `${mentor.department} • Người hướng dẫn: ${mentor.name} (${mentor.id})`;
+
+      populateMentorSwitchers();
+      renderMentorMentees(mentor);
+    }
+
+    function renderMentorMentees(mentor) {
+      const allTasks = window.API ? (API.getAll('tasks') || []) : [];
+      const mentees = mentor.mentees.map(m => {
+        const userTasks = allTasks.filter(t => t.newHireId === m.id || t.userId === m.id);
+        if (userTasks.length > 0) {
+          const completed = userTasks.filter(t => t.status === 'completed' || t.status === 'done').length;
+          const pct = Math.round((completed / userTasks.length) * 100);
+          return { ...m, progress: pct, doneTasks: completed, totalTasks: userTasks.length };
+        }
+        return m;
+      });
+
+      const totalEl = document.getElementById('mentorStatTotal');
+      const onTrackEl = document.getElementById('mentorStatOnTrack');
+      const checkinEl = document.getElementById('mentorStatCheckin');
+      if (totalEl) totalEl.textContent = mentees.length;
+      if (onTrackEl) onTrackEl.textContent = mentees.filter(m => m.status === 'ON TRACK').length;
+      if (checkinEl) checkinEl.textContent = mentees.filter(m => m.needsCheckin).length;
+
+      const container = document.getElementById('mentorMenteesContainer');
+      if (!container) return;
+      container.innerHTML = mentees.map(m => {
+        const isAtRisk = m.status === 'AT RISK';
+        const pillClass = isAtRisk ? 'pill-status pill-needs-action' : 'pill-status pill-on-track';
+        const pillLabel = isAtRisk ? 'CẦN LƯU Ý' : 'ĐÚNG TIẾN ĐỘ';
+        return `
+          <div class="bg-white rounded-2xl border border-[#E2E8F0] p-5 shadow-xs hover:border-indigo-300 transition-all space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="flex items-center gap-3.5">
+                <img src="${m.avatar}" alt="${m.name}" class="w-12 h-12 rounded-2xl border border-slate-200 bg-slate-50 object-cover">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <h3 class="text-sm font-bold text-slate-900">${m.name}</h3>
+                    <span class="${pillClass}">${pillLabel}</span>
+                  </div>
+                  <div class="text-xs text-slate-500 mt-0.5">${m.position} &bull; Gia nhập: ${m.startDate} &bull; Mã: <span class="font-mono text-slate-700 font-semibold">${m.id}</span></div>
+                </div>
+              </div>
+
+              <div class="flex flex-wrap items-center gap-2">
+                <button type="button" onclick="inspectMenteePage('${m.id}', 'newhire-onboarding-dashboard.html')" class="px-3.5 py-2 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 active:scale-95 cursor-pointer">
+                  <span>Xem Dashboard New Hire &rarr;</span>
+                </button>
+                <button type="button" onclick="inspectMenteePage('${m.id}', 'newhire-checklist.html')" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer">
+                  <span>Kiểm tra Checklist</span>
+                </button>
+                <button type="button" onclick="showToast('Đã ghi nhận lịch đánh giá 1-on-1 với ${m.name}!', 'success')" class="px-3.5 py-2 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold border border-indigo-200 transition flex items-center gap-1.5 cursor-pointer">
+                  <span>Ghi chú 1-on-1</span>
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between text-xs mb-1.5">
+                <span class="text-slate-500">Tiến độ hoàn thành nhiệm vụ</span>
+                <span class="font-bold text-[#1F5AFE]">${m.progress}% (${m.doneTasks}/${m.totalTasks} nhiệm vụ)</span>
+              </div>
+              <div class="progress-bar-micro">
+                <div class="progress-fill-micro bg-gradient-to-r from-[#1F5AFE] to-[#00B67A]" style="width: ${m.progress}%;"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    function inspectMenteePage(menteeId, targetUrl) {
+      const allMentees = MENTOR_PROFILES_DATA.flatMap(mt => mt.mentees.map(m => ({ ...m, mentorId: mt.id, mentorName: mt.name })));
+      const mentee = allMentees.find(m => m.id === menteeId) || allMentees[0];
+      if (!mentee) return;
+      if (!sessionStorage.getItem('isImpersonating')) {
+        sessionStorage.setItem('isImpersonating', 'mentor');
+        sessionStorage.setItem('impersonateReturnUrl', 'mentor-mentee-list.html');
+      }
+      sessionStorage.setItem('impersonatedUserId', mentee.id);
+      sessionStorage.setItem('impersonatedUserRole', 'newhire');
+      sessionStorage.setItem('impersonatedUserName', `${mentee.name} (${mentee.id} - ${mentee.position})`);
+      sessionStorage.setItem('impersonatedUserObj', JSON.stringify({ ...mentee, role: 'newhire' }));
+      window.location.href = targetUrl;
     }
 
     function checkAdminImpersonation() {
@@ -308,10 +457,7 @@
       const bar = document.getElementById('adminImpersonateBar');
       if (isImpersonating && bar) {
         bar.classList.remove('hidden');
-        const customName = sessionStorage.getItem('impersonatedUserName');
-        const strongEl = bar.querySelector('strong');
-        if (customName && strongEl) strongEl.textContent = customName;
-        const btn = bar.querySelector('button');
+        const btn = document.getElementById('exitImpersonateBtn');
         if (isImpersonating === 'admin' && btn) {
           btn.textContent = 'Thoát chế độ xem & Quay lại Quản trị tài khoản';
         }
@@ -321,43 +467,30 @@
     function exitImpersonation(returnUrl = 'hr-dashboard.html') {
       const savedReturn = sessionStorage.getItem('impersonateReturnUrl');
       const isImpersonating = sessionStorage.getItem('isImpersonating');
-      sessionStorage.removeItem('isImpersonating');
-      sessionStorage.removeItem('impersonateReturnUrl');
-      sessionStorage.removeItem('impersonatedUserName');
+      ['isImpersonating', 'impersonateReturnUrl', 'impersonatedUserName', 'impersonatedUserId', 'impersonatedUserRole', 'impersonatedUserObj']
+        .forEach(k => sessionStorage.removeItem(k));
       window.location.href = savedReturn || (isImpersonating === 'admin' ? 'admin-user-management.html' : returnUrl);
     }
 
     document.addEventListener('DOMContentLoaded', async () => {
       checkAdminImpersonation();
-      try {
-        const cur = JSON.parse(localStorage.getItem('ONBOARDAI_CURRENT_USER') || localStorage.getItem('currentUser') || 'null');
-        if (cur && cur.role === 'mentor') {
-          const av = document.getElementById('mentorTopbarAvatar');
-          const nm = document.getElementById('mentorTopbarName');
-          const pos = document.getElementById('mentorTopbarPosition');
-          if (av && cur.avatar) av.src = cur.avatar;
-          if (nm && cur.name) nm.textContent = cur.name;
-          if (pos && cur.position) pos.textContent = cur.position;
-        }
-      } catch (_) {}
       if (window.API) {
         await API.init();
-        // Lấy tiến độ thực tế của NH01 từ tasks
-        try {
-          const allTasks = typeof API.getTasksByNewHire === 'function'
-            ? await API.getTasksByNewHire('NH01')
-            : (API.getAll('tasks') || []).filter(t => t.newHireId === 'NH01' || t.userId === 'NH01');
-          if (allTasks && allTasks.length > 0) {
-            const completed = allTasks.filter(t => t.status === 'completed' || t.status === 'done').length;
-            const pct = Math.round((completed / allTasks.length) * 100);
-            const el = document.getElementById('anProgressText');
-            if (el) el.innerText = `${pct}% (${completed}/${allTasks.length} nhiệm vụ)`;
-            const bar = document.getElementById('anProgressBar');
-            if (bar) bar.style.width = `${pct}%`;
-          }
-        } catch (e) {}
       }
-      lucide.createIcons();
+      let initialMentorId = 'MT01';
+      const impRole = sessionStorage.getItem('impersonatedUserRole');
+      const impId = sessionStorage.getItem('impersonatedUserId');
+      if (impRole === 'mentor' && impId && MENTOR_PROFILES_DATA.some(m => m.id === impId)) {
+        initialMentorId = impId;
+      } else {
+        try {
+          const cur = JSON.parse(localStorage.getItem('ONBOARDAI_CURRENT_USER') || localStorage.getItem('currentUser') || 'null');
+          if (cur && cur.role === 'mentor' && cur.id && MENTOR_PROFILES_DATA.some(m => m.id === cur.id)) {
+            initialMentorId = cur.id;
+          }
+        } catch (_) {}
+      }
+      switchActiveMentorView(initialMentorId);
     });
   </script>
 </body>

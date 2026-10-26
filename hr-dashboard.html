@@ -140,14 +140,32 @@
         <div class="pt-4 px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
           Phạm vi giám sát Onboarding
         </div>
-        <a href="newhire-onboarding-dashboard.html" onclick="sessionStorage.setItem('isImpersonating', 'hr')" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors group">
-          <i data-lucide="user-check" class="w-4 h-4 text-blue-500"></i>
-          <span>Thị sát Nhân sự mới</span>
-        </a>
-        <a href="mentor-mentee-list.html" onclick="sessionStorage.setItem('isImpersonating', 'hr')" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors group">
-          <i data-lucide="award" class="w-4 h-4 text-indigo-500"></i>
-          <span>Thị sát Người hướng dẫn</span>
-        </a>
+        <div>
+          <button type="button" onclick="toggleHrSidebarViewAs('newhire')" class="w-full flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors cursor-pointer">
+            <span class="flex items-center gap-3">
+              <i data-lucide="user-check" class="w-4 h-4 text-blue-500"></i>
+              <span>Thị sát Nhân sự mới</span>
+            </span>
+            <span class="flex items-center gap-1">
+              <span id="hrSidebarViewAsNewHireCount" class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-blue-50 text-[#1F5AFE]">4</span>
+              <i id="hrChevronViewAs-newhire" data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200"></i>
+            </span>
+          </button>
+          <div id="hrSidebarViewAsList-newhire" class="hidden mt-1 ml-3 pl-2.5 border-l-2 border-blue-100 space-y-1 max-h-56 overflow-y-auto pr-1"></div>
+        </div>
+        <div>
+          <button type="button" onclick="toggleHrSidebarViewAs('mentor')" class="w-full flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors cursor-pointer">
+            <span class="flex items-center gap-3">
+              <i data-lucide="award" class="w-4 h-4 text-indigo-500"></i>
+              <span>Thị sát Người hướng dẫn</span>
+            </span>
+            <span class="flex items-center gap-1">
+              <span id="hrSidebarViewAsMentorCount" class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-indigo-50 text-indigo-600">8</span>
+              <i id="hrChevronViewAs-mentor" data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200"></i>
+            </span>
+          </button>
+          <div id="hrSidebarViewAsList-mentor" class="hidden mt-1 ml-3 pl-2.5 border-l-2 border-indigo-100 space-y-1 max-h-60 overflow-y-auto pr-1"></div>
+        </div>
 
         <div class="pt-5 px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
           Tài khoản & Hệ thống
@@ -878,7 +896,7 @@
                 ? `<button onclick="openInterventionDrawer('mentor')" class="px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-700 font-bold text-xs border border-amber-200 transition whitespace-nowrap">Can thiệp</button>`
                 : (nh.blocked
                     ? `<button onclick="openInterventionDrawer('it')" class="px-2.5 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs border border-rose-200 transition whitespace-nowrap">Xử lý IT</button>`
-                    : `<a href="newhire-onboarding-dashboard.html" onclick="sessionStorage.setItem('isImpersonating', 'hr')" class="px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs border border-slate-200 transition inline-block whitespace-nowrap">Xem chi tiết</a>`)
+                    : `<button type="button" onclick="hrImpersonateSpecificPerson('newhire', '${nh.id}')" class="px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs border border-slate-200 transition inline-block whitespace-nowrap cursor-pointer">Xem chi tiết</button>`)
             }
           </td>
         `;
@@ -1062,6 +1080,76 @@
       showToast('Đã đồng bộ số liệu mới nhất từ hệ thống!', 'success');
     }
 
+    const HR_MENTORS_VIEWAS = [
+      { id: 'MT01', name: 'Trần Thị Mai', position: 'Tech Lead', department: 'Kỹ thuật Công nghệ', avatar: 'assets/images/mentors/mt01.jpg' },
+      { id: 'MT05', name: 'Nguyễn Hoàng Minh', position: 'Principal Frontend Architect', department: 'Kỹ thuật Công nghệ', avatar: 'assets/images/mentors/mt05.jpg' },
+      { id: 'MT06', name: 'Vũ Đình Trọng', position: 'Backend & Cloud Lead', department: 'Kỹ thuật Công nghệ', avatar: 'assets/images/mentors/mt06.jpg' },
+      { id: 'MT07', name: 'Hoàng Bảo Ngọc', position: 'AI & Data Lead', department: 'Kỹ thuật Công nghệ', avatar: 'assets/images/mentors/mt07.jpg' },
+      { id: 'MT04', name: 'Đỗ Hoàng Sơn', position: 'Senior QA & Security Lead', department: 'Kỹ thuật Công nghệ', avatar: 'assets/images/mentors/mt04.jpg' },
+      { id: 'MT02', name: 'Lê Minh Tuấn', position: 'Product & Growth Lead', department: 'Sản phẩm & Thiết kế', avatar: 'assets/images/mentors/mt02.jpg' },
+      { id: 'MT08', name: 'Ngô Thanh Hà', position: 'Brand & Digital Marketing', department: 'Marketing & Truyền thông', avatar: 'assets/images/mentors/mt08.jpg' },
+      { id: 'MT03', name: 'Phạm Quang Huy', position: 'People & Culture Partner', department: 'Nhân sự & Vận hành', avatar: 'assets/images/mentors/mt03.jpg' }
+    ];
+
+    function renderHrSidebarViewAsLists() {
+      const nhCountEl = document.getElementById('hrSidebarViewAsNewHireCount');
+      const mtCountEl = document.getElementById('hrSidebarViewAsMentorCount');
+      if (nhCountEl) nhCountEl.textContent = newHiresData.length;
+      if (mtCountEl) mtCountEl.textContent = HR_MENTORS_VIEWAS.length;
+
+      const nhContainer = document.getElementById('hrSidebarViewAsList-newhire');
+      if (nhContainer) {
+        nhContainer.innerHTML = newHiresData.map(nh => `
+          <button type="button" onclick="hrImpersonateSpecificPerson('newhire', '${nh.id}')" class="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl hover:bg-blue-50/80 text-left transition group cursor-pointer">
+            <img src="${nh.avatar}" alt="${nh.name}" class="w-7 h-7 rounded-full object-cover border border-slate-200 bg-white shrink-0">
+            <div class="min-w-0 flex-1">
+              <div class="text-xs font-bold text-slate-800 group-hover:text-[#1F5AFE] truncate">${nh.name}</div>
+              <div class="text-[10px] text-slate-500 truncate">${nh.position} • ${nh.id}</div>
+            </div>
+          </button>
+        `).join('');
+      }
+
+      const mtContainer = document.getElementById('hrSidebarViewAsList-mentor');
+      if (mtContainer) {
+        mtContainer.innerHTML = HR_MENTORS_VIEWAS.map(m => `
+          <button type="button" onclick="hrImpersonateSpecificPerson('mentor', '${m.id}')" class="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl hover:bg-indigo-50/80 text-left transition group cursor-pointer">
+            <img src="${m.avatar}" alt="${m.name}" class="w-7 h-7 rounded-full object-cover border border-slate-200 bg-white shrink-0">
+            <div class="min-w-0 flex-1">
+              <div class="text-xs font-bold text-slate-800 group-hover:text-indigo-600 truncate">${m.name}</div>
+              <div class="text-[10px] text-slate-500 truncate">${m.position} • ${m.id}</div>
+            </div>
+          </button>
+        `).join('');
+      }
+    }
+
+    function toggleHrSidebarViewAs(roleType) {
+      const listEl = document.getElementById(`hrSidebarViewAsList-${roleType}`);
+      const chevEl = document.getElementById(`hrChevronViewAs-${roleType}`);
+      if (!listEl) return;
+      const isHidden = listEl.classList.contains('hidden');
+      listEl.classList.toggle('hidden', !isHidden);
+      if (chevEl) chevEl.classList.toggle('rotate-180', isHidden);
+    }
+
+    function hrImpersonateSpecificPerson(roleType, personId) {
+      const list = roleType === 'mentor' ? HR_MENTORS_VIEWAS : newHiresData;
+      const person = list.find(p => p.id === personId) || list[0];
+      if (!person) return;
+      const targetUrl = roleType === 'mentor' ? 'mentor-mentee-list.html' : 'newhire-onboarding-dashboard.html';
+      const displayLabel = `${person.name} (${person.id} - ${person.position || ''})`;
+
+      sessionStorage.setItem('isImpersonating', 'hr');
+      sessionStorage.setItem('impersonateReturnUrl', 'hr-dashboard.html');
+      sessionStorage.setItem('impersonatedUserId', person.id);
+      sessionStorage.setItem('impersonatedUserRole', roleType);
+      sessionStorage.setItem('impersonatedUserName', displayLabel);
+      sessionStorage.setItem('impersonatedUserObj', JSON.stringify({ ...person, role: roleType }));
+
+      window.location.href = targetUrl;
+    }
+
     // ================= KHỞI CHẠY TRANG =================
     document.addEventListener('DOMContentLoaded', async () => {
       checkAdminImpersonation();
@@ -1080,6 +1168,7 @@
       updateKpiMetrics(true);
       updateFilterTabCounts();
       renderTable();
+      renderHrSidebarViewAsLists();
       initCharts();
       lucide.createIcons();
     });

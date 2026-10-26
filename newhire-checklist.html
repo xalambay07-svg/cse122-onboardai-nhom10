@@ -45,11 +45,15 @@
 <body class="bg-[#F1F5F9] text-[#1E293B] font-sans antialiased h-full flex flex-col">
   <!-- Thanh Thị sát của Quản trị viên (Admin View-as Bar - Mặc định ẩn, chỉ hiện khi HR/Admin truy cập) -->
   <div id="adminImpersonateBar" class="hidden bg-slate-900 text-white px-4 py-2.5 text-xs font-medium flex flex-wrap items-center justify-between gap-2 z-50 border-b border-indigo-500/40 shrink-0">
-    <div class="flex items-center gap-2">
+    <div class="flex flex-wrap items-center gap-2.5">
       <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-500 text-slate-950">Chế độ thị sát</span>
-      <span class="text-slate-300">Đang xem giao diện dưới góc nhìn của <strong class="text-white">Nguyễn Văn An (NH01 - Frontend Developer)</strong></span>
+      <span class="text-slate-300">Đang xem góc nhìn của <strong id="impersonateNewHireLabel" class="text-white">Nguyễn Văn An (NH01 - Frontend Developer)</strong></span>
+      <div class="flex items-center gap-1.5 ml-1">
+        <span class="text-[11px] text-slate-400">Đổi Nhân sự mới:</span>
+        <select id="impersonateNewHireSelect" onchange="switchImpersonatedNewHire(this.value)" class="bg-slate-800 text-white border border-slate-700 rounded-lg px-2.5 py-1 text-xs font-semibold focus:outline-none focus:border-amber-400 cursor-pointer"></select>
+      </div>
     </div>
-    <button onclick="exitImpersonation('hr-dashboard.html')" class="px-3 py-1.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-600 text-white text-xs font-bold transition shadow-xs">
+    <button id="exitImpersonateBtn" onclick="exitImpersonation('hr-dashboard.html')" class="px-3 py-1.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-600 text-white text-xs font-bold transition shadow-xs cursor-pointer">
       Thoát chế độ xem & Quay lại Bảng điều khiển HR
     </button>
   </div>
@@ -142,7 +146,7 @@
           <div class="min-w-0">
             <h1 class="text-base font-bold text-slate-900 flex items-center gap-2 truncate">
               <span class="truncate">Hành trình & Checklist Hội nhập</span>
-              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-[#1F5AFE] border border-blue-200 whitespace-nowrap shrink-0">Mã NH02</span>
+              <span id="checklistCodeBadge" class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-[#1F5AFE] border border-blue-200 whitespace-nowrap shrink-0">Mã NH02</span>
             </h1>
             <p class="text-xs text-slate-500 hidden sm:block truncate">Danh sách nhiệm vụ theo 4 chặng, nộp minh chứng và nhận hỗ trợ trực tiếp từ Onbi</p>
           </div>
@@ -165,7 +169,7 @@
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div class="min-w-0">
               <h2 class="text-xl md:text-2xl font-extrabold tracking-tight text-slate-900">Bản đồ hành trình 60 ngày</h2>
-              <p class="text-xs text-slate-500 mt-1">Lộ trình được thiết kế cá nhân hóa cho vị trí Frontend Developer</p>
+              <p id="checklistRoleSubtitle" class="text-xs text-slate-500 mt-1">Lộ trình được thiết kế cá nhân hóa cho vị trí Frontend Developer</p>
             </div>
             <div class="flex items-center gap-3 shrink-0">
               <div class="text-right">
@@ -942,8 +946,9 @@
 
     // Render danh sách Nhiệm vụ với SVG tick vẽ dần & nhãn tiếng Việt (Mục 3.2, 4, 5)
     function renderTasksList() {
-      const currentUser = API.getCurrentUser();
+      const currentUser = getEffectiveNewHireProfile();
       const allTasks = API.getAll('tasks');
+      ensureNewHireTasksExist(currentUser, allTasks);
       let tasks = [...getTasksForPhase(currentActivePhase, currentUser, allTasks)];
 
       const searchVal = document.getElementById('taskSearchInput').value.toLowerCase().trim();
@@ -1156,8 +1161,9 @@
 
     // Cập nhật thống kê tiến độ chặng, thẻ chặng (Sửa Lỗi #2) và Huy hiệu cột mốc (Mục 2)
     function updatePhaseStats() {
-      const currentUser = API.getCurrentUser();
+      const currentUser = getEffectiveNewHireProfile();
       const allTasks = API.getAll('tasks');
+      ensureNewHireTasksExist(currentUser, allTasks);
 
       // 1. Tính tiến độ của chặng ĐANG XEM (hiển thị ở góc phải trên "Tiến độ chặng hiện tại")
       const activePhaseTasks = getTasksForPhase(currentActivePhase, currentUser, allTasks);
@@ -1504,17 +1510,84 @@
       }
     }
 
+    const NEWHIRE_VIEWAS_CATALOG = [
+      { id: 'NH01', name: 'Nguyễn Văn An', position: 'Frontend Developer', departmentId: 'DEP01', department: 'Kỹ thuật Công nghệ', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=An', defaultCompletedCount: 1 },
+      { id: 'NH02', name: 'Trần Thị Bình', position: 'Content Creator', departmentId: 'DEP02', department: 'Marketing & Truyền thông', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Binh', defaultCompletedCount: 1 },
+      { id: 'NH03', name: 'Lê Hoàng Long', position: 'Backend Developer', departmentId: 'DEP01', department: 'Kỹ thuật Công nghệ', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Long', defaultCompletedCount: 2 },
+      { id: 'NH04', name: 'Phạm Minh Thư', position: 'HR Executive', departmentId: 'DEP03', department: 'Nhân sự & Vận hành', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Thu', defaultCompletedCount: 5 },
+      { id: 'NH05', name: 'Nguyễn Quốc Bảo', position: 'UI/UX Frontend Engineer', departmentId: 'DEP01', department: 'Kỹ thuật Công nghệ', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Bao', defaultCompletedCount: 4 },
+      { id: 'NH06', name: 'Trần Quốc Khánh', position: 'DevOps & Cloud Engineer', departmentId: 'DEP01', department: 'Kỹ thuật Công nghệ', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Khanh', defaultCompletedCount: 3 }
+    ];
+
+    function getEffectiveNewHireProfile() {
+      const isImp = sessionStorage.getItem('isImpersonating');
+      const impRole = sessionStorage.getItem('impersonatedUserRole');
+      const impId = sessionStorage.getItem('impersonatedUserId');
+      if (isImp && (!impRole || impRole === 'newhire') && impId) {
+        const found = NEWHIRE_VIEWAS_CATALOG.find(n => n.id === impId);
+        if (found) return { ...found, role: 'newhire' };
+        try {
+          const obj = JSON.parse(sessionStorage.getItem('impersonatedUserObj') || 'null');
+          if (obj && obj.id) return obj;
+        } catch (_) {}
+      }
+      const base = API.getCurrentUser();
+      const matched = NEWHIRE_VIEWAS_CATALOG.find(n => n.id === base.id);
+      return matched ? { ...matched, ...base } : base;
+    }
+
+    function ensureNewHireTasksExist(currentUser, allTasks) {
+      if (!currentUser || !currentUser.id) return;
+      const existing = allTasks.filter(t => t.newHireId === currentUser.id);
+      if (existing.length > 0) return;
+      const templateTasks = allTasks.filter(t => t.newHireId === 'NH01');
+      const targetCompleted = typeof currentUser.defaultCompletedCount === 'number' ? currentUser.defaultCompletedCount : 1;
+      templateTasks.forEach((t, idx) => {
+        const isCompleted = idx < targetCompleted;
+        allTasks.push({
+          ...t,
+          id: `${currentUser.id}_${t.id}`,
+          newHireId: currentUser.id,
+          status: isCompleted ? 'completed' : (idx === targetCompleted && t.status === 'blocked' ? 'blocked' : 'pending'),
+          proof: isCompleted ? `https://portal.onboardai.vn/verify/${currentUser.id.toLowerCase()}-${t.id.toLowerCase()}-completed` : ''
+        });
+      });
+      const db = API.getDB();
+      db.tasks = allTasks;
+      API.saveDB(db);
+    }
+
+    function switchImpersonatedNewHire(nhId) {
+      const target = NEWHIRE_VIEWAS_CATALOG.find(n => n.id === nhId) || NEWHIRE_VIEWAS_CATALOG[0];
+      if (!target) return;
+      sessionStorage.setItem('impersonatedUserId', target.id);
+      sessionStorage.setItem('impersonatedUserRole', 'newhire');
+      sessionStorage.setItem('impersonatedUserName', `${target.name} (${target.id} - ${target.position})`);
+      sessionStorage.setItem('impersonatedUserObj', JSON.stringify({ ...target, role: 'newhire' }));
+      window.location.reload();
+    }
+
     function checkAdminImpersonation() {
       const isImpersonating = sessionStorage.getItem('isImpersonating');
       const bar = document.getElementById('adminImpersonateBar');
       if (isImpersonating && bar) {
         bar.classList.remove('hidden');
-        const customName = sessionStorage.getItem('impersonatedUserName');
-        const strongEl = bar.querySelector('strong');
-        if (customName && strongEl) strongEl.textContent = customName;
-        const btn = bar.querySelector('button');
+        const activeNh = getEffectiveNewHireProfile();
+        const labelEl = document.getElementById('impersonateNewHireLabel');
+        if (labelEl && activeNh) {
+          labelEl.textContent = `${activeNh.name} (${activeNh.id} - ${activeNh.position || 'New Hire'})`;
+        }
+        const selEl = document.getElementById('impersonateNewHireSelect');
+        if (selEl) {
+          selEl.innerHTML = NEWHIRE_VIEWAS_CATALOG.map(n =>
+            `<option value="${n.id}" ${n.id === (activeNh && activeNh.id) ? 'selected' : ''}>${n.name} (${n.id} - ${n.position})</option>`
+          ).join('');
+        }
+        const btn = document.getElementById('exitImpersonateBtn');
         if (isImpersonating === 'admin' && btn) {
           btn.textContent = 'Thoát chế độ xem & Quay lại Quản trị tài khoản';
+        } else if (isImpersonating === 'mentor' && btn) {
+          btn.textContent = 'Thoát chế độ xem & Quay lại Danh sách Mentee';
         }
       }
     }
@@ -1522,9 +1595,8 @@
     function exitImpersonation(returnUrl = 'hr-dashboard.html') {
       const savedReturn = sessionStorage.getItem('impersonateReturnUrl');
       const isImpersonating = sessionStorage.getItem('isImpersonating');
-      sessionStorage.removeItem('isImpersonating');
-      sessionStorage.removeItem('impersonateReturnUrl');
-      sessionStorage.removeItem('impersonatedUserName');
+      ['isImpersonating', 'impersonateReturnUrl', 'impersonatedUserName', 'impersonatedUserId', 'impersonatedUserRole', 'impersonatedUserObj']
+        .forEach(k => sessionStorage.removeItem(k));
       window.location.href = savedReturn || (isImpersonating === 'admin' ? 'admin-user-management.html' : returnUrl);
     }
 
@@ -1534,7 +1606,15 @@
     }
 
     function syncChecklistMentorWidget() {
-      const currentUser = API.getCurrentUser();
+      const currentUser = getEffectiveNewHireProfile();
+      const topAvatar = document.getElementById('userAvatar');
+      const topName = document.getElementById('userName');
+      const roleSub = document.getElementById('checklistRoleSubtitle');
+      if (topAvatar && currentUser.avatar) topAvatar.src = currentUser.avatar;
+      if (topName && currentUser.name) topName.textContent = currentUser.name;
+      if (roleSub && currentUser.position) {
+        roleSub.textContent = `Lộ trình được thiết kế cá nhân hóa cho vị trí ${currentUser.position} (${currentUser.name})`;
+      }
       const mentorId = localStorage.getItem(`ONBOARDAI_CONFIRMED_MENTOR_${currentUser.id}`) || null;
       const mentorProfiles = {
         MT01: {
