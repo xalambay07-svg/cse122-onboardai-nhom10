@@ -201,9 +201,9 @@
             <span>Làm mới số liệu</span>
           </button>
           <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Nam" alt="HR Avatar" class="w-6 h-6 rounded-full bg-white">
-            <span class="text-xs font-semibold text-slate-700 hidden sm:inline">Lê Hoàng Nam</span>
-            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-amber-100 text-amber-800">HR Specialist</span>
+            <img id="hrTopbarAvatar" src="assets/images/mentors/mt03.jpg" alt="HR Avatar" class="w-6 h-6 rounded-full bg-white object-cover">
+            <span id="hrTopbarName" class="text-xs font-semibold text-slate-700 hidden sm:inline">Lê Hoàng Nam</span>
+            <span id="hrTopbarPosition" class="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-amber-100 text-amber-800">HR Specialist</span>
           </div>
         </div>
       </header>
@@ -1065,6 +1065,17 @@
     // ================= KHỞI CHẠY TRANG =================
     document.addEventListener('DOMContentLoaded', async () => {
       checkAdminImpersonation();
+      try {
+        const cur = JSON.parse(localStorage.getItem('ONBOARDAI_CURRENT_USER') || localStorage.getItem('currentUser') || 'null');
+        if (cur && cur.role === 'hr') {
+          const av = document.getElementById('hrTopbarAvatar');
+          const nm = document.getElementById('hrTopbarName');
+          const pos = document.getElementById('hrTopbarPosition');
+          if (av && cur.avatar) av.src = cur.avatar;
+          if (nm && cur.name) nm.textContent = cur.name;
+          if (pos && cur.position) pos.textContent = cur.position;
+        }
+      } catch (_) {}
       await loadLiveHRData();
       updateKpiMetrics(true);
       updateFilterTabCounts();

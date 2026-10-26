@@ -135,9 +135,9 @@
 
         <div class="flex items-center gap-3">
           <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mai" alt="Mentor Avatar" class="w-6 h-6 rounded-full bg-white">
-            <span class="text-xs font-semibold text-slate-700 hidden sm:inline">Trần Thị Mai</span>
-            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-indigo-100 text-indigo-700">Mentor (Tech Lead)</span>
+            <img id="mentorTopbarAvatar" src="assets/images/mentors/mt01.jpg" alt="Mentor Avatar" class="w-6 h-6 rounded-full bg-white object-cover">
+            <span id="mentorTopbarName" class="text-xs font-semibold text-slate-700 hidden sm:inline">Trần Thị Mai</span>
+            <span id="mentorTopbarPosition" class="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-indigo-100 text-indigo-700">Mentor (Tech Lead)</span>
           </div>
         </div>
       </header>
@@ -329,6 +329,17 @@
 
     document.addEventListener('DOMContentLoaded', async () => {
       checkAdminImpersonation();
+      try {
+        const cur = JSON.parse(localStorage.getItem('ONBOARDAI_CURRENT_USER') || localStorage.getItem('currentUser') || 'null');
+        if (cur && cur.role === 'mentor') {
+          const av = document.getElementById('mentorTopbarAvatar');
+          const nm = document.getElementById('mentorTopbarName');
+          const pos = document.getElementById('mentorTopbarPosition');
+          if (av && cur.avatar) av.src = cur.avatar;
+          if (nm && cur.name) nm.textContent = cur.name;
+          if (pos && cur.position) pos.textContent = cur.position;
+        }
+      } catch (_) {}
       if (window.API) {
         await API.init();
         // Lấy tiến độ thực tế của NH01 từ tasks

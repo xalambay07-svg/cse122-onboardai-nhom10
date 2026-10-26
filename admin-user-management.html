@@ -200,9 +200,9 @@
             <span>Khôi phục dữ liệu mẫu</span>
           </button>
           <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-[#E2E8F0]">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin Avatar" class="w-6 h-6 rounded-full bg-white border border-slate-200">
-            <span class="text-xs font-semibold text-slate-800 hidden sm:inline">Vũ Quản Trị</span>
-            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-violet-50 text-violet-700 ring-1 ring-inset ring-violet-600/20">Admin</span>
+            <img id="adminTopbarAvatar" src="assets/images/mentors/mt06.jpg" alt="Admin Avatar" class="w-6 h-6 rounded-full bg-white border border-slate-200 object-cover">
+            <span id="adminTopbarName" class="text-xs font-semibold text-slate-800 hidden sm:inline">Vũ Quản Trị</span>
+            <span id="adminTopbarRole" class="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-violet-50 text-violet-700 ring-1 ring-inset ring-violet-600/20">Admin</span>
           </div>
         </div>
       </header>
@@ -915,21 +915,21 @@
         id: 'USR01', profileId: 'AD01', name: 'Vũ Quản Trị', email: 'admin@onboardai.vn',
         role: 'admin', departmentId: 'DEP01', department: 'Kỹ thuật Công nghệ',
         position: 'System Administrator', status: 'active',
-        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Admin',
+        avatar: 'assets/images/mentors/mt06.jpg',
         lastLogin: '2026-10-14T08:15:00', createdAt: '2026-08-01'
       },
       {
         id: 'USR02', profileId: 'HR01', name: 'Lê Hoàng Nam', email: 'hr@onboardai.vn',
         role: 'hr', departmentId: 'DEP03', department: 'Nhân sự & Vận hành',
         position: 'HR Specialist', status: 'active',
-        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Nam',
+        avatar: 'assets/images/mentors/mt03.jpg',
         lastLogin: '2026-10-14T08:40:00', createdAt: '2026-08-10'
       },
       {
         id: 'USR03', profileId: 'MT01', name: 'Trần Thị Mai', email: 'mentor@onboardai.vn',
         role: 'mentor', departmentId: 'DEP01', department: 'Kỹ thuật Công nghệ',
         position: 'Tech Lead & Mentor', status: 'active',
-        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Mai',
+        avatar: 'assets/images/mentors/mt01.jpg',
         lastLogin: '2026-10-14T09:05:00', createdAt: '2026-08-15'
       },
       {
@@ -942,8 +942,8 @@
       {
         id: 'USR05', profileId: 'MT02', name: 'Lê Minh Tuấn', email: 'tuan.le@onboardai.vn',
         role: 'mentor', departmentId: 'DEP02', department: 'Marketing & Truyền thông',
-        position: 'Marketing Lead & Mentor', status: 'active',
-        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Tuan',
+        position: 'Product & Growth Lead', status: 'active',
+        avatar: 'assets/images/mentors/mt02.jpg',
         lastLogin: '2026-10-13T17:20:00', createdAt: '2026-08-18'
       },
       {
@@ -970,9 +970,23 @@
       {
         id: 'USR09', profileId: 'MT04', name: 'Đỗ Hoàng Sơn', email: 'son.do@onboardai.vn',
         role: 'mentor', departmentId: 'DEP01', department: 'Kỹ thuật Công nghệ',
-        position: 'Senior QA Engineer', status: 'locked',
-        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Son',
+        position: 'Senior QA & Security Lead', status: 'active',
+        avatar: 'assets/images/mentors/mt04.jpg',
         lastLogin: '2026-09-28T11:00:00', createdAt: '2026-08-05'
+      },
+      {
+        id: 'USR10', profileId: 'MT05', name: 'Nguyễn Hoàng Minh', email: 'minh.nguyen@onboardai.vn',
+        role: 'mentor', departmentId: 'DEP01', department: 'Kỹ thuật Công nghệ',
+        position: 'Principal Frontend Architect', status: 'active',
+        avatar: 'assets/images/mentors/mt05.jpg',
+        lastLogin: '2026-10-14T08:50:00', createdAt: '2026-08-12'
+      },
+      {
+        id: 'USR11', profileId: 'HR02', name: 'Phạm Quang Huy', email: 'huy.pham@onboardai.vn',
+        role: 'hr', departmentId: 'DEP03', department: 'Nhân sự & Vận hành',
+        position: 'People & Culture Partner', status: 'active',
+        avatar: 'assets/images/mentors/mt03.jpg',
+        lastLogin: '2026-10-14T08:30:00', createdAt: '2026-08-14'
       }
     ];
 
@@ -2788,6 +2802,15 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      try {
+        const cur = JSON.parse(localStorage.getItem('ONBOARDAI_CURRENT_USER') || localStorage.getItem('currentUser') || 'null');
+        if (cur && cur.role === 'admin') {
+          const av = document.getElementById('adminTopbarAvatar');
+          const nm = document.getElementById('adminTopbarName');
+          if (av && cur.avatar) av.src = cur.avatar;
+          if (nm && cur.name) nm.textContent = cur.name;
+        }
+      } catch (_) {}
       loadInitialData();
     });
   </script>
