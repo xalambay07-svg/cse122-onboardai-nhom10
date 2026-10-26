@@ -327,20 +327,29 @@
               <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Kênh hỗ trợ nhanh (Help Desk)</h3>
               
               <!-- Mentor -->
-              <div class="flex items-center gap-3">
-                <div class="relative shrink-0">
-                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mai" alt="Mentor" class="w-10 h-10 rounded-full bg-slate-50 ring-1 ring-slate-200">
-                  <span class="absolute bottom-0 right-0 flex h-2.5 w-2.5">
-                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#00B67A] ring-2 ring-white"></span>
-                  </span>
+              <div class="p-3 rounded-xl bg-slate-50/80 border border-slate-200/80 space-y-2.5">
+                <div class="flex items-center gap-3">
+                  <div class="relative shrink-0">
+                    <img id="checklistMentorAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mai" alt="Mentor" class="w-10 h-10 rounded-full bg-white ring-1 ring-slate-200">
+                    <span class="absolute bottom-0 right-0 flex h-2.5 w-2.5">
+                      <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#00B67A] ring-2 ring-white"></span>
+                    </span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div id="checklistMentorName" class="text-xs font-bold text-slate-900 truncate">Trần Thị Mai</div>
+                    <div id="checklistMentorRole" class="text-[11px] text-slate-500 truncate">Tech Lead &bull; Mentor đồng hành</div>
+                  </div>
                 </div>
-                <div class="flex-1 min-w-0">
-                  <div class="text-xs font-bold text-slate-900">Trần Thị Mai</div>
-                  <div class="text-xs text-slate-500">Tech Lead &bull; Mentor chỉ định</div>
+                <div class="grid grid-cols-2 gap-1.5">
+                  <button onclick="openMentorActionFromChecklist('chat')" class="px-2.5 py-1.5 rounded-lg bg-[#1F5AFE] text-white text-[11px] font-bold hover:bg-blue-700 transition-all flex items-center justify-center gap-1 cursor-pointer">
+                    <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                    <span>Chat trực tiếp</span>
+                  </button>
+                  <button onclick="openMentorActionFromChecklist('explore')" class="px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-[#1F5AFE] text-[11px] font-semibold transition-all flex items-center justify-center gap-1 cursor-pointer">
+                    <i data-lucide="compass" class="w-3.5 h-3.5 text-[#1F5AFE]"></i>
+                    <span>Đổi Mentor</span>
+                  </button>
                 </div>
-                <button onclick="showToast('Đã mở tin nhắn Slack với Mentor Mai!', 'success')" class="p-2 rounded-lg border border-slate-200 text-slate-600 hover:text-[#1F5AFE] hover:border-blue-300 hover:bg-blue-50/50 transition-all active:scale-90" title="Nhắn tin với Mentor">
-                  <i data-lucide="message-circle" class="w-4 h-4"></i>
-                </button>
               </div>
 
               <!-- IT Support -->
@@ -1542,10 +1551,34 @@
       window.location.href = savedReturn || (isImpersonating === 'admin' ? 'admin-user-management.html' : returnUrl);
     }
 
+    function openMentorActionFromChecklist(action) {
+      sessionStorage.setItem('OPEN_MENTOR_ACTION', action);
+      window.location.href = 'newhire-onboarding-dashboard.html';
+    }
+
+    function syncChecklistMentorWidget() {
+      const currentUser = API.getCurrentUser();
+      const mentorId = localStorage.getItem(`ONBOARDAI_SELECTED_MENTOR_${currentUser.id}`) || currentUser.mentorId || 'MT01';
+      const mentorProfiles = {
+        MT01: { name: 'Trần Thị Mai', role: 'Tech Lead • Kỹ thuật', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Mai' },
+        MT05: { name: 'Nguyễn Hoàng Minh', role: 'Principal Architect • Kỹ thuật', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Minh' },
+        MT02: { name: 'Lê Minh Tuấn', role: 'Product Lead • Sản phẩm', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Tuan' },
+        MT03: { name: 'Phạm Quang Huy', role: 'People Partner • Nhân sự', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Huy' }
+      };
+      const m = mentorProfiles[mentorId] || mentorProfiles.MT01;
+      const avatarEl = document.getElementById('checklistMentorAvatar');
+      const nameEl = document.getElementById('checklistMentorName');
+      const roleEl = document.getElementById('checklistMentorRole');
+      if (avatarEl) avatarEl.src = m.avatar;
+      if (nameEl) nameEl.textContent = m.name;
+      if (roleEl) roleEl.textContent = m.role;
+    }
+
     // Khởi tạo trang khi DOM sẵn sàng
     document.addEventListener('DOMContentLoaded', async () => {
       checkAdminImpersonation();
       await API.init();
+      syncChecklistMentorWidget();
 
       document.getElementById('taskSearchInput').addEventListener('input', renderTasksList);
       document.getElementById('categoryFilter').addEventListener('change', renderTasksList);
