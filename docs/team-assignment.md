@@ -99,7 +99,7 @@ OBS       : OBS-03
 
 ```text
 TASK-05 (T07/T20) – Kiến trúc Mock Data JSON, OnboardAPI & Cổng đăng nhập 4 vai trò
-Người làm : SV2 (Hoàng)
+Người làm : SV2 – Đào Viết Huy Hoàng (2551170888)
 Màn hình  : js/api.js, assets/data/mock-data.json, login.html
 Nhánh     : feat/sv2-data-mentor
 Trạng thái: HOÀN THÀNH
@@ -111,7 +111,7 @@ OBS       : OBS-02
 
 ```text
 TASK-06 (T10/T16/T17) – Quản lý danh sách Mentee, Đánh giá định kỳ & AI-2 Cá nhân hóa lộ trình
-Người làm : SV2 (Hoàng)
+Người làm : SV2 – Đào Viết Huy Hoàng (2551170888)
 Màn hình  : mentor-mentee-list.html, profile.html
 Nhánh     : feat/sv2-data-mentor
 Trạng thái: HOÀN THÀNH

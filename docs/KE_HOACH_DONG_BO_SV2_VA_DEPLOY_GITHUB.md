@@ -69,7 +69,7 @@ git push origin main
 
 ## PHẦN 2: BẢNG PHÂN CÔNG CỦA SV2 & HIỆN TRẠNG CÁC FILE TRONG REPO
 
-| STT | Mã màn hình / Module | Tên file (ở thư mục gốc hoặc `js/`) | Hiện trạng trong Repo | Nhiệm vụ cụ thể của SV2 (Hoàng) |
+| STT | Mã màn hình / Module | Tên file (ở thư mục gốc hoặc `js/`) | Hiện trạng trong Repo | Nhiệm vụ cụ thể của SV2 – Đào Viết Huy Hoàng (2551170888) |
 | :-: | :--- | :--- | :--- | :--- |
 | 1 | **Data & Fake API** | `js/api.js` | Đã có (136 dòng) | **Cập nhật bắt buộc:** Bổ sung 3 hàm đang bị các màn hình gọi nhưng chưa có (`getNewHires`, `getTasksByNewHire`, `resetDB`) và đồng bộ khóa đăng nhập `currentUser` / `ONBOARDAI_CURRENT_USER`. |
 | 2 | **COM02** | `login.html` | Đã có (73KB) | **Sửa lỗi đồng bộ nghiêm trọng:** Đang dùng sai font (`Be Vietnam Pro`), thiếu `js/api.js`, sai ID tài khoản (`USR_NH_001` thay vì `NH01`), và cả 4 vai trò đều đang trỏ nhầm `redirectUrl: 'mentor-mentee-list.html'`. |
@@ -401,10 +401,10 @@ SV3 đã thiết kế và đưa sẵn vào thư mục `assets/images/` các file
 
 ## PHẦN 6: PROMPT MẪU ĐỂ SV2 COPY NGUYÊN VĂN GỬI CHO AI BÊN MÁY SV2
 
-> **Hướng dẫn cho SV2 (Hoàng):** Sau khi bạn mở dự án và chạy `git pull origin main` để lấy code mới nhất của Huy về máy, hãy **copy toàn bộ khung Prompt bên dưới** và dán cho trợ lý AI (Antigravity / Cursor / ChatGPT / Claude) của bạn:
+> **Hướng dẫn cho SV2 – Đào Viết Huy Hoàng (2551170888):** Sau khi bạn mở dự án và chạy `git pull origin main` để lấy code mới nhất của Huy về máy, hãy **copy toàn bộ khung Prompt bên dưới** và dán cho trợ lý AI (Antigravity / Cursor / ChatGPT / Claude) của bạn:
 
 ```markdown
-Bạn là Senior Frontend Developer phụ trách phần việc của SV2 (Hoàng) trong dự án Bài tập lớn môn CSE122 "OnboardAI" (HTML5 + Tailwind CSS CDN + Vanilla JS + LocalStorage Fake DB).
+Bạn là Senior Frontend Developer phụ trách phần việc của SV2 – Đào Viết Huy Hoàng (2551170888) trong dự án Bài tập lớn môn CSE122 "OnboardAI" (HTML5 + Tailwind CSS CDN + Vanilla JS + LocalStorage Fake DB).
 Trưởng nhóm (SV3 - Huy) đã hoàn thành và đẩy lên nhánh `main` 6 màn hình của SV3 (`index.html`, `newhire-onboarding-dashboard.html`, `newhire-checklist.html`, `newhire-ai-help.html`, `hr-dashboard.html`, `admin-user-management.html`) cùng bộ `css/style.css`, `assets/data/mock-data.json` và hình ảnh thương hiệu trong `assets/images/`.
 
 Hãy đọc kỹ tài liệu `docs/KE_HOACH_DONG_BO_SV2_VA_DEPLOY_GITHUB.md` và tham chiếu trực tiếp cấu trúc HTML/CSS trong `newhire-onboarding-dashboard.html` và `css/style.css` để thực hiện trọn vẹn phần việc của SV2 gồm 6 hạng mục sau:

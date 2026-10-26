@@ -111,7 +111,7 @@
 
     // 2. Tạo 7 Nhãn màu (Labels)
     const LABEL_DEFS = [
-      { key: 'SV1', name: 'SV1 - Nguy?n Gia Huy (2551170897)', color: 'blue' },
+      { key: 'SV1', name: 'SV1 - Nguyễn Gia Huy (2551170897)', color: 'blue' },
       { key: 'SV2', name: 'SV2 - Core Data & Mentor (Hoàng)', color: 'green' },
       { key: 'SV3', name: 'SV1 - DevOps, HR & Admin (Huy) (Trưởng nhóm)', color: 'purple' },
       { key: 'CORE', name: 'Core Data & Architecture', color: 'orange' },
@@ -148,7 +148,7 @@
         list: 'done',
         name: '[T01 - Tuần 1] Phân tích nghiệp vụ BTL-20 & Đặc tả 4 phân hệ người dùng',
         labels: ['SV3', 'TEST'],
-        desc: 'Phụ trách: SV3 (Trưởng nhóm) | Nhánh: main\nPhân tích bài toán Hội nhập nhân sự (Onboarding) tại doanh nghiệp, xác định rõ 4 nhóm tác nhân (New Hire, Mentor, HR Specialist, System Admin) và 3 tính năng AI cốt lõi.',
+        desc: 'Phụ trách: SV1 – Nguyễn Gia Huy (2551170897 - Trưởng nhóm) | Nhánh: main\nPhân tích bài toán Hội nhập nhân sự (Onboarding) tại doanh nghiệp, xác định rõ 4 nhóm tác nhân (New Hire, Mentor, HR Specialist, System Admin) và 3 tính năng AI cốt lõi.',
         checklist: [
           'Xác định 4 vai trò người dùng và ma trận phân quyền RBAC',
           'Đặc tả 3 tính năng AI: AI-1 (Policy Q&A), AI-2 (Checklist/Mentor Matching), AI-3 (HR Risk Radar)',
@@ -159,7 +159,7 @@
         list: 'done',
         name: '[T02 - Tuần 1] Lập Danh mục màn hình (Screen Inventory) & Sơ đồ luồng (User Flows)',
         labels: ['SV2', 'SV3'],
-        desc: 'Phụ trách: SV2 (Hoàng) & SV3 | File bàn giao: README.md\nLiệt kê đầy đủ 9 màn hình chức năng của dự án OnboardAI và thiết kế sơ đồ luồng nghiệp vụ khép kín.',
+        desc: 'Phụ trách: SV2 – Đào Viết Huy Hoàng (2551170888) & SV3 | File bàn giao: README.md\nLiệt kê đầy đủ 9 màn hình chức năng của dự án OnboardAI và thiết kế sơ đồ luồng nghiệp vụ khép kín.',
         checklist: [
           'Thiết lập bảng Screen Inventory cho 4 phân hệ',
           'Vẽ sơ đồ luồng xác thực đăng nhập & điều hướng theo vai trò',
@@ -170,7 +170,7 @@
         list: 'done',
         name: '[T03 - Tuần 1] Thiết kế UI/UX Design System & Wireframe trên Figma',
         labels: ['SV1', 'UI'],
-        desc: 'Phụ trách: SV1 ? Nguy?n Gia Huy (2551170897) | Nhánh: feat/sv1-ui-newhire\nThiết kế bảng màu thương hiệu (Primary Indigo #4F46E5, Emerald #10B981, Amber #F59E0B, Rose #F43F5E), Typography Plus Jakarta Sans & Inter, và bố cục Bento Grid.',
+        desc: 'Phụ trách: SV1 – Nguyễn Gia Huy (2551170897) | Nhánh: feat/sv1-ui-newhire\nThiết kế bảng màu thương hiệu (Primary Indigo #4F46E5, Emerald #10B981, Amber #F59E0B, Rose #F43F5E), Typography Plus Jakarta Sans & Inter, và bố cục Bento Grid.',
         checklist: [
           'Xây dựng Color Tokens & Typography Scale',
           'Thiết kế UI Components: Sidebar, KPI Cards, Badges, Modals',
@@ -181,7 +181,7 @@
         list: 'done',
         name: '[T04 - Tuần 1] Thiết kế Lược đồ Dữ liệu JSON (Schema) & Kiến trúc LocalStorage',
         labels: ['SV2', 'CORE'],
-        desc: 'Phụ trách: SV2 (Hoàng) | File: assets/data/mock-data.json\nThiết kế cấu trúc JSON chuẩn cho 6 nhân sự mới (NH01..NH06), 8 người đồng hành (MT01..MT08), danh sách công việc, kho FAQ chính sách và nhật ký kiểm toán.',
+        desc: 'Phụ trách: SV2 – Đào Viết Huy Hoàng (2551170888) | File: assets/data/mock-data.json\nThiết kế cấu trúc JSON chuẩn cho 6 nhân sự mới (NH01..NH06), 8 người đồng hành (MT01..MT08), danh sách công việc, kho FAQ chính sách và nhật ký kiểm toán.',
         checklist: [
           'Định nghĩa schema cho users, mentors, newHires, tasks, templates, faqs, activityLogs',
           'Thiết kế khóa lưu trữ onboardai_db_v1 trong LocalStorage',
@@ -192,7 +192,7 @@
         list: 'done',
         name: '[T05 - Tuần 1] Khởi tạo GitHub Repository, Cấu trúc Thư mục & Bảng Trello Kanban',
         labels: ['SV3', 'TEST'],
-        desc: 'Phụ trách: SV3 (Trưởng nhóm) | Nhánh: main / dev\nKhởi tạo kho mã nguồn GitHub của Nhóm 10, tạo cây thư mục chuẩn và thiết lập bảng Trello Kanban 6 cột.',
+        desc: 'Phụ trách: SV1 – Nguyễn Gia Huy (2551170897 - Trưởng nhóm) | Nhánh: main / dev\nKhởi tạo kho mã nguồn GitHub của Nhóm 10, tạo cây thư mục chuẩn và thiết lập bảng Trello Kanban 6 cột.',
         checklist: [
           'Khởi tạo thư mục css/, js/, assets/data/, assets/images/, docs/',
           'Tạo nhánh main, dev và các nhánh thành viên',
@@ -203,7 +203,7 @@
         list: 'done',
         name: '[T06 - Tuần 2] Xây dựng Global CSS Design System (css/style.css)',
         labels: ['SV1', 'CORE', 'UI'],
-        desc: 'Phụ trách: SV1 ? Nguy?n Gia Huy (2551170897) | File: css/style.css\nLập trình bộ khung CSS dùng chung cho toàn dự án: biến màu sắc, bố cục Sidebar + Main Content, Bento Grid, Table, Modal, Drawer và Responsive Breakpoints.',
+        desc: 'Phụ trách: SV1 – Nguyễn Gia Huy (2551170897) | File: css/style.css\nLập trình bộ khung CSS dùng chung cho toàn dự án: biến màu sắc, bố cục Sidebar + Main Content, Bento Grid, Table, Modal, Drawer và Responsive Breakpoints.',
         checklist: [
           'Khai báo hệ thống biến CSS (:root) đồng bộ toàn bộ 9 màn hình',
           'Xây dựng layout Sidebar cố định và Topbar linh hoạt',
@@ -214,7 +214,7 @@
         list: 'done',
         name: '[T07 - Tuần 2] Xây dựng Cơ sở dữ liệu mẫu (mock-data.json) & Data Engine (js/api.js)',
         labels: ['SV2', 'CORE'],
-        desc: 'Phụ trách: SV2 (Hoàng) | File: assets/data/mock-data.json, js/api.js\nHoàn thiện dữ liệu mẫu tiếng Việt chân thực và lập trình thư viện window.OnboardAPI hỗ trợ đọc/ghi LocalStorage.',
+        desc: 'Phụ trách: SV2 – Đào Viết Huy Hoàng (2551170888) | File: assets/data/mock-data.json, js/api.js\nHoàn thiện dữ liệu mẫu tiếng Việt chân thực và lập trình thư viện window.OnboardAPI hỗ trợ đọc/ghi LocalStorage.',
         checklist: [
           'Nhập dữ liệu đầy đủ cho 6 New Hires (NH01..NH06) và 8 Mentors (MT01..MT08)',
           'Lập trình các hàm getNewHires(), updateTaskStatus(), submitTaskProof(), submitMentorReview()',
@@ -225,7 +225,7 @@
         list: 'done',
         name: '[T08 - Tuần 2] Dựng giao diện Trang chủ Landing Page (index.html) & Đăng nhập (login.html)',
         labels: ['SV1', 'UI'],
-        desc: 'Phụ trách: SV1 ? Nguy?n Gia Huy (2551170897) | File: index.html, login.html\nThiết kế trang giới thiệu giải pháp OnboardAI và cổng đăng nhập xác thực điều hướng đúng phân hệ theo vai trò.',
+        desc: 'Phụ trách: SV1 – Nguyễn Gia Huy (2551170897) | File: index.html, login.html\nThiết kế trang giới thiệu giải pháp OnboardAI và cổng đăng nhập xác thực điều hướng đúng phân hệ theo vai trò.',
         checklist: [
           'Xây dựng Hero Banner và khu vực giới thiệu 3 mô-đun AI trên index.html',
           'Thiết kế form đăng nhập tinh gọn, chuyên nghiệp trên login.html',
@@ -236,7 +236,7 @@
         list: 'done',
         name: '[T09 - Tuần 2] Dựng khung giao diện Dashboard Nhân viên mới & Checklist (NH-01, NH-02)',
         labels: ['SV1', 'UI'],
-        desc: 'Phụ trách: SV1 ? Nguy?n Gia Huy (2551170897) | File: newhire-onboarding-dashboard.html, newhire-checklist.html\nDựng giao diện tổng quan lộ trình hội nhập của nhân viên mới, 4 thẻ chỉ số KPI, khu vực Người đồng hành và danh sách Checklist.',
+        desc: 'Phụ trách: SV1 – Nguyễn Gia Huy (2551170897) | File: newhire-onboarding-dashboard.html, newhire-checklist.html\nDựng giao diện tổng quan lộ trình hội nhập của nhân viên mới, 4 thẻ chỉ số KPI, khu vực Người đồng hành và danh sách Checklist.',
         checklist: [
           'Dựng Hero tiến độ, 4 KPI Cards và Timeline 3 giai đoạn trên Dashboard',
           'Dựng giao diện danh sách nhiệm vụ, bộ lọc giai đoạn và ô tìm kiếm trên trang Checklist',
@@ -247,7 +247,7 @@
         list: 'done',
         name: '[T10 - Tuần 2] Dựng khung giao diện Phân hệ Người hướng dẫn (mentor-mentee-list.html) & Hồ sơ (profile.html)',
         labels: ['SV2', 'UI'],
-        desc: 'Phụ trách: SV2 (Hoàng) | File: mentor-mentee-list.html, profile.html\nXây dựng giao diện quản lý danh sách nhân viên mới dành cho Mentor và trang quản lý hồ sơ cá nhân.',
+        desc: 'Phụ trách: SV2 – Đào Viết Huy Hoàng (2551170888) | File: mentor-mentee-list.html, profile.html\nXây dựng giao diện quản lý danh sách nhân viên mới dành cho Mentor và trang quản lý hồ sơ cá nhân.',
         checklist: [
           'Dựng 4 KPI tổng quan Mentor và lưới thẻ Mentee đang hướng dẫn',
           'Dựng Modal chấm điểm định kỳ và xem chi tiết tiến độ Mentee',
@@ -258,7 +258,7 @@
         list: 'done',
         name: '[T11 - Tuần 2] Dựng khung giao diện HR Dashboard (hr-dashboard.html) & Admin (admin-user-management.html)',
         labels: ['SV3', 'UI'],
-        desc: 'Phụ trách: SV3 (Trưởng nhóm) | File: hr-dashboard.html, admin-user-management.html\nXây dựng giao diện Trung tâm điều hành HR và trang Quản trị hệ thống & Phân quyền người dùng dành cho Admin.',
+        desc: 'Phụ trách: SV1 – Nguyễn Gia Huy (2551170897 - Trưởng nhóm) | File: hr-dashboard.html, admin-user-management.html\nXây dựng giao diện Trung tâm điều hành HR và trang Quản trị hệ thống & Phân quyền người dùng dành cho Admin.',
         checklist: [
           'Dựng 4 KPI Cards, khung biểu đồ Chart.js và bảng theo dõi toàn công ty trên hr-dashboard.html',
           'Dựng khu vực quản lý kịch bản Onboarding mẫu (Templates)',
@@ -279,7 +279,7 @@
         list: 'w3',
         name: '[T13 - Tuần 3] Lập trình Luồng Checklist, Bộ lọc Giai đoạn & Nộp Minh chứng (newhire-checklist.html)',
         labels: ['SV1', 'CORE'],
-        desc: 'Phụ trách: SV1 ? Nguy?n Gia Huy (2551170897) | Nhánh: huy/feature/newhire-checklist\nLập trình tương tác DOM cho phép nhân viên mới lọc công việc theo giai đoạn, đánh dấu hoàn thành, đính kèm link minh chứng và tự động cập nhật phần trăm tiến độ.',
+        desc: 'Phụ trách: SV1 – Nguyễn Gia Huy (2551170897) | Nhánh: huy/feature/newhire-checklist\nLập trình tương tác DOM cho phép nhân viên mới lọc công việc theo giai đoạn, đánh dấu hoàn thành, đính kèm link minh chứng và tự động cập nhật phần trăm tiến độ.',
         checklist: [
           'Lập trình bộ lọc công việc theo Tuần 1, Tháng 1, Tháng 2 và trạng thái',
           'Lưu link minh chứng (proofUrl) và ghi chú (proofNote) vào LocalStorage',
@@ -290,7 +290,7 @@
         list: 'w3',
         name: '[T14 - Tuần 3] Nâng cấp Hệ thống Đề xuất 8 Người đồng hành (Mentor) & Khung Chat Trực tiếp',
         labels: ['SV1', 'SV2', 'AI'],
-        desc: 'Phụ trách: SV1 ? Nguy?n Gia Huy (2551170897) & SV2 (Hoàng) | File: newhire-onboarding-dashboard.html\nMỗi tài khoản mới chưa có sẵn Mentor cố định mà được AI gợi ý danh sách 8 Người đồng hành (MT01..MT08) kèm điểm tương thích (Match Score %), SĐT, Zalo, giới thiệu chi tiết và khung Chat trực tiếp.',
+        desc: 'Phụ trách: SV1 – Nguyễn Gia Huy (2551170897) & SV2 – Đào Viết Huy Hoàng (2551170888) | File: newhire-onboarding-dashboard.html\nMỗi tài khoản mới chưa có sẵn Mentor cố định mà được AI gợi ý danh sách 8 Người đồng hành (MT01..MT08) kèm điểm tương thích (Match Score %), SĐT, Zalo, giới thiệu chi tiết và khung Chat trực tiếp.',
         checklist: [
           'Xây dựng thuật toán AI tính điểm phù hợp giữa Nhân viên mới và 8 Mentor',
           'Hiển thị đầy đủ SĐT, Zalo, chuyên môn, phong cách hỗ trợ để người dùng tự chọn Mentor',
@@ -301,7 +301,7 @@
         list: 'done',
         name: '[T15 - Tuần 3] Lập trình Tính năng AI-1: Trợ lý Hỏi đáp Chính sách & Sổ tay Nhân sự (newhire-ai-help.html)',
         labels: ['SV1', 'AI'],
-        desc: 'Phụ trách: SV1 ? Nguy?n Gia Huy (2551170897) | File: newhire-ai-help.html\nPhát triển trợ lý AI-1 giúp nhân viên mới hỏi đáp tức thì về chế độ phúc lợi, bảo hiểm, nghỉ phép, cấp phát thiết bị IT và quy trình đánh giá thử việc.',
+        desc: 'Phụ trách: SV1 – Nguyễn Gia Huy (2551170897) | File: newhire-ai-help.html\nPhát triển trợ lý AI-1 giúp nhân viên mới hỏi đáp tức thì về chế độ phúc lợi, bảo hiểm, nghỉ phép, cấp phát thiết bị IT và quy trình đánh giá thử việc.',
         checklist: [
           'Lập trình giao diện hội thoại AI có trích dẫn nguồn tài liệu nội bộ',
           'Thiết lập các nút câu hỏi mẫu (Quick Prompts) theo chủ đề',
@@ -312,7 +312,7 @@
         list: 'done',
         name: '[T16 - Tuần 3] Lập trình Phân hệ Mentor: Duyệt Minh chứng, Giao thêm việc & Đánh giá Mentee',
         labels: ['SV2', 'CORE'],
-        desc: 'Phụ trách: SV2 (Hoàng) | File: mentor-mentee-list.html\nLập trình đầy đủ nghiệp vụ dành cho Người hướng dẫn: theo dõi tiến độ từng Mentee, kiểm tra link minh chứng, giao thêm đầu việc mới và chấm điểm định kỳ.',
+        desc: 'Phụ trách: SV2 – Đào Viết Huy Hoàng (2551170888) | File: mentor-mentee-list.html\nLập trình đầy đủ nghiệp vụ dành cho Người hướng dẫn: theo dõi tiến độ từng Mentee, kiểm tra link minh chứng, giao thêm đầu việc mới và chấm điểm định kỳ.',
         checklist: [
           'Lập trình lọc danh sách Mentee theo trạng thái tiến độ',
           'Lập trình chức năng giao thêm nhiệm vụ và duyệt trạng thái hoàn thành',
@@ -323,7 +323,7 @@
         list: 'done',
         name: '[T17 - Tuần 3] Lập trình Tính năng AI-2: Cá nhân hóa Lộ trình Checklist theo Vị trí (Checklist Personalizer)',
         labels: ['SV2', 'AI'],
-        desc: 'Phụ trách: SV2 (Hoàng) | File: mentor-mentee-list.html, js/api.js\nXây dựng mô-đun AI-2 tự động phân tích vị trí công việc (Frontend, Backend, AI/Data, Product, QC, Marketing) để đề xuất các đầu việc hội nhập chuyên sâu.',
+        desc: 'Phụ trách: SV2 – Đào Viết Huy Hoàng (2551170888) | File: mentor-mentee-list.html, js/api.js\nXây dựng mô-đun AI-2 tự động phân tích vị trí công việc (Frontend, Backend, AI/Data, Product, QC, Marketing) để đề xuất các đầu việc hội nhập chuyên sâu.',
         checklist: [
           'Xây dựng kho mẫu nhiệm vụ chuyên biệt theo từng vị trí kỹ thuật và nghiệp vụ',
           'Cho phép Mentor hoặc HR kích hoạt AI-2 bổ sung nhiệm vụ cá nhân hóa chỉ với 1 click'
@@ -333,7 +333,7 @@
         list: 'done',
         name: '[T18 - Tuần 3] Lập trình Tính năng AI-3: Cảnh báo Sớm Rủi ro Hội nhập (HR Risk Radar) & Biểu đồ Chart.js',
         labels: ['SV3', 'AI'],
-        desc: 'Phụ trách: SV3 (Trưởng nhóm) | File: hr-dashboard.html\nTích hợp Chart.js và thuật toán AI-3 Risk Radar trên HR Dashboard để tự động phát hiện nhân sự có nguy cơ chậm tiến độ và đề xuất hành động hỗ trợ kịp thời.',
+        desc: 'Phụ trách: SV1 – Nguyễn Gia Huy (2551170897 - Trưởng nhóm) | File: hr-dashboard.html\nTích hợp Chart.js và thuật toán AI-3 Risk Radar trên HR Dashboard để tự động phát hiện nhân sự có nguy cơ chậm tiến độ và đề xuất hành động hỗ trợ kịp thời.',
         checklist: [
           'Vẽ biểu đồ tiến độ theo phòng ban và biểu đồ tỷ lệ trạng thái bằng Chart.js',
           'Hiển thị bảng cảnh báo sớm AI-3 Risk Radar kèm mức độ rủi ro và khuyến nghị can thiệp',
@@ -344,7 +344,7 @@
         list: 'done',
         name: '[T19 - Tuần 3] Lập trình Phân hệ Admin: Quản lý Người dùng CRUD, Khóa/Mở khóa & Nhật ký Kiểm toán',
         labels: ['SV3', 'CORE'],
-        desc: 'Phụ trách: SV3 (Trưởng nhóm) | File: admin-user-management.html\nHoàn thiện bảng điều khiển Quản trị viên: thêm/sửa tài khoản, đổi vai trò, khóa/mở khóa người dùng, xem Audit Logs và khôi phục dữ liệu mẫu.',
+        desc: 'Phụ trách: SV1 – Nguyễn Gia Huy (2551170897 - Trưởng nhóm) | File: admin-user-management.html\nHoàn thiện bảng điều khiển Quản trị viên: thêm/sửa tài khoản, đổi vai trò, khóa/mở khóa người dùng, xem Audit Logs và khôi phục dữ liệu mẫu.',
         checklist: [
           'Lập trình tìm kiếm & lọc tài khoản theo Vai trò, Phòng ban, Trạng thái',
           'Lập trình thêm mới, chỉnh sửa vai trò và khóa/mở khóa tài khoản',
@@ -355,7 +355,7 @@
         list: 'done',
         name: '[T20 - Tuần 3] Thiết lập Hệ thống Tài khoản Đăng nhập Chuẩn cho 4 Vai trò & Tài liệu Tra cứu',
         labels: ['SV1', 'SV3'],
-        desc: 'Phụ trách: SV1 ? Nguy?n Gia Huy (2551170897) & SV2 ? ??o Vi?t Huy Ho?ng (2551170888) | File: login.html, docs/TAI_KHOAN_DANG_NHAP.md\nCấu hình đầy đủ tài khoản đăng nhập cho cả 4 vai trò (New Hire, Mentor, HR, Admin), đồng bộ thông tin người dùng trên thanh Topbar và lập file tra cứu nhanh.',
+        desc: 'Phụ trách: SV1 – Nguyễn Gia Huy (2551170897) & SV2 ? ??o Vi?t Huy Ho?ng (2551170888) | File: login.html, docs/TAI_KHOAN_DANG_NHAP.md\nCấu hình đầy đủ tài khoản đăng nhập cho cả 4 vai trò (New Hire, Mentor, HR, Admin), đồng bộ thông tin người dùng trên thanh Topbar và lập file tra cứu nhanh.',
         checklist: [
           'Tích hợp tài khoản Mentor, HR, Admin và 6 New Hires vào login.html',
           'Giữ giao diện đăng nhập tinh gọn, chuẩn thực tế',
@@ -366,7 +366,7 @@
         list: 'review',
         name: '[T21 - Tuần 4] Chuẩn hóa Ảnh đại diện Mentor Việt Nam & Tối ưu Hiệu năng Cuộn trang 60FPS',
         labels: ['SV1', 'UI'],
-        desc: 'Phụ trách: SV1 ? Nguy?n Gia Huy (2551170897) | File: assets/images/mentors/mt01.jpg..mt08.jpg, css/style.css\nCập nhật bộ ảnh chân dung người Việt Nam chuyên nghiệp cho 8 Người đồng hành, loại bỏ các icon trang trí dư thừa và tối ưu CSS giúp cuộn trang mượt mà.',
+        desc: 'Phụ trách: SV1 – Nguyễn Gia Huy (2551170897) | File: assets/images/mentors/mt01.jpg..mt08.jpg, css/style.css\nCập nhật bộ ảnh chân dung người Việt Nam chuyên nghiệp cho 8 Người đồng hành, loại bỏ các icon trang trí dư thừa và tối ưu CSS giúp cuộn trang mượt mà.',
         checklist: [
           'Cập nhật ảnh chân dung người Việt cho 8 Mentor (mt01.jpg..mt08.jpg)',
           'Loại bỏ các icon trang trí không cần thiết trên giao diện',
@@ -377,7 +377,7 @@
         list: 'review',
         name: '[T22 - Tuần 4] Nâng cấp Chế độ Thị sát Đa người dùng (Multi-User View-As) cho HR & Admin',
         labels: ['SV3', 'CORE'],
-        desc: 'Phụ trách: SV3 (Trưởng nhóm) | Nhánh: fix/sv3-data-sync-hr-admin\nNâng cấp Chế độ thị sát (View-As) cho phép chọn xem góc nhìn của bất kỳ Nhân sự mới nào (NH01..NH06) hoặc bất kỳ Người hướng dẫn nào (MT01..MT08) ngay từ Sidebar và thanh Impersonation Bar.',
+        desc: 'Phụ trách: SV1 – Nguyễn Gia Huy (2551170897 - Trưởng nhóm) | Nhánh: fix/sv3-data-sync-hr-admin\nNâng cấp Chế độ thị sát (View-As) cho phép chọn xem góc nhìn của bất kỳ Nhân sự mới nào (NH01..NH06) hoặc bất kỳ Người hướng dẫn nào (MT01..MT08) ngay từ Sidebar và thanh Impersonation Bar.',
         checklist: [
           'Tích hợp hộp chọn 6 Nhân viên mới (NH01..NH06) và 8 Mentor (MT01..MT08) trên Sidebar',
           'Tích hợp bộ chuyển đổi nhanh nhân sự/mentor trên thanh #adminImpersonateBar đầu trang',
