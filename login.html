@@ -444,15 +444,6 @@
                 </div>
               </button>
             </div>
-
-            <!-- Danh sách tài khoản cấp sẵn theo vai trò (Bấm để điền nhanh) -->
-            <div class="mt-3.5 p-3 rounded-2xl bg-slate-50/90 border border-slate-200/90">
-              <div class="flex items-center justify-between mb-2">
-                <span class="text-[11px] font-bold text-slate-700">Tài khoản có sẵn (bấm để chọn nhanh)</span>
-                <span class="text-[10px] font-semibold text-sky-700 bg-sky-50 border border-sky-200 px-2 py-0.5 rounded-md">Mật khẩu: <strong>123456</strong></span>
-              </div>
-              <div id="quickAccountsList" class="space-y-1.5 max-h-36 overflow-y-auto pr-0.5"></div>
-            </div>
           </section>
 
           <!-- Form đăng nhập -->
@@ -514,7 +505,7 @@
             <!-- Vai trò đăng ký -->
             <div>
               <div class="text-xs font-semibold text-slate-700 mb-2" data-i18n="regRoleLabel">Bạn đăng ký với vai trò</div>
-              <div class="grid grid-cols-2 gap-2.5">
+              <div class="grid grid-cols-3 gap-2.5">
                 <button type="button" data-reg-role="newhire" onclick="selectRegRole('newhire')"
                         class="role-card is-active relative flex items-center gap-2 px-2.5 py-2 rounded-xl">
                   <span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs shrink-0"><i class="fa-solid fa-user-graduate"></i></span>
@@ -530,12 +521,8 @@
                   <span class="w-7 h-7 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center text-xs shrink-0"><i class="fa-solid fa-id-card-clip"></i></span>
                   <span class="role-title text-[11px] font-bold text-slate-800 leading-tight text-left" data-i18n="roleHr">Nhân sự</span>
                 </button>
-                <button type="button" data-reg-role="admin" onclick="selectRegRole('admin')"
-                        class="role-card relative flex items-center gap-2 px-2.5 py-2 rounded-xl">
-                  <span class="w-7 h-7 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center text-xs shrink-0"><i class="fa-solid fa-shield-halved"></i></span>
-                  <span class="role-title text-[11px] font-bold text-slate-800 leading-tight text-left" data-i18n="roleAdmin">Quản trị viên</span>
-                </button>
               </div>
+              <p class="mt-1.5 text-[10px] text-slate-400" data-i18n="regAdminNote">Tài khoản Quản trị viên do hệ thống cấp.</p>
             </div>
 
             <div class="field">
@@ -1126,64 +1113,17 @@
       try { history.replaceState(null, '', view === 'login' ? location.pathname : '#' + view); } catch (_) {}
     }
 
-    // 4. CHỌN VAI TRÒ & ĐIỀN NHANH TÀI KHOẢN CẤP SẴN
-    function selectRole(roleKey, autoFillPrimary = true) {
+    // 4. CHỌN VAI TRÒ (CHỈ ĐÁNH DẤU – KHÔNG CHUYỂN TRANG)
+    function selectRole(roleKey) {
       selectedRole = roleKey;
       document.querySelectorAll('.role-card[data-role]').forEach(card => {
         card.classList.toggle('is-active', card.dataset.role === roleKey);
       });
       updateLoginEmailPlaceholder();
-      renderQuickAccountsList(roleKey);
-      if (autoFillPrimary) {
-        const roleAccounts = getAllAccounts().filter(u => u.role === roleKey);
-        if (roleAccounts.length > 0) {
-          fillQuickAccount(roleAccounts[0].email);
-        }
-      }
       hideToast();
     }
 
-    function renderQuickAccountsList(roleKey) {
-      const listEl = document.getElementById('quickAccountsList');
-      if (!listEl) return;
-      const accounts = getAllAccounts().filter(u => u.role === roleKey);
-      const currentEmail = (document.getElementById('loginEmail')?.value || '').trim().toLowerCase();
-      listEl.innerHTML = accounts.map(acc => {
-        const isSelected = acc.email.toLowerCase() === currentEmail;
-        return `
-          <button type="button" onclick="fillQuickAccount('${acc.email}')"
-                  class="w-full flex items-center justify-between gap-2.5 p-2 rounded-xl border text-left transition ${
-                    isSelected
-                      ? 'bg-sky-50 border-sky-400 ring-1 ring-sky-300'
-                      : 'bg-white border-slate-200 hover:border-sky-300 hover:bg-slate-50'
-                  }">
-            <div class="flex items-center gap-2.5 min-w-0">
-              <img src="${acc.avatar}" alt="${acc.name}" class="w-8 h-8 rounded-full object-cover border border-slate-200 shrink-0 bg-white">
-              <div class="min-w-0">
-                <div class="text-xs font-bold text-slate-900 truncate">${acc.name} <span class="font-normal text-[11px] text-slate-500">• ${acc.position || ''}</span></div>
-                <div class="text-[11px] font-mono text-sky-700 truncate">${acc.email}</div>
-              </div>
-            </div>
-            <span class="shrink-0 text-[10px] font-bold px-2 py-1 rounded-lg ${
-              isSelected ? 'bg-sky-600 text-white' : 'bg-slate-100 text-slate-700'
-            }">${isSelected ? 'Đang chọn' : 'Điền nhanh'}</span>
-          </button>
-        `;
-      }).join('');
-    }
-
-    function fillQuickAccount(email) {
-      const acc = findAccount(email);
-      if (!acc) return;
-      const emailInput = document.getElementById('loginEmail');
-      const pwdInput = document.getElementById('loginPassword');
-      if (emailInput) emailInput.value = acc.email;
-      if (pwdInput) pwdInput.value = acc.password || DEMO_PASSWORD;
-      clearAllErrors();
-      renderQuickAccountsList(acc.role);
-    }
-
-    // Gợi ý email mờ theo vai trò đang chọn
+    // Gợi ý email mờ theo vai trò đang chọn (chỉ là placeholder, không điền sẵn)
     function updateLoginEmailPlaceholder() {
       const sample = selectedRole && ROLES_DATA[selectedRole] ? ROLES_DATA[selectedRole].email : 'ten@onboardai.vn';
       document.getElementById('loginEmail').placeholder = `${t('examplePrefix')} ${sample}`;
@@ -1226,7 +1166,7 @@
     // Tự đồng bộ vai trò khi email nhập vào trùng với một tài khoản đã có
     document.getElementById('loginEmail').addEventListener('input', (e) => {
       const acc = findAccount(e.target.value);
-      if (acc) selectRole(acc.role, false);
+      if (acc) selectRole(acc.role);
     });
 
     // 6. ĐĂNG NHẬP – CHỈ CHUYỂN TRANG KHI BẤM XÁC NHẬN VÀ ĐÚNG MẬT KHẨU
@@ -1362,7 +1302,7 @@
 
       setLoading('registerBtn', true, 'registering');
 
-      // Sau khi tạo xong: chuyển về đăng nhập, điền sẵn email & mật khẩu để đăng nhập ngay
+      // Sau khi tạo xong: chuyển về đăng nhập, điền sẵn email, chờ người dùng nhập mật khẩu
       setTimeout(() => {
         setLoading('registerBtn', false, 'registerSubmit');
         document.getElementById('registerForm').reset();
@@ -1370,10 +1310,10 @@
         updateStrength();
 
         showView('login');
-        selectRole(newUser.role, false);
+        selectRole(newUser.role);
         document.getElementById('loginEmail').value = newUser.email;
-        document.getElementById('loginPassword').value = newUser.password;
-        renderQuickAccountsList(newUser.role);
+        document.getElementById('loginPassword').value = '';
+        document.getElementById('loginPassword').focus();
         showToast(t('toastRegistered'), 'success');
       }, 800);
     }
@@ -1468,7 +1408,6 @@
 
     // KHỞI TẠO
     applyLanguage();
-    selectRole(selectedRole, true);
     const initialView = location.hash.replace('#', '');
     if (['register', 'forgot'].includes(initialView)) showView(initialView);
   </script>
