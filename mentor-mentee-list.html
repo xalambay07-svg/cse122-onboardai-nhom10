@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Danh sách Mentee – Người hướng dẫn (M01) | OnboardAI Enterprise</title>
+  <link rel="icon" href="assets/images/brand/onboardai-mark-small.svg" type="image/svg+xml">
   
   <!-- Font Inter Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -57,14 +58,14 @@
     <!-- ================= 1. SIDEBAR ĐIỀU HƯỚNG DÙNG CHUNG ================= -->
     <aside id="appSidebar" class="w-64 bg-white border-r border-[#E2E8F0] flex flex-col shrink-0 fixed inset-y-0 left-0 z-40 md:static transition-transform duration-300 -translate-x-full md:translate-x-0">
       <!-- Logo Header -->
-      <div class="h-16 flex items-center gap-3 px-6 border-b border-slate-100">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-xs">
-          <i data-lucide="compass" class="w-5 h-5"></i>
-        </div>
-        <div>
-          <span class="text-base font-bold tracking-tight text-slate-900">Onboard<span class="text-indigo-600">AI</span></span>
-          <span class="block text-[10px] uppercase font-semibold tracking-wider text-slate-400">Mentor Space</span>
-        </div>
+      <div class="h-16 flex items-center px-6 border-b border-slate-100">
+        <a href="index.html" class="flex items-center gap-2.5">
+          <img src="assets/images/brand/onboardai-mark.svg" width="36" height="36" alt="">
+          <div>
+            <div class="text-[17px] font-extrabold tracking-tight leading-tight text-slate-900">Onboard<span class="text-[#1F5AFE]">AI</span></div>
+            <div class="text-[10px] font-bold tracking-[.12em] text-slate-500 uppercase">MENTOR SPACE</div>
+          </div>
+        </a>
       </div>
 
       <!-- Navigation Links -->
@@ -88,6 +89,10 @@
         <div class="pt-5 px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
           Tài khoản & Hệ thống
         </div>
+        <a href="profile.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+          <i data-lucide="user-cog" class="w-4 h-4"></i>
+          <span>Hồ sơ cá nhân</span>
+        </a>
         <a href="index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
           <i data-lucide="home" class="w-4 h-4"></i>
           <span>Trang chủ OnboardAI</span>
@@ -220,10 +225,10 @@
             <div>
               <div class="flex items-center justify-between text-xs mb-1.5">
                 <span class="text-slate-500">Tiến độ hoàn thành nhiệm vụ</span>
-                <span class="font-bold text-[#1F5AFE]" id="anProgressText">65% (13/20 nhiệm vụ)</span>
+                <span class="font-bold text-[#1F5AFE]" id="anProgressText">20% (1/5 nhiệm vụ)</span>
               </div>
               <div class="progress-bar-micro">
-                <div class="progress-fill-micro bg-gradient-to-r from-[#1F5AFE] to-[#00B67A]" style="width: 65%;"></div>
+                <div id="anProgressBar" class="progress-fill-micro bg-gradient-to-r from-[#1F5AFE] to-[#00B67A]" style="width: 20%;"></div>
               </div>
             </div>
           </div>
@@ -292,8 +297,10 @@
     }
 
     function logout() {
-      localStorage.removeItem('currentUser');
-      localStorage.removeItem('isLoggedIn');
+      ['currentUser', 'ONBOARDAI_CURRENT_USER', 'isLoggedIn', 'userRole']
+        .forEach(k => localStorage.removeItem(k));
+      ['isImpersonating', 'impersonatedUserName', 'impersonateReturnUrl']
+        .forEach(k => sessionStorage.removeItem(k));
     }
 
     function checkAdminImpersonation() {
@@ -324,14 +331,18 @@
       checkAdminImpersonation();
       if (window.API) {
         await API.init();
-        // Lấy tiến độ thực tế của NH01
+        // Lấy tiến độ thực tế của NH01 từ tasks
         try {
-          const tasks = await API.getTasksByNewHire('NH01');
-          if (tasks && tasks.length > 0) {
-            const completed = tasks.filter(t => t.status === 'completed').length;
-            const pct = Math.round((completed / tasks.length) * 100);
+          const allTasks = typeof API.getTasksByNewHire === 'function'
+            ? await API.getTasksByNewHire('NH01')
+            : (API.getAll('tasks') || []).filter(t => t.newHireId === 'NH01' || t.userId === 'NH01');
+          if (allTasks && allTasks.length > 0) {
+            const completed = allTasks.filter(t => t.status === 'completed' || t.status === 'done').length;
+            const pct = Math.round((completed / allTasks.length) * 100);
             const el = document.getElementById('anProgressText');
-            if (el) el.innerText = `${pct}% (${completed}/${tasks.length} nhiệm vụ)`;
+            if (el) el.innerText = `${pct}% (${completed}/${allTasks.length} nhiệm vụ)`;
+            const bar = document.getElementById('anProgressBar');
+            if (bar) bar.style.width = `${pct}%`;
           }
         } catch (e) {}
       }
