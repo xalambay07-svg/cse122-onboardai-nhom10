@@ -135,14 +135,32 @@
         <div class="pt-4 px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
           Chế độ thị sát (View-As)
         </div>
-        <a href="newhire-onboarding-dashboard.html" onclick="startImpersonation('newhire-onboarding-dashboard.html', 'Nguyễn Văn An (New Hire)')" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
-          <i data-lucide="user-check" class="w-4 h-4 text-blue-600"></i>
-          <span>Thị sát Nhân sự mới</span>
-        </a>
-        <a href="mentor-mentee-list.html" onclick="startImpersonation('mentor-mentee-list.html', 'Trần Thị Mai (Mentor)')" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
-          <i data-lucide="award" class="w-4 h-4 text-indigo-600"></i>
-          <span>Thị sát Người hướng dẫn</span>
-        </a>
+        <div>
+          <button type="button" onclick="toggleSidebarViewAs('newhire')" class="w-full flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors cursor-pointer">
+            <span class="flex items-center gap-3">
+              <i data-lucide="user-check" class="w-4 h-4 text-blue-600"></i>
+              <span>Thị sát Nhân sự mới</span>
+            </span>
+            <span class="flex items-center gap-1">
+              <span id="sidebarViewAsNewHireCount" class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-blue-50 text-[#1F5AFE]">4</span>
+              <i id="chevronViewAs-newhire" data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200"></i>
+            </span>
+          </button>
+          <div id="sidebarViewAsList-newhire" class="hidden mt-1 ml-3 pl-2.5 border-l-2 border-blue-100 space-y-1 max-h-56 overflow-y-auto pr-1"></div>
+        </div>
+        <div>
+          <button type="button" onclick="toggleSidebarViewAs('mentor')" class="w-full flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors cursor-pointer">
+            <span class="flex items-center gap-3">
+              <i data-lucide="award" class="w-4 h-4 text-indigo-600"></i>
+              <span>Thị sát Người hướng dẫn</span>
+            </span>
+            <span class="flex items-center gap-1">
+              <span id="sidebarViewAsMentorCount" class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-indigo-50 text-indigo-600">8</span>
+              <i id="chevronViewAs-mentor" data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200"></i>
+            </span>
+          </button>
+          <div id="sidebarViewAsList-mentor" class="hidden mt-1 ml-3 pl-2.5 border-l-2 border-indigo-100 space-y-1 max-h-60 overflow-y-auto pr-1"></div>
+        </div>
 
         <div class="pt-5 px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
           Tài khoản & Hệ thống
@@ -200,9 +218,9 @@
             <span>Khôi phục dữ liệu mẫu</span>
           </button>
           <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-[#E2E8F0]">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin Avatar" class="w-6 h-6 rounded-full bg-white border border-slate-200">
-            <span class="text-xs font-semibold text-slate-800 hidden sm:inline">Vũ Quản Trị</span>
-            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-violet-50 text-violet-700 ring-1 ring-inset ring-violet-600/20">Admin</span>
+            <img id="adminTopbarAvatar" src="assets/images/mentors/mt06.jpg" alt="Admin Avatar" class="w-6 h-6 rounded-full bg-white border border-slate-200 object-cover">
+            <span id="adminTopbarName" class="text-xs font-semibold text-slate-800 hidden sm:inline">Vũ Quản Trị</span>
+            <span id="adminTopbarRole" class="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-violet-50 text-violet-700 ring-1 ring-inset ring-violet-600/20">Admin</span>
           </div>
         </div>
       </header>
@@ -915,21 +933,21 @@
         id: 'USR01', profileId: 'AD01', name: 'Vũ Quản Trị', email: 'admin@onboardai.vn',
         role: 'admin', departmentId: 'DEP01', department: 'Kỹ thuật Công nghệ',
         position: 'System Administrator', status: 'active',
-        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Admin',
+        avatar: 'assets/images/mentors/mt06.jpg',
         lastLogin: '2026-10-14T08:15:00', createdAt: '2026-08-01'
       },
       {
         id: 'USR02', profileId: 'HR01', name: 'Lê Hoàng Nam', email: 'hr@onboardai.vn',
         role: 'hr', departmentId: 'DEP03', department: 'Nhân sự & Vận hành',
         position: 'HR Specialist', status: 'active',
-        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Nam',
+        avatar: 'assets/images/mentors/mt03.jpg',
         lastLogin: '2026-10-14T08:40:00', createdAt: '2026-08-10'
       },
       {
         id: 'USR03', profileId: 'MT01', name: 'Trần Thị Mai', email: 'mentor@onboardai.vn',
         role: 'mentor', departmentId: 'DEP01', department: 'Kỹ thuật Công nghệ',
         position: 'Tech Lead & Mentor', status: 'active',
-        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Mai',
+        avatar: 'assets/images/mentors/mt01.jpg',
         lastLogin: '2026-10-14T09:05:00', createdAt: '2026-08-15'
       },
       {
@@ -942,8 +960,8 @@
       {
         id: 'USR05', profileId: 'MT02', name: 'Lê Minh Tuấn', email: 'tuan.le@onboardai.vn',
         role: 'mentor', departmentId: 'DEP02', department: 'Marketing & Truyền thông',
-        position: 'Marketing Lead & Mentor', status: 'active',
-        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Tuan',
+        position: 'Product & Growth Lead', status: 'active',
+        avatar: 'assets/images/mentors/mt02.jpg',
         lastLogin: '2026-10-13T17:20:00', createdAt: '2026-08-18'
       },
       {
@@ -970,9 +988,23 @@
       {
         id: 'USR09', profileId: 'MT04', name: 'Đỗ Hoàng Sơn', email: 'son.do@onboardai.vn',
         role: 'mentor', departmentId: 'DEP01', department: 'Kỹ thuật Công nghệ',
-        position: 'Senior QA Engineer', status: 'locked',
-        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Son',
+        position: 'Senior QA & Security Lead', status: 'active',
+        avatar: 'assets/images/mentors/mt04.jpg',
         lastLogin: '2026-09-28T11:00:00', createdAt: '2026-08-05'
+      },
+      {
+        id: 'USR10', profileId: 'MT05', name: 'Nguyễn Hoàng Minh', email: 'minh.nguyen@onboardai.vn',
+        role: 'mentor', departmentId: 'DEP01', department: 'Kỹ thuật Công nghệ',
+        position: 'Principal Frontend Architect', status: 'active',
+        avatar: 'assets/images/mentors/mt05.jpg',
+        lastLogin: '2026-10-14T08:50:00', createdAt: '2026-08-12'
+      },
+      {
+        id: 'USR11', profileId: 'HR02', name: 'Phạm Quang Huy', email: 'huy.pham@onboardai.vn',
+        role: 'hr', departmentId: 'DEP03', department: 'Nhân sự & Vận hành',
+        position: 'People & Culture Partner', status: 'active',
+        avatar: 'assets/images/mentors/mt03.jpg',
+        lastLogin: '2026-10-14T08:30:00', createdAt: '2026-08-14'
       }
     ];
 
@@ -1297,6 +1329,7 @@
       renderRbacMatrix();
       renderAuditLogs();
       updateBulkActionBar();
+      renderSidebarViewAsLists();
       lucide.createIcons();
     }
 
@@ -1735,7 +1768,131 @@
       closeRowActionMenu();
     });
 
-    // ================= CHẾ ĐỘ THỊ SÁT VIEW-AS (MỤC 3 & 5.1) =================
+    // ================= CHẾ ĐỘ THỊ SÁT VIEW-AS ĐA NHÂN SỰ & ĐA MENTOR (MỤC 3 & 5.1) =================
+    const FULL_MENTORS_VIEWAS = [
+      { id: 'MT01', name: 'Trần Thị Mai', position: 'Tech Lead', department: 'Kỹ thuật Công nghệ', avatar: 'assets/images/mentors/mt01.jpg', email: 'mentor@onboardai.vn' },
+      { id: 'MT05', name: 'Nguyễn Hoàng Minh', position: 'Principal Frontend Architect', department: 'Kỹ thuật Công nghệ', avatar: 'assets/images/mentors/mt05.jpg', email: 'minh.nguyen@onboardai.vn' },
+      { id: 'MT06', name: 'Vũ Đình Trọng', position: 'Backend & Cloud Lead', department: 'Kỹ thuật Công nghệ', avatar: 'assets/images/mentors/mt06.jpg', email: 'trong.vu@onboardai.vn' },
+      { id: 'MT07', name: 'Hoàng Bảo Ngọc', position: 'AI & Data Lead', department: 'Kỹ thuật Công nghệ', avatar: 'assets/images/mentors/mt07.jpg', email: 'ngoc.hoang@onboardai.vn' },
+      { id: 'MT04', name: 'Đỗ Hoàng Sơn', position: 'Senior QA & Security Lead', department: 'Kỹ thuật Công nghệ', avatar: 'assets/images/mentors/mt04.jpg', email: 'son.do@onboardai.vn' },
+      { id: 'MT02', name: 'Lê Minh Tuấn', position: 'Product & Growth Lead', department: 'Sản phẩm & Thiết kế', avatar: 'assets/images/mentors/mt02.jpg', email: 'tuan.le@onboardai.vn' },
+      { id: 'MT08', name: 'Ngô Thanh Hà', position: 'Brand & Digital Marketing', department: 'Marketing & Truyền thông', avatar: 'assets/images/mentors/mt08.jpg', email: 'ha.ngo@onboardai.vn' },
+      { id: 'MT03', name: 'Phạm Quang Huy', position: 'People & Culture Partner', department: 'Nhân sự & Vận hành', avatar: 'assets/images/mentors/mt03.jpg', email: 'huy.pham@onboardai.vn' }
+    ];
+
+    const FULL_NEWHIRES_VIEWAS = [
+      { id: 'NH01', name: 'Nguyễn Văn An', position: 'Frontend Developer', department: 'Kỹ thuật Công nghệ', mentorId: 'MT01', mentorName: 'Trần Thị Mai', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=An', email: 'an.nguyen@onboardai.vn' },
+      { id: 'NH02', name: 'Trần Thị Bình', position: 'Content Creator', department: 'Marketing & Truyền thông', mentorId: 'MT02', mentorName: 'Lê Minh Tuấn', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Binh', email: 'binh.tran@onboardai.vn' },
+      { id: 'NH03', name: 'Lê Hoàng Long', position: 'Backend Developer', department: 'Kỹ thuật Công nghệ', mentorId: 'MT01', mentorName: 'Trần Thị Mai', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Long', email: 'long.le@onboardai.vn' },
+      { id: 'NH04', name: 'Phạm Minh Thư', position: 'HR Executive', department: 'Nhân sự & Vận hành', mentorId: 'MT03', mentorName: 'Phạm Quang Huy', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Thu', email: 'thu.pham@onboardai.vn' }
+    ];
+
+    function getViewAsPeopleByRole(roleType) {
+      if (roleType === 'mentor') {
+        const dynamicMentors = usersList
+          .filter(u => u.role === 'mentor' && u.status !== 'locked')
+          .map(u => ({
+            id: u.profileId || u.id,
+            name: u.name,
+            position: u.position || 'Mentor',
+            department: u.department || 'Kỹ thuật Công nghệ',
+            avatar: u.avatar || 'assets/images/mentors/mt01.jpg',
+            email: u.email
+          }));
+        const map = new Map();
+        [...FULL_MENTORS_VIEWAS, ...dynamicMentors].forEach(m => {
+          if (!map.has(m.id)) map.set(m.id, m);
+        });
+        return Array.from(map.values());
+      } else {
+        const dynamicNewHires = usersList
+          .filter(u => u.role === 'newhire' && u.status !== 'locked')
+          .map(u => ({
+            id: u.profileId || u.id,
+            name: u.name,
+            position: u.position || 'New Hire',
+            department: u.department || 'Kỹ thuật Công nghệ',
+            mentorId: u.mentorId || 'MT01',
+            mentorName: u.mentorName || 'Trần Thị Mai',
+            avatar: u.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(u.name)}`,
+            email: u.email
+          }));
+        const map = new Map();
+        [...FULL_NEWHIRES_VIEWAS, ...dynamicNewHires].forEach(nh => {
+          if (!map.has(nh.id)) map.set(nh.id, nh);
+        });
+        return Array.from(map.values());
+      }
+    }
+
+    function renderSidebarViewAsLists() {
+      const nhList = getViewAsPeopleByRole('newhire');
+      const mtList = getViewAsPeopleByRole('mentor');
+      const nhCountEl = document.getElementById('sidebarViewAsNewHireCount');
+      const mtCountEl = document.getElementById('sidebarViewAsMentorCount');
+      if (nhCountEl) nhCountEl.textContent = nhList.length;
+      if (mtCountEl) mtCountEl.textContent = mtList.length;
+
+      const nhContainer = document.getElementById('sidebarViewAsList-newhire');
+      if (nhContainer) {
+        nhContainer.innerHTML = nhList.map(p => `
+          <button type="button" onclick="impersonateSpecificPerson('newhire', '${p.id}')" class="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl hover:bg-blue-50/80 text-left transition group cursor-pointer">
+            <img src="${p.avatar}" alt="${p.name}" class="w-7 h-7 rounded-full object-cover border border-slate-200 bg-white shrink-0">
+            <div class="min-w-0 flex-1">
+              <div class="text-xs font-bold text-slate-800 group-hover:text-[#1F5AFE] truncate">${p.name}</div>
+              <div class="text-[10px] text-slate-500 truncate">${p.position} • ${p.id}</div>
+            </div>
+          </button>
+        `).join('');
+      }
+
+      const mtContainer = document.getElementById('sidebarViewAsList-mentor');
+      if (mtContainer) {
+        mtContainer.innerHTML = mtList.map(p => `
+          <button type="button" onclick="impersonateSpecificPerson('mentor', '${p.id}')" class="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl hover:bg-indigo-50/80 text-left transition group cursor-pointer">
+            <img src="${p.avatar}" alt="${p.name}" class="w-7 h-7 rounded-full object-cover border border-slate-200 bg-white shrink-0">
+            <div class="min-w-0 flex-1">
+              <div class="text-xs font-bold text-slate-800 group-hover:text-indigo-600 truncate">${p.name}</div>
+              <div class="text-[10px] text-slate-500 truncate">${p.position} • ${p.id}</div>
+            </div>
+          </button>
+        `).join('');
+      }
+    }
+
+    function toggleSidebarViewAs(roleType) {
+      const listEl = document.getElementById(`sidebarViewAsList-${roleType}`);
+      const chevEl = document.getElementById(`chevronViewAs-${roleType}`);
+      if (!listEl) return;
+      const isHidden = listEl.classList.contains('hidden');
+      listEl.classList.toggle('hidden', !isHidden);
+      if (chevEl) chevEl.classList.toggle('rotate-180', isHidden);
+    }
+
+    function impersonateSpecificPerson(roleType, personId) {
+      const list = getViewAsPeopleByRole(roleType);
+      const person = list.find(p => p.id === personId) || list[0];
+      if (!person) return;
+      const targetUrl = roleType === 'mentor' ? 'mentor-mentee-list.html' : 'newhire-onboarding-dashboard.html';
+      const roleLabel = roleType === 'mentor' ? 'Mentor' : 'New Hire';
+      const displayLabel = `${person.name} (${person.id} - ${person.position || roleLabel})`;
+
+      sessionStorage.setItem('isImpersonating', 'admin');
+      sessionStorage.setItem('impersonateReturnUrl', 'admin-user-management.html');
+      sessionStorage.setItem('impersonatedUserId', person.id);
+      sessionStorage.setItem('impersonatedUserRole', roleType);
+      sessionStorage.setItem('impersonatedUserName', displayLabel);
+      sessionStorage.setItem('impersonatedUserObj', JSON.stringify({ ...person, role: roleType }));
+
+      addAuditLog({
+        action: 'impersonate',
+        target: `${person.name} (${person.id})`,
+        detail: `Kích hoạt Chế độ thị sát (View-As) sang màn hình ${targetUrl}`
+      });
+
+      window.location.href = targetUrl;
+    }
+
     function startImpersonation(targetUrl, displayLabel) {
       sessionStorage.setItem('isImpersonating', 'admin');
       sessionStorage.setItem('impersonateReturnUrl', 'admin-user-management.html');
@@ -1761,7 +1918,8 @@
       if (user.role === 'hr') targetPage = 'hr-dashboard.html';
 
       const roleLabel = ROLE_META[user.role]?.label || user.role;
-      const label = `${user.name} (${roleLabel} - ${user.position || user.department || 'OnboardAI'})`;
+      const pid = user.profileId || user.id;
+      const label = `${user.name} (${pid} - ${user.position || user.department || roleLabel})`;
 
       addAuditLog({
         action: 'impersonate',
@@ -1769,7 +1927,22 @@
         detail: `Kích hoạt Chế độ thị sát (View-As) sang màn hình ${targetPage}`
       });
 
-      startImpersonation(targetPage, label);
+      sessionStorage.setItem('isImpersonating', 'admin');
+      sessionStorage.setItem('impersonateReturnUrl', 'admin-user-management.html');
+      sessionStorage.setItem('impersonatedUserId', pid);
+      sessionStorage.setItem('impersonatedUserRole', user.role);
+      sessionStorage.setItem('impersonatedUserName', label);
+      sessionStorage.setItem('impersonatedUserObj', JSON.stringify({
+        id: pid,
+        name: user.name,
+        position: user.position || roleLabel,
+        department: user.department || 'Kỹ thuật Công nghệ',
+        mentorId: user.mentorId || 'MT01',
+        mentorName: user.mentorName || 'Trần Thị Mai',
+        avatar: user.avatar,
+        email: user.email,
+        role: user.role
+      }));
       window.location.href = targetPage;
     }
 
@@ -2788,6 +2961,15 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      try {
+        const cur = JSON.parse(localStorage.getItem('ONBOARDAI_CURRENT_USER') || localStorage.getItem('currentUser') || 'null');
+        if (cur && cur.role === 'admin') {
+          const av = document.getElementById('adminTopbarAvatar');
+          const nm = document.getElementById('adminTopbarName');
+          if (av && cur.avatar) av.src = cur.avatar;
+          if (nm && cur.name) nm.textContent = cur.name;
+        }
+      } catch (_) {}
       loadInitialData();
     });
   </script>

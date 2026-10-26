@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trello Kanban – [CSE122 - BTL20] OnboardAI - Nhóm 10</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-board: #0B5394;
+      --bg-board-gradient: linear-gradient(135deg, #1e3a8a 0%, #312e81 55%, #1e1b4b 100%);
+      --bg-list: #F1F2F4;
+      --bg-card: #FFFFFF;
+      --text-main: #172B4D;
+      --text-sub: #44546F;
+      --border-soft: #DCDFE4;
+      --shadow-card: 0 1px 2px rgba(9, 30, 66, 0.15), 0 0 1px rgba(9, 30, 66, 0.2);
+      --shadow-list: 0 4px 12px rgba(9, 30, 66, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-board-gradient);
+      color: var(--text-main);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Trello Global Topbar */
+    .trello-nav {
+      height: 48px;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      color: #FFFFFF;
+      flex-shrink: 0;
+    }
+
+    .trello-nav-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .trello-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      color: #FFFFFF;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .trello-logo-box {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      background: #60A5FA;
+      display: inline-grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      padding: 3px;
+    }
+
+    .trello-logo-box span:first-child {
+      background: #1E3A8A;
+      border-radius: 1px;
+      height: 100%;
+    }
+
+    .trello-logo-box span:last-child {
+      background: #1E3A8A;
+      border-radius: 1px;
+      height: 65%;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+    }
+
+    .nav-link-pill {
+      color: rgba(255, 255, 255, 0.88);
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: background 0.15s;
+    }
+
+    .nav-link-pill:hover {
+      background: rgba(255, 255, 255, 0.16);
+      color: #fff;
+    }
+
+    .trello-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+    }
+
+    .member-avatars {
+      display: flex;
+      align-items: center;
+    }
+
+    .avatar-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #FFFFFF;
+      border: 2px solid #1E293B;
+      margin-left: -6px;
+      cursor: pointer;
+    }
+
+    .avatar-circle:first-child {
+      margin-left: 0;
+    }
+
+    /* Board Header Subbar */
+    .board-header {
+      min-height: 56px;
+      background: rgba(15, 23, 42, 0.38);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 8px 16px;
+      color: #FFFFFF;
+      flex-shrink: 0;
+    }
+
+    .board-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .board-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .board-badge {
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.16);
+      color: #E2E8F0;
+    }
+
+    .board-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .sprint-tabs {
+      display: inline-flex;
+      background: rgba(15, 23, 42, 0.55);
+      padding: 3px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .sprint-tab {
+      border: none;
+      background: transparent;
+      color: #CBD5E1;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .sprint-tab:hover {
+      color: #FFFFFF;
+    }
+
+    .sprint-tab.active {
+      background: #4F46E5;
+      color: #FFFFFF;
+      box-shadow: 0 2px 6px rgba(79, 70, 229, 0.45);
+    }
+
+    .filter-select {
+      background: rgba(15, 23, 42, 0.65);
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 7px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .filter-select option {
+      background: #0F172A;
+      color: #FFFFFF;
+    }
+
+    /* Sprint Status Banner */
+    .sprint-banner {
+      background: rgba(15, 23, 42, 0.52);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 7px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #E2E8F0;
+      font-size: 12.5px;
+      flex-shrink: 0;
+    }
+
+    .sprint-metrics {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-weight: 600;
+    }
+
+    .metric-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.12);
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 11.5px;
+    }
+
+    /* Board Columns Container */
+    .board-canvas {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 16px;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+
+    .board-canvas::-webkit-scrollbar {
+      height: 10px;
+    }
+
+    .board-canvas::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.35);
+      border-radius: 6px;
+    }
+
+    .board-canvas::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.35);
+      border-radius: 6px;
+    }
+
+    .trello-list {
+      width: 305px;
+      min-width: 305px;
+      max-height: 100%;
+      background: var(--bg-list);
+      border-radius: 12px;
+      box-shadow: var(--shadow-list);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .list-header {
+      padding: 12px 14px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border-bottom: 1px solid rgba(9, 30, 66, 0.08);
+    }
+
+    .list-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.3;
+    }
+
+    .list-count {
+      font-size: 11.5px;
+      font-weight: 700;
+      background: #DCDFE4;
+      color: #172B4D;
+      padding: 2px 8px;
+      border-radius: 999px;
+      flex-shrink: 0;
+    }
+
+    .list-cards {
+      padding: 8px 8px 10px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .list-cards::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .list-cards::-webkit-scrollbar-thumb {
+      background: #C1C7D0;
+      border-radius: 4px;
+    }
+
+    /* Trello Card */
+    .trello-card {
+      background: var(--bg-card);
+      border-radius: 8px;
+      padding: 10px 12px;
+      box-shadow: var(--shadow-card);
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+      border: 1px solid transparent;
+    }
+
+    .trello-card:hover {
+      border-color: #388BFF;
+      box-shadow: 0 4px 10px rgba(9, 30, 66, 0.18);
+      transform: translateY(-1px);
+    }
+
+    .card-labels {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 6px;
+    }
+
+    .card-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      line-height: 1.35;
+    }
+
+    .lbl-sv1 { background: #E0E7FF; color: #3730A3; }
+    .lbl-sv2 { background: #DCFCE7; color: #166534; }
+    .lbl-sv3 { background: #F3E8FF; color: #6B21A8; }
+    .lbl-core { background: #FFEDD5; color: #9A3412; }
+    .lbl-ai { background: #FEE2E2; color: #991B1B; }
+    .lbl-ui { background: #FEF3C7; color: #92400E; }
+    .lbl-test { background: #E0F2FE; color: #075985; }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .card-code {
+      color: #4F46E5;
+      font-weight: 700;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px solid #F1F2F4;
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .card-badges {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .badge-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+      background: #F1F2F4;
+      color: #44546F;
+    }
+
+    .badge-item.done {
+      background: #DCFCE7;
+      color: #166534;
+    }
+
+    .badge-item.in-progress {
+      background: #FEF3C7;
+      color: #92400E;
+    }
+
+    .card-member {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      font-size: 10px;
+      font-weight: 700;
+      color: #FFFFFF;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* Card Detail Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(9, 30, 66, 0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 1000;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-card {
+      background: #F1F2F4;
+      width: 100%;
+      max-width: 680px;
+      max-height: 88vh;
+      border-radius: 12px;
+      box-shadow: 0 20px 45px rgba(9, 30, 66, 0.35);
+      overflow-y: auto;
+      padding: 22px 24px;
+      color: var(--text-main);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .modal-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .modal-close {
+      border: none;
+      background: #DCDFE4;
+      color: #172B4D;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .modal-section {
+      background: #FFFFFF;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .modal-section h4 {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-sub);
+      margin-bottom: 8px;
+    }
+
+    .modal-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 6px 0;
+      border-bottom: 1px solid #F1F2F4;
+      font-size: 13px;
+    }
+
+    .checklist-item:last-child {
+      border-bottom: none;
+    }
+
+    .btn-copy-card {
+      background: #4F46E5;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 14px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-copy-card:hover {
+      background: #4338CA;
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Trello Bar -->
+  <header class="trello-nav">
+    <div class="trello-nav-left">
+      <a href="index.html" class="trello-logo">
+        <span class="trello-logo-box"><span></span><span></span></span>
+        <span>Trello</span>
+      </a>
+      <nav class="nav-links">
+        <a href="index.html" class="nav-link-pill">Trang chủ OnboardAI</a>
+        <a href="newhire-onboarding-dashboard.html" class="nav-link-pill">Phân hệ New Hire</a>
+        <a href="mentor-mentee-list.html" class="nav-link-pill">Phân hệ Mentor</a>
+        <a href="hr-dashboard.html" class="nav-link-pill">Phân hệ HR</a>
+        <a href="admin-user-management.html" class="nav-link-pill">Phân hệ Admin</a>
+      </nav>
+    </div>
+    <div class="trello-nav-right">
+      <a href="javascript:%0A(async%20function%20createOnboardAITrelloBoard()%20%7B%0A%20%20const%20banner%20%3D%20document.createElement('div')%3B%0A%20%20banner.style.cssText%20%3D%20'position%3Afixed%3Btop%3A16px%3Bleft%3A50%25%3Btransform%3AtranslateX(-50%25)%3Bz-index%3A999999%3Bbackground%3A%231E1B4B%3Bcolor%3A%23FFFFFF%3Bpadding%3A14px%2024px%3Bborder-radius%3A10px%3Bbox-shadow%3A0%2010px%2030px%20rgba(0%2C0%2C0%2C0.45)%3Bfont-family%3Asans-serif%3Bfont-size%3A14px%3Bfont-weight%3A700%3Bborder%3A2px%20solid%20%2310B981%3B'%3B%0A%20%20banner.textContent%20%3D%20'%F0%9F%9A%80%20%C4%90ang%20b%E1%BA%AFt%20%C4%91%E1%BA%A7u%20kh%E1%BB%9Fi%20t%E1%BA%A1o%20B%E1%BA%A3ng%20Trello%20OnboardAI%20(BTL-20%20-%20Nh%C3%B3m%2010)...'%3B%0A%20%20document.body.appendChild(banner)%3B%0A%0A%20%20function%20setStatus(msg)%20%7B%0A%20%20%20%20console.log(msg)%3B%0A%20%20%20%20banner.textContent%20%3D%20msg%3B%0A%20%20%7D%0A%0A%20%20const%20dscMatch%20%3D%20document.cookie.match(%2F(%3F%3A%5E%7C%3B%5Cs*)dsc%3D(%5B%5E%3B%5D%2B)%2F)%3B%0A%20%20if%20(!dscMatch)%20%7B%0A%20%20%20%20banner.style.borderColor%20%3D%20'%23F43F5E'%3B%0A%20%20%20%20setStatus('%E2%9D%8C%20L%E1%BB%97i%3A%20Anh%20h%C3%A3y%20d%C3%A1n%20m%C3%A3%20n%C3%A0y%20%E1%BB%9F%20tab%20https%3A%2F%2Ftrello.com%2Fb%2FJ0c8nZ2l%2Fmy-trello-board%20nh%C3%A9!')%3B%0A%20%20%20%20return%3B%0A%20%20%7D%0A%20%20const%20dsc%20%3D%20decodeURIComponent(dscMatch%5B1%5D)%3B%0A%0A%20%20async%20function%20trelloReq(method%2C%20path%2C%20body%20%3D%20%7B%7D)%20%7B%0A%20%20%20%20const%20opts%20%3D%20%7B%0A%20%20%20%20%20%20method%2C%0A%20%20%20%20%20%20credentials%3A%20'include'%2C%0A%20%20%20%20%20%20headers%3A%20%7B%20'Content-Type'%3A%20'application%2Fjson'%2C%20'Accept'%3A%20'application%2Fjson'%20%7D%0A%20%20%20%20%7D%3B%0A%20%20%20%20if%20(method%20!%3D%3D%20'GET')%20%7B%0A%20%20%20%20%20%20opts.body%20%3D%20JSON.stringify(%7B%20...body%2C%20dsc%20%7D)%3B%0A%20%20%20%20%7D%0A%20%20%20%20const%20res%20%3D%20await%20fetch(%60https%3A%2F%2Ftrello.com%24%7Bpath%7D%60%2C%20opts)%3B%0A%20%20%20%20if%20(!res.ok)%20%7B%0A%20%20%20%20%20%20const%20errText%20%3D%20await%20res.text()%3B%0A%20%20%20%20%20%20throw%20new%20Error(%60HTTP%20%24%7Bres.status%7D%20(%24%7Bpath%7D)%3A%20%24%7BerrText%7D%60)%3B%0A%20%20%20%20%7D%0A%20%20%20%20return%20res.json()%3B%0A%20%20%7D%0A%0A%20%20try%20%7B%0A%20%20%20%20let%20idBoard%20%3D%20null%3B%0A%20%20%20%20let%20boardUrl%20%3D%20location.href%3B%0A%0A%20%20%20%20const%20pathParts%20%3D%20location.pathname.split('%2F').filter(Boolean)%3B%0A%20%20%20%20if%20(pathParts%5B0%5D%20%3D%3D%3D%20'b'%20%26%26%20pathParts%5B1%5D)%20%7B%0A%20%20%20%20%20%20const%20boardInfo%20%3D%20await%20trelloReq('GET'%2C%20%60%2F1%2Fboards%2F%24%7BpathParts%5B1%5D%7D%3Flists%3Dopen%26labels%3Dall%60)%3B%0A%20%20%20%20%20%20idBoard%20%3D%20boardInfo.id%3B%0A%20%20%20%20%20%20boardUrl%20%3D%20boardInfo.url%3B%0A%20%20%20%20%20%20setStatus(%60%E2%8F%B3%20%C4%90ang%20%C4%91%E1%BB%95i%20t%C3%AAn%20b%E1%BA%A3ng%20sang%20%22%5BCSE122%20-%20BTL20%5D%20OnboardAI%20-%20Nh%C3%B3m%2010%22%20%26%20b%E1%BA%ADt%20ch%E1%BA%BF%20%C4%91%E1%BB%99%20Public...%60)%3B%0A%0A%20%20%20%20%20%20try%20%7B%0A%20%20%20%20%20%20%20%20const%20updatedBoard%20%3D%20await%20trelloReq('PUT'%2C%20%60%2F1%2Fboards%2F%24%7BidBoard%7D%60%2C%20%7B%0A%20%20%20%20%20%20%20%20%20%20name%3A%20'%5BCSE122%20-%20BTL20%5D%20OnboardAI%20-%20Nh%C3%B3m%2010'%2C%0A%20%20%20%20%20%20%20%20%20%20desc%3A%20'B%E1%BA%A3ng%20qu%E1%BA%A3n%20l%C3%BD%20ti%E1%BA%BFn%20%C4%91%E1%BB%99%20Agile%2FKanban%204%20tu%E1%BA%A7n%20-%20D%E1%BB%B1%20%C3%A1n%20OnboardAI%20(BTL-20%20-%20H%E1%BB%8Dc%20ph%E1%BA%A7n%20CSE122%20-%20Nh%C3%B3m%2010)'%2C%0A%20%20%20%20%20%20%20%20%20%20'prefs%2FpermissionLevel'%3A%20'public'%0A%20%20%20%20%20%20%20%20%7D)%3B%0A%20%20%20%20%20%20%20%20if%20(updatedBoard%20%26%26%20updatedBoard.url)%20boardUrl%20%3D%20updatedBoard.url%3B%0A%20%20%20%20%20%20%7D%20catch%20(e)%20%7B%0A%20%20%20%20%20%20%20%20console.warn('Kh%C3%B4ng%20th%E1%BB%83%20b%E1%BA%ADt%20public%20t%E1%BB%B1%20%C4%91%E1%BB%99ng%2C%20v%E1%BA%ABn%20%C4%91%E1%BB%95i%20t%C3%AAn%20b%E1%BA%A3ng%3A'%2C%20e)%3B%0A%20%20%20%20%20%20%20%20await%20trelloReq('PUT'%2C%20%60%2F1%2Fboards%2F%24%7BidBoard%7D%60%2C%20%7B%0A%20%20%20%20%20%20%20%20%20%20name%3A%20'%5BCSE122%20-%20BTL20%5D%20OnboardAI%20-%20Nh%C3%B3m%2010'%0A%20%20%20%20%20%20%20%20%7D)%3B%0A%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20if%20(Array.isArray(boardInfo.lists))%20%7B%0A%20%20%20%20%20%20%20%20for%20(const%20oldList%20of%20boardInfo.lists)%20%7B%0A%20%20%20%20%20%20%20%20%20%20await%20trelloReq('PUT'%2C%20%60%2F1%2Flists%2F%24%7BoldList.id%7D%2Fclosed%60%2C%20%7B%20value%3A%20true%20%7D)%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20setStatus('%E2%8F%B3%20%C4%90ang%20t%E1%BA%A1o%20b%E1%BA%A3ng%20m%E1%BB%9Bi%20%5BCSE122%20-%20BTL20%5D%20OnboardAI%20-%20Nh%C3%B3m%2010...')%3B%0A%20%20%20%20%20%20const%20me%20%3D%20await%20trelloReq('GET'%2C%20'%2F1%2Fmembers%2Fme%3Forganizations%3Dall')%3B%0A%20%20%20%20%20%20const%20idOrganization%20%3D%20(me.idOrganizations%20%26%26%20me.idOrganizations%5B0%5D)%20%7C%7C%20undefined%3B%0A%20%20%20%20%20%20const%20newBoard%20%3D%20await%20trelloReq('POST'%2C%20'%2F1%2Fboards'%2C%20%7B%0A%20%20%20%20%20%20%20%20name%3A%20'%5BCSE122%20-%20BTL20%5D%20OnboardAI%20-%20Nh%C3%B3m%2010'%2C%0A%20%20%20%20%20%20%20%20desc%3A%20'B%E1%BA%A3ng%20qu%E1%BA%A3n%20l%C3%BD%20ti%E1%BA%BFn%20%C4%91%E1%BB%99%20Agile%2FKanban%204%20tu%E1%BA%A7n%20-%20D%E1%BB%B1%20%C3%A1n%20OnboardAI%20(BTL-20%20-%20H%E1%BB%8Dc%20ph%E1%BA%A7n%20CSE122%20-%20Nh%C3%B3m%2010)'%2C%0A%20%20%20%20%20%20%20%20defaultLists%3A%20false%2C%0A%20%20%20%20%20%20%20%20idOrganization%2C%0A%20%20%20%20%20%20%20%20prefs_permissionLevel%3A%20'public'%2C%0A%20%20%20%20%20%20%20%20prefs_background%3A%20'blue'%0A%20%20%20%20%20%20%7D)%3B%0A%20%20%20%20%20%20idBoard%20%3D%20newBoard.id%3B%0A%20%20%20%20%20%20boardUrl%20%3D%20newBoard.url%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20const%20LIST_DEFS%20%3D%20%5B%0A%20%20%20%20%20%20%7B%20key%3A%20'info'%2C%20name%3A%20'%F0%9F%93%8C%201.%20Th%C3%B4ng%20tin%20D%E1%BB%B1%20%C3%A1n%20%26%20Quy%20%C6%B0%E1%BB%9Bc'%20%7D%2C%0A%20%20%20%20%20%20%7B%20key%3A%20'backlog'%2C%20name%3A%20'%F0%9F%93%8B%202.%20Backlog%20(Danh%20s%C3%A1ch%20vi%E1%BB%87c)'%20%7D%2C%0A%20%20%20%20%20%20%7B%20key%3A%20'w12'%2C%20name%3A%20'%F0%9F%8E%A8%203.%20Tu%E1%BA%A7n%201%E2%80%932%3A%20Thi%E1%BA%BFt%20k%E1%BA%BF%20%26%20Khung%20UI%2FData'%20%7D%2C%0A%20%20%20%20%20%20%7B%20key%3A%20'w3'%2C%20name%3A%20'%E2%9A%A1%204.%20Tu%E1%BA%A7n%203%3A%20L%E1%BA%ADp%20tr%C3%ACnh%20DOM%2C%20CRUD%20%26%20AI'%20%7D%2C%0A%20%20%20%20%20%20%7B%20key%3A%20'review'%2C%20name%3A%20'%F0%9F%94%8D%205.%20Ki%E1%BB%83m%20th%E1%BB%AD%20%26%20Quay%20OBS%20(In%20Review)'%20%7D%2C%0A%20%20%20%20%20%20%7B%20key%3A%20'done'%2C%20name%3A%20'%E2%9C%85%206.%20%C4%90%C3%A3%20ho%C3%A0n%20th%C3%A0nh%20(Done)'%20%7D%0A%20%20%20%20%5D%3B%0A%0A%20%20%20%20const%20listIds%20%3D%20%7B%7D%3B%0A%20%20%20%20for%20(let%20i%20%3D%200%3B%20i%20%3C%20LIST_DEFS.length%3B%20i%2B%2B)%20%7B%0A%20%20%20%20%20%20const%20item%20%3D%20LIST_DEFS%5Bi%5D%3B%0A%20%20%20%20%20%20setStatus(%60%F0%9F%93%82%20%C4%90ang%20t%E1%BA%A1o%20c%E1%BB%99t%20%5B%24%7Bi%20%2B%201%7D%2F6%5D%3A%20%24%7Bitem.name%7D...%60)%3B%0A%20%20%20%20%20%20const%20createdList%20%3D%20await%20trelloReq('POST'%2C%20'%2F1%2Flists'%2C%20%7B%0A%20%20%20%20%20%20%20%20name%3A%20item.name%2C%0A%20%20%20%20%20%20%20%20idBoard%2C%0A%20%20%20%20%20%20%20%20pos%3A%20(i%20%2B%201)%20*%2016384%0A%20%20%20%20%20%20%7D)%3B%0A%20%20%20%20%20%20listIds%5Bitem.key%5D%20%3D%20createdList.id%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20const%20LABEL_DEFS%20%3D%20%5B%0A%20%20%20%20%20%20%7B%20key%3A%20'SV1'%2C%20name%3A%20'SV1%20-%20UI%2FUX%20%26%20New%20Hire%20(Huy)'%2C%20color%3A%20'blue'%20%7D%2C%0A%20%20%20%20%20%20%7B%20key%3A%20'SV2'%2C%20name%3A%20'SV2%20-%20Core%20Data%20%26%20Mentor%20(Ho%C3%A0ng)'%2C%20color%3A%20'green'%20%7D%2C%0A%20%20%20%20%20%20%7B%20key%3A%20'SV3'%2C%20name%3A%20'SV3%20-%20DevOps%2C%20HR%20%26%20Admin%20(Tr%C6%B0%E1%BB%9Fng%20nh%C3%B3m)'%2C%20color%3A%20'purple'%20%7D%2C%0A%20%20%20%20%20%20%7B%20key%3A%20'CORE'%2C%20name%3A%20'Core%20Data%20%26%20Architecture'%2C%20color%3A%20'orange'%20%7D%2C%0A%20%20%20%20%20%20%7B%20key%3A%20'AI'%2C%20name%3A%20'AI%20Feature%20(B%E1%BA%AFt%20bu%E1%BB%99c)'%2C%20color%3A%20'red'%20%7D%2C%0A%20%20%20%20%20%20%7B%20key%3A%20'UI'%2C%20name%3A%20'UI%2FUX%20%26%20Responsive'%2C%20color%3A%20'yellow'%20%7D%2C%0A%20%20%20%20%20%20%7B%20key%3A%20'TEST'%2C%20name%3A%20'Testing%2C%20Git%20%26%20B%C3%A1o%20c%C3%A1o'%2C%20color%3A%20'sky'%20%7D%0A%20%20%20%20%5D%3B%0A%0A%20%20%20%20setStatus('%F0%9F%8F%B7%EF%B8%8F%20%C4%90ang%20t%E1%BA%A1o%207%20nh%C3%A3n%20m%C3%A0u%20ph%C3%A2n%20c%C3%B4ng%20th%C3%A0nh%20vi%C3%AAn%20%26%20h%E1%BA%A1ng%20m%E1%BB%A5c...')%3B%0A%20%20%20%20const%20labelIds%20%3D%20%7B%7D%3B%0A%20%20%20%20for%20(const%20lbl%20of%20LABEL_DEFS)%20%7B%0A%20%20%20%20%20%20const%20createdLbl%20%3D%20await%20trelloReq('POST'%2C%20'%2F1%2Flabels'%2C%20%7B%0A%20%20%20%20%20%20%20%20name%3A%20lbl.name%2C%0A%20%20%20%20%20%20%20%20color%3A%20lbl.color%2C%0A%20%20%20%20%20%20%20%20idBoard%0A%20%20%20%20%20%20%7D)%3B%0A%20%20%20%20%20%20labelIds%5Blbl.key%5D%20%3D%20createdLbl.id%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20const%20CARDS%20%3D%20%5B%0A%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20list%3A%20'info'%2C%0A%20%20%20%20%20%20%20%20name%3A%20'%5BINFO-01%5D%20T%C3%A0i%20nguy%C3%AAn%20D%E1%BB%B1%20%C3%A1n%2C%20Nh%C3%A1nh%20Git%20%26%20Quy%20%C6%B0%E1%BB%9Bc%20Ph%E1%BB%91i%20h%E1%BB%A3p%20Nh%C3%B3m%2010'%2C%0A%20%20%20%20%20%20%20%20labels%3A%20%5B'TEST'%2C%20'SV3'%5D%2C%0A%20%20%20%20%20%20%20%20desc%3A%20'Repository%20GitHub%3A%20https%3A%2F%2Fgithub.com%2Fxalambay07-svg%2Fcse122-onboardai-nhom10.git%5CnNh%C3%A1nh%20ch%C3%ADnh%3A%20main%20(Production)%2C%20dev%20(Integration)%5CnQuy%20t%E1%BA%AFc%3A%20M%E1%BB%8Di%20thao%20t%C3%A1c%20%C4%91%E1%BB%8Dc%2Fghi%20d%E1%BB%AF%20li%E1%BB%87u%20%C4%91%E1%BB%81u%20th%C3%B4ng%20qua%20window.OnboardAPI%20(js%2Fapi.js)%20%C4%91%E1%BB%93ng%20b%E1%BB%99%20LocalStorage%20(onboardai_db_v1).'%2C%0A%20%20%20%20%20%20%20%20checklist%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20'Th%E1%BB%91ng%20nh%E1%BA%A5t%20quy%20t%E1%BA%AFc%20nh%C3%A1nh%20Git%20%26%20Conventional%20Commits%20(feat%3A%2C%20fix%3A%2C%20style%3A%2C%20docs%3A)'%2C%0A%20%20%20%20%20%20%20%20%20%20'C%E1%BA%A5u%20h%C3%ACnh%20kho%20d%E1%BB%AF%20li%E1%BB%87u%20chung%20window.OnboardAPI%20(js%2Fapi.js)'%2C%0A%20%20%20%20%20%20%20%20%20%20'L%C6%B0u%20tr%E1%BB%AF%20t%C3%A0i%20li%E1%BB%87u%20tra%20c%E1%BB%A9u%20t%C3%A0i%20kho%E1%BA%A3n%204%20vai%20tr%C3%B2%20t%E1%BA%A1i%20docs%2FTAI_KHOAN_DANG_NHAP.md'%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20list%3A%20'done'%2C%0A%20%20%20%20%20%20%20%20name%3A%20'%5BT01%20-%20Tu%E1%BA%A7n%201%5D%20Ph%C3%A2n%20t%C3%ADch%20nghi%E1%BB%87p%20v%E1%BB%A5%20BTL-20%20%26%20%C4%90%E1%BA%B7c%20t%E1%BA%A3%204%20ph%C3%A2n%20h%E1%BB%87%20ng%C6%B0%E1%BB%9Di%20d%C3%B9ng'%2C%0A%20%20%20%20%20%20%20%20labels%3A%20%5B'SV3'%2C%20'TEST'%5D%2C%0A%20%20%20%20%20%20%20%20desc%3A%20'Ph%E1%BB%A5%20tr%C3%A1ch%3A%20SV3%20(Tr%C6%B0%E1%BB%9Fng%20nh%C3%B3m)%20%7C%20Nh%C3%A1nh%3A%20main%5CnPh%C3%A2n%20t%C3%ADch%20b%C3%A0i%20to%C3%A1n%20H%E1%BB%99i%20nh%E1%BA%ADp%20nh%C3%A2n%20s%E1%BB%B1%20(Onboarding)%20t%E1%BA%A1i%20doanh%20nghi%E1%BB%87p%2C%20x%C3%A1c%20%C4%91%E1%BB%8Bnh%20r%C3%B5%204%20nh%C3%B3m%20t%C3%A1c%20nh%C3%A2n%20(New%20Hire%2C%20Mentor%2C%20HR%20Specialist%2C%20System%20Admin)%20v%C3%A0%203%20t%C3%ADnh%20n%C4%83ng%20AI%20c%E1%BB%91t%20l%C3%B5i.'%2C%0A%20%20%20%20%20%20%20%20checklist%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20'X%C3%A1c%20%C4%91%E1%BB%8Bnh%204%20vai%20tr%C3%B2%20ng%C6%B0%E1%BB%9Di%20d%C3%B9ng%20v%C3%A0%20ma%20tr%E1%BA%ADn%20ph%C3%A2n%20quy%E1%BB%81n%20RBAC'%2C%0A%20%20%20%20%20%20%20%20%20%20'%C4%90%E1%BA%B7c%20t%E1%BA%A3%203%20t%C3%ADnh%20n%C4%83ng%20AI%3A%20AI-1%20(Policy%20Q%26A)%2C%20AI-2%20(Checklist%2FMentor%20Matching)%2C%20AI-3%20(HR%20Risk%20Radar)'%2C%0A%20%20%20%20%20%20%20%20%20%20'Ho%C3%A0n%20thi%E1%BB%87n%20t%C3%A0i%20li%E1%BB%87u%20docs%2FTONG_QUAN_VA_QUY_TRINH_PHOI_HOP.md'%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20list%3A%20'done'%2C%0A%20%20%20%20%20%20%20%20name%3A%20'%5BT02%20-%20Tu%E1%BA%A7n%201%5D%20L%E1%BA%ADp%20Danh%20m%E1%BB%A5c%20m%C3%A0n%20h%C3%ACnh%20(Screen%20Inventory)%20%26%20S%C6%A1%20%C4%91%E1%BB%93%20lu%E1%BB%93ng%20(User%20Flows)'%2C%0A%20%20%20%20%20%20%20%20labels%3A%20%5B'SV2'%2C%20'SV3'%5D%2C%0A%20%20%20%20%20%20%20%20desc%3A%20'Ph%E1%BB%A5%20tr%C3%A1ch%3A%20SV2%20(Ho%C3%A0ng)%20%26%20SV3%20%7C%20File%20b%C3%A0n%20giao%3A%20README.md%5CnLi%E1%BB%87t%20k%C3%AA%20%C4%91%E1%BA%A7y%20%C4%91%E1%BB%A7%209%20m%C3%A0n%20h%C3%ACnh%20ch%E1%BB%A9c%20n%C4%83ng%20c%E1%BB%A7a%20d%E1%BB%B1%20%C3%A1n%20OnboardAI%20v%C3%A0%20thi%E1%BA%BFt%20k%E1%BA%BF%20s%C6%A1%20%C4%91%E1%BB%93%20lu%E1%BB%93ng%20nghi%E1%BB%87p%20v%E1%BB%A5%20kh%C3%A9p%20k%C3%ADn.'%2C%0A%20%20%20%20%20%20%20%20checklist%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20'Thi%E1%BA%BFt%20l%E1%BA%ADp%20b%E1%BA%A3ng%20Screen%20Inventory%20cho%204%20ph%C3%A2n%20h%E1%BB%87'%2C%0A%20%20%20%20%20%20%20%20%20%20'V%E1%BA%BD%20s%C6%A1%20%C4%91%E1%BB%93%20lu%E1%BB%93ng%20x%C3%A1c%20th%E1%BB%B1c%20%C4%91%C4%83ng%20nh%E1%BA%ADp%20%26%20%C4%91i%E1%BB%81u%20h%C6%B0%E1%BB%9Bng%20theo%20vai%20tr%C3%B2'%2C%0A%20%20%20%20%20%20%20%20%20%20'V%E1%BA%BD%20s%C6%A1%20%C4%91%E1%BB%93%20lu%E1%BB%93ng%20n%E1%BB%99p%20minh%20ch%E1%BB%A9ng%20%E2%80%93%20duy%E1%BB%87t%20nhi%E1%BB%87m%20v%E1%BB%A5%20%E2%80%93%20c%E1%BA%A3nh%20b%C3%A1o%20r%E1%BB%A7i%20ro%20HR'%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20list%3A%20'done'%2C%0A%20%20%20%20%20%20%20%20name%3A%20'%5BT03%20-%20Tu%E1%BA%A7n%201%5D%20Thi%E1%BA%BFt%20k%E1%BA%BF%20UI%2FUX%20Design%20System%20%26%20Wireframe%20tr%C3%AAn%20Figma'%2C%0A%20%20%20%20%20%20%20%20labels%3A%20%5B'SV1'%2C%20'UI'%5D%2C%0A%20%20%20%20%20%20%20%20desc%3A%20'Ph%E1%BB%A5%20tr%C3%A1ch%3A%20SV1%20(Huy)%20%7C%20Nh%C3%A1nh%3A%20feat%2Fsv1-ui-newhire%5CnThi%E1%BA%BFt%20k%E1%BA%BF%20b%E1%BA%A3ng%20m%C3%A0u%20th%C6%B0%C6%A1ng%20hi%E1%BB%87u%20(Primary%20Indigo%20%234F46E5%2C%20Emerald%20%2310B981%2C%20Amber%20%23F59E0B%2C%20Rose%20%23F43F5E)%2C%20Typography%20Plus%20Jakarta%20Sans%20%26%20Inter%2C%20v%C3%A0%20b%E1%BB%91%20c%E1%BB%A5c%20Bento%20Grid.'%2C%0A%20%20%20%20%20%20%20%20checklist%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20'X%C3%A2y%20d%E1%BB%B1ng%20Color%20Tokens%20%26%20Typography%20Scale'%2C%0A%20%20%20%20%20%20%20%20%20%20'Thi%E1%BA%BFt%20k%E1%BA%BF%20UI%20Components%3A%20Sidebar%2C%20KPI%20Cards%2C%20Badges%2C%20Modals'%2C%0A%20%20%20%20%20%20%20%20%20%20'Thi%E1%BA%BFt%20k%E1%BA%BF%20Wireframe%20cho%209%20m%C3%A0n%20h%C3%ACnh%20ch%C3%ADnh'%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20list%3A%20'done'%2C%0A%20%20%20%20%20%20%20%20name%3A%20'%5BT04%20-%20Tu%E1%BA%A7n%201%5D%20Thi%E1%BA%BFt%20k%E1%BA%BF%20L%C6%B0%E1%BB%A3c%20%C4%91%E1%BB%93%20D%E1%BB%AF%20li%E1%BB%87u%20JSON%20(Schema)%20%26%20Ki%E1%BA%BFn%20tr%C3%BAc%20LocalStorage'%2C%0A%20%20%20%20%20%20%20%20labels%3A%20%5B'SV2'%2C%20'CORE'%5D%2C%0A%20%20%20%20%20%20%20%20desc%3A%20'Ph%E1%BB%A5%20tr%C3%A1ch%3A%20SV2%20(Ho%C3%A0ng)%20%7C%20File%3A%20assets%2Fdata%2Fmock-data.json%5CnThi%E1%BA%BFt%20k%E1%BA%BF%20c%E1%BA%A5u%20tr%C3%BAc%20JSON%20chu%E1%BA%A9n%20cho%206%20nh%C3%A2n%20s%E1%BB%B1%20m%E1%BB%9Bi%20(NH01..NH06)%2C%208%20ng%C6%B0%E1%BB%9Di%20%C4%91%E1%BB%93ng%20h%C3%A0nh%20(MT01..MT08)%2C%20danh%20s%C3%A1ch%20c%C3%B4ng%20vi%E1%BB%87c%2C%20kho%20FAQ%20ch%C3%ADnh%20s%C3%A1ch%20v%C3%A0%20nh%E1%BA%ADt%20k%C3%BD%20ki%E1%BB%83m%20to%C3%A1n.'%2C%0A%20%20%20%20%20%20%20%20checklist%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20'%C4%90%E1%BB%8Bnh%20ngh%C4%A9a%20schema%20cho%20users%2C%20mentors%2C%20newHires%2C%20tasks%2C%20templates%2C%20faqs%2C%20activityLogs'%2C%0A%20%20%20%20%20%20%20%20%20%20'Thi%E1%BA%BFt%20k%E1%BA%BF%20kh%C3%B3a%20l%C6%B0u%20tr%E1%BB%AF%20onboardai_db_v1%20trong%20LocalStorage'%2C%0A%20%20%20%20%20%20%20%20%20%20'Th%E1%BB%91ng%20nh%E1%BA%A5t%20ch%E1%BB%AF%20k%C3%BD%20h%C3%A0m%20(method%20signatures)%20cho%20window.OnboardAPI'%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20list%3A%20'done'%2C%0A%20%20%20%20%20%20%20%20name%3A%20'%5BT05%20-%20Tu%E1%BA%A7n%201%5D%20Kh%E1%BB%9Fi%20t%E1%BA%A1o%20GitHub%20Repository%2C%20C%E1%BA%A5u%20tr%C3%BAc%20Th%C6%B0%20m%E1%BB%A5c%20%26%20B%E1%BA%A3ng%20Trello%20Kanban'%2C%0A%20%20%20%20%20%20%20%20labels%3A%20%5B'SV3'%2C%20'TEST'%5D%2C%0A%20%20%20%20%20%20%20%20desc%3A%20'Ph%E1%BB%A5%20tr%C3%A1ch%3A%20SV3%20(Tr%C6%B0%E1%BB%9Fng%20nh%C3%B3m)%20%7C%20Nh%C3%A1nh%3A%20main%20%2F%20dev%5CnKh%E1%BB%9Fi%20t%E1%BA%A1o%20kho%20m%C3%A3%20ngu%E1%BB%93n%20GitHub%20c%E1%BB%A7a%20Nh%C3%B3m%2010%2C%20t%E1%BA%A1o%20c%C3%A2y%20th%C6%B0%20m%E1%BB%A5c%20chu%E1%BA%A9n%20v%C3%A0%20thi%E1%BA%BFt%20l%E1%BA%ADp%20b%E1%BA%A3ng%20Trello%20Kanban%206%20c%E1%BB%99t.'%2C%0A%20%20%20%20%20%20%20%20checklist%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20'Kh%E1%BB%9Fi%20t%E1%BA%A1o%20th%C6%B0%20m%E1%BB%A5c%20css%2F%2C%20js%2F%2C%20assets%2Fdata%2F%2C%20assets%2Fimages%2F%2C%20docs%2F'%2C%0A%20%20%20%20%20%20%20%20%20%20'T%E1%BA%A1o%20nh%C3%A1nh%20main%2C%20dev%20v%C3%A0%20c%C3%A1c%20nh%C3%A1nh%20th%C3%A0nh%20vi%C3%AAn'%2C%0A%20%20%20%20%20%20%20%20%20%20'Thi%E1%BA%BFt%20l%E1%BA%ADp%20b%E1%BA%A3ng%20Trello%206%20c%E1%BB%99t%20v%C3%A0%20g%E1%BA%AFn%20nh%C3%A3n%20cho%2024%20th%E1%BA%BB%20c%C3%B4ng%20vi%E1%BB%87c'%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20list%3A%20'done'%2C%0A%20%20%20%20%20%20%20%20name%3A%20'%5BT06%20-%20Tu%E1%BA%A7n%202%5D%20X%C3%A2y%20d%E1%BB%B1ng%20Global%20CSS%20Design%20System%20(css%2Fstyle.css)'%2C%0A%20%20%20%20%20%20%20%20labels%3A%20%5B'SV1'%2C%20'CORE'%2C%20'UI'%5D%2C%0A%20%20%20%20%20%20%20%20desc%3A%20'Ph%E1%BB%A5%20tr%C3%A1ch%3A%20SV1%20(Huy)%20%7C%20File%3A%20css%2Fstyle.css%5CnL%E1%BA%ADp%20tr%C3%ACnh%20b%E1%BB%99%20khung%20CSS%20d%C3%B9ng%20chung%20cho%20to%C3%A0n%20d%E1%BB%B1%20%C3%A1n%3A%20bi%E1%BA%BFn%20m%C3%A0u%20s%E1%BA%AFc%2C%20b%E1%BB%91%20c%E1%BB%A5c%20Sidebar%20%2B%20Main%20Content%2C%20Bento%20Grid%2C%20Table%2C%20Modal%2C%20Drawer%20v%C3%A0%20Responsive%20Breakpoints.'%2C%0A%20%20%20%20%20%20%20%20checklist%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20'Khai%20b%C3%A1o%20h%E1%BB%87%20th%E1%BB%91ng%20bi%E1%BA%BFn%20CSS%20(%3Aroot)%20%C4%91%E1%BB%93ng%20b%E1%BB%99%20to%C3%A0n%20b%E1%BB%99%209%20m%C3%A0n%20h%C3%ACnh'%2C%0A%20%20%20%20%20%20%20%20%20%20'X%C3%A2y%20d%E1%BB%B1ng%20layout%20Sidebar%20c%E1%BB%91%20%C4%91%E1%BB%8Bnh%20v%C3%A0%20Topbar%20linh%20ho%E1%BA%A1t'%2C%0A%20%20%20%20%20%20%20%20%20%20'T%E1%BA%A1o%20class%20ti%E1%BB%87n%20%C3%ADch%20cho%20Button%2C%20Badge%2C%20Progress%20Bar%20v%C3%A0%20Toast%20Notification'%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20list%3A%20'done'%2C%0A%20%20%20%20%20%20%20%20name%3A%20'%5BT07%20-%20Tu%E1%BA%A7n%202%5D%20X%C3%A2y%20d%E1%BB%B1ng%20C%C6%A1%20s%E1%BB%9F%20d%E1%BB%AF%20li%E1%BB%87u%20m%E1%BA%ABu%20(mock-data.json)%20%26%20Data%20Engine%20(js%2Fapi.js)'%2C%0A%20%20%20%20%20%20%20%20labels%3A%20%5B'SV2'%2C%20'CORE'%5D%2C%0A%20%20%20%20%20%20%20%20desc%3A%20'Ph%E1%BB%A5%20tr%C3%A1ch%3A%20SV2%20(Ho%C3%A0ng)%20%7C%20File%3A%20assets%2Fdata%2Fmock-data.json%2C%20js%2Fapi.js%5CnHo%C3%A0n%20thi%E1%BB%87n%20d%E1%BB%AF%20li%E1%BB%87u%20m%E1%BA%ABu%20ti%E1%BA%BFng%20Vi%E1%BB%87t%20ch%C3%A2n%20th%E1%BB%B1c%20v%C3%A0%20l%E1%BA%ADp%20tr%C3%ACnh%20th%C6%B0%20vi%E1%BB%87n%20window.OnboardAPI%20h%E1%BB%97%20tr%E1%BB%A3%20%C4%91%E1%BB%8Dc%2Fghi%20LocalStorage.'%2C%0A%20%20%20%20%20%20%20%20checklist%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20'Nh%E1%BA%ADp%20d%E1%BB%AF%20li%E1%BB%87u%20%C4%91%E1%BA%A7y%20%C4%91%E1%BB%A7%20cho%206%20New%20Hires%20(NH01..NH06)%20v%C3%A0%208%20Mentors%20(MT01..MT08)'%2C%0A%20%20%20%20%20%20%20%20%20%20'L%E1%BA%ADp%20tr%C3%ACnh%20c%C3%A1c%20h%C3%A0m%20getNewHires()%2C%20updateTaskStatus()%2C%20submitTaskProof()%2C%20submitMentorReview()'%2C%0A%20%20%20%20%20%20%20%20%20%20'T%C3%ADch%20h%E1%BB%A3p%20s%E1%BB%B1%20ki%E1%BB%87n%20storage%20%C4%91%E1%BB%83%20%C4%91%E1%BB%93ng%20b%E1%BB%99%20d%E1%BB%AF%20li%E1%BB%87u%20t%E1%BB%A9c%20th%C3%AC%20gi%E1%BB%AFa%20c%C3%A1c%20tab%20tr%C3%ACnh%20duy%E1%BB%87t'%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20list%3A%20'done'%2C%0A%20%20%20%20%20%20%20%20name%3A%20'%5BT08%20-%20Tu%E1%BA%A7n%202%5D%20D%E1%BB%B1ng%20giao%20di%E1%BB%87n%20Trang%20ch%E1%BB%A7%20Landing%20Page%20(index.html)%20%26%20%C4%90%C4%83ng%20nh%E1%BA%ADp%20(login.html)'%2C%0A%20%20%20%20%20%20%20%20labels%3A%20%5B'SV1'%2C%20'UI'%5D%2C%0A%20%20%20%20%20%20%20%20desc%3A%20'Ph%E1%BB%A5%20tr%C3%A1ch%3A%20SV1%20(Huy)%20%7C%20File%3A%20index.html%2C%20login.html%5CnThi%E1%BA%BFt%20k%E1%BA%BF%20trang%20gi%E1%BB%9Bi%20thi%E1%BB%87u%20gi%E1%BA%A3i%20ph%C3%A1p%20OnboardAI%20v%C3%A0%20c%E1%BB%95ng%20%C4%91%C4%83ng%20nh%E1%BA%ADp%20x%C3%A1c%20th%E1%BB%B1c%20%C4%91i%E1%BB%81u%20h%C6%B0%E1%BB%9Bng%20%C4%91%C3%BAng%20ph%C3%A2n%20h%E1%BB%87%20theo%20vai%20tr%C3%B2.'%2C%0A%20%20%20%20%20%20%20%20checklist%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20'X%C3%A2y%20d%E1%BB%B1ng%20Hero%20Banner%20v%C3%A0%20khu%20v%E1%BB%B1c%20gi%E1%BB%9Bi%20thi%E1%BB%87u%203%20m%C3%B4-%C4%91un%20AI%20tr%C3%AAn%20index.html'%2C%0A%20%20%20%20%20%20%20%20%20%20'Thi%E1%BA%BFt%20k%E1%BA%BF%20form%20%C4%91%C4%83ng%20nh%E1%BA%ADp%20tinh%20g%E1%BB%8Dn%2C%20chuy%C3%AAn%20nghi%E1%BB%87p%20tr%C3%AAn%20login.html'%2C%0A%20%20%20%20%20%20%20%20%20%20'Ki%E1%BB%83m%20tra%20%C4%91i%E1%BB%81u%20h%C6%B0%E1%BB%9Bng%20t%E1%BB%B1%20%C4%91%E1%BB%99ng%20sau%20khi%20%C4%91%C4%83ng%20nh%E1%BA%ADp%20th%C3%A0nh%20c%C3%B4ng'%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20list%3A%20'done'%2C%0A%20%20%20%20%20%20%20%20name%3A%20'%5BT09%20-%20Tu%E1%BA%A7n%202%5D%20D%E1%BB%B1ng%20khung%20giao%20di%E1%BB%87n%20Dashboard%20Nh%C3%A2n%20vi%C3%AAn%20m%E1%BB%9Bi%20%26%20Checklist%20(NH-01%2C%20NH-02)'%2C%0A%20%20%20%20%20%20%20%20labels%3A%20%5B'SV1'%2C%20'UI'%5D%2C%0A%20%20%20%20%20%20%20%20desc%3A%20'Ph%E1%BB%A5%20tr%C3%A1ch%3A%20SV1%20(Huy)%20%7C%20File%3A%20newhire-onboarding-dashboard.html%2C%20newhire-checklist.html%5CnD%E1%BB%B1ng%20giao%20di%E1%BB%87n%20t%E1%BB%95ng%20quan%20l%E1%BB%99%20tr%C3%ACnh%20h%E1%BB%99i%20nh%E1%BA%ADp%20c%E1%BB%A7a%20nh%C3%A2n%20vi%C3%AAn%20m%E1%BB%9Bi%2C%204%20th%E1%BA%BB%20ch%E1%BB%89%20s%E1%BB%91%20KPI%2C%20khu%20v%E1%BB%B1c%20Ng%C6%B0%E1%BB%9Di%20%C4%91%E1%BB%93ng%20h%C3%A0nh%20v%C3%A0%20danh%20s%C3%A1ch%20Checklist.'%2C%0A%20%20%20%20%20%20%20%20checklist%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20'D%E1%BB%B1ng%20Hero%20ti%E1%BA%BFn%20%C4%91%E1%BB%99%2C%204%20KPI%20Cards%20v%C3%A0%20Timeline%203%20giai%20%C4%91o%E1%BA%A1n%20tr%C3%AAn%20Dashboard'%2C%0A%20%20%20%20%20%20%20%20%20%20'D%E1%BB%B1ng%20giao%20di%E1%BB%87n%20danh%20s%C3%A1ch%20nhi%E1%BB%87m%20v%E1%BB%A5%2C%20b%E1%BB%99%20l%E1%BB%8Dc%20giai%20%C4%91o%E1%BA%A1n%20v%C3%A0%20%C3%B4%20t%C3%ACm%20ki%E1%BA%BFm%20tr%C3%AAn%20trang%20Checklist'%2C%0A%20%20%20%20%20%20%20%20%20%20'D%E1%BB%B1ng%20Modal%20n%E1%BB%99p%20minh%20ch%E1%BB%A9ng%20ho%C3%A0n%20th%C3%A0nh%20c%C3%B4ng%20vi%E1%BB%87c'%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20list%3A%20'done'%2C%0A%20%20%20%20%20%20%20%20name%3A%20'%5BT10%20-%20Tu%E1%BA%A7n%202%5D%20D%E1%BB%B1ng%20khung%20giao%20di%E1%BB%87n%20Ph%C3%A2n%20h%E1%BB%87%20Ng%C6%B0%E1%BB%9Di%20h%C6%B0%E1%BB%9Bng%20d%E1%BA%ABn%20(mentor-mentee-list.html)%20%26%20H%E1%BB%93%20s%C6%A1%20(profile.html)'%2C%0A%20%20%20%20%20%20%20%20labels%3A%20%5B'SV2'%2C%20'UI'%5D%2C%0A%20%20%20%20%20%20%20%20desc%3A%20'Ph%E1%BB%A5%20tr%C3%A1ch%3A%20SV2%20(Ho%C3%A0ng)%20%7C%20File%3A%20mentor-mentee-list.html%2C%20profile.html%5CnX%C3%A2y%20d%E1%BB%B1ng%20giao%20di%E1%BB%87n%20qu%E1%BA%A3n%20l%C3%BD%20danh%20s%C3%A1ch%20nh%C3%A2n%20vi%C3%AAn%20m%E1%BB%9Bi%20d%C3%A0nh%20cho%20Mentor%20v%C3%A0%20trang%20qu%E1%BA%A3n%20l%C3%BD%20h%E1%BB%93%20s%C6%A1%20c%C3%A1%20nh%C3%A2n.'%2C%0A%20%20%20%20%20%20%20%20checklist%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20'D%E1%BB%B1ng%204%20KPI%20t%E1%BB%95ng%20quan%20Mentor%20v%C3%A0%20l%C6%B0%E1%BB%9Bi%20th%E1%BA%BB%20Mentee%20%C4%91ang%20h%C6%B0%E1%BB%9Bng%20d%E1%BA%ABn'%2C%0A%20%20%20%20%20%20%20%20%20%20'D%E1%BB%B1ng%20Modal%20ch%E1%BA%A5m%20%C4%91i%E1%BB%83m%20%C4%91%E1%BB%8Bnh%20k%E1%BB%B3%20v%C3%A0%20xem%20chi%20ti%E1%BA%BFt%20ti%E1%BA%BFn%20%C4%91%E1%BB%99%20Mentee'%2C%0A%20%20%20%20%20%20%20%20%20%20'D%E1%BB%B1ng%20trang%20profile.html%20hi%E1%BB%83n%20th%E1%BB%8B%20th%C3%B4ng%20tin%20c%C3%A1%20nh%C3%A2n'%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20list%3A%20'done'%2C%0A%20%20%20%20%20%20%20%20name%3A%20'%5BT11%20-%20Tu%E1%BA%A7n%202%5D%20D%E1%BB%B1ng%20khung%20giao%20di%E1%BB%87n%20HR%20Dashboard%20(hr-dashboard.html)%20%26%20Admin%20(admin-user-management.html)'%2C%0A%20%20%20%20%20%20%20%20labels%3A%20%5B'SV3'%2C%20'UI'%5D%2C%0A%20%20%20%20%20%20%20%20desc%3A%20'Ph%E1%BB%A5%20tr%C3%A1ch%3A%20SV3%20(Tr%C6%B0%E1%BB%9Fng%20nh%C3%B3m)%20%7C%20File%3A%20hr-dashboard.html%2C%20admin-user-management.html%5CnX%C3%A2y%20d%E1%BB%B1ng%20giao%20di%E1%BB%87n%20Trung%20t%C3%A2m%20%C4%91i%E1%BB%81u%20h%C3%A0nh%20HR%20v%C3%A0%20trang%20Qu%E1%BA%A3n%20tr%E1%BB%8B%20h%E1%BB%87%20th%E1%BB%91ng%20%26%20Ph%C3%A2n%20quy%E1%BB%81n%20ng%C6%B0%E1%BB%9Di%20d%C3%B9ng%20d%C3%A0nh%20cho%20Admin.'%2C%0A%20%20%20%20%20%20%20%20checklist%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20'D%E1%BB%B1ng%204%20KPI%20Cards%2C%20khung%20bi%E1%BB%83u%20%C4%91%E1%BB%93%20Chart.js%20v%C3%A0%20b%E1%BA%A3ng%20theo%20d%C3%B5i%20to%C3%A0n%20c%C3%B4ng%20ty%20tr%C3%AAn%20hr-dashboard.html'%2C%0A%20%20%20%20%20%20%20%20%20%20'D%E1%BB%B1ng%20khu%20v%E1%BB%B1c%20qu%E1%BA%A3n%20l%C3%BD%20k%E1%BB%8Bch%20b%E1%BA%A3n%20Onboarding%20m%E1%BA%ABu%20(Templates)'%2C%0A%20%20%20%20%20%20%20%20%20%20'D%E1%BB%B1ng%20b%E1%BA%A3ng%20danh%20s%C3%A1ch%20t%C3%A0i%20kho%E1%BA%A3n%20v%C3%A0%20Nh%E1%BA%ADt%20k%C3%BD%20ki%E1%BB%83m%20to%C3%A1n%20(Audit%20Logs)%20tr%C3%AAn%20admin-user-management.html'%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20list%3A%20'done'%2C%0A%20%20%20%20%20%20%20%20name%3A%20'%5BT12%20-%20Tu%E1%BA%A7n%202%5D%20Ki%E1%BB%83m%20tra%20Responsive%20%26%20%C4%90%E1%BB%93ng%20b%E1%BB%99%20Navigation%20Sidebar%20tr%C3%AAn%20to%C3%A0n%20b%E1%BB%99%209%20m%C3%A0n%20h%C3%ACnh'%2C%0A%20%20%20%20%20%20%20%20labels%3A%20%5B'UI'%2C%20'TEST'%5D%2C%0A%20%20%20%20%20%20%20%20desc%3A%20'Ph%E1%BB%A5%20tr%C3%A1ch%3A%20C%E1%BA%A3%20nh%C3%B3m%20(SV1%2C%20SV2%2C%20SV3)%20%7C%20Nh%C3%A1nh%3A%20dev%5CnR%C3%A0%20so%C3%A1t%20t%C3%ADnh%20nh%E1%BA%A5t%20qu%C3%A1n%20c%E1%BB%A7a%20thanh%20Sidebar%2C%20Header%2C%20li%C3%AAn%20k%E1%BA%BFt%20chuy%E1%BB%83n%20trang%20v%C3%A0%20kh%E1%BA%A3%20n%C4%83ng%20co%20gi%C3%A3n%20tr%C3%AAn%20c%C3%A1c%20k%C3%ADch%20th%C6%B0%E1%BB%9Bc%20m%C3%A0n%20h%C3%ACnh.'%2C%0A%20%20%20%20%20%20%20%20checklist%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20'%C4%90%E1%BB%93ng%20b%E1%BB%99%20menu%20%C4%91i%E1%BB%81u%20h%C6%B0%E1%BB%9Bng%20gi%E1%BB%AFa%20c%C3%A1c%20m%C3%A0n%20h%C3%ACnh%20trong%20c%C3%B9ng%20ph%C3%A2n%20h%E1%BB%87'%2C%0A%20%20%20%20%20%20%20%20%20%20'Ki%E1%BB%83m%20tra%20hi%E1%BB%83n%20th%E1%BB%8B%20tr%C3%AAn%20m%C3%A0n%20h%C3%ACnh%20Laptop%20(1366px)%2C%20Desktop%20(1920px)%20v%C3%A0%20Mobile%20(375px)'%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20list%3A%20'w3'%2C%0A%20%20%20%20%20%20%20%20name%3A%20'%5BT13%20-%20Tu%E1%BA%A7n%203%5D%20L%E1%BA%ADp%20tr%C3%ACnh%20Lu%E1%BB%93ng%20Checklist%2C%20B%E1%BB%99%20l%E1%BB%8Dc%20Giai%20%C4%91o%E1%BA%A1n%20%26%20N%E1%BB%99p%20Minh%20ch%E1%BB%A9ng%20(newhire-checklist.html)'%2C%0A%20%20%20%20%20%20%20%20labels%3A%20%5B'SV1'%2C%20'CORE'%5D%2C%0A%20%20%20%20%20%20%20%20desc%3A%20'Ph%E1%BB%A5%20tr%C3%A1ch%3A%20SV1%20(Huy)%20%7C%20Nh%C3%A1nh%3A%20huy%2Ffeature%2Fnewhire-checklist%5CnL%E1%BA%ADp%20tr%C3%ACnh%20t%C6%B0%C6%A1ng%20t%C3%A1c%20DOM%20cho%20ph%C3%A9p%20nh%C3%A2n%20vi%C3%AAn%20m%E1%BB%9Bi%20l%E1%BB%8Dc%20c%C3%B4ng%20vi%E1%BB%87c%20theo%20giai%20%C4%91o%E1%BA%A1n%2C%20%C4%91%C3%A1nh%20d%E1%BA%A5u%20ho%C3%A0n%20th%C3%A0nh%2C%20%C4%91%C3%ADnh%20k%C3%A8m%20link%20minh%20ch%E1%BB%A9ng%20v%C3%A0%20t%E1%BB%B1%20%C4%91%E1%BB%99ng%20c%E1%BA%ADp%20nh%E1%BA%ADt%20ph%E1%BA%A7n%20tr%C4%83m%20ti%E1%BA%BFn%20%C4%91%E1%BB%99.'%2C%0A%20%20%20%20%20%20%20%20checklist%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20'L%E1%BA%ADp%20tr%C3%ACnh%20b%E1%BB%99%20l%E1%BB%8Dc%20c%C3%B4ng%20vi%E1%BB%87c%20theo%20Tu%E1%BA%A7n%201%2C%20Th%C3%A1ng%201%2C%20Th%C3%A1ng%202%20v%C3%A0%20tr%E1%BA%A1ng%20th%C3%A1i'%2C%0A%20%20%20%20%20%20%20%20%20%20'L%C6%B0u%20link%20minh%20ch%E1%BB%A9ng%20(proofUrl)%20v%C3%A0%20ghi%20ch%C3%BA%20(proofNote)%20v%C3%A0o%20LocalStorage'%2C%0A%20%20%20%20%20%20%20%20%20%20'T%E1%BB%B1%20%C4%91%E1%BB%99ng%20t%C3%ADnh%20l%E1%BA%A1i%20ti%E1%BA%BFn%20%C4%91%E1%BB%99%20t%E1%BB%95ng%20th%E1%BB%83%20ngay%20khi%20tick%20ho%C3%A0n%20th%C3%A0nh'%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20list%3A%20'w3'%2C%0A%20%20%20%20%20%20%20%20name%3A%20'%5BT14%20-%20Tu%E1%BA%A7n%203%5D%20N%C3%A2ng%20c%E1%BA%A5p%20H%E1%BB%87%20th%E1%BB%91ng%20%C4%90%E1%BB%81%20xu%E1%BA%A5t%208%20Ng%C6%B0%E1%BB%9Di%20%C4%91%E1%BB%93ng%20h%C3%A0nh%20(Mentor)%20%26%20Khung%20Chat%20Tr%E1%BB%B1c%20ti%E1%BA%BFp'%2C%0A%20%20%20%20%20%20%20%20labels%3A%20%5B'SV1'%2C%20'SV2'%2C%20'AI'%5D%2C%0A%20%20%20%20%20%20%20%20desc%3A%20'Ph%E1%BB%A5%20tr%C3%A1ch%3A%20SV1%20(Huy)%20%26%20SV2%20(Ho%C3%A0ng)%20%7C%20File%3A%20newhire-onboarding-dashboard.html%5CnM%E1%BB%97i%20t%C3%A0i%20kho%E1%BA%A3n%20m%E1%BB%9Bi%20ch%C6%B0a%20c%C3%B3%20s%E1%BA%B5n%20Mentor%20c%E1%BB%91%20%C4%91%E1%BB%8Bnh%20m%C3%A0%20%C4%91%C6%B0%E1%BB%A3c%20AI%20g%E1%BB%A3i%20%C3%BD%20danh%20s%C3%A1ch%208%20Ng%C6%B0%E1%BB%9Di%20%C4%91%E1%BB%93ng%20h%C3%A0nh%20(MT01..MT08)%20k%C3%A8m%20%C4%91i%E1%BB%83m%20t%C6%B0%C6%A1ng%20th%C3%ADch%20(Match%20Score%20%25)%2C%20S%C4%90T%2C%20Zalo%2C%20gi%E1%BB%9Bi%20thi%E1%BB%87u%20chi%20ti%E1%BA%BFt%20v%C3%A0%20khung%20Chat%20tr%E1%BB%B1c%20ti%E1%BA%BFp.'%2C%0A%20%20%20%20%20%20%20%20checklist%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20'X%C3%A2y%20d%E1%BB%B1ng%20thu%E1%BA%ADt%20to%C3%A1n%20AI%20t%C3%ADnh%20%C4%91i%E1%BB%83m%20ph%C3%B9%20h%E1%BB%A3p%20gi%E1%BB%AFa%20Nh%C3%A2n%20vi%C3%AAn%20m%E1%BB%9Bi%20v%C3%A0%208%20Mentor'%2C%0A%20%20%20%20%20%20%20%20%20%20'Hi%E1%BB%83n%20th%E1%BB%8B%20%C4%91%E1%BA%A7y%20%C4%91%E1%BB%A7%20S%C4%90T%2C%20Zalo%2C%20chuy%C3%AAn%20m%C3%B4n%2C%20phong%20c%C3%A1ch%20h%E1%BB%97%20tr%E1%BB%A3%20%C4%91%E1%BB%83%20ng%C6%B0%E1%BB%9Di%20d%C3%B9ng%20t%E1%BB%B1%20ch%E1%BB%8Dn%20Mentor'%2C%0A%20%20%20%20%20%20%20%20%20%20'L%E1%BA%ADp%20tr%C3%ACnh%20ng%C4%83n%20k%C3%A9o%20Chat%20tr%E1%BB%B1c%20ti%E1%BA%BFp%20v%E1%BB%9Bi%20Ng%C6%B0%E1%BB%9Di%20%C4%91%E1%BB%93ng%20h%C3%A0nh%20c%C3%B3%20g%E1%BB%A3i%20%C3%BD%20c%C3%A2u%20h%E1%BB%8Fi%20nhanh%20v%C3%A0%20ph%E1%BA%A3n%20h%E1%BB%93i%20t%E1%BB%B1%20%C4%91%E1%BB%99ng'%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20list%3A%20'done'%2C%0A%20%20%20%20%20%20%20%20name%3A%20'%5BT15%20-%20Tu%E1%BA%A7n%203%5D%20L%E1%BA%ADp%20tr%C3%ACnh%20T%C3%ADnh%20n%C4%83ng%20AI-1%3A%20Tr%E1%BB%A3%20l%C3%BD%20H%E1%BB%8Fi%20%C4%91%C3%A1p%20Ch%C3%ADnh%20s%C3%A1ch%20%26%20S%E1%BB%95%20tay%20Nh%C3%A2n%20s%E1%BB%B1%20(newhire-ai-help.html)'%2C%0A%20%20%20%20%20%20%20%20labels%3A%20%5B'SV1'%2C%20'AI'%5D%2C%0A%20%20%20%20%20%20%20%20desc%3A%20'Ph%E1%BB%A5%20tr%C3%A1ch%3A%20SV1%20(Huy)%20%7C%20File%3A%20newhire-ai-help.html%5CnPh%C3%A1t%20tri%E1%BB%83n%20tr%E1%BB%A3%20l%C3%BD%20AI-1%20gi%C3%BAp%20nh%C3%A2n%20vi%C3%AAn%20m%E1%BB%9Bi%20h%E1%BB%8Fi%20%C4%91%C3%A1p%20t%E1%BB%A9c%20th%C3%AC%20v%E1%BB%81%20ch%E1%BA%BF%20%C4%91%E1%BB%99%20ph%C3%BAc%20l%E1%BB%A3i%2C%20b%E1%BA%A3o%20hi%E1%BB%83m%2C%20ngh%E1%BB%89%20ph%C3%A9p%2C%20c%E1%BA%A5p%20ph%C3%A1t%20thi%E1%BA%BFt%20b%E1%BB%8B%20IT%20v%C3%A0%20quy%20tr%C3%ACnh%20%C4%91%C3%A1nh%20gi%C3%A1%20th%E1%BB%AD%20vi%E1%BB%87c.'%2C%0A%20%20%20%20%20%20%20%20checklist%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20'L%E1%BA%ADp%20tr%C3%ACnh%20giao%20di%E1%BB%87n%20h%E1%BB%99i%20tho%E1%BA%A1i%20AI%20c%C3%B3%20tr%C3%ADch%20d%E1%BA%ABn%20ngu%E1%BB%93n%20t%C3%A0i%20li%E1%BB%87u%20n%E1%BB%99i%20b%E1%BB%99'%2C%0A%20%20%20%20%20%20%20%20%20%20'Thi%E1%BA%BFt%20l%E1%BA%ADp%20c%C3%A1c%20n%C3%BAt%20c%C3%A2u%20h%E1%BB%8Fi%20m%E1%BA%ABu%20(Quick%20Prompts)%20theo%20ch%E1%BB%A7%20%C4%91%E1%BB%81'%2C%0A%20%20%20%20%20%20%20%20%20%20'K%E1%BA%BFt%20n%E1%BB%91i%20b%E1%BB%99%20t%C3%ACm%20ki%E1%BA%BFm%20tr%E1%BB%B1c%20ti%E1%BA%BFp%20v%E1%BB%9Bi%20kho%20d%E1%BB%AF%20li%E1%BB%87u%20FAQ%20trong%20mock-data.json'%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20list%3A%20'done'%2C%0A%20%20%20%20%20%20%20%20name%3A%20'%5BT16%20-%20Tu%E1%BA%A7n%203%5D%20L%E1%BA%ADp%20tr%C3%ACnh%20Ph%C3%A2n%20h%E1%BB%87%20Mentor%3A%20Duy%E1%BB%87t%20Minh%20ch%E1%BB%A9ng%2C%20Giao%20th%C3%AAm%20vi%E1%BB%87c%20%26%20%C4%90%C3%A1nh%20gi%C3%A1%20Mentee'%2C%0A%20%20%20%20%20%20%20%20labels%3A%20%5B'SV2'%2C%20'CORE'%5D%2C%0A%20%20%20%20%20%20%20%20desc%3A%20'Ph%E1%BB%A5%20tr%C3%A1ch%3A%20SV2%20(Ho%C3%A0ng)%20%7C%20File%3A%20mentor-mentee-list.html%5CnL%E1%BA%ADp%20tr%C3%ACnh%20%C4%91%E1%BA%A7y%20%C4%91%E1%BB%A7%20nghi%E1%BB%87p%20v%E1%BB%A5%20d%C3%A0nh%20cho%20Ng%C6%B0%E1%BB%9Di%20h%C6%B0%E1%BB%9Bng%20d%E1%BA%ABn%3A%20theo%20d%C3%B5i%20ti%E1%BA%BFn%20%C4%91%E1%BB%99%20t%E1%BB%ABng%20Mentee%2C%20ki%E1%BB%83m%20tra%20link%20minh%20ch%E1%BB%A9ng%2C%20giao%20th%C3%AAm%20%C4%91%E1%BA%A7u%20vi%E1%BB%87c%20m%E1%BB%9Bi%20v%C3%A0%20ch%E1%BA%A5m%20%C4%91i%E1%BB%83m%20%C4%91%E1%BB%8Bnh%20k%E1%BB%B3.'%2C%0A%20%20%20%20%20%20%20%20checklist%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20'L%E1%BA%ADp%20tr%C3%ACnh%20l%E1%BB%8Dc%20danh%20s%C3%A1ch%20Mentee%20theo%20tr%E1%BA%A1ng%20th%C3%A1i%20ti%E1%BA%BFn%20%C4%91%E1%BB%99'%2C%0A%20%20%20%20%20%20%20%20%20%20'L%E1%BA%ADp%20tr%C3%ACnh%20ch%E1%BB%A9c%20n%C4%83ng%20giao%20th%C3%AAm%20nhi%E1%BB%87m%20v%E1%BB%A5%20v%C3%A0%20duy%E1%BB%87t%20tr%E1%BA%A1ng%20th%C3%A1i%20ho%C3%A0n%20th%C3%A0nh'%2C%0A%20%20%20%20%20%20%20%20%20%20'L%E1%BA%ADp%20tr%C3%ACnh%20Modal%20ch%E1%BA%A5m%20%C4%91i%E1%BB%83m%201%E2%80%935%20sao%20v%C3%A0%20l%C6%B0u%20nh%E1%BA%ADn%20x%C3%A9t%20c%E1%BB%A7a%20Mentor'%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20list%3A%20'done'%2C%0A%20%20%20%20%20%20%20%20name%3A%20'%5BT17%20-%20Tu%E1%BA%A7n%203%5D%20L%E1%BA%ADp%20tr%C3%ACnh%20T%C3%ADnh%20n%C4%83ng%20AI-2%3A%20C%C3%A1%20nh%C3%A2n%20h%C3%B3a%20L%E1%BB%99%20tr%C3%ACnh%20Checklist%20theo%20V%E1%BB%8B%20tr%C3%AD%20(Checklist%20Personalizer)'%2C%0A%20%20%20%20%20%20%20%20labels%3A%20%5B'SV2'%2C%20'AI'%5D%2C%0A%20%20%20%20%20%20%20%20desc%3A%20'Ph%E1%BB%A5%20tr%C3%A1ch%3A%20SV2%20(Ho%C3%A0ng)%20%7C%20File%3A%20mentor-mentee-list.html%2C%20js%2Fapi.js%5CnX%C3%A2y%20d%E1%BB%B1ng%20m%C3%B4-%C4%91un%20AI-2%20t%E1%BB%B1%20%C4%91%E1%BB%99ng%20ph%C3%A2n%20t%C3%ADch%20v%E1%BB%8B%20tr%C3%AD%20c%C3%B4ng%20vi%E1%BB%87c%20(Frontend%2C%20Backend%2C%20AI%2FData%2C%20Product%2C%20QC%2C%20Marketing)%20%C4%91%E1%BB%83%20%C4%91%E1%BB%81%20xu%E1%BA%A5t%20c%C3%A1c%20%C4%91%E1%BA%A7u%20vi%E1%BB%87c%20h%E1%BB%99i%20nh%E1%BA%ADp%20chuy%C3%AAn%20s%C3%A2u.'%2C%0A%20%20%20%20%20%20%20%20checklist%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20'X%C3%A2y%20d%E1%BB%B1ng%20kho%20m%E1%BA%ABu%20nhi%E1%BB%87m%20v%E1%BB%A5%20chuy%C3%AAn%20bi%E1%BB%87t%20theo%20t%E1%BB%ABng%20v%E1%BB%8B%20tr%C3%AD%20k%E1%BB%B9%20thu%E1%BA%ADt%20v%C3%A0%20nghi%E1%BB%87p%20v%E1%BB%A5'%2C%0A%20%20%20%20%20%20%20%20%20%20'Cho%20ph%C3%A9p%20Mentor%20ho%E1%BA%B7c%20HR%20k%C3%ADch%20ho%E1%BA%A1t%20AI-2%20b%E1%BB%95%20sung%20nhi%E1%BB%87m%20v%E1%BB%A5%20c%C3%A1%20nh%C3%A2n%20h%C3%B3a%20ch%E1%BB%89%20v%E1%BB%9Bi%201%20click'%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20list%3A%20'done'%2C%0A%20%20%20%20%20%20%20%20name%3A%20'%5BT18%20-%20Tu%E1%BA%A7n%203%5D%20L%E1%BA%ADp%20tr%C3%ACnh%20T%C3%ADnh%20n%C4%83ng%20AI-3%3A%20C%E1%BA%A3nh%20b%C3%A1o%20S%E1%BB%9Bm%20R%E1%BB%A7i%20ro%20H%E1%BB%99i%20nh%E1%BA%ADp%20(HR%20Risk%20Radar)%20%26%20Bi%E1%BB%83u%20%C4%91%E1%BB%93%20Chart.js'%2C%0A%20%20%20%20%20%20%20%20labels%3A%20%5B'SV3'%2C%20'AI'%5D%2C%0A%20%20%20%20%20%20%20%20desc%3A%20'Ph%E1%BB%A5%20tr%C3%A1ch%3A%20SV3%20(Tr%C6%B0%E1%BB%9Fng%20nh%C3%B3m)%20%7C%20File%3A%20hr-dashboard.html%5CnT%C3%ADch%20h%E1%BB%A3p%20Chart.js%20v%C3%A0%20thu%E1%BA%ADt%20to%C3%A1n%20AI-3%20Risk%20Radar%20tr%C3%AAn%20HR%20Dashboard%20%C4%91%E1%BB%83%20t%E1%BB%B1%20%C4%91%E1%BB%99ng%20ph%C3%A1t%20hi%E1%BB%87n%20nh%C3%A2n%20s%E1%BB%B1%20c%C3%B3%20nguy%20c%C6%A1%20ch%E1%BA%ADm%20ti%E1%BA%BFn%20%C4%91%E1%BB%99%20v%C3%A0%20%C4%91%E1%BB%81%20xu%E1%BA%A5t%20h%C3%A0nh%20%C4%91%E1%BB%99ng%20h%E1%BB%97%20tr%E1%BB%A3%20k%E1%BB%8Bp%20th%E1%BB%9Di.'%2C%0A%20%20%20%20%20%20%20%20checklist%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20'V%E1%BA%BD%20bi%E1%BB%83u%20%C4%91%E1%BB%93%20ti%E1%BA%BFn%20%C4%91%E1%BB%99%20theo%20ph%C3%B2ng%20ban%20v%C3%A0%20bi%E1%BB%83u%20%C4%91%E1%BB%93%20t%E1%BB%B7%20l%E1%BB%87%20tr%E1%BA%A1ng%20th%C3%A1i%20b%E1%BA%B1ng%20Chart.js'%2C%0A%20%20%20%20%20%20%20%20%20%20'Hi%E1%BB%83n%20th%E1%BB%8B%20b%E1%BA%A3ng%20c%E1%BA%A3nh%20b%C3%A1o%20s%E1%BB%9Bm%20AI-3%20Risk%20Radar%20k%C3%A8m%20m%E1%BB%A9c%20%C4%91%E1%BB%99%20r%E1%BB%A7i%20ro%20v%C3%A0%20khuy%E1%BA%BFn%20ngh%E1%BB%8B%20can%20thi%E1%BB%87p'%2C%0A%20%20%20%20%20%20%20%20%20%20'L%E1%BA%ADp%20tr%C3%ACnh%20ch%E1%BB%A9c%20n%C4%83ng%20xu%E1%BA%A5t%20b%C3%A1o%20c%C3%A1o%20CSV%20(Export%20CSV)'%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20list%3A%20'done'%2C%0A%20%20%20%20%20%20%20%20name%3A%20'%5BT19%20-%20Tu%E1%BA%A7n%203%5D%20L%E1%BA%ADp%20tr%C3%ACnh%20Ph%C3%A2n%20h%E1%BB%87%20Admin%3A%20Qu%E1%BA%A3n%20l%C3%BD%20Ng%C6%B0%E1%BB%9Di%20d%C3%B9ng%20CRUD%2C%20Kh%C3%B3a%2FM%E1%BB%9F%20kh%C3%B3a%20%26%20Nh%E1%BA%ADt%20k%C3%BD%20Ki%E1%BB%83m%20to%C3%A1n'%2C%0A%20%20%20%20%20%20%20%20labels%3A%20%5B'SV3'%2C%20'CORE'%5D%2C%0A%20%20%20%20%20%20%20%20desc%3A%20'Ph%E1%BB%A5%20tr%C3%A1ch%3A%20SV3%20(Tr%C6%B0%E1%BB%9Fng%20nh%C3%B3m)%20%7C%20File%3A%20admin-user-management.html%5CnHo%C3%A0n%20thi%E1%BB%87n%20b%E1%BA%A3ng%20%C4%91i%E1%BB%81u%20khi%E1%BB%83n%20Qu%E1%BA%A3n%20tr%E1%BB%8B%20vi%C3%AAn%3A%20th%C3%AAm%2Fs%E1%BB%ADa%20t%C3%A0i%20kho%E1%BA%A3n%2C%20%C4%91%E1%BB%95i%20vai%20tr%C3%B2%2C%20kh%C3%B3a%2Fm%E1%BB%9F%20kh%C3%B3a%20ng%C6%B0%E1%BB%9Di%20d%C3%B9ng%2C%20xem%20Audit%20Logs%20v%C3%A0%20kh%C3%B4i%20ph%E1%BB%A5c%20d%E1%BB%AF%20li%E1%BB%87u%20m%E1%BA%ABu.'%2C%0A%20%20%20%20%20%20%20%20checklist%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20'L%E1%BA%ADp%20tr%C3%ACnh%20t%C3%ACm%20ki%E1%BA%BFm%20%26%20l%E1%BB%8Dc%20t%C3%A0i%20kho%E1%BA%A3n%20theo%20Vai%20tr%C3%B2%2C%20Ph%C3%B2ng%20ban%2C%20Tr%E1%BA%A1ng%20th%C3%A1i'%2C%0A%20%20%20%20%20%20%20%20%20%20'L%E1%BA%ADp%20tr%C3%ACnh%20th%C3%AAm%20m%E1%BB%9Bi%2C%20ch%E1%BB%89nh%20s%E1%BB%ADa%20vai%20tr%C3%B2%20v%C3%A0%20kh%C3%B3a%2Fm%E1%BB%9F%20kh%C3%B3a%20t%C3%A0i%20kho%E1%BA%A3n'%2C%0A%20%20%20%20%20%20%20%20%20%20'T%C3%ADch%20h%E1%BB%A3p%20n%C3%BAt%20Kh%C3%B4i%20ph%E1%BB%A5c%20d%E1%BB%AF%20li%E1%BB%87u%20g%E1%BB%91c%20(Reset%20Demo%20Data)%20v%C3%A0%20Xu%E1%BA%A5t%20file%20JSON'%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20list%3A%20'done'%2C%0A%20%20%20%20%20%20%20%20name%3A%20'%5BT20%20-%20Tu%E1%BA%A7n%203%5D%20Thi%E1%BA%BFt%20l%E1%BA%ADp%20H%E1%BB%87%20th%E1%BB%91ng%20T%C3%A0i%20kho%E1%BA%A3n%20%C4%90%C4%83ng%20nh%E1%BA%ADp%20Chu%E1%BA%A9n%20cho%204%20Vai%20tr%C3%B2%20%26%20T%C3%A0i%20li%E1%BB%87u%20Tra%20c%E1%BB%A9u'%2C%0A%20%20%20%20%20%20%20%20labels%3A%20%5B'SV1'%2C%20'SV3'%5D%2C%0A%20%20%20%20%20%20%20%20desc%3A%20'Ph%E1%BB%A5%20tr%C3%A1ch%3A%20SV3%20%26%20SV1%20%7C%20File%3A%20login.html%2C%20docs%2FTAI_KHOAN_DANG_NHAP.md%5CnC%E1%BA%A5u%20h%C3%ACnh%20%C4%91%E1%BA%A7y%20%C4%91%E1%BB%A7%20t%C3%A0i%20kho%E1%BA%A3n%20%C4%91%C4%83ng%20nh%E1%BA%ADp%20cho%20c%E1%BA%A3%204%20vai%20tr%C3%B2%20(New%20Hire%2C%20Mentor%2C%20HR%2C%20Admin)%2C%20%C4%91%E1%BB%93ng%20b%E1%BB%99%20th%C3%B4ng%20tin%20ng%C6%B0%E1%BB%9Di%20d%C3%B9ng%20tr%C3%AAn%20thanh%20Topbar%20v%C3%A0%20l%E1%BA%ADp%20file%20tra%20c%E1%BB%A9u%20nhanh.'%2C%0A%20%20%20%20%20%20%20%20checklist%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20'T%C3%ADch%20h%E1%BB%A3p%20t%C3%A0i%20kho%E1%BA%A3n%20Mentor%2C%20HR%2C%20Admin%20v%C3%A0%206%20New%20Hires%20v%C3%A0o%20login.html'%2C%0A%20%20%20%20%20%20%20%20%20%20'Gi%E1%BB%AF%20giao%20di%E1%BB%87n%20%C4%91%C4%83ng%20nh%E1%BA%ADp%20tinh%20g%E1%BB%8Dn%2C%20chu%E1%BA%A9n%20th%E1%BB%B1c%20t%E1%BA%BF'%2C%0A%20%20%20%20%20%20%20%20%20%20'T%E1%BA%A1o%20file%20docs%2FTAI_KHOAN_DANG_NHAP.md%20t%E1%BB%95ng%20h%E1%BB%A3p%20to%C3%A0n%20b%E1%BB%99%20email%20v%C3%A0%20m%E1%BA%ADt%20kh%E1%BA%A9u'%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20list%3A%20'review'%2C%0A%20%20%20%20%20%20%20%20name%3A%20'%5BT21%20-%20Tu%E1%BA%A7n%204%5D%20Chu%E1%BA%A9n%20h%C3%B3a%20%E1%BA%A2nh%20%C4%91%E1%BA%A1i%20di%E1%BB%87n%20Mentor%20Vi%E1%BB%87t%20Nam%20%26%20T%E1%BB%91i%20%C6%B0u%20Hi%E1%BB%87u%20n%C4%83ng%20Cu%E1%BB%99n%20trang%2060FPS'%2C%0A%20%20%20%20%20%20%20%20labels%3A%20%5B'SV1'%2C%20'UI'%5D%2C%0A%20%20%20%20%20%20%20%20desc%3A%20'Ph%E1%BB%A5%20tr%C3%A1ch%3A%20SV1%20(Huy)%20%7C%20File%3A%20assets%2Fimages%2Fmentors%2Fmt01.jpg..mt08.jpg%2C%20css%2Fstyle.css%5CnC%E1%BA%ADp%20nh%E1%BA%ADt%20b%E1%BB%99%20%E1%BA%A3nh%20ch%C3%A2n%20dung%20ng%C6%B0%E1%BB%9Di%20Vi%E1%BB%87t%20Nam%20chuy%C3%AAn%20nghi%E1%BB%87p%20cho%208%20Ng%C6%B0%E1%BB%9Di%20%C4%91%E1%BB%93ng%20h%C3%A0nh%2C%20lo%E1%BA%A1i%20b%E1%BB%8F%20c%C3%A1c%20icon%20trang%20tr%C3%AD%20d%C6%B0%20th%E1%BB%ABa%20v%C3%A0%20t%E1%BB%91i%20%C6%B0u%20CSS%20gi%C3%BAp%20cu%E1%BB%99n%20trang%20m%C6%B0%E1%BB%A3t%20m%C3%A0.'%2C%0A%20%20%20%20%20%20%20%20checklist%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20'C%E1%BA%ADp%20nh%E1%BA%ADt%20%E1%BA%A3nh%20ch%C3%A2n%20dung%20ng%C6%B0%E1%BB%9Di%20Vi%E1%BB%87t%20cho%208%20Mentor%20(mt01.jpg..mt08.jpg)'%2C%0A%20%20%20%20%20%20%20%20%20%20'Lo%E1%BA%A1i%20b%E1%BB%8F%20c%C3%A1c%20icon%20trang%20tr%C3%AD%20kh%C3%B4ng%20c%E1%BA%A7n%20thi%E1%BA%BFt%20tr%C3%AAn%20giao%20di%E1%BB%87n'%2C%0A%20%20%20%20%20%20%20%20%20%20'T%E1%BB%91i%20%C6%B0u%20hi%E1%BB%87u%20n%C4%83ng%20render%20CSS%20khi%20cu%E1%BB%99n%20trang%20danh%20s%C3%A1ch%20d%C3%A0i'%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20list%3A%20'review'%2C%0A%20%20%20%20%20%20%20%20name%3A%20'%5BT22%20-%20Tu%E1%BA%A7n%204%5D%20N%C3%A2ng%20c%E1%BA%A5p%20Ch%E1%BA%BF%20%C4%91%E1%BB%99%20Th%E1%BB%8B%20s%C3%A1t%20%C4%90a%20ng%C6%B0%E1%BB%9Di%20d%C3%B9ng%20(Multi-User%20View-As)%20cho%20HR%20%26%20Admin'%2C%0A%20%20%20%20%20%20%20%20labels%3A%20%5B'SV3'%2C%20'CORE'%5D%2C%0A%20%20%20%20%20%20%20%20desc%3A%20'Ph%E1%BB%A5%20tr%C3%A1ch%3A%20SV3%20(Tr%C6%B0%E1%BB%9Fng%20nh%C3%B3m)%20%7C%20Nh%C3%A1nh%3A%20fix%2Fsv3-data-sync-hr-admin%5CnN%C3%A2ng%20c%E1%BA%A5p%20Ch%E1%BA%BF%20%C4%91%E1%BB%99%20th%E1%BB%8B%20s%C3%A1t%20(View-As)%20cho%20ph%C3%A9p%20ch%E1%BB%8Dn%20xem%20g%C3%B3c%20nh%C3%ACn%20c%E1%BB%A7a%20b%E1%BA%A5t%20k%E1%BB%B3%20Nh%C3%A2n%20s%E1%BB%B1%20m%E1%BB%9Bi%20n%C3%A0o%20(NH01..NH06)%20ho%E1%BA%B7c%20b%E1%BA%A5t%20k%E1%BB%B3%20Ng%C6%B0%E1%BB%9Di%20h%C6%B0%E1%BB%9Bng%20d%E1%BA%ABn%20n%C3%A0o%20(MT01..MT08)%20ngay%20t%E1%BB%AB%20Sidebar%20v%C3%A0%20thanh%20Impersonation%20Bar.'%2C%0A%20%20%20%20%20%20%20%20checklist%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20'T%C3%ADch%20h%E1%BB%A3p%20h%E1%BB%99p%20ch%E1%BB%8Dn%206%20Nh%C3%A2n%20vi%C3%AAn%20m%E1%BB%9Bi%20(NH01..NH06)%20v%C3%A0%208%20Mentor%20(MT01..MT08)%20tr%C3%AAn%20Sidebar'%2C%0A%20%20%20%20%20%20%20%20%20%20'T%C3%ADch%20h%E1%BB%A3p%20b%E1%BB%99%20chuy%E1%BB%83n%20%C4%91%E1%BB%95i%20nhanh%20nh%C3%A2n%20s%E1%BB%B1%2Fmentor%20tr%C3%AAn%20thanh%20%23adminImpersonateBar%20%C4%91%E1%BA%A7u%20trang'%2C%0A%20%20%20%20%20%20%20%20%20%20'T%E1%BB%B1%20%C4%91%E1%BB%99ng%20c%E1%BA%ADp%20nh%E1%BA%ADt%20d%E1%BB%AF%20li%E1%BB%87u%20Dashboard%2C%20Checklist%20v%C3%A0%20Danh%20s%C3%A1ch%20Mentee%20theo%20ng%C6%B0%E1%BB%9Di%20%C4%91%C6%B0%E1%BB%A3c%20ch%E1%BB%8Dn'%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20list%3A%20'review'%2C%0A%20%20%20%20%20%20%20%20name%3A%20'%5BT23%20-%20Tu%E1%BA%A7n%204%5D%20Ki%E1%BB%83m%20th%E1%BB%AD%20Li%C3%AAn%20th%C3%B4ng%20To%C3%A0n%20H%E1%BB%87%20th%E1%BB%91ng%20(End-to-End)%20%26%20Quay%2011%20Video%20Minh%20ch%E1%BB%A9ng%20OBS'%2C%0A%20%20%20%20%20%20%20%20labels%3A%20%5B'TEST'%2C%20'SV1'%2C%20'SV2'%2C%20'SV3'%5D%2C%0A%20%20%20%20%20%20%20%20desc%3A%20'Ph%E1%BB%A5%20tr%C3%A1ch%3A%20C%E1%BA%A3%20nh%C3%B3m%20(SV1%2C%20SV2%2C%20SV3)%20%7C%20Nh%C3%A1nh%3A%20main%20%2F%20dev%5CnTh%E1%BB%B1c%20hi%E1%BB%87n%20ki%E1%BB%83m%20th%E1%BB%AD%20t%C3%ADch%20h%E1%BB%A3p%20to%C3%A0n%20b%E1%BB%99%20lu%E1%BB%93ng%20d%E1%BB%AF%20li%E1%BB%87u%20gi%E1%BB%AFa%204%20ph%C3%A2n%20h%E1%BB%87%20v%C3%A0%20quay%20%C4%91%E1%BA%A7y%20%C4%91%E1%BB%A7%2011%20video%20OBS%20minh%20ch%E1%BB%A9ng%20theo%20quy%20%C4%91%E1%BB%8Bnh%20c%E1%BB%A7a%20h%E1%BB%8Dc%20ph%E1%BA%A7n%20CSE122.'%2C%0A%20%20%20%20%20%20%20%20checklist%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20'Ki%E1%BB%83m%20th%E1%BB%AD%20lu%E1%BB%93ng%20Nh%C3%A2n%20vi%C3%AAn%20m%E1%BB%9Bi%20ch%E1%BB%8Dn%20Mentor%2C%20chat%20v%E1%BB%9Bi%20Mentor%20v%C3%A0%20n%E1%BB%99p%20minh%20ch%E1%BB%A9ng'%2C%0A%20%20%20%20%20%20%20%20%20%20'Ki%E1%BB%83m%20th%E1%BB%AD%20lu%E1%BB%93ng%20Mentor%20duy%E1%BB%87t%20minh%20ch%E1%BB%A9ng%2C%20ch%E1%BA%A5m%20%C4%91i%E1%BB%83m%20v%C3%A0%20d%C3%B9ng%20AI-2'%2C%0A%20%20%20%20%20%20%20%20%20%20'Ki%E1%BB%83m%20th%E1%BB%AD%20lu%E1%BB%93ng%20HR%20xem%20bi%E1%BB%83u%20%C4%91%E1%BB%93%2C%20AI-3%20Risk%20Radar%20v%C3%A0%20Admin%20th%E1%BB%8B%20s%C3%A1t%20%C4%91a%20ng%C6%B0%E1%BB%9Di%20d%C3%B9ng'%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20list%3A%20'done'%2C%0A%20%20%20%20%20%20%20%20name%3A%20'%5BT24%20-%20Tu%E1%BA%A7n%204%5D%20Ho%C3%A0n%20thi%E1%BB%87n%20B%C3%A1o%20c%C3%A1o%20S%E1%BB%AD%20d%E1%BB%A5ng%20AI%20(ai-usage-report.md)%2C%20T%C3%A0i%20li%E1%BB%87u%20Trello%20%26%20%C4%90%C3%B3ng%20g%C3%B3i%20N%E1%BB%99p%20b%C3%A0i'%2C%0A%20%20%20%20%20%20%20%20labels%3A%20%5B'TEST'%2C%20'SV3'%5D%2C%0A%20%20%20%20%20%20%20%20desc%3A%20'Ph%E1%BB%A5%20tr%C3%A1ch%3A%20C%E1%BA%A3%20nh%C3%B3m%20(SV1%2C%20SV2%2C%20SV3)%20%7C%20File%3A%20docs%2Fai-usage-report.md%2C%20docs%2FQUY_TRINH_TRELLO_KANBAN.md%5CnT%E1%BB%95ng%20h%E1%BB%A3p%20b%C3%A1o%20c%C3%A1o%20s%E1%BB%AD%20d%E1%BB%A5ng%20AI%20minh%20b%E1%BA%A1ch%2C%20t%C3%A0i%20li%E1%BB%87u%20quy%20tr%C3%ACnh%20Trello%20Kanban%204%20tu%E1%BA%A7n%20v%C3%A0%20%C4%91%E1%BB%93ng%20b%E1%BB%99%20to%C3%A0n%20b%E1%BB%99%20m%C3%A3%20ngu%E1%BB%93n%20l%C3%AAn%20GitHub.'%2C%0A%20%20%20%20%20%20%20%20checklist%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20'Ho%C3%A0n%20thi%E1%BB%87n%20docs%2Fai-usage-report.md%20v%C3%A0%20README.md'%2C%0A%20%20%20%20%20%20%20%20%20%20'Ho%C3%A0n%20thi%E1%BB%87n%20docs%2FQUY_TRINH_TRELLO_KANBAN.md%20v%C3%A0%20trello-kanban.html'%2C%0A%20%20%20%20%20%20%20%20%20%20'Merge%20v%C3%A0%20%C4%91%E1%BB%93ng%20b%E1%BB%99%20t%E1%BA%A5t%20c%E1%BA%A3%20nh%C3%A1nh%20l%C3%AAn%20GitHub%20Repository%20ch%C3%ADnh%20th%E1%BB%A9c'%0A%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%5D%3B%0A%0A%20%20%20%20for%20(let%20i%20%3D%200%3B%20i%20%3C%20CARDS.length%3B%20i%2B%2B)%20%7B%0A%20%20%20%20%20%20const%20c%20%3D%20CARDS%5Bi%5D%3B%0A%20%20%20%20%20%20setStatus(%60%E2%8F%B3%20%C4%90ang%20t%E1%BA%A1o%20th%E1%BA%BB%20%5B%24%7Bi%20%2B%201%7D%2F%24%7BCARDS.length%7D%5D%3A%20%24%7Bc.name.slice(0%2C%2048)%7D...%60)%3B%0A%20%20%20%20%20%20const%20idList%20%3D%20listIds%5Bc.list%5D%20%7C%7C%20listIds.done%3B%0A%20%20%20%20%20%20const%20idLabels%20%3D%20c.labels.map(k%20%3D%3E%20labelIds%5Bk%5D).filter(Boolean)%3B%0A%0A%20%20%20%20%20%20const%20cardCreated%20%3D%20await%20trelloReq('POST'%2C%20'%2F1%2Fcards'%2C%20%7B%0A%20%20%20%20%20%20%20%20name%3A%20c.name%2C%0A%20%20%20%20%20%20%20%20desc%3A%20c.desc%2C%0A%20%20%20%20%20%20%20%20idList%2C%0A%20%20%20%20%20%20%20%20idLabels%2C%0A%20%20%20%20%20%20%20%20pos%3A%20(i%20%2B%201)%20*%2016384%0A%20%20%20%20%20%20%7D)%3B%0A%0A%20%20%20%20%20%20if%20(Array.isArray(c.checklist)%20%26%26%20c.checklist.length%20%3E%200)%20%7B%0A%20%20%20%20%20%20%20%20const%20cl%20%3D%20await%20trelloReq('POST'%2C%20'%2F1%2Fchecklists'%2C%20%7B%0A%20%20%20%20%20%20%20%20%20%20idCard%3A%20cardCreated.id%2C%0A%20%20%20%20%20%20%20%20%20%20name%3A%20'Checklist%20c%C3%B4ng%20vi%E1%BB%87c%20con'%0A%20%20%20%20%20%20%20%20%7D)%3B%0A%20%20%20%20%20%20%20%20for%20(const%20itemName%20of%20c.checklist)%20%7B%0A%20%20%20%20%20%20%20%20%20%20await%20trelloReq('POST'%2C%20%60%2F1%2Fchecklists%2F%24%7Bcl.id%7D%2FcheckItems%60%2C%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20name%3A%20itemName%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20checked%3A%20true%0A%20%20%20%20%20%20%20%20%20%20%7D)%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%0A%20%20%20%20setStatus('%F0%9F%8E%89%20HO%C3%80N%20T%E1%BA%A4T%20100%25!%20%C4%90%C3%A3%20t%E1%BA%A1o%20xong%20to%C3%A0n%20b%E1%BB%99%206%20C%E1%BB%99t%2C%207%20Nh%C3%A3n%20%26%2025%20Th%E1%BA%BB%20tr%C3%AAn%20Trello.com!')%3B%0A%20%20%20%20setTimeout(()%20%3D%3E%20%7B%0A%20%20%20%20%20%20location.href%20%3D%20boardUrl%3B%0A%20%20%20%20%7D%2C%201200)%3B%0A%20%20%7D%20catch%20(err)%20%7B%0A%20%20%20%20console.error(err)%3B%0A%20%20%20%20banner.style.borderColor%20%3D%20'%23F43F5E'%3B%0A%20%20%20%20setStatus('%E2%9D%8C%20C%C3%B3%20l%E1%BB%97i%20khi%20ch%E1%BA%A1y%20script%3A%20'%20%2B%20err.message)%3B%0A%20%20%7D%0A%7D)()%3B%0A" title="K?o n?t n?y th? l?n thanh D?u trang (Bookmarks Bar) c?a tr?nh duy?t, sau ?? sang tab Trello.com b?m v?o l? t? ch?y!" style="background:#F59E0B;color:#1E1B4B;text-decoration:none;border-radius:6px;padding:6px 12px;font-size:12px;font-weight:800;cursor:grab;box-shadow:0 2px 6px rgba(245,158,11,0.4);">? K?o N?t N?y L?n Thanh D?u Trang (Kh?ng c?n F12)</a>
+      <button id="autoCreateTrelloWebBtn" style="background:#10B981;color:#FFFFFF;border:none;border-radius:6px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;box-shadow:0 2px 6px rgba(16,185,129,0.35);">
+        Copy Mã Tạo Tự Động Trên Web Trello.com
+      </button>
+      <span>Thành viên Nhóm 10:</span>
+      <div class="member-avatars">
+        <span class="avatar-circle" style="background:#4F46E5;" title="SV1 - Huy (UI/UX & New Hire)">SV1</span>
+        <span class="avatar-circle" style="background:#10B981;" title="SV2 - Hoàng (Core Data & Mentor)">SV2</span>
+        <span class="avatar-circle" style="background:#9333EA;" title="SV3 - Trưởng nhóm (DevOps, HR & Admin)">SV3</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Board Controls Bar -->
+  <section class="board-header">
+    <div class="board-title-group">
+      <h1 class="board-title">[CSE122 - BTL20] OnboardAI – Nền tảng Hội nhập Nhân sự Thông minh (Nhóm 10)</h1>
+      <span class="board-badge">Workspace Public</span>
+      <span class="board-badge">25 Thẻ công việc</span>
+    </div>
+
+    <div class="board-controls">
+      <span style="font-size:12px;font-weight:600;color:#E2E8F0;">Xem quá trình theo tuần:</span>
+      <div class="sprint-tabs" id="sprintTabs">
+        <button class="sprint-tab" data-week="1">Tuần 1: Phân tích & Thiết kế</button>
+        <button class="sprint-tab" data-week="2">Tuần 2: Core Data & Khung UI</button>
+        <button class="sprint-tab" data-week="3">Tuần 3: DOM, CRUD & 3 AI</button>
+        <button class="sprint-tab active" data-week="4">Tuần 4: Hoàn thiện 100%</button>
+      </div>
+
+      <select id="memberFilter" class="filter-select" aria-label="Lọc theo thành viên">
+        <option value="ALL">Tất cả thành viên (SV1, SV2, SV3)</option>
+        <option value="SV1">SV1 – UI/UX & New Hire (Huy)</option>
+        <option value="SV2">SV2 – Core Data & Mentor (Hoàng)</option>
+        <option value="SV3">SV3 – DevOps, HR & Admin (Trưởng nhóm)</option>
+      </select>
+    </div>
+  </section>
+
+  <!-- Sprint Progress Summary -->
+  <div class="sprint-banner">
+    <div id="sprintSummaryText">
+      <strong>Trạng thái Tuần 4 (Nghiệm thu):</strong> Toàn bộ 24/24 hạng mục công việc từ Tuần 1 đến Tuần 4 đã hoàn thành, kiểm thử liên thông và đồng bộ lên GitHub.
+    </div>
+    <div class="sprint-metrics" id="sprintMetrics"></div>
+  </div>
+
+  <!-- 6 Kanban Columns -->
+  <main class="board-canvas" id="boardCanvas"></main>
+
+  <!-- Card Detail Modal -->
+  <div class="modal-backdrop" id="cardModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <div class="card-labels" id="modalLabels"></div>
+          <h2 class="modal-title" id="modalTitle"></h2>
+        </div>
+        <button class="modal-close" id="closeModalBtn" title="Đóng">×</button>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-meta-grid" id="modalMeta"></div>
+      </div>
+
+      <div class="modal-section">
+        <h4>Mô tả công việc (Description)</h4>
+        <p id="modalDesc" style="font-size:13.5px;line-height:1.55;color:#172B4D;"></p>
+      </div>
+
+      <div class="modal-section">
+        <h4>Checklist công việc con (Subtasks)</h4>
+        <div id="modalChecklist"></div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+        <span id="copyFeedback" style="font-size:12px;color:#166534;font-weight:600;"></span>
+        <button class="btn-copy-card" id="copyCardBtn">Sao chép nội dung thẻ sang Trello</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const COLUMNS = [
+      { id: 'col-info', title: '1. Thông tin Dự án & Quy ước' },
+      { id: 'col-backlog', title: '2. Backlog (Danh sách việc)' },
+      { id: 'col-w12', title: '3. Tuần 1–2: Thiết kế & Khung UI/Data' },
+      { id: 'col-w3', title: '4. Tuần 3: Lập trình DOM, CRUD & AI' },
+      { id: 'col-review', title: '5. Kiểm thử & Quay OBS (In Review)' },
+      { id: 'col-done', title: '6. Đã hoàn thành (Done)' }
+    ];
+
+    const CARDS = [
+      {
+        id: 'INFO-01',
+        week: 1,
+        title: 'Tài nguyên Dự án, Nhánh Git & Quy ước Phối hợp Nhóm 10',
+        assignee: 'ALL',
+        assigneeName: 'Cả nhóm (SV1, SV2, SV3)',
+        avatarBg: '#0EA5E9',
+        avatarText: 'N10',
+        labels: [
+          { text: 'Testing, Git & Báo cáo', cls: 'lbl-test' }
+        ],
+        due: 'Xuyên suốt 4 tuần',
+        branch: 'main / dev',
+        deliverable: 'docs/TONG_QUAN_VA_QUY_TRINH_PHOI_HOP.md',
+        desc: 'Lưu trữ thông tin cốt lõi của dự án BTL-20 OnboardAI: Link GitHub Repo (cse122-onboardai-nhom10), quy tắc phân nhánh (main, dev, feature/*), chuẩn Conventional Commits và bảng tài khoản đăng nhập tại docs/TAI_KHOAN_DANG_NHAP.md.',
+        checklist: [
+          'Thống nhất quy tắc nhánh Git & Conventional Commits (feat:, fix:, style:, docs:)',
+          'Cấu hình kho dữ liệu chung window.OnboardAPI (js/api.js)',
+          'Lưu trữ tài liệu tra cứu tài khoản 4 vai trò tại docs/TAI_KHOAN_DANG_NHAP.md'
+        ]
+      },
+      {
+        id: 'T01',
+        week: 1,
+        title: 'Phân tích nghiệp vụ BTL-20 & Đặc tả 4 phân hệ người dùng',
+        assignee: 'SV3',
+        assigneeName: 'SV3 – Trưởng nhóm',
+        avatarBg: '#9333EA',
+        avatarText: 'SV3',
+        labels: [
+          { text: 'SV3 - DevOps, HR & Admin', cls: 'lbl-sv3' },
+          { text: 'Testing, Git & Báo cáo', cls: 'lbl-test' }
+        ],
+        due: 'Tuần 1',
+        branch: 'main',
+        deliverable: 'docs/TONG_QUAN_VA_QUY_TRINH_PHOI_HOP.md',
+        desc: 'Phân tích bài toán Hội nhập nhân sự (Onboarding) tại doanh nghiệp, xác định rõ 4 nhóm tác nhân (New Hire, Mentor, HR Specialist, System Admin) và 3 tính năng AI cốt lõi.',
+        checklist: [
+          'Xác định 4 vai trò người dùng và ma trận phân quyền RBAC',
+          'Đặc tả 3 tính năng AI: AI-1 (Policy Q&A), AI-2 (Checklist/Mentor Matching), AI-3 (HR Risk Radar)',
+          'Hoàn thiện tài liệu tổng quan dự án'
+        ]
+      },
+      {
+        id: 'T02',
+        week: 1,
+        title: 'Lập Danh mục màn hình (Screen Inventory) & Sơ đồ luồng (User Flows)',
+        assignee: 'SV2',
+        assigneeName: 'SV2 – Hoàng (Phối hợp SV3)',
+        avatarBg: '#10B981',
+        avatarText: 'SV2',
+        labels: [
+          { text: 'SV2 - Core Data & Mentor', cls: 'lbl-sv2' },
+          { text: 'SV3 - DevOps, HR & Admin', cls: 'lbl-sv3' }
+        ],
+        due: 'Tuần 1',
+        branch: 'dev',
+        deliverable: 'README.md',
+        desc: 'Liệt kê đầy đủ 9 màn hình chức năng của dự án OnboardAI và thiết kế sơ đồ luồng nghiệp vụ khép kín từ lúc nhân sự mới nhận việc đến khi hoàn thành thử việc.',
+        checklist: [
+          'Thiết lập bảng Screen Inventory cho 4 phân hệ',
+          'Vẽ sơ đồ luồng xác thực đăng nhập & điều hướng theo vai trò',
+          'Vẽ sơ đồ luồng nộp minh chứng – duyệt nhiệm vụ – cảnh báo rủi ro HR'
+        ]
+      },
+      {
+        id: 'T03',
+        week: 1,
+        title: 'Thiết kế UI/UX Design System & Wireframe trên Figma',
+        assignee: 'SV1',
+        assigneeName: 'SV1 – Huy',
+        avatarBg: '#4F46E5',
+        avatarText: 'SV1',
+        labels: [
+          { text: 'SV1 - UI/UX & New Hire', cls: 'lbl-sv1' },
+          { text: 'UI/UX & Responsive', cls: 'lbl-ui' }
+        ],
+        due: 'Tuần 1',
+        branch: 'feat/sv1-ui-newhire',
+        deliverable: 'Figma Design System',
+        desc: 'Thiết kế bảng màu thương hiệu (Primary Indigo #4F46E5, Emerald #10B981, Amber #F59E0B, Rose #F43F5E), Typography Plus Jakarta Sans & Inter, và bố cục Bento Grid.',
+        checklist: [
+          'Xây dựng Color Tokens & Typography Scale',
+          'Thiết kế UI Components: Sidebar, KPI Cards, Badges, Modals',
+          'Thiết kế Wireframe cho 9 màn hình chính'
+        ]
+      },
+      {
+        id: 'T04',
+        week: 1,
+        title: 'Thiết kế Lược đồ Dữ liệu JSON (Schema) & Kiến trúc LocalStorage',
+        assignee: 'SV2',
+        assigneeName: 'SV2 – Hoàng',
+        avatarBg: '#10B981',
+        avatarText: 'SV2',
+        labels: [
+          { text: 'SV2 - Core Data & Mentor', cls: 'lbl-sv2' },
+          { text: 'Core Data & Architecture', cls: 'lbl-core' }
+        ],
+        due: 'Tuần 1',
+        branch: 'feat/sv2-data-mentor',
+        deliverable: 'assets/data/mock-data.json',
+        desc: 'Thiết kế cấu trúc JSON chuẩn cho 6 nhân sự mới (NH01..NH06), 8 người đồng hành (MT01..MT08), danh sách công việc, kho FAQ chính sách và nhật ký kiểm toán.',
+        checklist: [
+          'Định nghĩa schema cho users, mentors, newHires, tasks, templates, faqs, activityLogs',
+          'Thiết kế khóa lưu trữ onboardai_db_v1 trong LocalStorage',
+          'Thống nhất chữ ký hàm (method signatures) cho window.OnboardAPI'
+        ]
+      },
+      {
+        id: 'T05',
+        week: 1,
+        title: 'Khởi tạo GitHub Repository, Cấu trúc Thư mục & Bảng Trello Kanban',
+        assignee: 'SV3',
+        assigneeName: 'SV3 – Trưởng nhóm',
+        avatarBg: '#9333EA',
+        avatarText: 'SV3',
+        labels: [
+          { text: 'SV3 - DevOps, HR & Admin', cls: 'lbl-sv3' },
+          { text: 'Testing, Git & Báo cáo', cls: 'lbl-test' }
+        ],
+        due: 'Tuần 1',
+        branch: 'main / dev',
+        deliverable: 'GitHub Repo & Trello Board',
+        desc: 'Khởi tạo kho mã nguồn GitHub của Nhóm 10, tạo cây thư mục chuẩn và thiết lập bảng Trello Kanban 6 cột để theo dõi tiến độ 4 tuần.',
+        checklist: [
+          'Khởi tạo thư mục css/, js/, assets/data/, assets/images/, docs/',
+          'Tạo nhánh main, dev và các nhánh thành viên',
+          'Thiết lập bảng Trello 6 cột và gắn nhãn cho 24 thẻ công việc'
+        ]
+      },
+      {
+        id: 'T06',
+        week: 2,
+        title: 'Xây dựng Global CSS Design System (css/style.css)',
+        assignee: 'SV1',
+        assigneeName: 'SV1 – Huy',
+        avatarBg: '#4F46E5',
+        avatarText: 'SV1',
+        labels: [
+          { text: 'SV1 - UI/UX & New Hire', cls: 'lbl-sv1' },
+          { text: 'Core Data & Architecture', cls: 'lbl-core' },
+          { text: 'UI/UX & Responsive', cls: 'lbl-ui' }
+        ],
+        due: 'Giữa Tuần 2',
+        branch: 'feat/sv1-ui-newhire',
+        deliverable: 'css/style.css',
+        desc: 'Lập trình bộ khung CSS dùng chung cho toàn dự án: biến màu sắc, bố cục Sidebar + Main Content, Bento Grid, Table, Modal, Drawer và Responsive Breakpoints.',
+        checklist: [
+          'Khai báo hệ thống biến CSS (:root) đồng bộ toàn bộ 9 màn hình',
+          'Xây dựng layout Sidebar cố định và Topbar linh hoạt',
+          'Tạo class tiện ích cho Button, Badge, Progress Bar và Toast Notification'
+        ]
+      },
+      {
+        id: 'T07',
+        week: 2,
+        title: 'Xây dựng Cơ sở dữ liệu mẫu (mock-data.json) & Data Engine (js/api.js)',
+        assignee: 'SV2',
+        assigneeName: 'SV2 – Hoàng',
+        avatarBg: '#10B981',
+        avatarText: 'SV2',
+        labels: [
+          { text: 'SV2 - Core Data & Mentor', cls: 'lbl-sv2' },
+          { text: 'Core Data & Architecture', cls: 'lbl-core' }
+        ],
+        due: 'Giữa Tuần 2',
+        branch: 'feat/sv2-data-mentor',
+        deliverable: 'assets/data/mock-data.json, js/api.js',
+        desc: 'Hoàn thiện dữ liệu mẫu tiếng Việt chân thực và lập trình thư viện window.OnboardAPI hỗ trợ đọc/ghi LocalStorage và đồng bộ thời gian thực giữa các tab.',
+        checklist: [
+          'Nhập dữ liệu đầy đủ cho 6 New Hires (NH01..NH06) và 8 Mentors (MT01..MT08)',
+          'Lập trình các hàm getNewHires(), updateTaskStatus(), submitTaskProof(), submitMentorReview()',
+          'Tích hợp sự kiện storage để đồng bộ dữ liệu tức thì giữa các tab trình duyệt'
+        ]
+      },
+      {
+        id: 'T08',
+        week: 2,
+        title: 'Dựng giao diện Trang chủ Landing Page (index.html) & Đăng nhập (login.html)',
+        assignee: 'SV1',
+        assigneeName: 'SV1 – Huy',
+        avatarBg: '#4F46E5',
+        avatarText: 'SV1',
+        labels: [
+          { text: 'SV1 - UI/UX & New Hire', cls: 'lbl-sv1' },
+          { text: 'UI/UX & Responsive', cls: 'lbl-ui' }
+        ],
+        due: 'Cuối Tuần 2',
+        branch: 'feat/sv1-ui-newhire',
+        deliverable: 'index.html, login.html',
+        desc: 'Thiết kế trang giới thiệu giải pháp OnboardAI và cổng đăng nhập xác thực điều hướng đúng phân hệ theo vai trò.',
+        checklist: [
+          'Xây dựng Hero Banner và khu vực giới thiệu 3 mô-đun AI trên index.html',
+          'Thiết kế form đăng nhập tinh gọn, chuyên nghiệp trên login.html',
+          'Kiểm tra điều hướng tự động sau khi đăng nhập thành công'
+        ]
+      },
+      {
+        id: 'T09',
+        week: 2,
+        title: 'Dựng khung giao diện Dashboard Nhân viên mới & Checklist (NH-01, NH-02)',
+        assignee: 'SV1',
+        assigneeName: 'SV1 – Huy',
+        avatarBg: '#4F46E5',
+        avatarText: 'SV1',
+        labels: [
+          { text: 'SV1 - UI/UX & New Hire', cls: 'lbl-sv1' },
+          { text: 'UI/UX & Responsive', cls: 'lbl-ui' }
+        ],
+        due: 'Cuối Tuần 2',
+        branch: 'huy/feature/newhire-checklist',
+        deliverable: 'newhire-onboarding-dashboard.html, newhire-checklist.html',
+        desc: 'Dựng giao diện tổng quan lộ trình hội nhập của nhân viên mới, 4 thẻ chỉ số KPI, khu vực Người đồng hành và danh sách Checklist công việc theo giai đoạn.',
+        checklist: [
+          'Dựng Hero tiến độ, 4 KPI Cards và Timeline 3 giai đoạn trên Dashboard',
+          'Dựng giao diện danh sách nhiệm vụ, bộ lọc giai đoạn và ô tìm kiếm trên trang Checklist',
+          'Dựng Modal nộp minh chứng hoàn thành công việc'
+        ]
+      },
+      {
+        id: 'T10',
+        week: 2,
+        title: 'Dựng khung giao diện Phân hệ Người hướng dẫn (mentor-mentee-list.html) & Hồ sơ (profile.html)',
+        assignee: 'SV2',
+        assigneeName: 'SV2 – Hoàng',
+        avatarBg: '#10B981',
+        avatarText: 'SV2',
+        labels: [
+          { text: 'SV2 - Core Data & Mentor', cls: 'lbl-sv2' },
+          { text: 'UI/UX & Responsive', cls: 'lbl-ui' }
+        ],
+        due: 'Cuối Tuần 2',
+        branch: 'feat/sv2-data-mentor',
+        deliverable: 'mentor-mentee-list.html, profile.html',
+        desc: 'Xây dựng giao diện quản lý danh sách nhân viên mới dành cho Mentor và trang quản lý hồ sơ cá nhân.',
+        checklist: [
+          'Dựng 4 KPI tổng quan Mentor và lưới thẻ Mentee đang hướng dẫn',
+          'Dựng Modal chấm điểm định kỳ và xem chi tiết tiến độ Mentee',
+          'Dựng trang profile.html hiển thị thông tin cá nhân'
+        ]
+      },
+      {
+        id: 'T11',
+        week: 2,
+        title: 'Dựng khung giao diện HR Dashboard (hr-dashboard.html) & Admin (admin-user-management.html)',
+        assignee: 'SV3',
+        assigneeName: 'SV3 – Trưởng nhóm',
+        avatarBg: '#9333EA',
+        avatarText: 'SV3',
+        labels: [
+          { text: 'SV3 - DevOps, HR & Admin', cls: 'lbl-sv3' },
+          { text: 'UI/UX & Responsive', cls: 'lbl-ui' }
+        ],
+        due: 'Cuối Tuần 2',
+        branch: 'feat/sv3-hr-admin',
+        deliverable: 'hr-dashboard.html, admin-user-management.html',
+        desc: 'Xây dựng giao diện Trung tâm điều hành HR và trang Quản trị hệ thống & Phân quyền người dùng dành cho Admin.',
+        checklist: [
+          'Dựng 4 KPI Cards, khung biểu đồ Chart.js và bảng theo dõi toàn công ty trên hr-dashboard.html',
+          'Dựng khu vực quản lý kịch bản Onboarding mẫu (Templates)',
+          'Dựng bảng danh sách tài khoản và Nhật ký kiểm toán (Audit Logs) trên admin-user-management.html'
+        ]
+      },
+      {
+        id: 'T12',
+        week: 2,
+        title: 'Kiểm tra Responsive & Đồng bộ Navigation Sidebar trên toàn bộ 9 màn hình',
+        assignee: 'ALL',
+        assigneeName: 'Cả nhóm (SV1, SV2, SV3)',
+        avatarBg: '#0EA5E9',
+        avatarText: 'N10',
+        labels: [
+          { text: 'UI/UX & Responsive', cls: 'lbl-ui' },
+          { text: 'Testing, Git & Báo cáo', cls: 'lbl-test' }
+        ],
+        due: 'Cuối Tuần 2',
+        branch: 'dev',
+        deliverable: 'Toàn bộ 9 file HTML',
+        desc: 'Rà soát tính nhất quán của thanh Sidebar, Header, liên kết chuyển trang và khả năng co giãn trên các kích thước màn hình.',
+        checklist: [
+          'Đồng bộ menu điều hướng giữa các màn hình trong cùng phân hệ',
+          'Kiểm tra hiển thị trên màn hình Laptop (1366px), Desktop (1920px) và Mobile (375px)'
+        ]
+      },
+      {
+        id: 'T13',
+        week: 3,
+        title: 'Lập trình Luồng Checklist, Bộ lọc Giai đoạn & Nộp Minh chứng (newhire-checklist.html)',
+        assignee: 'SV1',
+        assigneeName: 'SV1 – Huy',
+        avatarBg: '#4F46E5',
+        avatarText: 'SV1',
+        labels: [
+          { text: 'SV1 - UI/UX & New Hire', cls: 'lbl-sv1' },
+          { text: 'Core Data & Architecture', cls: 'lbl-core' }
+        ],
+        due: 'Giữa Tuần 3',
+        branch: 'huy/feature/newhire-checklist',
+        deliverable: 'newhire-checklist.html',
+        desc: 'Lập trình tương tác DOM cho phép nhân viên mới lọc công việc theo giai đoạn, đánh dấu hoàn thành, đính kèm link minh chứng và tự động cập nhật phần trăm tiến độ.',
+        checklist: [
+          'Lập trình bộ lọc công việc theo Tuần 1, Tháng 1, Tháng 2 và trạng thái',
+          'Lưu link minh chứng (proofUrl) và ghi chú (proofNote) vào LocalStorage',
+          'Tự động tính lại tiến độ tổng thể ngay khi tick hoàn thành'
+        ]
+      },
+      {
+        id: 'T14',
+        week: 3,
+        title: 'Nâng cấp Hệ thống Đề xuất 8 Người đồng hành (Mentor) & Khung Chat Trực tiếp',
+        assignee: 'SV1',
+        assigneeName: 'SV1 – Huy & SV2 – Hoàng',
+        avatarBg: '#4F46E5',
+        avatarText: 'SV1',
+        labels: [
+          { text: 'SV1 - UI/UX & New Hire', cls: 'lbl-sv1' },
+          { text: 'SV2 - Core Data & Mentor', cls: 'lbl-sv2' },
+          { text: 'AI Feature (Bắt buộc)', cls: 'lbl-ai' }
+        ],
+        due: 'Giữa Tuần 3',
+        branch: 'huy/feature/newhire-checklist',
+        deliverable: 'newhire-onboarding-dashboard.html',
+        desc: 'Mỗi tài khoản mới chưa có sẵn Mentor cố định mà được AI gợi ý danh sách 8 Người đồng hành (MT01..MT08) kèm điểm tương thích (Match Score %), thông tin SĐT, Zalo, giới thiệu chi tiết và khung Chat trao đổi trực tiếp.',
+        checklist: [
+          'Xây dựng thuật toán AI tính điểm phù hợp giữa Nhân viên mới và 8 Mentor',
+          'Hiển thị đầy đủ SĐT, Zalo, chuyên môn, phong cách hỗ trợ để người dùng tự chọn Mentor',
+          'Lập trình ngăn kéo Chat trực tiếp với Người đồng hành có gợi ý câu hỏi nhanh và phản hồi tự động'
+        ]
+      },
+      {
+        id: 'T15',
+        week: 3,
+        title: 'Lập trình Tính năng AI-1: Trợ lý Hỏi đáp Chính sách & Sổ tay Nhân sự (newhire-ai-help.html)',
+        assignee: 'SV1',
+        assigneeName: 'SV1 – Huy',
+        avatarBg: '#4F46E5',
+        avatarText: 'SV1',
+        labels: [
+          { text: 'SV1 - UI/UX & New Hire', cls: 'lbl-sv1' },
+          { text: 'AI Feature (Bắt buộc)', cls: 'lbl-ai' }
+        ],
+        due: 'Cuối Tuần 3',
+        branch: 'feat/sv1-ui-newhire',
+        deliverable: 'newhire-ai-help.html',
+        desc: 'Phát triển trợ lý AI-1 giúp nhân viên mới hỏi đáp tức thì về chế độ phúc lợi, bảo hiểm, nghỉ phép, cấp phát thiết bị IT và quy trình đánh giá thử việc.',
+        checklist: [
+          'Lập trình giao diện hội thoại AI có trích dẫn nguồn tài liệu nội bộ',
+          'Thiết lập các nút câu hỏi mẫu (Quick Prompts) theo chủ đề',
+          'Kết nối bộ tìm kiếm trực tiếp với kho dữ liệu FAQ trong mock-data.json'
+        ]
+      },
+      {
+        id: 'T16',
+        week: 3,
+        title: 'Lập trình Phân hệ Mentor: Duyệt Minh chứng, Giao thêm việc & Đánh giá Mentee',
+        assignee: 'SV2',
+        assigneeName: 'SV2 – Hoàng',
+        avatarBg: '#10B981',
+        avatarText: 'SV2',
+        labels: [
+          { text: 'SV2 - Core Data & Mentor', cls: 'lbl-sv2' },
+          { text: 'Core Data & Architecture', cls: 'lbl-core' }
+        ],
+        due: 'Cuối Tuần 3',
+        branch: 'feat/sv2-data-mentor',
+        deliverable: 'mentor-mentee-list.html',
+        desc: 'Lập trình đầy đủ nghiệp vụ dành cho Người hướng dẫn: theo dõi tiến độ từng Mentee, kiểm tra link minh chứng, giao thêm đầu việc mới và chấm điểm định kỳ.',
+        checklist: [
+          'Lập trình lọc danh sách Mentee theo trạng thái tiến độ',
+          'Lập trình chức năng giao thêm nhiệm vụ và duyệt trạng thái hoàn thành',
+          'Lập trình Modal chấm điểm 1–5 sao và lưu nhận xét của Mentor'
+        ]
+      },
+      {
+        id: 'T17',
+        week: 3,
+        title: 'Lập trình Tính năng AI-2: Cá nhân hóa Lộ trình Checklist theo Vị trí (Checklist Personalizer)',
+        assignee: 'SV2',
+        assigneeName: 'SV2 – Hoàng',
+        avatarBg: '#10B981',
+        avatarText: 'SV2',
+        labels: [
+          { text: 'SV2 - Core Data & Mentor', cls: 'lbl-sv2' },
+          { text: 'AI Feature (Bắt buộc)', cls: 'lbl-ai' }
+        ],
+        due: 'Cuối Tuần 3',
+        branch: 'feat/sv2-data-mentor',
+        deliverable: 'mentor-mentee-list.html, js/api.js',
+        desc: 'Xây dựng mô-đun AI-2 tự động phân tích vị trí công việc (Frontend, Backend, AI/Data, Product, QC, Marketing) để đề xuất các đầu việc hội nhập chuyên sâu.',
+        checklist: [
+          'Xây dựng kho mẫu nhiệm vụ chuyên biệt theo từng vị trí kỹ thuật và nghiệp vụ',
+          'Cho phép Mentor hoặc HR kích hoạt AI-2 bổ sung nhiệm vụ cá nhân hóa chỉ với 1 click'
+        ]
+      },
+      {
+        id: 'T18',
+        week: 3,
+        title: 'Lập trình Tính năng AI-3: Cảnh báo Sớm Rủi ro Hội nhập (HR Risk Radar) & Biểu đồ Chart.js',
+        assignee: 'SV3',
+        assigneeName: 'SV3 – Trưởng nhóm',
+        avatarBg: '#9333EA',
+        avatarText: 'SV3',
+        labels: [
+          { text: 'SV3 - DevOps, HR & Admin', cls: 'lbl-sv3' },
+          { text: 'AI Feature (Bắt buộc)', cls: 'lbl-ai' }
+        ],
+        due: 'Cuối Tuần 3',
+        branch: 'feat/sv3-hr-admin',
+        deliverable: 'hr-dashboard.html',
+        desc: 'Tích hợp Chart.js và thuật toán AI-3 Risk Radar trên HR Dashboard để tự động phát hiện nhân sự có nguy cơ chậm tiến độ và đề xuất hành động hỗ trợ kịp thời.',
+        checklist: [
+          'Vẽ biểu đồ tiến độ theo phòng ban và biểu đồ tỷ lệ trạng thái bằng Chart.js',
+          'Hiển thị bảng cảnh báo sớm AI-3 Risk Radar kèm mức độ rủi ro và khuyến nghị can thiệp',
+          'Lập trình chức năng xuất báo cáo CSV (Export CSV)'
+        ]
+      },
+      {
+        id: 'T19',
+        week: 3,
+        title: 'Lập trình Phân hệ Admin: Quản lý Người dùng CRUD, Khóa/Mở khóa & Nhật ký Kiểm toán',
+        assignee: 'SV3',
+        assigneeName: 'SV3 – Trưởng nhóm',
+        avatarBg: '#9333EA',
+        avatarText: 'SV3',
+        labels: [
+          { text: 'SV3 - DevOps, HR & Admin', cls: 'lbl-sv3' },
+          { text: 'Core Data & Architecture', cls: 'lbl-core' }
+        ],
+        due: 'Cuối Tuần 3',
+        branch: 'feat/sv3-hr-admin',
+        deliverable: 'admin-user-management.html',
+        desc: 'Hoàn thiện bảng điều khiển Quản trị viên: thêm/sửa tài khoản, đổi vai trò, khóa/mở khóa người dùng, xem Audit Logs và khôi phục dữ liệu mẫu.',
+        checklist: [
+          'Lập trình tìm kiếm & lọc tài khoản theo Vai trò, Phòng ban, Trạng thái',
+          'Lập trình thêm mới, chỉnh sửa vai trò và khóa/mở khóa tài khoản',
+          'Tích hợp nút Khôi phục dữ liệu gốc (Reset Demo Data) và Xuất file JSON'
+        ]
+      },
+      {
+        id: 'T20',
+        week: 3,
+        title: 'Thiết lập Hệ thống Tài khoản Đăng nhập Chuẩn cho 4 Vai trò & Tài liệu Tra cứu',
+        assignee: 'SV3',
+        assigneeName: 'SV3 – Trưởng nhóm & SV1 – Huy',
+        avatarBg: '#9333EA',
+        avatarText: 'SV3',
+        labels: [
+          { text: 'SV1 - UI/UX & New Hire', cls: 'lbl-sv1' },
+          { text: 'SV3 - DevOps, HR & Admin', cls: 'lbl-sv3' }
+        ],
+        due: 'Cuối Tuần 3',
+        branch: 'fix/sv3-data-sync-hr-admin',
+        deliverable: 'login.html, docs/TAI_KHOAN_DANG_NHAP.md',
+        desc: 'Cấu hình đầy đủ tài khoản đăng nhập cho cả 4 vai trò (New Hire, Mentor, HR, Admin), đồng bộ thông tin người dùng trên thanh Topbar và lập file tra cứu nhanh.',
+        checklist: [
+          'Tích hợp tài khoản Mentor, HR, Admin và 6 New Hires vào login.html',
+          'Loại bỏ các khung chọn nhanh rườm rà để giữ giao diện đăng nhập chuẩn thực tế',
+          'Tạo file docs/TAI_KHOAN_DANG_NHAP.md tổng hợp toàn bộ email và mật khẩu'
+        ]
+      },
+      {
+        id: 'T21',
+        week: 4,
+        title: 'Chuẩn hóa Ảnh đại diện Mentor Việt Nam & Tối ưu Hiệu năng Cuộn trang 60FPS',
+        assignee: 'SV1',
+        assigneeName: 'SV1 – Huy',
+        avatarBg: '#4F46E5',
+        avatarText: 'SV1',
+        labels: [
+          { text: 'SV1 - UI/UX & New Hire', cls: 'lbl-sv1' },
+          { text: 'UI/UX & Responsive', cls: 'lbl-ui' }
+        ],
+        due: 'Đầu Tuần 4',
+        branch: 'huy/feature/newhire-checklist',
+        deliverable: 'assets/images/mentors/mt01.jpg..mt08.jpg, css/style.css',
+        desc: 'Cập nhật bộ ảnh chân dung người Việt Nam chuyên nghiệp cho 8 Người đồng hành, loại bỏ các icon trang trí dư thừa và tối ưu CSS giúp cuộn trang mượt mà.',
+        checklist: [
+          'Cập nhật ảnh chân dung người Việt cho 8 Mentor (mt01.jpg..mt08.jpg)',
+          'Loại bỏ các icon trang trí không cần thiết trên giao diện',
+          'Tối ưu hiệu năng render CSS khi cuộn trang danh sách dài'
+        ]
+      },
+      {
+        id: 'T22',
+        week: 4,
+        title: 'Nâng cấp Chế độ Thị sát Đa người dùng (Multi-User View-As) cho HR & Admin',
+        assignee: 'SV3',
+        assigneeName: 'SV3 – Trưởng nhóm',
+        avatarBg: '#9333EA',
+        avatarText: 'SV3',
+        labels: [
+          { text: 'SV3 - DevOps, HR & Admin', cls: 'lbl-sv3' },
+          { text: 'Core Data & Architecture', cls: 'lbl-core' }
+        ],
+        due: 'Giữa Tuần 4',
+        branch: 'fix/sv3-data-sync-hr-admin',
+        deliverable: 'admin-user-management.html, hr-dashboard.html, mentor-mentee-list.html',
+        desc: 'Nâng cấp Chế độ thị sát (View-As) cho phép chọn xem góc nhìn của bất kỳ Nhân sự mới nào (NH01..NH06) hoặc bất kỳ Người hướng dẫn nào (MT01..MT08) ngay từ Sidebar và thanh Impersonation Bar.',
+        checklist: [
+          'Tích hợp hộp chọn 6 Nhân viên mới (NH01..NH06) và 8 Mentor (MT01..MT08) trên Sidebar',
+          'Tích hợp bộ chuyển đổi nhanh nhân sự/mentor trên thanh #adminImpersonateBar đầu trang',
+          'Tự động cập nhật dữ liệu Dashboard, Checklist và Danh sách Mentee theo người được chọn'
+        ]
+      },
+      {
+        id: 'T23',
+        week: 4,
+        title: 'Kiểm thử Liên thông Toàn Hệ thống (End-to-End) & Quay 11 Video Minh chứng OBS',
+        assignee: 'ALL',
+        assigneeName: 'Cả nhóm (SV1, SV2, SV3)',
+        avatarBg: '#0EA5E9',
+        avatarText: 'N10',
+        labels: [
+          { text: 'Testing, Git & Báo cáo', cls: 'lbl-test' }
+        ],
+        due: 'Cuối Tuần 4',
+        branch: 'main / dev',
+        deliverable: 'Bộ 11 Video OBS & Kịch bản kiểm thử',
+        desc: 'Thực hiện kiểm thử tích hợp toàn bộ luồng dữ liệu giữa 4 phân hệ và quay đầy đủ 11 video OBS minh chứng theo quy định của học phần CSE122.',
+        checklist: [
+          'Kiểm thử luồng Nhân viên mới chọn Mentor, chat với Mentor và nộp minh chứng',
+          'Kiểm thử luồng Mentor duyệt minh chứng, chấm điểm và dùng AI-2',
+          'Kiểm thử luồng HR xem biểu đồ, AI-3 Risk Radar và Admin thị sát đa người dùng'
+        ]
+      },
+      {
+        id: 'T24',
+        week: 4,
+        title: 'Hoàn thiện Báo cáo Sử dụng AI (ai-usage-report.md), Tài liệu Trello & Đóng gói Nộp bài',
+        assignee: 'ALL',
+        assigneeName: 'Cả nhóm (SV1, SV2, SV3)',
+        avatarBg: '#0EA5E9',
+        avatarText: 'N10',
+        labels: [
+          { text: 'Testing, Git & Báo cáo', cls: 'lbl-test' }
+        ],
+        due: 'Cuối Tuần 4',
+        branch: 'main',
+        deliverable: 'docs/ai-usage-report.md, docs/QUY_TRINH_TRELLO_KANBAN.md',
+        desc: 'Tổng hợp báo cáo sử dụng AI minh bạch, tài liệu quy trình Trello Kanban 4 tuần, file CSV import và đồng bộ toàn bộ mã nguồn lên GitHub.',
+        checklist: [
+          'Hoàn thiện docs/ai-usage-report.md và README.md',
+          'Hoàn thiện docs/QUY_TRINH_TRELLO_KANBAN.md và trello-kanban.html',
+          'Merge và đồng bộ tất cả nhánh lên GitHub Repository chính thức'
+        ]
+      }
+    ];
+
+    let activeWeek = 4;
+    let activeMember = 'ALL';
+    let selectedCard = null;
+
+    function getCardColumnForWeek(card, weekView) {
+      if (card.id === 'INFO-01') return 'col-info';
+
+      if (weekView === 1) {
+        if (['T01', 'T02', 'T05'].includes(card.id)) return 'col-done';
+        if (['T03', 'T04'].includes(card.id)) return 'col-review';
+        if (['T06', 'T07'].includes(card.id)) return 'col-w12';
+        return 'col-backlog';
+      }
+
+      if (weekView === 2) {
+        if (card.week === 1 || ['T06', 'T07', 'T08', 'T09'].includes(card.id)) return 'col-done';
+        if (['T10', 'T11', 'T12'].includes(card.id)) return 'col-review';
+        if (['T13', 'T14'].includes(card.id)) return 'col-w3';
+        return 'col-backlog';
+      }
+
+      if (weekView === 3) {
+        if (card.week <= 2 || ['T13', 'T14', 'T15', 'T16', 'T17'].includes(card.id)) return 'col-done';
+        if (['T18', 'T19', 'T20'].includes(card.id)) return 'col-review';
+        if (['T21', 'T22'].includes(card.id)) return 'col-w3';
+        return 'col-backlog';
+      }
+
+      // Week 4 (100% Completed & Final Review)
+      if (card.week <= 2) return 'col-done';
+      if (card.week === 3) return 'col-done';
+      if (['T21', 'T22', 'T23', 'T24'].includes(card.id)) return 'col-done';
+      return 'col-done';
+    }
+
+    const WEEK_SUMMARIES = {
+      1: '<strong>Quá trình Tuần 1 (Phân tích & Thiết kế):</strong> Hoàn thành phân tích nghiệp vụ, thiết kế Figma, lược đồ JSON, khởi tạo GitHub Repo & Bảng Trello; chuẩn bị bước sang dựng Core CSS & Data Engine.',
+      2: '<strong>Quá trình Tuần 2 (Core Data & Khung Giao diện):</strong> Đã hoàn thành css/style.css, mock-data.json, js/api.js và dựng khung giao diện tĩnh cho 9 màn hình của 4 phân hệ.',
+      3: '<strong>Quá trình Tuần 3 (Lập trình DOM, CRUD & 3 AI):</strong> Hoàn thiện luồng Checklist, Đề xuất & Chat với 8 Mentor, tích hợp 3 mô-đun AI-1, AI-2, AI-3 và thiết lập tài khoản 4 vai trò.',
+      4: '<strong>Quá trình Tuần 4 (Nghiệm thu 100%):</strong> Hoàn thiện ảnh chân dung Mentor Việt Nam, tối ưu cuộn mượt 60fps, nâng cấp Chế độ thị sát đa người dùng (View-As), quay OBS và đóng gói báo cáo.'
+    };
+
+    function renderBoard() {
+      const canvas = document.getElementById('boardCanvas');
+      canvas.innerHTML = '';
+
+      const filteredCards = CARDS.filter(card => {
+        if (activeMember === 'ALL') return true;
+        return card.assignee === activeMember || card.assignee === 'ALL';
+      });
+
+      let doneCount = 0;
+      let inProgressCount = 0;
+      let backlogCount = 0;
+
+      COLUMNS.forEach(col => {
+        const colCards = filteredCards.filter(c => getCardColumnForWeek(c, activeWeek) === col.id);
+
+        if (col.id === 'col-done') doneCount += colCards.length;
+        else if (col.id === 'col-backlog') backlogCount += colCards.length;
+        else if (col.id !== 'col-info') inProgressCount += colCards.length;
+
+        const listEl = document.createElement('section');
+        listEl.className = 'trello-list';
+        listEl.innerHTML = `
+          <div class="list-header">
+            <h2 class="list-title">${col.title}</h2>
+            <span class="list-count">${colCards.length}</span>
+          </div>
+          <div class="list-cards"></div>
+        `;
+
+        const cardsWrap = listEl.querySelector('.list-cards');
+
+        if (colCards.length === 0) {
+          cardsWrap.innerHTML = `
+            <div style="padding:14px 10px;text-align:center;font-size:12px;color:#626F86;border:1px dashed #C1C7D0;border-radius:8px;">
+              Không có thẻ nào ở cột này trong Giai đoạn Tuần ${activeWeek}
+            </div>
+          `;
+        } else {
+          colCards.forEach(card => {
+            const isDone = col.id === 'col-done' || card.id === 'INFO-01';
+            const totalChecks = card.checklist.length;
+            const doneChecks = isDone ? totalChecks : Math.max(1, totalChecks - 1);
+
+            const cardEl = document.createElement('article');
+            cardEl.className = 'trello-card';
+            cardEl.innerHTML = `
+              <div class="card-labels">
+                ${card.labels.map(l => `<span class="card-label ${l.cls}">${l.text}</span>`).join('')}
+              </div>
+              <div class="card-title">
+                <span class="card-code">[${card.id}]</span> ${card.title}
+              </div>
+              <div class="card-footer">
+                <div class="card-badges">
+                  <span class="badge-item ${isDone ? 'done' : 'in-progress'}">
+                    ☑ ${doneChecks}/${totalChecks}
+                  </span>
+                  <span class="badge-item">🕒 ${card.due}</span>
+                </div>
+                <span class="card-member" style="background:${card.avatarBg};" title="${card.assigneeName}">
+                  ${card.avatarText}
+                </span>
+              </div>
+            `;
+            cardEl.addEventListener('click', () => openCardModal(card, isDone));
+            cardsWrap.appendChild(cardEl);
+          });
+        }
+
+        canvas.appendChild(listEl);
+      });
+
+      document.getElementById('sprintSummaryText').innerHTML = WEEK_SUMMARIES[activeWeek];
+      document.getElementById('sprintMetrics').innerHTML = `
+        <span class="metric-pill">Hoàn thành: ${doneCount} thẻ</span>
+        <span class="metric-pill">Đang thực hiện / Review: ${inProgressCount} thẻ</span>
+        <span class="metric-pill">Backlog: ${backlogCount} thẻ</span>
+      `;
+    }
+
+    function openCardModal(card, isDone) {
+      selectedCard = card;
+      document.getElementById('modalLabels').innerHTML = card.labels
+        .map(l => `<span class="card-label ${l.cls}">${l.text}</span>`)
+        .join('');
+      document.getElementById('modalTitle').textContent = `[${card.id}] ${card.title}`;
+      document.getElementById('modalMeta').innerHTML = `
+        <div><strong>Người phụ trách:</strong><br/>${card.assigneeName}</div>
+        <div><strong>Giai đoạn:</strong><br/>${card.due}</div>
+        <div><strong>Nhánh Git:</strong><br/><code>${card.branch}</code></div>
+        <div><strong>File bàn giao:</strong><br/><code>${card.deliverable}</code></div>
+      `;
+      document.getElementById('modalDesc').textContent = card.desc;
+      document.getElementById('modalChecklist').innerHTML = card.checklist
+        .map((item, idx) => {
+          const checked = isDone || idx < card.checklist.length - 1;
+          return `
+            <div class="checklist-item">
+              <input type="checkbox" ${checked ? 'checked' : ''} readonly style="margin-top:3px;" />
+              <span style="${checked ? 'text-decoration:line-through;color:#44546F;' : ''}">${item}</span>
+            </div>
+          `;
+        })
+        .join('');
+      document.getElementById('copyFeedback').textContent = '';
+      document.getElementById('cardModal').classList.add('open');
+    }
+
+    document.getElementById('closeModalBtn').addEventListener('click', () => {
+      document.getElementById('cardModal').classList.remove('open');
+    });
+
+    document.getElementById('cardModal').addEventListener('click', (e) => {
+      if (e.target.id === 'cardModal') {
+        document.getElementById('cardModal').classList.remove('open');
+      }
+    });
+
+    document.getElementById('copyCardBtn').addEventListener('click', () => {
+      if (!selectedCard) return;
+      const text = [
+        `[${selectedCard.id}] ${selectedCard.title}`,
+        `Phụ trách: ${selectedCard.assigneeName} | Hạn: ${selectedCard.due} | Nhánh: ${selectedCard.branch}`,
+        `Mô tả: ${selectedCard.desc}`,
+        `Checklist:`,
+        ...selectedCard.checklist.map(i => `- [x] ${i}`)
+      ].join('\n');
+      navigator.clipboard.writeText(text).then(() => {
+        document.getElementById('copyFeedback').textContent = 'Đã sao chép nội dung thẻ vào Clipboard!';
+      });
+    });
+
+    document.querySelectorAll('.sprint-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.sprint-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeWeek = Number(btn.dataset.week);
+        renderBoard();
+      });
+    });
+
+    document.getElementById('memberFilter').addEventListener('change', (e) => {
+      activeMember = e.target.value;
+      renderBoard();
+    });
+
+    document.getElementById('autoCreateTrelloWebBtn').addEventListener('click', async () => {
+      try {
+        const res = await fetch('scripts/trello-auto-create-console.js');
+        const scriptCode = await res.text();
+        await navigator.clipboard.writeText(scriptCode);
+        alert(
+          '✅ ĐÃ COPY MÃ TỰ ĐỘNG TẠO BẢNG TRELLO VÀO CLIPBOARD!\n\n' +
+          'Anh chỉ cần làm 3 bước (15 giây):\n' +
+          '1. Mở trang https://trello.com (đã đăng nhập tài khoản của anh).\n' +
+          '2. Nhấn phím F12 -> Chọn tab "Console".\n' +
+          '3. Nhấn Ctrl + V để dán mã và nhấn Enter -> Toàn bộ 6 cột, 7 nhãn màu, 25 thẻ công việc & Checklist sẽ tự động được tạo trên Trello.com!'
+        );
+      } catch (err) {
+        alert('Anh hãy mở file scripts/trello-auto-create-console.js để copy mã nhé!');
+      }
+    });
+
+    renderBoard();
+  </script>
+</body>
+</html>

@@ -294,10 +294,10 @@
       <div class="relative flex items-end justify-between gap-6">
         <div class="animate-float bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 w-72 shadow-2xl">
           <div class="flex items-center gap-3">
-            <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=120&q=80"
-                 class="w-10 h-10 rounded-full object-cover ring-2 ring-white/40" alt="Trần Minh Alex">
+            <img src="assets/images/mentors/mt01.jpg"
+                 class="w-10 h-10 rounded-full object-cover ring-2 ring-white/40" alt="Trần Thị Mai">
             <div class="flex-1">
-              <div class="text-sm font-semibold">Trần Minh Alex</div>
+              <div class="text-sm font-semibold">Trần Thị Mai</div>
               <div class="text-[11px] text-indigo-200" data-i18n="statCardRole">Người hướng dẫn • 3 học viên</div>
             </div>
             <span class="text-[10px] font-bold bg-emerald-400/20 text-emerald-200 px-2 py-0.5 rounded-full" data-i18n="online">Trực tuyến</span>
@@ -902,8 +902,8 @@
       newhire: {
         id: 'NH01',
         name: 'Nguyễn Văn An',
-        email: 'an.nguyen@company.com',
-        altEmails: ['an.nguyen@onboardai.vn'],
+        email: 'an.nguyen@onboardai.vn',
+        altEmails: ['an.nguyen@company.com'],
         role: 'newhire',
         department: 'Kỹ thuật Công nghệ',
         position: 'Frontend Developer',
@@ -914,39 +914,83 @@
       mentor: {
         id: 'MT01',
         name: 'Trần Thị Mai',
-        email: 'mentor.alex@company.com',
-        altEmails: ['mentor@onboardai.vn', 'mai.tran@onboardai.vn'],
+        email: 'mentor@onboardai.vn',
+        altEmails: ['mai.tran@onboardai.vn', 'mentor.alex@company.com'],
         role: 'mentor',
         department: 'Kỹ thuật Công nghệ',
         position: 'Tech Lead & Mentor',
-        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Mai',
+        avatar: 'assets/images/mentors/mt01.jpg',
         menteeCount: 2,
         redirectUrl: 'mentor-mentee-list.html'
       },
       hr: {
         id: 'HR01',
         name: 'Lê Hoàng Nam',
-        email: 'dung.le@company.com',
-        altEmails: ['hr@onboardai.vn', 'nam.le@onboardai.vn'],
+        email: 'hr@onboardai.vn',
+        altEmails: ['nam.le@onboardai.vn', 'dung.le@company.com'],
         role: 'hr',
         department: 'Nhân sự & Vận hành',
         position: 'HR Specialist',
-        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Nam',
+        avatar: 'assets/images/mentors/mt03.jpg',
         redirectUrl: 'hr-dashboard.html'
       },
       admin: {
         id: 'USR01',
         name: 'Vũ Quản Trị',
-        email: 'admin.huy@company.com',
-        altEmails: ['admin@onboardai.vn'],
+        email: 'admin@onboardai.vn',
+        altEmails: ['admin.huy@company.com'],
         role: 'admin',
         department: 'Kỹ thuật Công nghệ',
         position: 'System Administrator',
-        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Admin',
+        avatar: 'assets/images/mentors/mt06.jpg',
         redirectUrl: 'admin-user-management.html'
       }
     };
     const DEMO_PASSWORD = '123456';
+
+    // Danh sách mở rộng các tài khoản cấp sẵn cho từng vai trò (Người hướng dẫn, Nhân sự, Quản trị viên, Nhân viên mới)
+    const EXTRA_BUILTIN_ACCOUNTS = [
+      {
+        id: 'MT05',
+        name: 'Nguyễn Hoàng Minh',
+        email: 'minh.nguyen@onboardai.vn',
+        role: 'mentor',
+        department: 'Kỹ thuật Công nghệ',
+        position: 'Principal Frontend Architect',
+        avatar: 'assets/images/mentors/mt05.jpg',
+        redirectUrl: 'mentor-mentee-list.html'
+      },
+      {
+        id: 'MT02',
+        name: 'Lê Minh Tuấn',
+        email: 'tuan.le@onboardai.vn',
+        role: 'mentor',
+        department: 'Sản phẩm & Thiết kế',
+        position: 'Product & Growth Lead',
+        avatar: 'assets/images/mentors/mt02.jpg',
+        redirectUrl: 'mentor-mentee-list.html'
+      },
+      {
+        id: 'HR02',
+        name: 'Phạm Quang Huy',
+        email: 'huy.pham@onboardai.vn',
+        role: 'hr',
+        department: 'Nhân sự & Vận hành',
+        position: 'People & Culture Partner',
+        avatar: 'assets/images/mentors/mt03.jpg',
+        redirectUrl: 'hr-dashboard.html'
+      },
+      {
+        id: 'AD02',
+        name: 'Đỗ Hoàng Sơn',
+        email: 'son.do@onboardai.vn',
+        role: 'admin',
+        department: 'Kỹ thuật Công nghệ',
+        position: 'Security & System Admin',
+        avatar: 'assets/images/mentors/mt04.jpg',
+        redirectUrl: 'admin-user-management.html'
+      }
+    ];
 
     // Tài khoản người dùng tự đăng ký hoặc tạo từ trang Admin (lưu trong LocalStorage)
     function getRegisteredUsers() {
@@ -973,12 +1017,19 @@
       }
     }
     function getAllAccounts() {
-      const demo = Object.values(ROLES_DATA).map(u => ({ ...u, password: DEMO_PASSWORD }));
+      const demo = [...Object.values(ROLES_DATA), ...EXTRA_BUILTIN_ACCOUNTS].map(u => ({ ...u, password: DEMO_PASSWORD }));
       const registered = getRegisteredUsers().map(u => ({
         ...u,
         redirectUrl: ROLE_REDIRECT_MAP[u.role] || u.redirectUrl || 'newhire-onboarding-dashboard.html'
       }));
-      return [...demo, ...registered, ...getDbUsers()];
+      const combined = [...demo, ...registered, ...getDbUsers()];
+      const seen = new Set();
+      return combined.filter(u => {
+        const key = (u.email || '').toLowerCase();
+        if (!key || seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
     }
     function findAccount(email) {
       const e = email.trim().toLowerCase();
@@ -1074,7 +1125,7 @@
 
     // Gợi ý email mờ theo vai trò đang chọn (chỉ là placeholder, không điền sẵn)
     function updateLoginEmailPlaceholder() {
-      const sample = selectedRole && ROLES_DATA[selectedRole] ? ROLES_DATA[selectedRole].email : 'ten@company.com';
+      const sample = selectedRole && ROLES_DATA[selectedRole] ? ROLES_DATA[selectedRole].email : 'ten@onboardai.vn';
       document.getElementById('loginEmail').placeholder = `${t('examplePrefix')} ${sample}`;
     }
 
@@ -1202,14 +1253,21 @@
       if (!agreed) { setFieldError('regAgree', 'errAgree'); valid = false; }
       if (!valid) { showToast(t('toastInvalid'), 'error'); return; }
 
+      const defaultAvatarByRole = {
+        mentor: 'assets/images/mentors/mt01.jpg',
+        hr: 'assets/images/mentors/mt03.jpg',
+        admin: 'assets/images/mentors/mt06.jpg',
+        newhire: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name)}`
+      };
+
       const newUser = {
-        id: regRole === 'newhire' ? 'NH01' : ('USR_' + regRole.toUpperCase() + '_' + Date.now().toString().slice(-6)),
+        id: regRole === 'newhire' ? ('NH_' + Date.now().toString().slice(-6)) : ('USR_' + regRole.toUpperCase() + '_' + Date.now().toString().slice(-6)),
         name,
         email,
         role: regRole,
-        department: department || 'Kỹ thuật Công nghệ',
+        department: department || (regRole === 'hr' ? 'Nhân sự & Vận hành' : 'Kỹ thuật Công nghệ'),
         position: I18N.vi.roleTitles[regRole],
-        avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name)}`,
+        avatar: defaultAvatarByRole[regRole] || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name)}`,
         password,   // Lưu ý: chỉ phục vụ demo phía trình duyệt, hệ thống thật phải mã hoá ở máy chủ
         redirectUrl: ROLE_REDIRECT_MAP[regRole] || 'newhire-onboarding-dashboard.html',
         createdAt: new Date().toISOString()
@@ -1218,6 +1276,29 @@
       const users = getRegisteredUsers();
       users.push(newUser);
       localStorage.setItem('registeredUsers', JSON.stringify(users));
+
+      // Đồng bộ vào ONBOARDAI_DB_V4.users để hiển thị trong trang Quản trị viên (AD02)
+      try {
+        const db = JSON.parse(localStorage.getItem('ONBOARDAI_DB_V4') || 'null');
+        if (db && Array.isArray(db.users)) {
+          db.users.unshift({
+            id: newUser.id,
+            profileId: newUser.id,
+            name: newUser.name,
+            email: newUser.email,
+            role: newUser.role,
+            departmentId: newUser.role === 'hr' ? 'DEP03' : 'DEP01',
+            department: newUser.department,
+            position: newUser.position,
+            status: 'active',
+            avatar: newUser.avatar,
+            password: newUser.password,
+            lastLogin: new Date().toISOString(),
+            createdAt: new Date().toISOString().slice(0, 10)
+          });
+          localStorage.setItem('ONBOARDAI_DB_V4', JSON.stringify(db));
+        }
+      } catch (_) {}
 
       setLoading('registerBtn', true, 'registering');
 

@@ -65,11 +65,15 @@
 <body class="bg-[#F1F5F9] text-slate-900 font-sans antialiased h-full flex flex-col">
   <!-- Thanh Thị sát của Quản trị viên (Admin View-as Bar - Mặc định ẩn, chỉ hiện khi HR/Admin truy cập) -->
   <div id="adminImpersonateBar" class="hidden bg-slate-900 text-white px-4 py-2.5 text-xs font-medium flex flex-wrap items-center justify-between gap-2 z-50 border-b border-indigo-500/40 shrink-0">
-    <div class="flex items-center gap-2">
+    <div class="flex flex-wrap items-center gap-2.5">
       <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-500 text-slate-950">Chế độ thị sát</span>
-      <span class="text-slate-300">Đang xem giao diện dưới góc nhìn của <strong class="text-white">Nguyễn Văn An (NH01 - Frontend Developer)</strong></span>
+      <span class="text-slate-300">Đang xem góc nhìn của <strong id="impersonateNewHireLabel" class="text-white">Nguyễn Văn An (NH01 - Frontend Developer)</strong></span>
+      <div class="flex items-center gap-1.5 ml-1">
+        <span class="text-[11px] text-slate-400">Đổi Nhân sự mới:</span>
+        <select id="impersonateNewHireSelect" onchange="switchImpersonatedNewHire(this.value)" class="bg-slate-800 text-white border border-slate-700 rounded-lg px-2.5 py-1 text-xs font-semibold focus:outline-none focus:border-amber-400 cursor-pointer"></select>
+      </div>
     </div>
-    <button onclick="exitImpersonation('hr-dashboard.html')" class="px-3 py-1.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-600 text-white text-xs font-bold transition shadow-xs">
+    <button id="exitImpersonateBtn" onclick="exitImpersonation('hr-dashboard.html')" class="px-3 py-1.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-600 text-white text-xs font-bold transition shadow-xs cursor-pointer">
       Thoát chế độ xem & Quay lại Bảng điều khiển HR
     </button>
   </div>
@@ -162,9 +166,9 @@
           <div>
             <h1 class="text-base font-bold text-slate-900 flex items-center gap-2">
               <span>Bảng điều khiển Hội nhập Cá nhân</span>
-              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-[#1F5AFE] border border-blue-200 whitespace-nowrap">Mã NH01</span>
+              <span id="headerNewHireCodeBadge" class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-[#1F5AFE] border border-blue-200 whitespace-nowrap">Mã NH01</span>
             </h1>
-            <p class="text-xs text-slate-500 hidden sm:block">Theo dõi lộ trình hội nhập, việc cần làm hôm nay và kết nối cùng Mentor</p>
+            <p id="headerNewHireDeptSub" class="text-xs text-slate-500 hidden sm:block">Theo dõi lộ trình hội nhập, việc cần làm hôm nay và kết nối cùng Mentor</p>
           </div>
         </div>
 
@@ -728,17 +732,63 @@
       });
     }
 
+    const NEWHIRE_VIEWAS_CATALOG = [
+      { id: 'NH01', name: 'Nguyễn Văn An', position: 'Frontend Developer', departmentId: 'DEP01', department: 'Kỹ thuật Công nghệ', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=An', defaultCompletedCount: 1 },
+      { id: 'NH02', name: 'Trần Thị Bình', position: 'Content Creator', departmentId: 'DEP02', department: 'Marketing & Truyền thông', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Binh', defaultCompletedCount: 1 },
+      { id: 'NH03', name: 'Lê Hoàng Long', position: 'Backend Developer', departmentId: 'DEP01', department: 'Kỹ thuật Công nghệ', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Long', defaultCompletedCount: 2 },
+      { id: 'NH04', name: 'Phạm Minh Thư', position: 'HR Executive', departmentId: 'DEP03', department: 'Nhân sự & Vận hành', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Thu', defaultCompletedCount: 5 },
+      { id: 'NH05', name: 'Nguyễn Quốc Bảo', position: 'UI/UX Frontend Engineer', departmentId: 'DEP01', department: 'Kỹ thuật Công nghệ', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Bao', defaultCompletedCount: 4 },
+      { id: 'NH06', name: 'Trần Quốc Khánh', position: 'DevOps & Cloud Engineer', departmentId: 'DEP01', department: 'Kỹ thuật Công nghệ', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Khanh', defaultCompletedCount: 3 }
+    ];
+
+    function getEffectiveNewHireProfile() {
+      const isImp = sessionStorage.getItem('isImpersonating');
+      const impRole = sessionStorage.getItem('impersonatedUserRole');
+      const impId = sessionStorage.getItem('impersonatedUserId');
+      if (isImp && (!impRole || impRole === 'newhire') && impId) {
+        const found = NEWHIRE_VIEWAS_CATALOG.find(n => n.id === impId);
+        if (found) return { ...found, role: 'newhire' };
+        try {
+          const obj = JSON.parse(sessionStorage.getItem('impersonatedUserObj') || 'null');
+          if (obj && obj.id) return obj;
+        } catch (_) {}
+      }
+      const base = API.getCurrentUser();
+      const matched = NEWHIRE_VIEWAS_CATALOG.find(n => n.id === base.id);
+      return matched ? { ...matched, ...base } : base;
+    }
+
+    function switchImpersonatedNewHire(nhId) {
+      const target = NEWHIRE_VIEWAS_CATALOG.find(n => n.id === nhId) || NEWHIRE_VIEWAS_CATALOG[0];
+      if (!target) return;
+      sessionStorage.setItem('impersonatedUserId', target.id);
+      sessionStorage.setItem('impersonatedUserRole', 'newhire');
+      sessionStorage.setItem('impersonatedUserName', `${target.name} (${target.id} - ${target.position})`);
+      sessionStorage.setItem('impersonatedUserObj', JSON.stringify({ ...target, role: 'newhire' }));
+      window.location.reload();
+    }
+
     function checkAdminImpersonation() {
       const isImpersonating = sessionStorage.getItem('isImpersonating');
       const bar = document.getElementById('adminImpersonateBar');
       if (isImpersonating && bar) {
         bar.classList.remove('hidden');
-        const customName = sessionStorage.getItem('impersonatedUserName');
-        const strongEl = bar.querySelector('strong');
-        if (customName && strongEl) strongEl.textContent = customName;
-        const btn = bar.querySelector('button');
+        const activeNh = getEffectiveNewHireProfile();
+        const labelEl = document.getElementById('impersonateNewHireLabel');
+        if (labelEl && activeNh) {
+          labelEl.textContent = `${activeNh.name} (${activeNh.id} - ${activeNh.position || 'New Hire'})`;
+        }
+        const selEl = document.getElementById('impersonateNewHireSelect');
+        if (selEl) {
+          selEl.innerHTML = NEWHIRE_VIEWAS_CATALOG.map(n =>
+            `<option value="${n.id}" ${n.id === (activeNh && activeNh.id) ? 'selected' : ''}>${n.name} (${n.id} - ${n.position})</option>`
+          ).join('');
+        }
+        const btn = document.getElementById('exitImpersonateBtn');
         if (isImpersonating === 'admin' && btn) {
           btn.textContent = 'Thoát chế độ xem & Quay lại Quản trị tài khoản';
+        } else if (isImpersonating === 'mentor' && btn) {
+          btn.textContent = 'Thoát chế độ xem & Quay lại Danh sách Mentee';
         }
       }
     }
@@ -746,22 +796,56 @@
     function exitImpersonation(returnUrl = 'hr-dashboard.html') {
       const savedReturn = sessionStorage.getItem('impersonateReturnUrl');
       const isImpersonating = sessionStorage.getItem('isImpersonating');
-      sessionStorage.removeItem('isImpersonating');
-      sessionStorage.removeItem('impersonateReturnUrl');
-      sessionStorage.removeItem('impersonatedUserName');
+      ['isImpersonating', 'impersonateReturnUrl', 'impersonatedUserName', 'impersonatedUserId', 'impersonatedUserRole', 'impersonatedUserObj']
+        .forEach(k => sessionStorage.removeItem(k));
       window.location.href = savedReturn || (isImpersonating === 'admin' ? 'admin-user-management.html' : returnUrl);
     }
 
     // Khởi tạo Dashboard khi trang tải xong
     document.addEventListener('DOMContentLoaded', async () => {
-      checkAdminImpersonation();
       await API.init();
+      checkAdminImpersonation();
 
-      const currentUser = API.getCurrentUser();
+      const currentUser = getEffectiveNewHireProfile();
       const allTasks = API.getAll('tasks');
+
+      // Cập nhật Topbar & Hero theo nhân sự đang xem
+      const topAvatar = document.getElementById('userAvatar');
+      const topName = document.getElementById('userName');
+      const codeBadge = document.getElementById('headerNewHireCodeBadge');
+      const deptSub = document.getElementById('headerNewHireDeptSub');
+      const welcomeTitleEl = document.getElementById('welcomeTitle');
+      if (topAvatar && currentUser.avatar) topAvatar.src = currentUser.avatar;
+      if (topName && currentUser.name) topName.textContent = currentUser.name;
+      if (codeBadge && currentUser.id) codeBadge.textContent = `Mã ${currentUser.id}`;
+      if (deptSub && currentUser.department) {
+        deptSub.textContent = `${currentUser.position || 'Nhân sự mới'} • Phòng ${currentUser.department}`;
+      }
+      if (welcomeTitleEl && currentUser.name) {
+        welcomeTitleEl.textContent = `Chào ${currentUser.name}, hôm nay là ngày tăng tốc!`;
+      }
       
-      // Lọc nhiệm vụ thuộc về New Hire hiện tại
-      const userTasks = allTasks.filter(t => t.newHireId === currentUser.id);
+      // Lọc nhiệm vụ thuộc về New Hire hiện tại (nếu là NH02..NH06 chưa có bản ghi riêng thì khởi tạo từ mẫu NH01)
+      let userTasks = allTasks.filter(t => t.newHireId === currentUser.id);
+      if (userTasks.length === 0) {
+        const templateTasks = allTasks.filter(t => t.newHireId === 'NH01');
+        const targetCompleted = typeof currentUser.defaultCompletedCount === 'number' ? currentUser.defaultCompletedCount : 1;
+        userTasks = templateTasks.map((t, idx) => {
+          const isCompleted = idx < targetCompleted;
+          const cloned = {
+            ...t,
+            id: `${currentUser.id}_${t.id}`,
+            newHireId: currentUser.id,
+            status: isCompleted ? 'completed' : (idx === targetCompleted && t.status === 'blocked' ? 'blocked' : 'pending'),
+            proof: isCompleted ? `https://portal.onboardai.vn/verify/${currentUser.id.toLowerCase()}-${t.id.toLowerCase()}-completed` : ''
+          };
+          allTasks.push(cloned);
+          return cloned;
+        });
+        const db = API.getDB();
+        db.tasks = allTasks;
+        API.saveDB(db);
+      }
       // Đảm bảo nhiệm vụ đã hoàn thành từ dữ liệu gốc có sẵn minh chứng hợp lệ
       userTasks.forEach(t => {
         if (t.status === 'completed' && (!t.proof || !t.proof.trim())) {
