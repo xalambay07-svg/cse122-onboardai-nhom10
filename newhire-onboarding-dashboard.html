@@ -358,7 +358,7 @@
                 <div class="p-4 rounded-xl bg-slate-50/90 border border-[#E2E8F0] space-y-3">
                   <div class="flex items-start gap-3.5">
                     <div class="relative shrink-0">
-                      <img id="mentorCardAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mai" alt="Mentor" class="w-12 h-12 rounded-full bg-white ring-2 ring-blue-100 object-cover">
+                      <img id="mentorCardAvatar" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=256&q=80" alt="Mentor" class="w-12 h-12 rounded-full bg-white ring-2 ring-blue-100 object-cover">
                       <span class="absolute bottom-0 right-0 flex h-3 w-3">
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-3 w-3 bg-[#00B67A] ring-2 ring-white"></span>
@@ -380,6 +380,18 @@
                         <span id="mentorCardExp" class="text-[11px] text-slate-500 font-medium">Phản hồi ~5 phút</span>
                       </div>
                     </div>
+                  </div>
+
+                  <!-- Kênh liên hệ trực tiếp: SĐT & Zalo của Người đồng hành -->
+                  <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-200/70">
+                    <button type="button" onclick="copyMentorPhone()" class="flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-blue-300 text-[11px] font-bold text-slate-700 hover:text-[#1F5AFE] transition-all cursor-pointer" title="Bấm để sao chép SĐT Mentor">
+                      <i data-lucide="phone-call" class="w-3.5 h-3.5 text-emerald-600 shrink-0"></i>
+                      <span id="mentorCardPhone" class="truncate">0904 682 115</span>
+                    </button>
+                    <button type="button" onclick="openMentorZalo()" class="flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#0068FF]/10 border border-[#0068FF]/25 hover:bg-[#0068FF] text-[11px] font-bold text-[#0068FF] hover:text-white transition-all cursor-pointer" title="Nhắn tin Zalo trực tiếp với Mentor">
+                      <span class="px-1 py-0.2 rounded bg-[#0068FF] text-white text-[9px] font-extrabold leading-none">Zalo</span>
+                      <span id="mentorCardZalo" class="truncate">0904.682.115</span>
+                    </button>
                   </div>
 
                   <!-- Giới thiệu ngắn về người đồng hành -->
@@ -859,7 +871,10 @@
           departmentId: 'DEP01',
           department: 'Kỹ thuật Công nghệ',
           category: 'tech',
-          avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Mai',
+          avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=256&q=80',
+          phone: '0904 682 115',
+          zalo: '0904.682.115',
+          zaloUrl: 'https://zalo.me/0904682115',
           baseScore: 98,
           matchReason: 'Cùng nhóm Kỹ thuật & phụ trách trực tiếp kiến trúc dự án bạn đang tham gia.',
           rating: '4.9',
@@ -887,7 +902,7 @@
             {
               sender: 'mentor',
               time: '09:16',
-              text: 'Nếu vướng phần cấp quyền SSH Key (Task T02) hay cài đặt môi trường Local thì nhắn chị ngay tại đây nhé!'
+              text: 'Nếu vướng phần cấp quyền SSH Key (Task T02) hay cần gấp thì nhắn tại đây hoặc gọi/Zalo cho chị qua số 0904 682 115 nhé!'
             }
           ]
         },
@@ -898,7 +913,10 @@
           departmentId: 'DEP01',
           department: 'Kỹ thuật Công nghệ',
           category: 'tech',
-          avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Minh',
+          avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=256&q=80',
+          phone: '0912 345 889',
+          zalo: '0912.345.889',
+          zaloUrl: 'https://zalo.me/0912345889',
           baseScore: 95,
           matchReason: 'Chuyên gia Design System & tối ưu hiệu năng giao diện Web hiện đại.',
           rating: '5.0',
@@ -926,7 +944,7 @@
             {
               sender: 'mentor',
               time: '09:21',
-              text: 'Em cứ thoải mái nhắn câu hỏi hoặc gửi PR đầu tiên qua đây để anh em mình cùng trao đổi nhé.'
+              text: 'Em cứ thoải mái nhắn câu hỏi hoặc kết nối Zalo anh số 0912 345 889 để trao đổi nhanh nhé.'
             }
           ]
         },
@@ -937,7 +955,10 @@
           departmentId: 'DEP01',
           department: 'Kỹ thuật Công nghệ',
           category: 'tech',
-          avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Trong',
+          avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=256&q=80',
+          phone: '0983 771 420',
+          zalo: '0983.771.420',
+          zaloUrl: 'https://zalo.me/0983771420',
           baseScore: 93,
           matchReason: 'Thế mạnh về kiến trúc API, hạ tầng Docker/Cloud và tích hợp hệ thống.',
           rating: '4.9',
@@ -960,7 +981,7 @@
             {
               sender: 'mentor',
               time: '09:25',
-              text: `Chào ${currentUser.name} 👋 Anh là Đình Trọng. Chào mừng em đến với khối Kỹ thuật Công nghệ! Anh sẽ hỗ trợ em nắm vững toàn bộ luồng API và môi trường kỹ thuật nhé.`
+              text: `Chào ${currentUser.name} 👋 Anh là Đình Trọng (SĐT/Zalo: 0983 771 420). Chào mừng em đến với khối Kỹ thuật Công nghệ! Anh sẽ hỗ trợ em nắm vững toàn bộ luồng API và môi trường kỹ thuật nhé.`
             }
           ]
         },
@@ -971,7 +992,10 @@
           departmentId: 'DEP01',
           department: 'Kỹ thuật Công nghệ',
           category: 'tech',
-          avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ngoc',
+          avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=256&q=80',
+          phone: '0936 519 208',
+          zalo: '0936.519.208',
+          zaloUrl: 'https://zalo.me/0936519208',
           baseScore: 91,
           matchReason: 'Chuyên gia tích hợp AI Copilot, RAG Pipeline và phân tích dữ liệu thông minh.',
           rating: '5.0',
@@ -994,7 +1018,7 @@
             {
               sender: 'mentor',
               time: '09:18',
-              text: `Chào ${currentUser.name} ✨ Chị là Bảo Ngọc từ nhóm AI & Data. Rất vui được đồng hành cùng em khám phá công nghệ cốt lõi tại OnboardAI!`
+              text: `Chào ${currentUser.name} ✨ Chị là Bảo Ngọc từ nhóm AI & Data (Zalo: 0936 519 208). Rất vui được đồng hành cùng em khám phá công nghệ cốt lõi tại OnboardAI!`
             }
           ]
         },
@@ -1005,7 +1029,10 @@
           departmentId: 'DEP01',
           department: 'Kỹ thuật Công nghệ',
           category: 'tech',
-          avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Son',
+          avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=256&q=80',
+          phone: '0978 402 661',
+          zalo: '0978.402.661',
+          zaloUrl: 'https://zalo.me/0978402661',
           baseScore: 89,
           matchReason: 'Giúp bạn nắm vững tiêu chuẩn kiểm thử tự động, bảo mật 2FA/ISO và chất lượng code.',
           rating: '4.8',
@@ -1028,7 +1055,7 @@
             {
               sender: 'mentor',
               time: '09:22',
-              text: `Chào ${currentUser.name} 🛡️ Anh là Hoàng Sơn. Anh sẽ đồng hành hỗ trợ em về quy chuẩn chất lượng code, kiểm thử và bảo mật hệ thống nhé!`
+              text: `Chào ${currentUser.name} 🛡️ Anh là Hoàng Sơn (SĐT/Zalo: 0978 402 661). Anh sẽ đồng hành hỗ trợ em về quy chuẩn chất lượng code, kiểm thử và bảo mật hệ thống nhé!`
             }
           ]
         },
@@ -1039,7 +1066,10 @@
           departmentId: 'DEP02',
           department: 'Marketing & Truyền thông',
           category: 'culture',
-          avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Tuan',
+          avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=256&q=80',
+          phone: '0945 812 330',
+          zalo: '0945.812.330',
+          zaloUrl: 'https://zalo.me/0945812330',
           baseScore: 90,
           matchReason: 'Giúp bạn hiểu sâu bài toán nghiệp vụ sản phẩm và phối hợp Agile đa phòng ban.',
           rating: '4.8',
@@ -1062,7 +1092,7 @@
             {
               sender: 'mentor',
               time: '09:30',
-              text: `Chào mừng ${currentUser.name} đến với đại gia đình OnboardAI! 🚀 Mình là Minh Tuấn, sẵn sàng hỗ trợ bạn hòa nhập văn hóa và nắm bắt quy trình sản phẩm.`
+              text: `Chào mừng ${currentUser.name} đến với đại gia đình OnboardAI! 🚀 Mình là Minh Tuấn (Zalo: 0945 812 330), sẵn sàng hỗ trợ bạn hòa nhập văn hóa và nắm bắt quy trình sản phẩm.`
             }
           ]
         },
@@ -1073,7 +1103,10 @@
           departmentId: 'DEP02',
           department: 'Marketing & Truyền thông',
           category: 'culture',
-          avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ha',
+          avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=256&q=80',
+          phone: '0962 198 745',
+          zalo: '0962.198.745',
+          zaloUrl: 'https://zalo.me/0962198745',
           baseScore: 87,
           matchReason: 'Chuyên gia định vị thương hiệu, truyền thông sản phẩm công nghệ và kỹ năng thuyết trình.',
           rating: '4.9',
@@ -1096,7 +1129,7 @@
             {
               sender: 'mentor',
               time: '09:12',
-              text: `Chào ${currentUser.name} 🌸 Chị là Thanh Hà. Rất vui được đồng hành cùng em trong hành trình hòa nhập và tỏa sáng tại OnboardAI!`
+              text: `Chào ${currentUser.name} 🌸 Chị là Thanh Hà (SĐT/Zalo: 0962 198 745). Rất vui được đồng hành cùng em trong hành trình hòa nhập và tỏa sáng tại OnboardAI!`
             }
           ]
         },
@@ -1107,7 +1140,10 @@
           departmentId: 'DEP03',
           department: 'Nhân sự & Vận hành',
           category: 'culture',
-          avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Huy',
+          avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=256&q=80',
+          phone: '0918 905 512',
+          zalo: '0918.905.512',
+          zaloUrl: 'https://zalo.me/0918905512',
           baseScore: 86,
           matchReason: 'Chuyên gia tư vấn mục tiêu thử việc 60 ngày, phúc lợi và văn hóa doanh nghiệp.',
           rating: '4.9',
@@ -1130,7 +1166,7 @@
             {
               sender: 'mentor',
               time: '09:10',
-              text: `Chào ${currentUser.name} 🌟 Anh là Quang Huy từ khối People & Culture. Anh sẽ đồng hành cùng em thiết lập OKRs thử việc và giải đáp mọi thắc mắc về văn hóa, chế độ tại OnboardAI nhé!`
+              text: `Chào ${currentUser.name} 🌟 Anh là Quang Huy từ khối People & Culture (Zalo: 0918 905 512). Anh sẽ đồng hành cùng em thiết lập OKRs thử việc và giải đáp mọi thắc mắc về văn hóa, chế độ tại OnboardAI nhé!`
             }
           ]
         }
@@ -1233,7 +1269,7 @@
             <div class="p-3 rounded-xl border ${idx === 0 ? 'border-blue-300 bg-blue-50/40' : 'border-slate-200 bg-slate-50/70'} hover:bg-white hover:border-[#1F5AFE] transition-all space-y-2">
               <div class="flex items-start justify-between gap-2.5">
                 <div class="flex items-center gap-2.5 min-w-0">
-                  <img src="${m.avatar}" alt="${m.name}" class="w-10 h-10 rounded-full bg-white ring-1 ring-slate-200 shrink-0 object-cover">
+                  <img src="${m.avatar}" alt="${m.name}" class="w-10 h-10 rounded-full bg-white ring-2 ring-slate-200 shrink-0 object-cover">
                   <div class="min-w-0">
                     <div class="flex items-center gap-1.5">
                       <h4 class="text-xs font-extrabold text-slate-900 truncate">${m.name}</h4>
@@ -1247,6 +1283,16 @@
                 } shrink-0">
                   ${m.matchScore}% hợp
                 </span>
+              </div>
+              <div class="flex flex-wrap items-center gap-1.5 text-[10px]">
+                <button type="button" onclick="copyMentorPhone('${m.phone}', '${m.name}')" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-700 hover:border-[#1F5AFE] hover:text-[#1F5AFE] font-semibold cursor-pointer" title="Nhấn để sao chép SĐT">
+                  <i data-lucide="phone" class="w-2.5 h-2.5 text-emerald-600"></i>
+                  <span>SĐT: ${m.phone}</span>
+                </button>
+                <button type="button" onclick="openMentorZalo('${m.zalo}', '${m.name}', '${m.zaloUrl}')" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-50/80 border border-blue-200 text-[#0068FF] hover:bg-blue-100 font-bold cursor-pointer" title="Nhấn để kết nối Zalo">
+                  <span class="w-3.5 h-3.5 rounded bg-[#0068FF] text-white text-[8px] font-black inline-flex items-center justify-center">Z</span>
+                  <span>Zalo: ${m.zalo}</span>
+                </button>
               </div>
               <p class="text-[11px] text-slate-600 line-clamp-2 leading-snug">
                 <strong class="text-slate-700">Lý do AI gợi ý:</strong> ${m.matchReason}
@@ -1286,6 +1332,15 @@
         document.getElementById('mentorCardExp').textContent = mentor.responseTime;
         document.getElementById('mentorCardBio').textContent = `"${mentor.shortBio}"`;
 
+        const phoneEl = document.getElementById('mentorCardPhone');
+        if (phoneEl) phoneEl.textContent = mentor.phone || '0904 682 115';
+        const zaloEl = document.getElementById('mentorCardZalo');
+        if (zaloEl) zaloEl.textContent = `Zalo: ${mentor.zalo || mentor.phone || '0904 682 115'}`;
+        const phoneBtn = document.getElementById('mentorCardPhoneBtn');
+        if (phoneBtn) phoneBtn.onclick = () => window.copyMentorPhone(mentor.phone, mentor.name);
+        const zaloBtn = document.getElementById('mentorCardZaloBtn');
+        if (zaloBtn) zaloBtn.onclick = () => window.openMentorZalo(mentor.zalo, mentor.name, mentor.zaloUrl);
+
         const tagsContainer = document.getElementById('mentorCardTags');
         tagsContainer.innerHTML = mentor.tags.map(tag =>
           `<span class="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-white border border-slate-200 text-slate-700">${tag}</span>`
@@ -1321,6 +1376,25 @@
         lucide.createIcons();
       }
 
+      window.copyMentorPhone = function(phone, mentorName) {
+        const cleanPhone = phone || '0904 682 115';
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(cleanPhone.replace(/\s+/g, '')).catch(() => {});
+        }
+        showToast(`Đã sao chép SĐT của ${mentorName || 'Người đồng hành'}: ${cleanPhone}`, 'success');
+      };
+
+      window.openMentorZalo = function(zalo, mentorName, zaloUrl) {
+        const cleanZalo = zalo || '0904 682 115';
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(cleanZalo.replace(/\s+/g, '')).catch(() => {});
+        }
+        showToast(`Đã sao chép Zalo của ${mentorName || 'Người đồng hành'} (${cleanZalo}). Đang mở Zalo...`, 'success');
+        if (zaloUrl) {
+          window.open(zaloUrl, '_blank', 'noopener');
+        }
+      };
+
       window.toggleSchedulePicker = function() {
         const picker = document.getElementById('mentorSchedulePicker');
         picker.classList.toggle('hidden');
@@ -1341,7 +1415,7 @@
         const activeSlot = getMentorCustomSlot(mentor);
         document.getElementById('chatMentorAvatar').src = mentor.avatar;
         document.getElementById('chatMentorName').textContent = mentor.name;
-        document.getElementById('chatMentorRole').textContent = `${mentor.role} • Đang trực tuyến`;
+        document.getElementById('chatMentorRole').textContent = `${mentor.role} • SĐT/Zalo: ${mentor.phone} • Đang trực tuyến`;
         document.getElementById('chatPinnedSchedule').textContent = `Lịch 1-on-1: ${activeSlot}`;
 
         const messages = getMentorChatHistory(mentor.id);
@@ -1503,7 +1577,7 @@
           if (currentMentorFilter === 'tech' && m.category !== 'tech') return false;
           if (currentMentorFilter === 'culture' && m.category !== 'culture') return false;
           if (query) {
-            const haystack = `${m.name} ${m.role} ${m.shortBio} ${m.tags.join(' ')}`.toLowerCase();
+            const haystack = `${m.name} ${m.role} ${m.shortBio} ${m.phone || ''} ${m.zalo || ''} ${m.tags.join(' ')}`.toLowerCase();
             if (!haystack.includes(query)) return false;
           }
           return true;
@@ -1556,6 +1630,18 @@
                   } shrink-0">
                     ${mentor.matchLabel}
                   </span>
+                </div>
+
+                <!-- Liên hệ nhanh SĐT & Zalo -->
+                <div class="grid grid-cols-2 gap-2">
+                  <button type="button" onclick="copyMentorPhone('${mentor.phone}', '${mentor.name}')" class="px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/90 flex items-center justify-center gap-1.5 text-[11px] font-bold text-slate-700 transition-all cursor-pointer" title="Nhấn để sao chép SĐT">
+                    <i data-lucide="phone-call" class="w-3.5 h-3.5 text-emerald-600 shrink-0"></i>
+                    <span class="truncate">SĐT: ${mentor.phone}</span>
+                  </button>
+                  <button type="button" onclick="openMentorZalo('${mentor.zalo}', '${mentor.name}', '${mentor.zaloUrl}')" class="px-2.5 py-1.5 rounded-xl bg-blue-50/70 hover:bg-blue-100/80 border border-blue-200/90 flex items-center justify-center gap-1.5 text-[11px] font-bold text-[#0068FF] transition-all cursor-pointer" title="Nhấn để kết nối Zalo">
+                    <span class="w-4 h-4 rounded-md bg-[#0068FF] text-white text-[9px] font-black inline-flex items-center justify-center shrink-0">Z</span>
+                    <span class="truncate">Zalo: ${mentor.zalo}</span>
+                  </button>
                 </div>
 
                 <!-- Lý do gợi ý từ AI -->
