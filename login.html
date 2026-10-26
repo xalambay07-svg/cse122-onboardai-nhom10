@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Đăng nhập | Hệ thống Hội nhập & Kèm cặp nhân sự</title>
+  <title>Đăng nhập | OnboardAI – Hệ thống Hội nhập & Kèm cặp nhân sự</title>
+  <link rel="icon" href="assets/images/brand/onboardai-mark-small.svg" type="image/svg+xml">
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font Awesome CDN -->
@@ -241,15 +242,13 @@
       </svg>
 
       <!-- Logo -->
-      <div class="relative flex items-center gap-3">
-        <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur border border-cyan-300/40 flex items-center justify-center shadow-[0_0_16px_rgba(34,211,238,.45)]">
-          <i class="fa-solid fa-graduation-cap text-lg text-cyan-200"></i>
-        </div>
+      <a href="index.html" class="relative flex items-center gap-3 hover:opacity-95 transition">
+        <img src="assets/images/brand/onboardai-mark.svg" width="44" height="44" alt="OnboardAI" class="w-11 h-11 shrink-0 rounded-xl shadow-[0_0_16px_rgba(34,211,238,.45)]">
         <div>
-          <div class="font-bold leading-tight" data-i18n="brandName">Cổng Đào Tạo & Kèm Cặp</div>
+          <div class="font-extrabold text-lg leading-tight tracking-tight" data-i18n="brandName">OnboardAI</div>
           <div class="text-xs text-indigo-200" data-i18n="brandTagline">Hệ thống hội nhập & hướng dẫn nhân sự mới</div>
         </div>
-      </div>
+      </a>
 
       <!-- Nội dung chính -->
       <div class="relative max-w-md">
@@ -372,15 +371,13 @@
       <div class="relative w-full max-w-md animate-fade-up bg-white/95 backdrop-blur rounded-3xl border border-slate-200 shadow-2xl shadow-sky-900/10 p-6 sm:p-8">
 
         <!-- Logo cho mobile -->
-        <div class="lg:hidden flex items-center gap-3 mb-6">
-          <div class="w-11 h-11 rounded-xl bg-brand-600 text-white flex items-center justify-center shadow-lg shadow-brand-500/30">
-            <i class="fa-solid fa-graduation-cap"></i>
-          </div>
+        <a href="index.html" class="lg:hidden flex items-center gap-3 mb-6 hover:opacity-95 transition">
+          <img src="assets/images/brand/onboardai-mark.svg" width="44" height="44" alt="OnboardAI" class="w-11 h-11 shrink-0 rounded-xl shadow-lg shadow-brand-500/30">
           <div>
-            <div class="font-bold leading-tight text-slate-900" data-i18n="brandName">Cổng Đào Tạo & Kèm Cặp</div>
+            <div class="font-extrabold text-lg leading-tight text-slate-900" data-i18n="brandName">OnboardAI</div>
             <div class="text-xs text-slate-500" data-i18n="brandTagline">Hệ thống hội nhập & hướng dẫn nhân sự mới</div>
           </div>
-        </div>
+        </a>
 
         <!-- ===================================================== -->
         <!-- GIAO DIỆN 1: ĐĂNG NHẬP                                 -->
@@ -697,10 +694,10 @@
     // 0. TỪ ĐIỂN ĐA NGÔN NGỮ (TIẾNG VIỆT / TIẾNG ANH)
     const I18N = {
       vi: {
-        titleLogin: 'Đăng nhập | Hệ thống Hội nhập & Kèm cặp nhân sự',
-        titleRegister: 'Đăng ký | Hệ thống Hội nhập & Kèm cặp nhân sự',
-        titleForgot: 'Quên mật khẩu | Hệ thống Hội nhập & Kèm cặp nhân sự',
-        brandName: 'Cổng Đào Tạo & Kèm Cặp',
+        titleLogin: 'Đăng nhập | OnboardAI – Hệ thống Hội nhập & Kèm cặp nhân sự',
+        titleRegister: 'Đăng ký | OnboardAI – Hệ thống Hội nhập & Kèm cặp nhân sự',
+        titleForgot: 'Quên mật khẩu | OnboardAI – Hệ thống Hội nhập & Kèm cặp nhân sự',
+        brandName: 'OnboardAI',
         brandTagline: 'Hệ thống hội nhập & hướng dẫn nhân sự mới',
         ms1: 'Ngày 1', ms2: 'Tuần 1', ms3: 'Tháng 1', ms4: 'Tháng 3',
         aiBadge: 'Tích hợp trợ lý AI-2',
@@ -789,10 +786,10 @@
         roleTitles: { newhire: 'Nhân viên mới', mentor: 'Người hướng dẫn', hr: 'Nhân sự', admin: 'Quản trị viên' }
       },
       en: {
-        titleLogin: 'Sign in | Onboarding & Mentoring System',
-        titleRegister: 'Sign up | Onboarding & Mentoring System',
-        titleForgot: 'Forgot password | Onboarding & Mentoring System',
-        brandName: 'Mentorship Portal',
+        titleLogin: 'Sign in | OnboardAI – Onboarding & Mentoring System',
+        titleRegister: 'Sign up | OnboardAI – Onboarding & Mentoring System',
+        titleForgot: 'Forgot password | OnboardAI – Onboarding & Mentoring System',
+        brandName: 'OnboardAI',
         brandTagline: 'Onboarding & Mentoring System',
         ms1: 'Day 1', ms2: 'Week 1', ms3: 'Month 1', ms4: 'Month 3',
         aiBadge: 'Powered by AI-2 assistant',
@@ -881,6 +878,14 @@
       }
     };
 
+    // Bản đồ điều hướng chuẩn theo vai trò
+    const ROLE_REDIRECT_MAP = {
+      newhire: 'newhire-onboarding-dashboard.html',
+      mentor: 'mentor-mentee-list.html',
+      hr: 'hr-dashboard.html',
+      admin: 'admin-user-management.html'
+    };
+
     // Trạng thái giao diện
     let currentLang = localStorage.getItem('lang') === 'en' ? 'en' : 'vi';
     let currentView = 'login';      // login | register | forgot
@@ -895,63 +900,93 @@
     // 1. DỮ LIỆU TÀI KHOẢN MẪU (MOCK DATA) – mật khẩu chung: 123456
     const ROLES_DATA = {
       newhire: {
-        id: 'USR_NH_001',
+        id: 'NH01',
         name: 'Nguyễn Văn An',
         email: 'an.nguyen@company.com',
+        altEmails: ['an.nguyen@onboardai.vn'],
         role: 'newhire',
-        department: 'Công nghệ thông tin',
-        position: 'Lập trình viên giao diện (mới vào nghề)',
-        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80',
-        mentorName: 'Trần Minh Alex',
-        redirectUrl: 'mentor-mentee-list.html'
+        department: 'Kỹ thuật Công nghệ',
+        position: 'Frontend Developer',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=An',
+        mentorName: 'Trần Thị Mai',
+        redirectUrl: 'newhire-onboarding-dashboard.html'
       },
       mentor: {
-        id: 'USR_MT_102',
-        name: 'Trần Minh Alex',
+        id: 'MT01',
+        name: 'Trần Thị Mai',
         email: 'mentor.alex@company.com',
+        altEmails: ['mentor@onboardai.vn', 'mai.tran@onboardai.vn'],
         role: 'mentor',
-        department: 'Phòng Kỹ thuật',
-        position: 'Kỹ sư phần mềm cấp cao & Người hướng dẫn',
-        avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=120&q=80',
-        menteeCount: 3,
-        // Chuyển sang màn hình số 2 của nhóm bạn
+        department: 'Kỹ thuật Công nghệ',
+        position: 'Tech Lead & Mentor',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Mai',
+        menteeCount: 2,
         redirectUrl: 'mentor-mentee-list.html'
       },
       hr: {
-        id: 'USR_HR_055',
-        name: 'Lê Thuỳ Dung',
+        id: 'HR01',
+        name: 'Lê Hoàng Nam',
         email: 'dung.le@company.com',
+        altEmails: ['hr@onboardai.vn', 'nam.le@onboardai.vn'],
         role: 'hr',
-        department: 'Phòng Nhân sự',
-        position: 'Trưởng nhóm Tuyển dụng & Hội nhập',
-        avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80',
-        redirectUrl: 'mentor-mentee-list.html'
+        department: 'Nhân sự & Vận hành',
+        position: 'HR Specialist',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Nam',
+        redirectUrl: 'hr-dashboard.html'
       },
       admin: {
-        id: 'USR_AD_001',
-        name: 'Phạm Quốc Huy',
+        id: 'USR01',
+        name: 'Vũ Quản Trị',
         email: 'admin.huy@company.com',
+        altEmails: ['admin@onboardai.vn'],
         role: 'admin',
-        department: 'Quản trị hệ thống',
-        position: 'Quản trị viên hệ thống',
-        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80',
-        redirectUrl: 'mentor-mentee-list.html'
+        department: 'Kỹ thuật Công nghệ',
+        position: 'System Administrator',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Admin',
+        redirectUrl: 'admin-user-management.html'
       }
     };
     const DEMO_PASSWORD = '123456';
 
-    // Tài khoản người dùng tự đăng ký (lưu trong LocalStorage – chỉ dùng cho bản demo)
+    // Tài khoản người dùng tự đăng ký hoặc tạo từ trang Admin (lưu trong LocalStorage)
     function getRegisteredUsers() {
       try { return JSON.parse(localStorage.getItem('registeredUsers')) || []; }
       catch { return []; }
     }
+    function getDbUsers() {
+      try {
+        const db = JSON.parse(localStorage.getItem('ONBOARDAI_DB_V4') || 'null');
+        if (!db || !Array.isArray(db.users)) return [];
+        return db.users.map(u => ({
+          id: u.profileId || u.id,
+          name: u.name,
+          email: u.email,
+          role: u.role || 'newhire',
+          department: u.department || 'Kỹ thuật Công nghệ',
+          position: u.position || 'Nhân viên',
+          avatar: u.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(u.name || 'User')}`,
+          password: u.password || DEMO_PASSWORD,
+          redirectUrl: ROLE_REDIRECT_MAP[u.role] || 'newhire-onboarding-dashboard.html'
+        }));
+      } catch {
+        return [];
+      }
+    }
     function getAllAccounts() {
       const demo = Object.values(ROLES_DATA).map(u => ({ ...u, password: DEMO_PASSWORD }));
-      return [...demo, ...getRegisteredUsers()];
+      const registered = getRegisteredUsers().map(u => ({
+        ...u,
+        redirectUrl: ROLE_REDIRECT_MAP[u.role] || u.redirectUrl || 'newhire-onboarding-dashboard.html'
+      }));
+      return [...demo, ...registered, ...getDbUsers()];
     }
     function findAccount(email) {
       const e = email.trim().toLowerCase();
-      return getAllAccounts().find(u => u.email.toLowerCase() === e);
+      return getAllAccounts().find(u => {
+        if (u.email && u.email.toLowerCase() === e) return true;
+        if (Array.isArray(u.altEmails) && u.altEmails.some(alt => alt.toLowerCase() === e)) return true;
+        return false;
+      });
     }
     function isValidEmail(email) {
       return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -1116,19 +1151,24 @@
       saveSessionAndRedirect(account);
     }
 
-    // Lưu phiên đăng nhập và chuyển sang giao diện tiếp theo
+    // Lưu phiên đăng nhập và chuyển sang giao diện tiếp theo đúng theo vai trò
     function saveSessionAndRedirect(account) {
-      const { password, ...user } = account;   // không lưu mật khẩu vào phiên
+      const { password, altEmails, ...user } = account;   // không lưu mật khẩu vào phiên
       const roleTitle = t('roleTitles')[user.role];
+      const targetRedirectUrl = ROLE_REDIRECT_MAP[user.role] || user.redirectUrl || 'newhire-onboarding-dashboard.html';
       const sessionData = {
         ...user,
+        redirectUrl: targetRedirectUrl,
         roleTitle,
         lang: currentLang,
         token: 'BEARER_TOKEN_' + Math.random().toString(36).substring(2).toUpperCase(),
         loginAt: new Date().toISOString()
       };
 
+      ['isImpersonating', 'impersonatedUserName', 'impersonateReturnUrl']
+        .forEach(k => sessionStorage.removeItem(k));
       localStorage.setItem('currentUser', JSON.stringify(sessionData));
+      localStorage.setItem('ONBOARDAI_CURRENT_USER', JSON.stringify(sessionData));
       localStorage.setItem('userRole', user.role);
       localStorage.setItem('isLoggedIn', 'true');
 
@@ -1136,7 +1176,7 @@
       showToast(t('toastSuccess')(roleTitle), 'success');
 
       setTimeout(() => {
-        window.location.href = user.redirectUrl || 'mentor-mentee-list.html';
+        window.location.href = targetRedirectUrl;
       }, 900);
     }
 
@@ -1163,15 +1203,15 @@
       if (!valid) { showToast(t('toastInvalid'), 'error'); return; }
 
       const newUser = {
-        id: 'USR_' + regRole.toUpperCase() + '_' + Date.now().toString().slice(-6),
+        id: regRole === 'newhire' ? 'NH01' : ('USR_' + regRole.toUpperCase() + '_' + Date.now().toString().slice(-6)),
         name,
         email,
         role: regRole,
-        department: department || '—',
+        department: department || 'Kỹ thuật Công nghệ',
         position: I18N.vi.roleTitles[regRole],
-        avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0ea5e9&color=fff`,
+        avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name)}`,
         password,   // Lưu ý: chỉ phục vụ demo phía trình duyệt, hệ thống thật phải mã hoá ở máy chủ
-        redirectUrl: 'mentor-mentee-list.html',
+        redirectUrl: ROLE_REDIRECT_MAP[regRole] || 'newhire-onboarding-dashboard.html',
         createdAt: new Date().toISOString()
       };
 
