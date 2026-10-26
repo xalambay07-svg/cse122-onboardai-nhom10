@@ -2,7 +2,7 @@
 
 > **Học phần:** PHÁT TRIỂN ỨNG DỤNG WEB CƠ BẢN – CSE122 (Trường Đại học Thủy Lợi – Khoa CNTT)  
 > **Mã đề tài:** BTL-20 (Lĩnh vực: Nhân sự / HRTech)  
-> **Nhóm thực hiện:** Nhóm 10 (3 Thành viên: SV1, SV2, SV3)  
+> **Nhóm thực hiện:** Nhóm 10 (2 Thành viên thực hiện toàn bộ khối lượng dự án: **SV1 – Trưởng nhóm** & **SV2**)  
 > **Repository GitHub:** [https://github.com/xalambay07-svg/cse122-onboardai-nhom10](https://github.com/xalambay07-svg/cse122-onboardai-nhom10)  
 > **Bảng Kanban Trello:** [[CSE122 - BTL20] OnboardAI - Nhóm 10](https://trello.com/b/J0c8nZ2l) *(Xem bản trực quan 4 tuần tại [`trello-kanban.html`](trello-kanban.html) & [`docs/QUY_TRINH_TRELLO_KANBAN.md`](docs/QUY_TRINH_TRELLO_KANBAN.md))*
 
@@ -76,15 +76,15 @@ flowchart LR
 
 | # | Vai trò | Mục tiêu người dùng | Nhiệm vụ người dùng | Màn hình | Tệp | CRUD | Trạng thái | AI | Phụ trách | Công việc | Nhánh | OBS |
 |:---:|:---|:---|:---|:---|:---|:---:|:---|:---|:---:|:---:|:---|:---:|
-| 1 | **Dùng chung** | Tìm hiểu giải pháp | Xem tính năng & quy trình 4 giai đoạn | Trang chủ giới thiệu | [`index.html`](index.html) | R | Bình thường · Đang tải | Giới thiệu 3 AI | **SV1** | `T08` | `feat/sv1-ui-newhire` | `OBS-01` |
+| 1 | **Dùng chung** | Tìm hiểu giải pháp | Xem tính năng & quy trình 4 giai đoạn | Trang chủ giới thiệu | [`index.html`](index.html) | R | Bình thường · Đang tải | Giới thiệu 3 AI | **SV1** | `T08` | `huy/feature/newhire-checklist` | `OBS-01` |
 | 2 | **Dùng chung** | Xác thực vai trò | Đăng nhập & kiểm tra hợp lệ biểu mẫu | Cổng đăng nhập 4 vai trò | [`login.html`](login.html) | C/R | Bình thường · Lỗi · Bị khóa | – | **SV2** | `T08`, `T20` | `feat/sv2-data-mentor` | `OBS-02` |
 | 3 | **New Hire** | Theo dõi tiến độ & chọn Mentor | Chọn trong 8 Mentor AI gợi ý & Chat trực tiếp | Dashboard Nhân viên mới | [`newhire-onboarding-dashboard.html`](newhire-onboarding-dashboard.html) | C/R/U | Chưa có Mentor (Rỗng) · Đang chat · Hoàn thành | **AI-2:** Ghép cặp 8 Mentor | **SV1** | `T09`, `T14`, `T21` | `huy/feature/newhire-checklist` | `OBS-01` |
 | 4 | **New Hire** | Hoàn thành nhiệm vụ thử việc | Lọc việc 4 giai đoạn, nộp minh chứng | Hành trình & Checklist công việc | [`newhire-checklist.html`](newhire-checklist.html) | C/R/U | Chưa làm · Đã nộp · Hoàn thành · Rỗng | AI Guide & AI Quiz | **SV1** | `T09`, `T13` | `huy/feature/newhire-checklist` | `OBS-01` |
-| 5 | **New Hire** | Tra cứu quy chế nội bộ | Đặt câu hỏi tự nhiên, xem trích dẫn nguồn | Trợ lý AI Chính sách | [`newhire-ai-help.html`](newhire-ai-help.html) | C/R | Đang tải · Có kết quả · Không chắc chắn (Fallback HR) | **AI-1:** Tìm kiếm ngữ nghĩa | **SV1** | `T15` | `feat/sv1-ui-newhire` | `OBS-01` |
+| 5 | **New Hire** | Tra cứu quy chế nội bộ | Đặt câu hỏi tự nhiên, xem trích dẫn nguồn | Trợ lý AI Chính sách | [`newhire-ai-help.html`](newhire-ai-help.html) | C/R | Đang tải · Có kết quả · Không chắc chắn (Fallback HR) | **AI-1:** Tìm kiếm ngữ nghĩa | **SV1** | `T15` | `huy/feature/newhire-checklist` | `OBS-01` |
 | 6 | **Mentor** | Kèm cặp nhân sự mới | Lọc Mentee, đánh giá & gợi ý việc theo vị trí | Quản lý danh sách Mentee | [`mentor-mentee-list.html`](mentor-mentee-list.html) | C/R/U | Đúng tiến độ · Cần chú ý · Nguy cơ trễ hạn · Rỗng | **AI-2:** Cá nhân hóa Checklist | **SV2** | `T10`, `T16`, `T17` | `feat/sv2-data-mentor` | `OBS-02` |
 | 7 | **Dùng chung** | Quản lý hồ sơ cá nhân | Cập nhật thông tin liên hệ & đổi mật khẩu | Hồ sơ cá nhân | [`profile.html`](profile.html) | R/U | Bình thường · Thành công · Lỗi kiểm tra hợp lệ | – | **SV2** | `T10` | `feat/sv2-data-mentor` | `OBS-02` |
-| 8 | **HR** | Giám sát toàn công ty | Xem biểu đồ `Chart.js` & can thiệp nhân sự trễ hạn | Trung tâm điều hành HR | [`hr-dashboard.html`](hr-dashboard.html) | C/R/U | Bình thường · Rỗng · Cảnh báo rủi ro · Đã can thiệp | **AI-3:** Dự báo rủi ro (`Risk Radar`) | **SV3** | `T11`, `T18` | `feat/sv3-hr-admin` | `OBS-03` |
-| 9 | **Admin** | Quản trị hệ thống & RBAC | CRUD tài khoản, xem Audit Logs, thị sát đa tài khoản | Quản trị tài khoản & Phân quyền | [`admin-user-management.html`](admin-user-management.html) | C/R/U/D | `Active` · `Pending` · `Locked` · Rỗng | Kiểm tra tự động cấu hình | **SV3** | `T11`, `T19`, `T22` | `fix/sv3-data-sync-hr-admin` | `OBS-03` |
+| 8 | **HR** | Giám sát toàn công ty | Xem biểu đồ `Chart.js` & can thiệp nhân sự trễ hạn | Trung tâm điều hành HR | [`hr-dashboard.html`](hr-dashboard.html) | C/R/U | Bình thường · Rỗng · Cảnh báo rủi ro · Đã can thiệp | **AI-3:** Dự báo rủi ro (`Risk Radar`) | **SV1** | `T11`, `T18` | `fix/sv3-data-sync-hr-admin` | `OBS-03` |
+| 9 | **Admin** | Quản trị hệ thống & RBAC | CRUD tài khoản, xem Audit Logs, thị sát đa tài khoản | Quản trị tài khoản & Phân quyền | [`admin-user-management.html`](admin-user-management.html) | C/R/U/D | `Active` · `Pending` · `Locked` · Rỗng | Kiểm tra tự động cấu hình | **SV1** | `T11`, `T19`, `T22` | `fix/sv3-data-sync-hr-admin` | `OBS-03` |
 
 ---
 
@@ -92,13 +92,13 @@ flowchart LR
 
 Dự án triển khai **3 mô-đun AI thuộc 3 nhóm khác nhau** kèm đầy đủ giải thích kết quả (*Explainability*) và xử lý khi AI không chắc chắn (*Fallback* – chi tiết tại [`docs/roles-and-features.md`](docs/roles-and-features.md)):
 
-1. **AI-1 – Tìm kiếm ngữ nghĩa & Trợ lý giải thích chính sách (`newhire-ai-help.html`):**
+1. **AI-1 – Tìm kiếm ngữ nghĩa & Trợ lý giải thích chính sách (`newhire-ai-help.html` – SV1 phụ trách):**
    - Phân tích câu hỏi ngôn ngữ tự nhiên, hiển thị trạng thái đang xử lý (*Loading*), trả về câu trả lời kèm **Độ tin cậy (%)** và **Điều khoản trích dẫn**.
    - **Trải nghiệm khi AI thất bại / không chắc chắn:** Khi câu hỏi mơ hồ (Zone 2) AI gợi ý câu hỏi làm rõ; khi ngoài phạm vi dữ liệu (Zone 3) AI thông báo *"Không đủ dữ liệu chính sách"* và cung cấp nút **[Chuyển câu hỏi cho HR]**.
-2. **AI-2 – Ghép cặp Người đồng hành & Cá nhân hóa lộ trình (`newhire-onboarding-dashboard.html`, `mentor-mentee-list.html`):**
+2. **AI-2 – Ghép cặp Người đồng hành & Cá nhân hóa lộ trình (`newhire-onboarding-dashboard.html`, `mentor-mentee-list.html` – SV1 & SV2 phối hợp):**
    - Phân tích phòng ban và chuyên môn của nhân sự mới để đề xuất **8 Người đồng hành (`MT01`..`MT08`)** kèm điểm phù hợp (`Match Score %`) và lý do ghép cặp; người dùng toàn quyền chấp nhận hoặc tự chọn/đổi Mentor khác.
    - Hỗ trợ Mentor tự động sinh danh sách đầu việc chuyên môn theo vị trí.
-3. **AI-3 – Dự báo & Cảnh báo sớm rủi ro hội nhập (`hr-dashboard.html`):**
+3. **AI-3 – Dự báo & Cảnh báo sớm rủi ro hội nhập (`hr-dashboard.html` – SV1 phụ trách):**
    - Tự động quét tiến độ và các nhiệm vụ quá hạn để phân loại mức độ rủi ro (`Đúng tiến độ`, `Cần chú ý`, `Nguy cơ trễ hạn`), giải thích nguyên nhân và mở ngăn kéo can thiệp cho HR.
 
 ---
@@ -114,20 +114,20 @@ Dự án triển khai **3 mô-đun AI thuộc 3 nhóm khác nhau** kèm đầy �
 
 ## Thành viên nhóm
 
-| STT | Thành viên | Vai trò trong nhóm | Nhánh Git phụ trách | Video OBS |
-|:---:|:---|:---|:---|:---:|
-| 1 | **SV1 (Huy)** | **UI/UX & New Hire Lead** | `huy/feature/newhire-checklist`, `feat/sv1-ui-newhire` | `OBS-01` |
-| 2 | **SV2 (Hoàng)** | **Core Data & Mentor Lead** | `feat/sv2-data-mentor` | `OBS-02` |
-| 3 | **SV3 (Trưởng nhóm)** | **Team Lead, HR/Admin & DevOps** | `fix/sv3-data-sync-hr-admin`, `feat/sv3-hr-admin` | `OBS-03` |
+> *(Ghi chú: Do thành viên thứ 3 nghỉ học, toàn bộ khối lượng công việc của dự án được **SV1 – Trưởng nhóm** đảm nhận gộp cùng phân hệ New Hire, HR & Admin).*
+
+| STT | Thành viên | Vai trò trong nhóm | Phân hệ & Tính năng phụ trách | Nhánh Git | Video OBS |
+|:---:|:---|:---|:---|:---|:---:|
+| 1 | **SV1 (Huy)** | **Trưởng nhóm – UI/UX, New Hire, HR & Admin Lead** | • Phân hệ Khách & Nhân viên mới (`index.html`, `newhire-*`)<br>• Phân hệ HR & Admin (`hr-dashboard.html`, `admin-user-management.html`, Chế độ thị sát `View-As`)<br>• Tính năng **AI-1**, **AI-2 (Mentor Matching & Chat)**, **AI-3 (HR Risk Radar)** | `huy/feature/newhire-checklist`<br>`fix/sv3-data-sync-hr-admin` | `OBS-01`<br>`OBS-03` |
+| 2 | **SV2 (Hoàng)** | **Core Data & Mentor Lead** | • Kiến trúc dữ liệu (`js/api.js`, `assets/data/mock-data.json`)<br>• Đăng nhập & Hồ sơ (`login.html`, `profile.html`)<br>• Phân hệ Người hướng dẫn (`mentor-mentee-list.html`) & **AI-2 (Checklist Personalizer)** | `feat/sv2-data-mentor` | `OBS-02` |
 
 ---
 
 ## Phân công công việc
 
 Chi tiết lát cắt dọc và trách nhiệm chéo của từng thành viên được lưu tại [`docs/team-assignment.md`](docs/team-assignment.md) và [`docs/QUY_TRINH_TRELLO_KANBAN.md`](docs/QUY_TRINH_TRELLO_KANBAN.md):
-- **SV1:** Phụ trách phân hệ Khách & Nhân viên mới (`index.html`, `newhire-onboarding-dashboard.html`, `newhire-checklist.html`, `newhire-ai-help.html`), mô-đun **AI-1**, đề xuất & chat với 8 Mentor, và trách nhiệm chéo về **Design System (`css/style.css`)**.
-- **SV2:** Phụ trách kiến trúc dữ liệu (`js/api.js`, `assets/data/mock-data.json`), đăng nhập (`login.html`), hồ sơ (`profile.html`), phân hệ Người hướng dẫn (`mentor-mentee-list.html`), mô-đun **AI-2**, và trách nhiệm chéo về **Form Validation & Đồng bộ dữ liệu**.
-- **SV3:** Phụ trách phân hệ Nhân sự (`hr-dashboard.html` + `Chart.js`), Quản trị viên (`admin-user-management.html`), mô-đun **AI-3**, **Chế độ thị sát đa người dùng (`View-As`)**, và trách nhiệm chéo về **Tích hợp Git/Trello & Kiểm thử phát hành**.
+- **SV1 (Huy – Trưởng nhóm):** Đảm nhận toàn bộ phân hệ Khách, Nhân viên mới (`index.html`, `newhire-onboarding-dashboard.html`, `newhire-checklist.html`, `newhire-ai-help.html`), phân hệ Nhân sự (`hr-dashboard.html` + `Chart.js`), Quản trị viên (`admin-user-management.html`), **Chế độ thị sát đa người dùng (`View-As`)**, mô-đun **AI-1** & **AI-3**, cùng trách nhiệm chéo về **Design System (`css/style.css`), Quản trị Git/Trello & Tích hợp hệ thống**.
+- **SV2 (Hoàng):** Đảm nhận kiến trúc dữ liệu (`js/api.js`, `assets/data/mock-data.json`), đăng nhập (`login.html`), hồ sơ (`profile.html`), phân hệ Người hướng dẫn (`mentor-mentee-list.html`), mô-đun **AI-2**, cùng trách nhiệm chéo về **Form Validation & Đồng bộ dữ liệu LocalStorage**.
 
 ---
 
@@ -137,7 +137,7 @@ Nhóm tuân thủ quy trình GitHub Flow chuẩn (Xem chi tiết tại [`docs/TO
 1. Nhận thẻ công việc trên bảng Trello Kanban (`T01` $\rightarrow$ `T24`).
 2. Tạo nhánh tính năng từ `dev` (`huy/feature/newhire-checklist`, `feat/sv2-data-mentor`, `fix/sv3-data-sync-hr-admin`).
 3. Ghi nhận thay đổi theo chuẩn Conventional Commits (`feat:`, `fix:`, `style:`, `perf:`, `docs:`).
-4. Tạo Pull Request (PR), đánh giá chéo (Review) và hợp nhất vào `dev` $\rightarrow$ kiểm thử tích hợp $\rightarrow$ phát hành lên `main`.
+4. Tạo Pull Request (PR #1 $\rightarrow$ PR #4), đánh giá chéo (Review) và hợp nhất vào `dev` $\rightarrow$ kiểm thử tích hợp $\rightarrow$ phát hành lên `main`.
 
 ---
 
@@ -168,9 +168,9 @@ Nhóm tuân thủ quy trình GitHub Flow chuẩn (Xem chi tiết tại [`docs/TO
 
 | Mã Video | Phân hệ & Tệp trọng tâm | Thành viên | Nội dung giải thích code & Sửa trực tiếp (Live Coding) | Link Video (Drive / YouTube) |
 |:---:|:---|:---:|:---|:---:|
-| **`OBS-01`** | **Phân hệ Nhân viên mới & AI-1**<br>(`index.html`, `newhire-onboarding-dashboard.html`, `newhire-checklist.html`, `newhire-ai-help.html`) | **SV1** | Giải thích thuật toán AI gợi ý 8 Người đồng hành & Chat trực tiếp, tích chọn hoàn thành Checklist lưu `localStorage`, hỏi đáp trợ lý **AI-1** và sửa trực tiếp giao diện/logic trên code. | [Xem Video OBS 01](https://...) |
-| **`OBS-02`** | **Core Data Engine, Phân hệ Mentor & AI-2**<br>(`js/api.js`, `assets/data/mock-data.json`, `login.html`, `mentor-mentee-list.html`, `profile.html`) | **SV2** | Giải thích kiến trúc `window.OnboardAPI` & `localStorage`, tìm kiếm/lọc Mentee, kiểm tra hợp lệ biểu mẫu (Form Validation), tính năng **AI-2 (Checklist Personalizer)** và sửa trực tiếp code. | [Xem Video OBS 02](https://...) |
-| **`OBS-03`** | **Phân hệ HR, Quản trị viên (Admin) & AI-3**<br>(`hr-dashboard.html`, `admin-user-management.html`, Chế độ thị sát `View-As`) | **SV3** | Giải thích biểu đồ `Chart.js`, thuật toán cảnh báo sớm **AI-3 (HR Risk Radar)**, quản lý CRUD tài khoản, Chế độ thị sát đa người dùng (`NH01`..`NH06`, `MT01`..`MT08`) và sửa trực tiếp code. | [Xem Video OBS 03](https://...) |
+| **`OBS-01`** | **Phân hệ Nhân viên mới & AI-1**<br>(`index.html`, `newhire-onboarding-dashboard.html`, `newhire-checklist.html`, `newhire-ai-help.html`) | **SV1 (Huy)** | Giải thích thuật toán AI gợi ý 8 Người đồng hành & Chat trực tiếp, tích chọn hoàn thành Checklist lưu `localStorage`, hỏi đáp trợ lý **AI-1** và sửa trực tiếp giao diện/logic trên code. | [Xem Video OBS 01](https://...) |
+| **`OBS-02`** | **Core Data Engine, Phân hệ Mentor & AI-2**<br>(`js/api.js`, `assets/data/mock-data.json`, `login.html`, `mentor-mentee-list.html`, `profile.html`) | **SV2 (Hoàng)** | Giải thích kiến trúc `window.OnboardAPI` & `localStorage`, tìm kiếm/lọc Mentee, kiểm tra hợp lệ biểu mẫu (Form Validation), tính năng **AI-2 (Checklist Personalizer)** và sửa trực tiếp code. | [Xem Video OBS 02](https://...) |
+| **`OBS-03`** | **Phân hệ HR, Quản trị viên (Admin) & AI-3**<br>(`hr-dashboard.html`, `admin-user-management.html`, Chế độ thị sát `View-As`) | **SV1 (Huy)** | Giải thích biểu đồ `Chart.js`, thuật toán cảnh báo sớm **AI-3 (HR Risk Radar)**, quản lý CRUD tài khoản, Chế độ thị sát đa người dùng (`NH01`..`NH06`, `MT01`..`MT08`) và sửa trực tiếp code. | [Xem Video OBS 03](https://...) |
 
 ---
 

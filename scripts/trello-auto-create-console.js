@@ -113,7 +113,7 @@
     const LABEL_DEFS = [
       { key: 'SV1', name: 'SV1 - UI/UX & New Hire (Huy)', color: 'blue' },
       { key: 'SV2', name: 'SV2 - Core Data & Mentor (Hoàng)', color: 'green' },
-      { key: 'SV3', name: 'SV3 - DevOps, HR & Admin (Trưởng nhóm)', color: 'purple' },
+      { key: 'SV3', name: 'SV1 - DevOps, HR & Admin (Huy) (Trưởng nhóm)', color: 'purple' },
       { key: 'CORE', name: 'Core Data & Architecture', color: 'orange' },
       { key: 'AI', name: 'AI Feature (Bắt buộc)', color: 'red' },
       { key: 'UI', name: 'UI/UX & Responsive', color: 'yellow' },
@@ -355,7 +355,7 @@
         list: 'done',
         name: '[T20 - Tuần 3] Thiết lập Hệ thống Tài khoản Đăng nhập Chuẩn cho 4 Vai trò & Tài liệu Tra cứu',
         labels: ['SV1', 'SV3'],
-        desc: 'Phụ trách: SV3 & SV1 | File: login.html, docs/TAI_KHOAN_DANG_NHAP.md\nCấu hình đầy đủ tài khoản đăng nhập cho cả 4 vai trò (New Hire, Mentor, HR, Admin), đồng bộ thông tin người dùng trên thanh Topbar và lập file tra cứu nhanh.',
+        desc: 'Phụ trách: SV1 (Huy) & SV2 (Ho?ng) | File: login.html, docs/TAI_KHOAN_DANG_NHAP.md\nCấu hình đầy đủ tài khoản đăng nhập cho cả 4 vai trò (New Hire, Mentor, HR, Admin), đồng bộ thông tin người dùng trên thanh Topbar và lập file tra cứu nhanh.',
         checklist: [
           'Tích hợp tài khoản Mentor, HR, Admin và 6 New Hires vào login.html',
           'Giữ giao diện đăng nhập tinh gọn, chuẩn thực tế',

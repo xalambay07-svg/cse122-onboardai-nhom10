@@ -27,7 +27,7 @@ Bảng Trello của nhóm được đặt tên là **`[CSE122 - BTL20] OnboardAI
 ### 2.1. Nhãn theo Thành viên phụ trách
 - 🟦 **`SV1 - UI/UX & New Hire (Huy)`** *(Màu Xanh dương - Blue)*: Phụ trách Design System (`css/style.css`), Landing Page (`index.html`), Đăng nhập (`login.html`), Dashboard Nhân viên mới (`newhire-onboarding-dashboard.html`), Checklist & Nộp minh chứng (`newhire-checklist.html`), Đề xuất & Chat với Người đồng hành, và trợ lý **AI-1 (Policy Q&A Assistant - `newhire-ai-help.html`)**.
 - 🟩 **`SV2 - Core Data & Mentor (Hoàng)`** *(Màu Xanh lá - Green)*: Phụ trách Kiến trúc dữ liệu (`assets/data/mock-data.json`), Data Engine (`js/api.js`), Phân hệ Người hướng dẫn (`mentor-mentee-list.html`), Hồ sơ cá nhân (`profile.html`), và **AI-2 (Checklist Personalizer & Mentor Matching)**.
-- 🟪 **`SV3 - DevOps, HR & Admin (Trưởng nhóm)`** *(Màu Tím - Purple)*: Phụ trách Quản trị Git/Trello, Phân hệ Nhân sự (`hr-dashboard.html` + Chart.js), Phân hệ Quản trị viên (`admin-user-management.html`), Chế độ thị sát đa tài khoản (`View-As`), và **AI-3 (Progress Risk Warning / Risk Radar)**.
+- 🟪 **`SV1 - DevOps, HR & Admin (Huy) (Trưởng nhóm)`** *(Màu Tím - Purple)*: Phụ trách Quản trị Git/Trello, Phân hệ Nhân sự (`hr-dashboard.html` + Chart.js), Phân hệ Quản trị viên (`admin-user-management.html`), Chế độ thị sát đa tài khoản (`View-As`), và **AI-3 (Progress Risk Warning / Risk Radar)**.
 
 ### 2.2. Nhãn theo Loại công việc & Mức độ ưu tiên
 - 🟧 **`Core Data & Architecture`** *(Màu Cam - Orange)*: Các tác vụ nền tảng bắt buộc hoàn thành trước để không chặn (block) thành viên khác.
@@ -88,7 +88,7 @@ Dưới đây là nội dung chi tiết của từng thẻ để nhóm sử dụ
 
 #### Thẻ T01: `[Tuần 1] Phân tích nghiệp vụ BTL-20 & Đặc tả 4 phân hệ người dùng`
 - **Phụ trách:** SV3 (Trưởng nhóm) phối hợp SV1, SV2
-- **Nhãn:** `SV3 - DevOps, HR & Admin`, `Testing, Git & Báo cáo`
+- **Nhãn:** `SV1 - DevOps, HR & Admin (Huy)`, `Testing, Git & Báo cáo`
 - **Hạn chót:** Cuối Tuần 1
 - **Mô tả:** Phân tích bài toán Hội nhập nhân sự (Onboarding) tại doanh nghiệp, xác định rõ 4 nhóm tác nhân (**Visitor/New Hire**, **Mentor**, **HR Specialist**, **System Admin**) và luồng dữ liệu khép kín.
 - **Checklist:**
@@ -98,7 +98,7 @@ Dưới đây là nội dung chi tiết của từng thẻ để nhóm sử dụ
 
 #### Thẻ T02: `[Tuần 1] Lập Danh mục màn hình (Screen Inventory) & Sơ đồ luồng (User Flows)`
 - **Phụ trách:** SV2 (Hoàng) & SV3 (Trưởng nhóm)
-- **Nhãn:** `SV2 - Core Data & Mentor`, `SV3 - DevOps, HR & Admin`
+- **Nhãn:** `SV2 - Core Data & Mentor`, `SV1 - DevOps, HR & Admin (Huy)`
 - **Hạn chót:** Cuối Tuần 1
 - **Mô tả:** Liệt kê đầy đủ các màn hình chức năng của dự án OnboardAI, mã màn hình (`PG-01`..`PG-03`, `NH-01`..`NH-03`, `MT-01`, `HR-01`, `AD-01`) và vẽ sơ đồ luồng nghiệp vụ.
 - **Checklist:**
@@ -128,7 +128,7 @@ Dưới đây là nội dung chi tiết của từng thẻ để nhóm sử dụ
 
 #### Thẻ T05: `[Tuần 1] Khởi tạo GitHub Repository, Cấu trúc Thư mục & Bảng Trello Kanban`
 - **Phụ trách:** SV3 (Trưởng nhóm)
-- **Nhãn:** `SV3 - DevOps, HR & Admin`, `Testing, Git & Báo cáo`
+- **Nhãn:** `SV1 - DevOps, HR & Admin (Huy)`, `Testing, Git & Báo cáo`
 - **Hạn chót:** Cuối Tuần 1
 - **Mô tả:** Tạo kho mã nguồn GitHub, phân nhánh `main`, `dev`, nhánh tính năng cho 3 thành viên và thiết lập bảng Trello quản lý tiến độ.
 - **Checklist:**
@@ -192,7 +192,7 @@ Dưới đây là nội dung chi tiết của từng thẻ để nhóm sử dụ
 
 #### Thẻ T11: `[Tuần 2] Dựng khung giao diện HR Dashboard (hr-dashboard.html) & Admin (admin-user-management.html)`
 - **Phụ trách:** SV3 (Trưởng nhóm)
-- **Nhãn:** `SV3 - DevOps, HR & Admin`, `UI/UX & Responsive`
+- **Nhãn:** `SV1 - DevOps, HR & Admin (Huy)`, `UI/UX & Responsive`
 - **Hạn chót:** Cuối Tuần 2
 - **Mô tả:** Xây dựng giao diện trung tâm điều hành HR (`hr-dashboard.html`) và trang quản trị hệ thống (`admin-user-management.html`).
 - **Checklist:**
@@ -264,7 +264,7 @@ Dưới đây là nội dung chi tiết của từng thẻ để nhóm sử dụ
 
 #### Thẻ T18: `[Tuần 3] Lập trình Tính năng AI-3: Cảnh báo Sớm Rủi ro Hội nhập (HR Risk Radar) & Biểu đồ Chart.js`
 - **Phụ trách:** SV3 (Trưởng nhóm)
-- **Nhãn:** `SV3 - DevOps, HR & Admin`, `AI Feature (Bắt buộc)`
+- **Nhãn:** `SV1 - DevOps, HR & Admin (Huy)`, `AI Feature (Bắt buộc)`
 - **Hạn chót:** Cuối Tuần 3
 - **Mô tả:** Xây dựng động cơ phân tích rủi ro tự động trên `hr-dashboard.html`, phát hiện sớm các nhân sự có tiến độ thấp, quá hạn nhiệm vụ hoặc điểm tương tác thấp để đưa ra khuyến nghị can thiệp cho HR.
 - **Checklist:**
@@ -274,7 +274,7 @@ Dưới đây là nội dung chi tiết của từng thẻ để nhóm sử dụ
 
 #### Thẻ T19: `[Tuần 3] Lập trình Phân hệ Admin: Quản lý Người dùng CRUD, Khóa/Mở khóa & Nhật ký Kiểm toán`
 - **Phụ trách:** SV3 (Trưởng nhóm)
-- **Nhãn:** `SV3 - DevOps, HR & Admin`, `Core Data & Architecture`
+- **Nhãn:** `SV1 - DevOps, HR & Admin (Huy)`, `Core Data & Architecture`
 - **Hạn chót:** Cuối Tuần 3
 - **Mô tả:** Hoàn thiện trang `admin-user-management.html` cho phép thêm tài khoản mới, phân quyền vai trò, khóa/mở khóa tài khoản, khôi phục dữ liệu gốc (`Reset Demo Data`) và xuất cấu hình JSON.
 - **Checklist:**
@@ -284,7 +284,7 @@ Dưới đây là nội dung chi tiết của từng thẻ để nhóm sử dụ
 
 #### Thẻ T20: `[Tuần 3] Thiết lập Hệ thống Tài khoản Đăng nhập Chuẩn cho 4 Vai trò & Tài liệu Tra cứu`
 - **Phụ trách:** SV3 (Trưởng nhóm) & SV1 (Huy)
-- **Nhãn:** `SV1 - UI/UX & New Hire`, `SV3 - DevOps, HR & Admin`
+- **Nhãn:** `SV1 - UI/UX & New Hire`, `SV1 - DevOps, HR & Admin (Huy)`
 - **Hạn chót:** Cuối Tuần 3
 - **Mô tả:** Thiết lập đầy đủ các tài khoản đăng nhập cho cả 4 vai trò (**New Hire**, **Mentor**, **HR**, **Admin**) trong `login.html`, đồng bộ hiển thị thông tin người dùng trên thanh Topbar và lập bảng tra cứu tài khoản.
 - **Checklist:**
@@ -308,7 +308,7 @@ Dưới đây là nội dung chi tiết của từng thẻ để nhóm sử dụ
 
 #### Thẻ T22: `[Tuần 4] Nâng cấp Chế độ Thị sát Đa người dùng (Multi-User View-As) cho HR & Admin`
 - **Phụ trách:** SV3 (Trưởng nhóm)
-- **Nhãn:** `SV3 - DevOps, HR & Admin`, `Core Data & Architecture`
+- **Nhãn:** `SV1 - DevOps, HR & Admin (Huy)`, `Core Data & Architecture`
 - **Hạn chót:** Giữa Tuần 4
 - **Mô tả:** Mở rộng tính năng **Chế độ thị sát (View-As)** trên thanh Sidebar và thanh Impersonation Bar phía trên cùng, cho phép Admin và HR lựa chọn chuyển đổi linh hoạt giữa **6 Nhân viên mới (`NH01`..`NH06`)** và **8 Người hướng dẫn (`MT01`..`MT08`)** để kiểm tra dữ liệu thực tế của từng người.
 - **Checklist:**
