@@ -19,6 +19,7 @@
 
 ## 🎬 VIDEO OBS SỐ 01: PHÂN HỆ NHÂN VIÊN MỚI (NEW HIRE), ĐỀ XUẤT & CHAT VỚI 8 MENTOR + TRỢ LÝ AI-1
 
+- **Người trình bày:** **Nguyễn Gia Huy – MSV: `2551170897` (Trưởng nhóm – SV1)**
 - **Thời lượng dự kiến:** 3 phút 30 giây – 4 phút
 - **Các tệp mở sẵn trong VS Code:** `newhire-onboarding-dashboard.html`, `newhire-checklist.html`, `newhire-ai-help.html`
 - **Tài khoản đăng nhập demo:** `an.nguyen@onboardai.vn` / Mật khẩu: `123456`
@@ -27,7 +28,7 @@
 
 | Thời gian | Thao tác trên màn hình | Lời thoại gợi ý (Anh đọc theo tự nhiên) |
 | :--- | :--- | :--- |
-| **0:00 – 0:20** | Mở trang `http://localhost:8080/login.html`, nhập `an.nguyen@onboardai.vn` và mật khẩu `123456`, bấm **Đăng nhập**. | *"Em chào thầy/cô ạ. Em xin đại diện nhóm 10 trình bày Video OBS số 1 của đề tài BTL-20 OnboardAI: Phân hệ dành cho Nhân viên mới (New Hire) và Trợ lý AI-1. Đầu tiên em đăng nhập bằng tài khoản nhân viên mới Nguyễn Văn An."* |
+| **0:00 – 0:20** | Mở trang `http://localhost:8080/login.html`, nhập `an.nguyen@onboardai.vn` và mật khẩu `123456`, bấm **Đăng nhập**. | *"Em chào thầy/cô ạ. Em là Nguyễn Gia Huy, mã sinh viên 2551170897, trưởng nhóm 10. Hôm nay em xin trình bày Video OBS số 1 của đề tài BTL-20 OnboardAI: Phân hệ dành cho Nhân viên mới (New Hire) và Trợ lý AI-1. Đầu tiên em đăng nhập bằng tài khoản nhân viên mới Nguyễn Văn An."* |
 | **0:20 – 0:55** | Tại `newhire-onboarding-dashboard.html`: Kéo xuống phần **Người đồng hành (Mentor)** $\rightarrow$ Bấm nút **Khám phá / Đổi người đồng hành** để mở danh sách **8 Mentor** $\rightarrow$ Bấm chọn 1 Mentor $\rightarrow$ Bấm nút **Chat ngay** và gửi thử 1 tin nhắn (hoặc bấm câu hỏi gợi ý nhanh). | *"Trên trang Dashboard Nhân viên mới, mỗi tài khoản khi khởi tạo sẽ được AI phân tích vị trí công việc để đề xuất 8 Người đồng hành với điểm tương thích phần trăm, kèm ảnh chân dung, số điện thoại và Zalo. Người dùng có thể tự lựa chọn người đồng hành phù hợp và mở khung Chat trực tiếp ngay trên hệ thống để trao đổi và nhận phản hồi tức thì."* |
 | **0:55 – 1:25** | Bấm menu bên trái sang trang **Checklist hội nhập** (`newhire-checklist.html`).<br>1. Gõ chữ `xyz123` vào ô tìm kiếm để hiện **Empty State** $\rightarrow$ bấm nút **Đặt lại bộ lọc**.<br>2. Tích hoàn thành 1 nhiệm vụ hoặc bấm **Nộp minh chứng** $\rightarrow$ điền link mẫu và bấm Lưu. | *"Tiếp theo ở màn hình Checklist hội nhập, hệ thống hỗ trợ lọc theo giai đoạn Tuần 1, Tháng 1, Tháng 2 và tìm kiếm theo từ khóa. Khi tìm từ khóa không tồn tại, giao diện hiển thị trạng thái rỗng Empty State kèm nút Đặt lại bộ lọc đúng yêu cầu Mục 9. Khi em đánh dấu hoàn thành nhiệm vụ hoặc nộp link minh chứng, phần trăm tiến độ tổng thể được tính toán lại tự động và lưu vào LocalStorage."* |
 | **1:25 – 1:45** | Bấm menu bên trái sang **Trợ lý AI Chính sách** (`newhire-ai-help.html`) $\rightarrow$ Bấm vào 1 câu hỏi gợi ý (VD: chính sách lương/bảo hiểm) để thấy hiệu ứng **AI đang suy nghĩ (Loading State)** và câu trả lời trích dẫn nguồn. | *"Ở màn hình Trợ lý AI-1 Hỏi đáp chính sách, khi nhân viên mới đặt câu hỏi, hệ thống hiển thị trạng thái Loading đang phân tích và trả về câu trả lời chi tiết kèm trích dẫn điều khoản trong sổ tay nhân sự."* |
@@ -42,18 +43,19 @@
 ### Phần 1.3: Sửa Code Trực tiếp – Live Coding trên Video (2:45 – 3:30)
 
 - **Thao tác:**
-  1. Trong file [`newhire-onboarding-dashboard.html`](file:///C:/Users/admin/.gemini/antigravity/scratch/onboardai-btl20/newhire-onboarding-dashboard.html), nhấn `Ctrl + G` gõ **`167`** (dòng tiêu đề Header trên cùng `<h1 class="text-base font-bold text-slate-900...">Bảng điều khiển hội nhập</h1>`).
+  1. Trong file [`newhire-onboarding-dashboard.html`](file:///C:/Users/admin/.gemini/antigravity/scratch/onboardai-btl20/newhire-onboarding-dashboard.html#L168), nhấn `Ctrl + G` gõ **`168`** (dòng tiêu đề Header trên cùng `<span>Bảng điều khiển Hội nhập Cá nhân</span>`).
   2. Sửa trực tiếp dòng chữ thành:
-     `Bảng điều khiển hội nhập – OnboardAI Live Demo`
+     `<span>Bảng điều khiển Hội nhập Cá nhân – OnboardAI Live Demo</span>`
   3. Nhấn **`Ctrl + S`** để lưu file.
   4. Chuyển sang trình duyệt (`http://localhost:8080/newhire-onboarding-dashboard.html`), nhấn **`F5`** tải lại trang $\rightarrow$ chỉ chuột vào tiêu đề vừa đổi ngay lập tức trên giao diện!
   5. *(Tùy chọn)* Sửa lại như cũ và nhấn `Ctrl + S`.
-- **Lời thoại kết thúc Video 1:** *"Bây giờ em xin thực hiện sửa trực tiếp tiêu đề tại dòng 167 của file `newhire-onboarding-dashboard.html` và lưu lại. Khi tải lại trình duyệt, tiêu đề mới đã được cập nhật ngay lập tức. Em xin kết thúc Video OBS số 1 tại đây ạ."*
+- **Lời thoại kết thúc Video 1:** *"Bây giờ em xin thực hiện sửa trực tiếp tiêu đề tại dòng 168 của file `newhire-onboarding-dashboard.html` và lưu lại. Khi tải lại trình duyệt, tiêu đề mới đã được cập nhật ngay lập tức. Em xin kết thúc Video OBS số 1 tại đây ạ."*
 
 ---
 
 ## 🎬 VIDEO OBS SỐ 02: CORE DATA ENGINE (`js/api.js`), FORM VALIDATION, PHÂN HỆ MENTOR & AI-2
 
+- **Người trình bày:** **Đào Viết Huy Hoàng – MSV: `2551170888` (SV2)** *(hoặc anh **Nguyễn Gia Huy – `2551170897`** trình bày thay mặt nhóm)*
 - **Thời lượng dự kiến:** 3 phút 30 giây – 4 phút
 - **Các tệp mở sẵn trong VS Code:** `js/api.js`, `assets/data/mock-data.json`, `login.html`, `mentor-mentee-list.html`, `mentor-task-assignment.html`
 - **Tài khoản đăng nhập demo:** `mentor@onboardai.vn` / Mật khẩu: `123456`
@@ -62,7 +64,7 @@
 
 | Thời gian | Thao tác trên màn hình | Lời thoại gợi ý |
 | :--- | :--- | :--- |
-| **0:00 – 0:30** | Mở trang `http://localhost:8080/login.html`:<br>1. Bấm **Đăng nhập** khi đang để trống email/mật khẩu để hiện thông báo lỗi đỏ (**Form Validation – Mục 7 & 10**).<br>2. Nhập `mentor@onboardai.vn` và mật khẩu `123456` $\rightarrow$ Bấm **Đăng nhập**. | *"Em chào thầy/cô ạ. Trong Video OBS số 2, em xin trình bày kiến trúc dữ liệu Core Data `js/api.js`, kiểm tra hợp lệ biểu mẫu (Form Validation), Phân hệ Người hướng dẫn (Mentor) và tính năng AI-2. Tại trang Đăng nhập, khi em để trống hoặc nhập sai định dạng email, hệ thống kiểm tra Form Validation và báo lỗi trực quan. Tiếp theo em đăng nhập vào tài khoản Người hướng dẫn."* |
+| **0:00 – 0:30** | Mở trang `http://localhost:8080/login.html`:<br>1. Bấm **Đăng nhập** khi đang để trống email/mật khẩu để hiện thông báo lỗi đỏ (**Form Validation – Mục 7 & 10**).<br>2. Nhập `mentor@onboardai.vn` và mật khẩu `123456` $\rightarrow$ Bấm **Đăng nhập**. | *"Em chào thầy/cô ạ. Trong Video OBS số 2 của nhóm 10 (phần công việc của thành viên Đào Viết Huy Hoàng – MSV 2551170888), em xin trình bày kiến trúc dữ liệu Core Data `js/api.js`, kiểm tra hợp lệ biểu mẫu (Form Validation), Phân hệ Người hướng dẫn (Mentor) và tính năng AI-2. Tại trang Đăng nhập, khi để trống hoặc nhập sai định dạng email, hệ thống kiểm tra Form Validation và báo lỗi trực quan. Tiếp theo em đăng nhập vào tài khoản Người hướng dẫn."* |
 | **0:30 – 1:15** | Tại `mentor-mentee-list.html`:<br>1. Thử tìm kiếm tên nhân viên mới và lọc theo trạng thái.<br>2. Bấm vào xem chi tiết tiến độ hoặc sang trang **Phiếu đánh giá 1-on-1** (`mentor-checkin-note.html`) tạo thử 1 ghi chú đánh giá. | *"Trên màn hình quản lý của Mentor, hệ thống hiển thị các chỉ số KPI và danh sách các Mentee đang phụ trách. Mentor có thể tìm kiếm theo tên, lọc theo trạng thái tiến độ, kiểm tra các nhiệm vụ Mentee đã hoàn thành và ghi nhận phiếu đánh giá 1-on-1 định kỳ."* |
 | **1:15 – 1:45** | Chuyển sang trang **Giao việc & AI-2 Gợi ý** (`mentor-task-assignment.html`) $\rightarrow$ Chọn vị trí công việc và bấm nút **AI Gợi ý lộ trình Checklist** $\rightarrow$ Danh sách công việc chuyên môn được sinh tự động. | *"Đặc biệt tại màn hình Giao việc, tính năng AI-2 Checklist Personalizer cho phép Mentor chọn vị trí chuyên môn của nhân viên mới để AI tự động đề xuất bộ nhiệm vụ hội nhập sát với vị trí đó và lưu trực tiếp vào cơ sở dữ liệu."* |
 
@@ -76,16 +78,17 @@
 ### Phần 2.3: Sửa Code Trực tiếp – Live Coding trên Video (2:45 – 3:30)
 
 - **Thao tác:**
-  1. Mở file [`mentor-mentee-list.html`](file:///C:/Users/admin/.gemini/antigravity/scratch/onboardai-btl20/mentor-mentee-list.html) trong VS Code, nhấn `Ctrl + F` tìm cụm từ **`Danh sách Mentee cần kèm cặp`** (hoặc tiêu đề trang trên thanh Header).
+  1. Mở file [`mentor-mentee-list.html`](file:///C:/Users/admin/.gemini/antigravity/scratch/onboardai-btl20/mentor-mentee-list.html#L133) trong VS Code, nhấn `Ctrl + G` gõ **`133`** (dòng `<span>Quản lý & Hướng dẫn Mentee</span>`).
   2. Sửa trực tiếp thành:
-     `Danh sách Mentee cần kèm cặp – Học kỳ CSE122`
+     `<span>Quản lý & Hướng dẫn Mentee – Học kỳ CSE122</span>`
   3. Nhấn **`Ctrl + S`** lưu lại $\rightarrow$ chuyển sang trình duyệt nhấn **`F5`** để thấy tiêu đề trên trang Mentor thay đổi ngay lập tức!
-- **Lời thoại kết thúc Video 2:** *"Em vừa chỉnh sửa trực tiếp tiêu đề trong `mentor-mentee-list.html` và lưu lại. Trình duyệt đã cập nhật ngay nội dung mới. Em xin kết thúc Video OBS số 2 tại đây ạ."*
+- **Lời thoại kết thúc Video 2:** *"Em vừa chỉnh sửa trực tiếp tiêu đề tại dòng 133 trong `mentor-mentee-list.html` và lưu lại. Trình duyệt đã cập nhật ngay nội dung mới. Em xin kết thúc Video OBS số 2 tại đây ạ."*
 
 ---
 
 ## 🎬 VIDEO OBS SỐ 03: PHÂN HỆ NHÂN SỰ (HR DASHBOARD), QUẢN TRỊ VIÊN (ADMIN), CHẾ ĐỘ THỊ SÁT ĐA NGƯỜI DÙNG & AI-3
 
+- **Người trình bày:** **Nguyễn Gia Huy – MSV: `2551170897` (Trưởng nhóm – SV1)**
 - **Thời lượng dự kiến:** 3 phút 30 giây – 4 phút
 - **Các tệp mở sẵn trong VS Code:** `hr-dashboard.html`, `admin-user-management.html`
 - **Tài khoản đăng nhập demo:** `hr@onboardai.vn` / `123456` và `admin@onboardai.vn` / `123456`
