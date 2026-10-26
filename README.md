@@ -5,7 +5,7 @@
 > **Lớp:** [Tên Lớp của bạn, ví dụ: 64KTPM...]  
 > **Nhóm thực hiện:** Nhóm [Số nhóm, ví dụ: Nhóm 05] (2 thành viên: SV2 & SV3)  
 > **Loại sản phẩm:** Web Frontend Prototype (HTML5 Semantic, CSS3 Responsive, JavaScript DOM, LocalStorage Mock API & Mô phỏng Trải nghiệm AI)  
-> **Bảng Kanban Trello:** [Link Trello của nhóm](https://trello.com/b/...)
+> **Bảng Kanban Trello:** [[CSE122 - BTL20] OnboardAI - Nhóm 10](https://trello.com/b/J0c8nZ2l) (Xem thêm [Tài liệu Quy trình Trello 4 Tuần](docs/QUY_TRINH_TRELLO_KANBAN.md))
 
 ---
 
