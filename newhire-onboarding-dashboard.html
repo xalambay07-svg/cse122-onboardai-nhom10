@@ -185,20 +185,15 @@
           <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#1F5AFE] via-indigo-500 to-[#00B67A]"></div>
           
           <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-            <div class="flex items-start gap-3.5">
-              <div class="w-11 h-11 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold border border-indigo-100 shadow-xs shrink-0">
-                <i data-lucide="sparkles" class="w-5 h-5 text-indigo-600"></i>
+            <div>
+              <div class="flex flex-wrap items-center gap-2 mb-1">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-100">Gợi ý từ Onbi</span>
+                <span class="text-xs text-slate-500">&bull; Ngày 3 trong lộ trình</span>
               </div>
-              <div>
-                <div class="flex flex-wrap items-center gap-2 mb-1">
-                  <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-100">Gợi ý từ Onbi</span>
-                  <span class="text-xs text-slate-500">&bull; Ngày 3 trong lộ trình</span>
-                </div>
-                <h2 id="welcomeTitle" class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Chào Nguyễn Văn An, hôm nay là ngày tăng tốc!</h2>
-                <p class="text-xs md:text-sm text-slate-600 mt-2 leading-relaxed max-w-2xl">
-                  Mục tiêu chính hôm nay: Hoàn tất <strong>Clone repo & Cài đặt Node.js</strong> trước 14:00 để kịp tham gia buổi review kỹ thuật với Mentor Trần Thị Mai lúc 15:00.
-                </p>
-              </div>
+              <h2 id="welcomeTitle" class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Chào Nguyễn Văn An, hôm nay là ngày tăng tốc!</h2>
+              <p class="text-xs md:text-sm text-slate-600 mt-2 leading-relaxed max-w-2xl">
+                Mục tiêu chính hôm nay: Hoàn tất <strong>Clone repo & Cài đặt Node.js</strong> trước 14:00 để kịp tham gia buổi review kỹ thuật với Mentor Trần Thị Mai lúc 15:00.
+              </p>
             </div>
 
             <!-- Nhãn trạng thái người dùng tiếng Việt & không xuống dòng (Mục 4 Lỗi #4 & Mục 5) -->
@@ -211,12 +206,10 @@
           </div>
 
           <div class="flex flex-wrap items-center gap-3 mt-4 pt-4 border-t border-slate-100">
-            <a href="#tasksSection" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#1F5AFE] text-white font-semibold text-xs hover:bg-blue-700 transition shadow-xs active:scale-95 hover:no-underline">
+            <a href="#tasksSection" class="inline-flex items-center px-4 py-2 rounded-xl bg-[#1F5AFE] text-white font-semibold text-xs hover:bg-blue-700 transition shadow-xs active:scale-95 hover:no-underline">
               <span>Thực hiện ngay việc hôm nay</span>
-              <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i>
             </a>
-            <a href="newhire-ai-help.html" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs border border-[#E2E8F0] transition active:scale-95 hover:no-underline">
-              <i data-lucide="bot" class="w-3.5 h-3.5 text-indigo-600"></i>
+            <a href="newhire-ai-help.html" class="inline-flex items-center px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs border border-[#E2E8F0] transition active:scale-95 hover:no-underline">
               <span>Hỏi nhanh Onbi</span>
             </a>
           </div>
@@ -282,27 +275,18 @@
               <h3 class="text-base font-bold text-slate-900 mb-4">Tài liệu quan trọng cho tân binh</h3>
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div onclick="quickAsk('Thời gian làm việc trong Sổ tay nhân viên 2026 quy định thế nào?')" class="p-3.5 rounded-xl border border-[#E2E8F0] bg-slate-50/70 hover:bg-white hover:border-blue-200 hover:shadow-xs transition-all duration-200 group cursor-pointer">
-                  <div class="w-7 h-7 rounded-lg bg-blue-100/80 text-[#1F5AFE] flex items-center justify-center mb-2">
-                    <i data-lucide="book-open" class="w-4 h-4"></i>
-                  </div>
                   <h4 class="text-xs font-semibold text-slate-900 group-hover:text-[#1F5AFE] transition-colors">Sổ tay nhân viên 2026</h4>
-                  <p class="text-xs text-slate-500 mt-0.5">Văn hóa & thời gian làm việc</p>
+                  <p class="text-xs text-slate-500 mt-1">Văn hóa & thời gian làm việc</p>
                 </div>
 
                 <div onclick="quickAsk('Chính sách làm việc từ xa (WFH) quy định thế nào?')" class="p-3.5 rounded-xl border border-[#E2E8F0] bg-slate-50/70 hover:bg-white hover:border-blue-200 hover:shadow-xs transition-all duration-200 group cursor-pointer">
-                  <div class="w-7 h-7 rounded-lg bg-indigo-100/80 text-indigo-700 flex items-center justify-center mb-2">
-                    <i data-lucide="laptop" class="w-4 h-4"></i>
-                  </div>
                   <h4 class="text-xs font-semibold text-slate-900 group-hover:text-[#1F5AFE] transition-colors">Chính sách Remote (WFH)</h4>
-                  <p class="text-xs text-slate-500 mt-0.5">Tối đa 2 ngày/tuần</p>
+                  <p class="text-xs text-slate-500 mt-1">Tối đa 2 ngày/tuần</p>
                 </div>
 
                 <div onclick="quickAsk('Hướng dẫn cài đặt VPN và xác thực bảo mật 2 lớp (2FA)?')" class="p-3.5 rounded-xl border border-[#E2E8F0] bg-slate-50/70 hover:bg-white hover:border-blue-200 hover:shadow-xs transition-all duration-200 group cursor-pointer">
-                  <div class="w-7 h-7 rounded-lg bg-emerald-100/80 text-[#00B67A] flex items-center justify-center mb-2">
-                    <i data-lucide="shield-check" class="w-4 h-4"></i>
-                  </div>
                   <h4 class="text-xs font-semibold text-slate-900 group-hover:text-[#1F5AFE] transition-colors">Quy định Bảo mật IT</h4>
-                  <p class="text-xs text-slate-500 mt-0.5">Xác thực 2 lớp & dữ liệu</p>
+                  <p class="text-xs text-slate-500 mt-1">Xác thực 2 lớp & dữ liệu</p>
                 </div>
               </div>
             </div>
@@ -317,12 +301,11 @@
               <div class="flex items-center justify-between gap-2">
                 <div class="flex items-center gap-2 flex-wrap">
                   <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Người đồng hành (Mentor)</h3>
-                  <span id="mentorMatchBadge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 text-[#1F5AFE] border border-indigo-200/80">
-                    <i data-lucide="sparkles" class="w-2.5 h-2.5"></i> AI Đề xuất
+                  <span id="mentorMatchBadge" class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 text-[#1F5AFE] border border-indigo-200/80">
+                    AI Đề xuất
                   </span>
                 </div>
-                <button onclick="openMentorExplorerModal()" class="text-[11px] font-bold text-[#1F5AFE] hover:underline flex items-center gap-1 cursor-pointer transition-all shrink-0">
-                  <i data-lucide="users" class="w-3.5 h-3.5"></i>
+                <button onclick="openMentorExplorerModal()" class="text-[11px] font-bold text-[#1F5AFE] hover:underline cursor-pointer transition-all shrink-0">
                   <span id="mentorHeaderActionLabel">Xem 8 Mentor</span>
                 </button>
               </div>
@@ -330,11 +313,8 @@
               <!-- TRẠNG THÁI 1: CHƯA CHỌN NGƯỜI ĐỒNG HÀNH -> HIỂN THỊ ĐỀ XUẤT TỪ AI ĐỂ NGƯỜI DÙNG TỰ LỰA CHỌN -->
               <div id="mentorUnassignedState" class="space-y-3.5">
                 <div class="p-3.5 rounded-xl bg-gradient-to-br from-indigo-50/90 via-blue-50/60 to-white border border-indigo-200/80 space-y-1.5">
-                  <div class="flex items-center gap-2 text-xs font-extrabold text-slate-900">
-                    <span class="w-6 h-6 rounded-lg bg-[#1F5AFE] text-white flex items-center justify-center shrink-0">
-                      <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-                    </span>
-                    <span>Gợi ý Người đồng hành từ Onbi AI</span>
+                  <div class="text-xs font-extrabold text-slate-900">
+                    Gợi ý Người đồng hành từ Onbi AI
                   </div>
                   <p id="aiRecommendIntroText" class="text-xs text-slate-600 leading-relaxed">
                     Tài khoản của bạn chưa có Người đồng hành chính thức. Dựa trên vị trí và phòng ban của bạn, AI đề xuất <strong>Top 3 Mentor phù hợp nhất</strong> dưới đây để bạn xem xét và tự quyết định:
@@ -346,8 +326,7 @@
                   <!-- Render động bằng JS -->
                 </div>
 
-                <button onclick="openMentorExplorerModal()" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#1F5AFE] text-white text-xs font-bold hover:bg-blue-700 transition-all active:scale-95 shadow-xs cursor-pointer">
-                  <i data-lucide="compass" class="w-4 h-4"></i>
+                <button onclick="openMentorExplorerModal()" class="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-[#1F5AFE] text-white text-xs font-bold hover:bg-blue-700 transition-all active:scale-95 shadow-xs cursor-pointer">
                   <span>Xem giới thiệu 8 Mentor & Tự lựa chọn</span>
                 </button>
               </div>
@@ -358,7 +337,7 @@
                 <div class="p-4 rounded-xl bg-slate-50/90 border border-[#E2E8F0] space-y-3">
                   <div class="flex items-start gap-3.5">
                     <div class="relative shrink-0">
-                      <img id="mentorCardAvatar" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=256&q=80" alt="Mentor" class="w-12 h-12 rounded-full bg-white ring-2 ring-blue-100 object-cover">
+                      <img id="mentorCardAvatar" src="assets/images/mentors/mt01.jpg" alt="Mentor" class="w-12 h-12 rounded-full bg-white ring-2 ring-blue-100 object-cover">
                       <span class="absolute bottom-0 right-0 flex h-3 w-3">
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-3 w-3 bg-[#00B67A] ring-2 ring-white"></span>
@@ -367,13 +346,13 @@
                     <div class="flex-1 min-w-0">
                       <div class="flex items-center justify-between gap-1">
                         <h4 id="mentorCardName" class="text-sm font-extrabold text-slate-900 truncate">Trần Thị Mai</h4>
-                        <span id="mentorCardRating" class="inline-flex items-center gap-0.5 text-[11px] font-bold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded-md border border-amber-200/70 shrink-0">
-                          ★ 4.9
+                        <span id="mentorCardRating" class="inline-flex items-center text-[11px] font-bold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded-md border border-amber-200/70 shrink-0">
+                          4.9/5
                         </span>
                       </div>
                       <p id="mentorCardRole" class="text-xs text-slate-600 font-medium truncate">Tech Lead &bull; Kỹ thuật Công nghệ</p>
                       <div class="flex flex-wrap items-center gap-2 mt-1">
-                        <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-[#00B67A]">
+                        <span class="inline-flex items-center text-[11px] font-semibold text-[#00B67A]">
                           Đang trực tuyến
                         </span>
                         <span class="text-slate-300">&bull;</span>
@@ -384,13 +363,11 @@
 
                   <!-- Kênh liên hệ trực tiếp: SĐT & Zalo của Người đồng hành -->
                   <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-200/70">
-                    <button type="button" onclick="copyMentorPhone()" class="flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-blue-300 text-[11px] font-bold text-slate-700 hover:text-[#1F5AFE] transition-all cursor-pointer" title="Bấm để sao chép SĐT Mentor">
-                      <i data-lucide="phone-call" class="w-3.5 h-3.5 text-emerald-600 shrink-0"></i>
-                      <span id="mentorCardPhone" class="truncate">0904 682 115</span>
+                    <button type="button" id="mentorCardPhoneBtn" onclick="copyMentorPhone()" class="flex items-center justify-center px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-blue-300 text-[11px] font-bold text-slate-700 hover:text-[#1F5AFE] transition-all cursor-pointer" title="Bấm để sao chép SĐT Mentor">
+                      <span id="mentorCardPhone" class="truncate">SĐT: 0904 682 115</span>
                     </button>
-                    <button type="button" onclick="openMentorZalo()" class="flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#0068FF]/10 border border-[#0068FF]/25 hover:bg-[#0068FF] text-[11px] font-bold text-[#0068FF] hover:text-white transition-all cursor-pointer" title="Nhắn tin Zalo trực tiếp với Mentor">
-                      <span class="px-1 py-0.2 rounded bg-[#0068FF] text-white text-[9px] font-extrabold leading-none">Zalo</span>
-                      <span id="mentorCardZalo" class="truncate">0904.682.115</span>
+                    <button type="button" id="mentorCardZaloBtn" onclick="openMentorZalo()" class="flex items-center justify-center px-2.5 py-1.5 rounded-lg bg-[#0068FF]/10 border border-[#0068FF]/25 hover:bg-[#0068FF] text-[11px] font-bold text-[#0068FF] hover:text-white transition-all cursor-pointer" title="Nhắn tin Zalo trực tiếp với Mentor">
+                      <span id="mentorCardZalo" class="truncate">Zalo: 0904 682 115</span>
                     </button>
                   </div>
 
@@ -406,9 +383,8 @@
                 <!-- Lịch hẹn 1-on-1 sắp tới (Cho phép đổi khung giờ nhanh) -->
                 <div class="p-3.5 rounded-xl bg-amber-50/80 border border-amber-200/70 text-xs text-amber-950 space-y-2">
                   <div class="flex items-center justify-between gap-2">
-                    <div class="font-bold flex items-center gap-1.5 text-amber-900">
-                      <i data-lucide="calendar" class="w-3.5 h-3.5 text-amber-700"></i>
-                      <span>Buổi gặp 1-on-1 tiếp theo:</span>
+                    <div class="font-bold text-amber-900">
+                      Buổi gặp 1-on-1 tiếp theo:
                     </div>
                     <button onclick="toggleSchedulePicker()" class="text-[11px] font-bold text-amber-800 hover:text-amber-950 underline cursor-pointer">
                       Đổi lịch hẹn
@@ -416,7 +392,7 @@
                   </div>
                   <div id="mentorNextSessionText" class="text-slate-800 font-semibold">15:00 Thứ Sáu tuần này (Check-in 7 ngày)</div>
                   <div class="flex items-center justify-between text-[11px] text-amber-800/90">
-                    <span id="mentorSessionLocation"><i data-lucide="video" class="w-3 h-3 inline mr-1"></i>Google Meet &bull; Phòng 302</span>
+                    <span id="mentorSessionLocation">Google Meet &bull; Phòng 302</span>
                     <span class="font-semibold text-emerald-700">Đã xác nhận</span>
                   </div>
 
@@ -430,24 +406,22 @@
                 <!-- Xem trước tin nhắn mới nhất từ Mentor -->
                 <div onclick="openMentorChatModal()" class="p-3 rounded-xl bg-blue-50/60 border border-blue-200/70 hover:bg-blue-50 transition-all cursor-pointer group">
                   <div class="flex items-center justify-between mb-1">
-                    <span class="text-[11px] font-bold text-[#1F5AFE] flex items-center gap-1">
-                      <i data-lucide="message-square-dot" class="w-3.5 h-3.5"></i> Tin nhắn gần nhất từ Mentor
+                    <span class="text-[11px] font-bold text-[#1F5AFE]">
+                      Tin nhắn gần nhất từ Mentor
                     </span>
                     <span id="mentorUnreadBadge" class="px-1.5 py-0.2 rounded-full text-[10px] font-extrabold bg-[#1F5AFE] text-white">Mới</span>
                   </div>
                   <p id="mentorLastMessagePreview" class="text-xs text-slate-700 line-clamp-2 group-hover:text-slate-900">
-                    "Chào An 👋 Nếu vướng phần cấp quyền SSH Key hay cài đặt môi trường Local thì nhắn chị ngay nhé!"
+                    "Chào An, nếu vướng phần cấp quyền SSH Key hay cài đặt môi trường Local thì nhắn chị ngay nhé!"
                   </p>
                 </div>
 
                 <!-- Cụm nút hành động: Nhắn tin trực tiếp & Xem giới thiệu / Chọn lại Mentor -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  <button onclick="openMentorChatModal()" class="w-full inline-flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl bg-[#1F5AFE] text-white text-xs font-bold hover:bg-blue-700 transition-all active:scale-95 shadow-xs cursor-pointer">
-                    <i data-lucide="message-circle" class="w-4 h-4"></i>
+                  <button onclick="openMentorChatModal()" class="w-full inline-flex items-center justify-center px-3.5 py-2.5 rounded-xl bg-[#1F5AFE] text-white text-xs font-bold hover:bg-blue-700 transition-all active:scale-95 shadow-xs cursor-pointer">
                     <span>Chat với Mentor</span>
                   </button>
-                  <button onclick="openMentorExplorerModal()" class="w-full inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:border-blue-300 hover:text-[#1F5AFE] transition-all active:scale-95 cursor-pointer">
-                    <i data-lucide="compass" class="w-4 h-4 text-[#1F5AFE]"></i>
+                  <button onclick="openMentorExplorerModal()" class="w-full inline-flex items-center justify-center px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:border-blue-300 hover:text-[#1F5AFE] transition-all active:scale-95 cursor-pointer">
                     <span>Đổi người đồng hành</span>
                   </button>
                 </div>
@@ -464,9 +438,8 @@
                     <div class="text-xs font-medium text-slate-500">Trợ lý hội nhập</div>
                   </div>
                 </div>
-                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100">
-                  <i data-lucide="sparkles" class="w-3 h-3 text-indigo-600"></i>
-                  <span>AI-1</span>
+                <span class="inline-flex items-center text-[11px] font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100">
+                  AI-1
                 </span>
               </div>
 
@@ -484,9 +457,8 @@
                 </button>
               </div>
 
-              <a href="newhire-ai-help.html" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#1F5AFE] text-white text-xs font-semibold hover:bg-blue-700 transition shadow-xs active:scale-95 hover:no-underline">
+              <a href="newhire-ai-help.html" class="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-[#1F5AFE] text-white text-xs font-semibold hover:bg-blue-700 transition shadow-xs active:scale-95 hover:no-underline">
                 <span>Trò chuyện cùng Onbi</span>
-                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
               </a>
             </div>
 
@@ -501,34 +473,28 @@
   <div id="dashboardProofModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(4px);">
     <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-md w-full p-6 relative animate-fade-in">
       <div class="flex items-start justify-between gap-3 mb-4">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-blue-50 text-[#1F5AFE] flex items-center justify-center shrink-0">
-            <i data-lucide="file-check-2" class="w-5 h-5"></i>
+        <div>
+          <div class="flex items-center gap-2">
+            <h3 class="text-base font-bold text-slate-900">Nộp minh chứng hoàn thành</h3>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">Bắt buộc</span>
           </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <h3 class="text-base font-bold text-slate-900">Nộp minh chứng hoàn thành</h3>
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">Bắt buộc</span>
-            </div>
-            <p class="text-xs text-slate-500 font-medium line-clamp-1" id="dashProofTaskTitle">Nhiệm vụ</p>
-          </div>
+          <p class="text-xs text-slate-500 font-medium line-clamp-1 mt-0.5" id="dashProofTaskTitle">Nhiệm vụ</p>
         </div>
         <button onclick="closeDashProofModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
 
-      <div class="mb-3.5 p-3 rounded-xl bg-amber-50/80 border border-amber-200/80 flex items-start gap-2.5 text-xs text-amber-900 font-medium">
-        <i data-lucide="shield-check" class="w-4 h-4 text-amber-600 shrink-0 mt-0.5"></i>
-        <span>Bạn cần cung cấp đường dẫn minh chứng kết quả (PR GitHub, ảnh chụp màn hình hoặc tài liệu) để hệ thống xác nhận <strong>Hoàn thành nhiệm vụ</strong>.</span>
+      <div class="mb-3.5 p-3 rounded-xl bg-amber-50/80 border border-amber-200/80 text-xs text-amber-900 font-medium">
+        Bạn cần cung cấp đường dẫn minh chứng kết quả (PR GitHub, ảnh chụp màn hình hoặc tài liệu) để hệ thống xác nhận <strong>Hoàn thành nhiệm vụ</strong>.
       </div>
 
       <div class="space-y-3 mb-5">
         <div>
           <div class="flex items-center justify-between mb-1">
             <label class="block text-xs font-bold text-slate-700">Đường dẫn (URL) kết quả hoặc tài liệu minh chứng <span class="text-rose-600">*</span></label>
-            <button type="button" onclick="fillDashSampleProof()" class="text-[11px] font-bold text-[#1F5AFE] hover:underline flex items-center gap-1 cursor-pointer">
-              <i data-lucide="wand-2" class="w-3 h-3"></i> Điền mẫu nhanh
+            <button type="button" onclick="fillDashSampleProof()" class="text-[11px] font-bold text-[#1F5AFE] hover:underline cursor-pointer">
+              Điền mẫu nhanh
             </button>
           </div>
           <input type="text" id="dashProofInputUrl" placeholder="Ví dụ: https://github.com/org/repo/pull/12 hoặc link ảnh chụp..." class="w-full px-3.5 py-2.5 text-xs font-medium bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#1F5AFE] focus:bg-white transition-all">
@@ -541,8 +507,7 @@
 
       <div class="flex items-center justify-end gap-2">
         <button onclick="closeDashProofModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition-all cursor-pointer">Hủy</button>
-        <button onclick="submitDashTaskProof()" class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition-all flex items-center gap-1.5 shadow-xs cursor-pointer">
-          <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
+        <button onclick="submitDashTaskProof()" class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition-all shadow-xs cursor-pointer">
           <span>Xác nhận nộp & Hoàn thành</span>
         </button>
       </div>
@@ -556,7 +521,7 @@
       <div class="px-5 py-4 bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white flex items-center justify-between gap-3 shrink-0">
         <div class="flex items-center gap-3 min-w-0">
           <div class="relative shrink-0">
-            <img id="chatMentorAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mai" alt="Mentor" class="w-11 h-11 rounded-full bg-white ring-2 ring-white/30 object-cover">
+            <img id="chatMentorAvatar" src="assets/images/mentors/mt01.jpg" alt="Mentor" class="w-11 h-11 rounded-full bg-white ring-2 ring-white/30 object-cover">
             <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-[#00B67A] ring-2 ring-slate-900"></span>
           </div>
           <div class="min-w-0">
@@ -568,8 +533,7 @@
           </div>
         </div>
         <div class="flex items-center gap-1.5 shrink-0">
-          <button onclick="closeMentorChatModal(); openMentorExplorerModal();" class="px-2.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-semibold text-white transition-all flex items-center gap-1 cursor-pointer" title="Xem giới thiệu & Đổi người đồng hành">
-            <i data-lucide="user-check" class="w-3.5 h-3.5"></i>
+          <button onclick="closeMentorChatModal(); openMentorExplorerModal();" class="px-2.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-semibold text-white transition-all cursor-pointer" title="Xem giới thiệu & Đổi người đồng hành">
             <span class="hidden sm:inline">Hồ sơ & Đổi</span>
           </button>
           <button onclick="closeMentorChatModal()" class="p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer">
@@ -580,8 +544,7 @@
 
       <!-- Thanh ghim lịch 1-on-1 & cam kết hỗ trợ -->
       <div class="px-4 py-2.5 bg-amber-50/90 border-b border-amber-200/70 flex items-center justify-between gap-2 text-xs shrink-0">
-        <div class="flex items-center gap-1.5 text-amber-900 font-medium truncate">
-          <i data-lucide="calendar-clock" class="w-3.5 h-3.5 text-amber-600 shrink-0"></i>
+        <div class="text-amber-900 font-medium truncate">
           <span id="chatPinnedSchedule" class="truncate">Lịch 1-on-1: 15:00 Thứ Sáu tuần này (Check-in 7 ngày)</span>
         </div>
         <button onclick="sendMentorQuickPrompt('Em muốn xác nhận lịch gặp 1-on-1 tuần này và các nội dung cần chuẩn bị ạ.')" class="text-[11px] font-bold text-[#1F5AFE] hover:underline shrink-0 cursor-pointer">
@@ -599,13 +562,13 @@
         <div class="text-[11px] font-semibold text-slate-400 mb-1.5">Gợi ý trao đổi nhanh cùng Mentor:</div>
         <div class="flex flex-wrap gap-1.5">
           <button onclick="sendMentorQuickPrompt('Nhờ anh/chị hỗ trợ thúc đẩy phê duyệt quyền SSH Key cho nhiệm vụ T02 giúp em với ạ!')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-[#1F5AFE] text-[11px] font-medium text-slate-700 transition-colors cursor-pointer">
-            🔑 Hỗ trợ quyền SSH Key (T02)
+            Hỗ trợ quyền SSH Key (T02)
           </button>
           <button onclick="sendMentorQuickPrompt('Em vừa nộp minh chứng hoàn thành nhiệm vụ, nhờ anh/chị kiểm tra và góp ý giúp em nhé!')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-[#1F5AFE] text-[11px] font-medium text-slate-700 transition-colors cursor-pointer">
-            ✅ Nhờ review minh chứng
+            Nhờ review minh chứng
           </button>
           <button onclick="sendMentorQuickPrompt('Anh/chị có thể chia sẻ giúp em các tiêu chí quan trọng nhất để đạt OKRs 60 ngày thử việc không ạ?')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-[#1F5AFE] text-[11px] font-medium text-slate-700 transition-colors cursor-pointer">
-            🎯 Kinh nghiệm đạt OKRs thử việc
+            Kinh nghiệm đạt OKRs thử việc
           </button>
         </div>
       </div>
@@ -613,9 +576,8 @@
       <!-- Ô nhập tin nhắn -->
       <form onsubmit="handleMentorChatSubmit(event)" class="p-3.5 bg-white border-t border-slate-200 flex items-center gap-2 shrink-0">
         <input id="mentorChatInput" type="text" placeholder="Nhập tin nhắn trao đổi trực tiếp với Mentor..." class="flex-1 px-3.5 py-2.5 text-xs font-medium bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#1F5AFE] focus:bg-white transition-all">
-        <button type="submit" class="px-4 py-2.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95 shadow-xs cursor-pointer">
-          <span>Gửi</span>
-          <i data-lucide="send" class="w-3.5 h-3.5"></i>
+        <button type="submit" class="px-4 py-2.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold transition-all active:scale-95 shadow-xs cursor-pointer">
+          Gửi
         </button>
       </form>
     </div>
@@ -626,19 +588,14 @@
     <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-5xl w-full h-[90vh] max-h-[820px] flex flex-col overflow-hidden animate-fade-in">
       <!-- Header Modal (Cố định phía trên) -->
       <div class="px-6 py-4 border-b border-slate-200 bg-gradient-to-r from-blue-50/80 via-white to-indigo-50/70 flex items-center justify-between gap-4 shrink-0">
-        <div class="flex items-center gap-3.5 min-w-0">
-          <div class="w-10 h-10 rounded-xl bg-[#1F5AFE] text-white flex items-center justify-center shadow-xs shrink-0">
-            <i data-lucide="compass" class="w-5 h-5"></i>
+        <div class="min-w-0">
+          <div class="flex flex-wrap items-center gap-2">
+            <h3 class="text-base font-extrabold text-slate-900">Giới thiệu & Lựa chọn Người đồng hành (Mentor)</h3>
+            <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 text-[#1F5AFE]">AI Matching</span>
           </div>
-          <div class="min-w-0">
-            <div class="flex flex-wrap items-center gap-2">
-              <h3 class="text-base font-extrabold text-slate-900">Giới thiệu & Lựa chọn Người đồng hành (Mentor)</h3>
-              <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 text-[#1F5AFE]">AI Matching</span>
-            </div>
-            <p class="text-xs text-slate-600 mt-0.5 truncate">
-              Tìm hiểu năng lực, phong cách hướng dẫn và lịch 1-on-1 để chọn Người đồng hành phù hợp nhất với bạn.
-            </p>
-          </div>
+          <p class="text-xs text-slate-600 mt-0.5 truncate">
+            Tìm hiểu năng lực, phong cách hướng dẫn và lịch 1-on-1 để chọn Người đồng hành phù hợp nhất với bạn.
+          </p>
         </div>
         <button onclick="closeMentorExplorerModal()" class="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer shrink-0">
           <i data-lucide="x" class="w-5 h-5"></i>
@@ -652,21 +609,20 @@
             Tất cả Mentor (8)
           </button>
           <button onclick="filterMentorCatalog('ai_best')" data-filter="ai_best" class="mentor-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-white text-slate-700 border border-slate-200 hover:border-blue-300 transition-all cursor-pointer">
-            ✨ Đề xuất AI hàng đầu (≥90%)
+            Đề xuất AI hàng đầu (≥90%)
           </button>
           <button onclick="filterMentorCatalog('tech')" data-filter="tech" class="mentor-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-white text-slate-700 border border-slate-200 hover:border-blue-300 transition-all cursor-pointer">
-            💻 Kỹ thuật, AI & Bảo mật (5)
+            Kỹ thuật, AI & Bảo mật (5)
           </button>
           <button onclick="filterMentorCatalog('culture')" data-filter="culture" class="mentor-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-white text-slate-700 border border-slate-200 hover:border-blue-300 transition-all cursor-pointer">
-            🌱 Sản phẩm, Marketing & Nhân sự (3)
+            Sản phẩm, Marketing & Nhân sự (3)
           </button>
         </div>
 
         <div class="flex items-center justify-between lg:justify-end gap-2">
           <!-- Ô tìm kiếm nhanh Mentor -->
           <div class="relative w-48 sm:w-56">
-            <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
-            <input id="mentorSearchInput" oninput="renderMentorExplorerCatalog()" type="text" placeholder="Tìm tên, kỹ năng (React, AI...)" class="w-full pl-8 pr-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs text-slate-800 focus:outline-none focus:border-[#1F5AFE]">
+            <input id="mentorSearchInput" oninput="renderMentorExplorerCatalog()" type="text" placeholder="Tìm tên, SĐT, kỹ năng..." class="w-full px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs text-slate-800 focus:outline-none focus:border-[#1F5AFE]">
           </div>
           <div class="hidden sm:flex items-center gap-1.5 text-[11px] text-slate-500 font-medium shrink-0">
             <strong id="explorerCurrentMentorLabel" class="text-slate-800">Chưa chọn</strong>
@@ -686,16 +642,15 @@
 
       <!-- Footer hướng dẫn & Nút cuộn nhanh lên/xuống -->
       <div class="px-6 py-3 bg-white border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500 shrink-0">
-        <div class="flex items-center gap-2">
-          <i data-lucide="shield-check" class="w-4 h-4 text-[#00B67A] shrink-0"></i>
+        <div>
           <span>Onbi AI gợi ý theo vị trí của bạn; bạn có thể đọc thông tin và tự do lựa chọn Người đồng hành.</span>
         </div>
         <div class="flex items-center gap-2 ml-auto">
-          <button type="button" onclick="scrollMentorCatalog(-340)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-[11px] flex items-center gap-1 cursor-pointer transition-colors" title="Trượt lên trên">
-            <i data-lucide="chevron-up" class="w-3.5 h-3.5"></i> Lên trên
+          <button type="button" onclick="scrollMentorCatalog(-340)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-[11px] cursor-pointer transition-colors" title="Trượt lên trên">
+            Lên trên
           </button>
-          <button type="button" onclick="scrollMentorCatalog(340)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-[11px] flex items-center gap-1 cursor-pointer transition-colors" title="Trượt xuống dưới">
-            <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i> Xem tiếp
+          <button type="button" onclick="scrollMentorCatalog(340)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-[11px] cursor-pointer transition-colors" title="Trượt xuống dưới">
+            Xem tiếp
           </button>
           <button onclick="closeMentorExplorerModal()" class="px-4 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition-all cursor-pointer">
             Đóng
@@ -871,13 +826,13 @@
           departmentId: 'DEP01',
           department: 'Kỹ thuật Công nghệ',
           category: 'tech',
-          avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=256&q=80',
+          avatar: 'assets/images/mentors/mt01.jpg',
           phone: '0904 682 115',
-          zalo: '0904.682.115',
+          zalo: '0904 682 115',
           zaloUrl: 'https://zalo.me/0904682115',
           baseScore: 98,
           matchReason: 'Cùng nhóm Kỹ thuật & phụ trách trực tiếp kiến trúc dự án bạn đang tham gia.',
-          rating: '4.9',
+          rating: '4.9/5',
           experience: '6 năm KN • Đã dẫn dắt 14 tân binh',
           responseTime: 'Phản hồi ~5 phút',
           capacity: 'Đang kèm 2/3 Mentee (Còn 1 chỗ)',
@@ -897,7 +852,7 @@
             {
               sender: 'mentor',
               time: '09:15',
-              text: `Chào ${currentUser.name} 👋 Chào mừng em gia nhập đội Kỹ thuật OnboardAI! Chị là Mai — rất vui được em tin tưởng lựa chọn làm Người đồng hành trong 60 ngày tới.`
+              text: `Chào ${currentUser.name}, chào mừng em gia nhập đội Kỹ thuật OnboardAI! Chị là Mai — rất vui được em tin tưởng lựa chọn làm Người đồng hành trong 60 ngày tới.`
             },
             {
               sender: 'mentor',
@@ -913,13 +868,13 @@
           departmentId: 'DEP01',
           department: 'Kỹ thuật Công nghệ',
           category: 'tech',
-          avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=256&q=80',
+          avatar: 'assets/images/mentors/mt05.jpg',
           phone: '0912 345 889',
-          zalo: '0912.345.889',
+          zalo: '0912 345 889',
           zaloUrl: 'https://zalo.me/0912345889',
           baseScore: 95,
           matchReason: 'Chuyên gia Design System & tối ưu hiệu năng giao diện Web hiện đại.',
-          rating: '5.0',
+          rating: '5.0/5',
           experience: '8 năm KN • Đã dẫn dắt 19 tân binh',
           responseTime: 'Phản hồi ~10 phút',
           capacity: 'Đang kèm 1/3 Mentee (Còn 2 chỗ)',
@@ -939,7 +894,7 @@
             {
               sender: 'mentor',
               time: '09:20',
-              text: `Chào ${currentUser.name} 👋 Anh là Hoàng Minh. Rất vui được đồng hành cùng em trong việc làm chủ Design System và kiến trúc Frontend tại OnboardAI!`
+              text: `Chào ${currentUser.name}, anh là Hoàng Minh. Rất vui được đồng hành cùng em trong việc làm chủ Design System và kiến trúc Frontend tại OnboardAI!`
             },
             {
               sender: 'mentor',
@@ -955,13 +910,13 @@
           departmentId: 'DEP01',
           department: 'Kỹ thuật Công nghệ',
           category: 'tech',
-          avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=256&q=80',
+          avatar: 'assets/images/mentors/mt06.jpg',
           phone: '0983 771 420',
-          zalo: '0983.771.420',
+          zalo: '0983 771 420',
           zaloUrl: 'https://zalo.me/0983771420',
           baseScore: 93,
           matchReason: 'Thế mạnh về kiến trúc API, hạ tầng Docker/Cloud và tích hợp hệ thống.',
-          rating: '4.9',
+          rating: '4.9/5',
           experience: '9 năm KN • Đã dẫn dắt 25 tân binh',
           responseTime: 'Phản hồi ~8 phút',
           capacity: 'Đang kèm 2/4 Mentee (Còn 2 chỗ)',
@@ -981,7 +936,7 @@
             {
               sender: 'mentor',
               time: '09:25',
-              text: `Chào ${currentUser.name} 👋 Anh là Đình Trọng (SĐT/Zalo: 0983 771 420). Chào mừng em đến với khối Kỹ thuật Công nghệ! Anh sẽ hỗ trợ em nắm vững toàn bộ luồng API và môi trường kỹ thuật nhé.`
+              text: `Chào ${currentUser.name}, anh là Đình Trọng (SĐT/Zalo: 0983 771 420). Chào mừng em đến với khối Kỹ thuật Công nghệ! Anh sẽ hỗ trợ em nắm vững toàn bộ luồng API và môi trường kỹ thuật nhé.`
             }
           ]
         },
@@ -992,13 +947,13 @@
           departmentId: 'DEP01',
           department: 'Kỹ thuật Công nghệ',
           category: 'tech',
-          avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=256&q=80',
+          avatar: 'assets/images/mentors/mt07.jpg',
           phone: '0936 519 208',
-          zalo: '0936.519.208',
+          zalo: '0936 519 208',
           zaloUrl: 'https://zalo.me/0936519208',
           baseScore: 91,
           matchReason: 'Chuyên gia tích hợp AI Copilot, RAG Pipeline và phân tích dữ liệu thông minh.',
-          rating: '5.0',
+          rating: '5.0/5',
           experience: '6 năm KN • Đã dẫn dắt 12 tân binh',
           responseTime: 'Phản hồi ~7 phút',
           capacity: 'Đang kèm 1/3 Mentee (Còn 2 chỗ)',
@@ -1018,7 +973,7 @@
             {
               sender: 'mentor',
               time: '09:18',
-              text: `Chào ${currentUser.name} ✨ Chị là Bảo Ngọc từ nhóm AI & Data (Zalo: 0936 519 208). Rất vui được đồng hành cùng em khám phá công nghệ cốt lõi tại OnboardAI!`
+              text: `Chào ${currentUser.name}, chị là Bảo Ngọc từ nhóm AI & Data (Zalo: 0936 519 208). Rất vui được đồng hành cùng em khám phá công nghệ cốt lõi tại OnboardAI!`
             }
           ]
         },
@@ -1029,13 +984,13 @@
           departmentId: 'DEP01',
           department: 'Kỹ thuật Công nghệ',
           category: 'tech',
-          avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=256&q=80',
+          avatar: 'assets/images/mentors/mt04.jpg',
           phone: '0978 402 661',
-          zalo: '0978.402.661',
+          zalo: '0978 402 661',
           zaloUrl: 'https://zalo.me/0978402661',
           baseScore: 89,
           matchReason: 'Giúp bạn nắm vững tiêu chuẩn kiểm thử tự động, bảo mật 2FA/ISO và chất lượng code.',
-          rating: '4.8',
+          rating: '4.8/5',
           experience: '7 năm KN • Đã dẫn dắt 16 tân binh',
           responseTime: 'Phản hồi ~9 phút',
           capacity: 'Đang kèm 1/3 Mentee (Còn 2 chỗ)',
@@ -1055,7 +1010,7 @@
             {
               sender: 'mentor',
               time: '09:22',
-              text: `Chào ${currentUser.name} 🛡️ Anh là Hoàng Sơn (SĐT/Zalo: 0978 402 661). Anh sẽ đồng hành hỗ trợ em về quy chuẩn chất lượng code, kiểm thử và bảo mật hệ thống nhé!`
+              text: `Chào ${currentUser.name}, anh là Hoàng Sơn (SĐT/Zalo: 0978 402 661). Anh sẽ đồng hành hỗ trợ em về quy chuẩn chất lượng code, kiểm thử và bảo mật hệ thống nhé!`
             }
           ]
         },
@@ -1066,13 +1021,13 @@
           departmentId: 'DEP02',
           department: 'Marketing & Truyền thông',
           category: 'culture',
-          avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=256&q=80',
+          avatar: 'assets/images/mentors/mt02.jpg',
           phone: '0945 812 330',
-          zalo: '0945.812.330',
+          zalo: '0945 812 330',
           zaloUrl: 'https://zalo.me/0945812330',
           baseScore: 90,
           matchReason: 'Giúp bạn hiểu sâu bài toán nghiệp vụ sản phẩm và phối hợp Agile đa phòng ban.',
-          rating: '4.8',
+          rating: '4.8/5',
           experience: '5 năm KN • Đã dẫn dắt 11 tân binh',
           responseTime: 'Phản hồi ~12 phút',
           capacity: 'Đang kèm 2/4 Mentee (Còn 2 chỗ)',
@@ -1092,7 +1047,7 @@
             {
               sender: 'mentor',
               time: '09:30',
-              text: `Chào mừng ${currentUser.name} đến với đại gia đình OnboardAI! 🚀 Mình là Minh Tuấn (Zalo: 0945 812 330), sẵn sàng hỗ trợ bạn hòa nhập văn hóa và nắm bắt quy trình sản phẩm.`
+              text: `Chào mừng ${currentUser.name} đến với đại gia đình OnboardAI! Mình là Minh Tuấn (Zalo: 0945 812 330), sẵn sàng hỗ trợ bạn hòa nhập văn hóa và nắm bắt quy trình sản phẩm.`
             }
           ]
         },
@@ -1103,13 +1058,13 @@
           departmentId: 'DEP02',
           department: 'Marketing & Truyền thông',
           category: 'culture',
-          avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=256&q=80',
+          avatar: 'assets/images/mentors/mt08.jpg',
           phone: '0962 198 745',
-          zalo: '0962.198.745',
+          zalo: '0962 198 745',
           zaloUrl: 'https://zalo.me/0962198745',
           baseScore: 87,
           matchReason: 'Chuyên gia định vị thương hiệu, truyền thông sản phẩm công nghệ và kỹ năng thuyết trình.',
-          rating: '4.9',
+          rating: '4.9/5',
           experience: '6 năm KN • Đã dẫn dắt 15 tân binh',
           responseTime: 'Phản hồi ~6 phút',
           capacity: 'Đang kèm 1/3 Mentee (Còn 2 chỗ)',
@@ -1129,7 +1084,7 @@
             {
               sender: 'mentor',
               time: '09:12',
-              text: `Chào ${currentUser.name} 🌸 Chị là Thanh Hà (SĐT/Zalo: 0962 198 745). Rất vui được đồng hành cùng em trong hành trình hòa nhập và tỏa sáng tại OnboardAI!`
+              text: `Chào ${currentUser.name}, chị là Thanh Hà (SĐT/Zalo: 0962 198 745). Rất vui được đồng hành cùng em trong hành trình hòa nhập và tỏa sáng tại OnboardAI!`
             }
           ]
         },
@@ -1140,13 +1095,13 @@
           departmentId: 'DEP03',
           department: 'Nhân sự & Vận hành',
           category: 'culture',
-          avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=256&q=80',
+          avatar: 'assets/images/mentors/mt03.jpg',
           phone: '0918 905 512',
-          zalo: '0918.905.512',
+          zalo: '0918 905 512',
           zaloUrl: 'https://zalo.me/0918905512',
           baseScore: 86,
           matchReason: 'Chuyên gia tư vấn mục tiêu thử việc 60 ngày, phúc lợi và văn hóa doanh nghiệp.',
-          rating: '4.9',
+          rating: '4.9/5',
           experience: '7 năm KN • Đã dẫn dắt 22 tân binh',
           responseTime: 'Phản hồi ~8 phút',
           capacity: 'Đang kèm 1/3 Mentee (Còn 2 chỗ)',
@@ -1166,7 +1121,7 @@
             {
               sender: 'mentor',
               time: '09:10',
-              text: `Chào ${currentUser.name} 🌟 Anh là Quang Huy từ khối People & Culture (Zalo: 0918 905 512). Anh sẽ đồng hành cùng em thiết lập OKRs thử việc và giải đáp mọi thắc mắc về văn hóa, chế độ tại OnboardAI nhé!`
+              text: `Chào ${currentUser.name}, anh là Quang Huy từ khối People & Culture (Zalo: 0918 905 512). Anh sẽ đồng hành cùng em thiết lập OKRs thử việc và giải đáp mọi thắc mắc về văn hóa, chế độ tại OnboardAI nhé!`
             }
           ]
         }
@@ -1252,8 +1207,8 @@
           unassignedEl.classList.remove('hidden');
           assignedEl.classList.add('hidden');
 
-          matchBadgeEl.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200';
-          matchBadgeEl.innerHTML = `<i data-lucide="sparkles" class="w-2.5 h-2.5 text-amber-600"></i> Chưa chọn • AI Đề xuất`;
+          matchBadgeEl.className = 'inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200';
+          matchBadgeEl.textContent = 'Chưa chọn • AI Đề xuất';
           if (headerActionLabel) headerActionLabel.textContent = `Xem tất cả (${MENTOR_CATALOG.length})`;
           if (explorerLabel) explorerLabel.textContent = 'Chưa chọn (Đang xem đề xuất AI)';
           if (resetBtn) resetBtn.classList.add('hidden');
@@ -1273,7 +1228,7 @@
                   <div class="min-w-0">
                     <div class="flex items-center gap-1.5">
                       <h4 class="text-xs font-extrabold text-slate-900 truncate">${m.name}</h4>
-                      <span class="text-[10px] font-bold text-amber-600">★ ${m.rating}</span>
+                      <span class="text-[10px] font-bold text-amber-600">${m.rating}</span>
                     </div>
                     <p class="text-[11px] text-slate-500 truncate">${m.role}</p>
                   </div>
@@ -1285,12 +1240,10 @@
                 </span>
               </div>
               <div class="flex flex-wrap items-center gap-1.5 text-[10px]">
-                <button type="button" onclick="copyMentorPhone('${m.phone}', '${m.name}')" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-700 hover:border-[#1F5AFE] hover:text-[#1F5AFE] font-semibold cursor-pointer" title="Nhấn để sao chép SĐT">
-                  <i data-lucide="phone" class="w-2.5 h-2.5 text-emerald-600"></i>
+                <button type="button" onclick="copyMentorPhone('${m.phone}', '${m.name}')" class="inline-flex items-center px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-700 hover:border-[#1F5AFE] hover:text-[#1F5AFE] font-semibold cursor-pointer" title="Nhấn để sao chép SĐT">
                   <span>SĐT: ${m.phone}</span>
                 </button>
-                <button type="button" onclick="openMentorZalo('${m.zalo}', '${m.name}', '${m.zaloUrl}')" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-50/80 border border-blue-200 text-[#0068FF] hover:bg-blue-100 font-bold cursor-pointer" title="Nhấn để kết nối Zalo">
-                  <span class="w-3.5 h-3.5 rounded bg-[#0068FF] text-white text-[8px] font-black inline-flex items-center justify-center">Z</span>
+                <button type="button" onclick="openMentorZalo('${m.zalo}', '${m.name}', '${m.zaloUrl}')" class="inline-flex items-center px-2 py-0.5 rounded-md bg-blue-50/80 border border-blue-200 text-[#0068FF] hover:bg-blue-100 font-bold cursor-pointer" title="Nhấn để kết nối Zalo">
                   <span>Zalo: ${m.zalo}</span>
                 </button>
               </div>
@@ -1301,15 +1254,13 @@
                 <button onclick="openMentorExplorerModal('${m.id}')" class="text-[11px] font-semibold text-slate-600 hover:text-[#1F5AFE] hover:underline cursor-pointer">
                   Xem giới thiệu chi tiết
                 </button>
-                <button onclick="selectMentor('${m.id}')" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-[#1F5AFE] text-white text-[11px] font-bold flex items-center gap-1 transition-all active:scale-95 cursor-pointer">
-                  <i data-lucide="user-check" class="w-3 h-3"></i>
-                  <span>Chọn đồng hành</span>
+                <button onclick="selectMentor('${m.id}')" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-[#1F5AFE] text-white text-[11px] font-bold transition-all active:scale-95 cursor-pointer">
+                  Chọn đồng hành
                 </button>
               </div>
             </div>
           `).join('');
 
-          lucide.createIcons();
           return;
         }
 
@@ -1321,19 +1272,19 @@
         const history = getMentorChatHistory(mentor.id);
         const lastMsg = history.length > 0 ? history[history.length - 1] : null;
 
-        matchBadgeEl.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/80';
-        matchBadgeEl.innerHTML = `<i data-lucide="check-circle-2" class="w-2.5 h-2.5"></i> Đã chọn (${mentor.matchScore}% hợp)`;
+        matchBadgeEl.className = 'inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/80';
+        matchBadgeEl.textContent = `Đã chọn (${mentor.matchScore}% hợp)`;
         if (headerActionLabel) headerActionLabel.textContent = 'Giới thiệu & Đổi';
 
         document.getElementById('mentorCardAvatar').src = mentor.avatar;
         document.getElementById('mentorCardName').textContent = mentor.name;
-        document.getElementById('mentorCardRating').textContent = `★ ${mentor.rating}`;
+        document.getElementById('mentorCardRating').textContent = mentor.rating;
         document.getElementById('mentorCardRole').textContent = mentor.role;
         document.getElementById('mentorCardExp').textContent = mentor.responseTime;
         document.getElementById('mentorCardBio').textContent = `"${mentor.shortBio}"`;
 
         const phoneEl = document.getElementById('mentorCardPhone');
-        if (phoneEl) phoneEl.textContent = mentor.phone || '0904 682 115';
+        if (phoneEl) phoneEl.textContent = `SĐT: ${mentor.phone || '0904 682 115'}`;
         const zaloEl = document.getElementById('mentorCardZalo');
         if (zaloEl) zaloEl.textContent = `Zalo: ${mentor.zalo || mentor.phone || '0904 682 115'}`;
         const phoneBtn = document.getElementById('mentorCardPhoneBtn');
@@ -1347,7 +1298,7 @@
         ).join('');
 
         document.getElementById('mentorNextSessionText').textContent = activeSlot;
-        document.getElementById('mentorSessionLocation').innerHTML = `<i data-lucide="video" class="w-3 h-3 inline mr-1"></i>${mentor.location}`;
+        document.getElementById('mentorSessionLocation').textContent = mentor.location;
 
         const slotBtns = document.getElementById('mentorSlotButtons');
         slotBtns.innerHTML = mentor.slots.map(slot => {
@@ -1360,7 +1311,7 @@
                 : 'bg-white/90 text-amber-950 border border-amber-200 hover:bg-amber-100/70'
             }">
               <span class="truncate">${slot}</span>
-              ${isSelected ? '<i data-lucide="check" class="w-3.5 h-3.5 shrink-0"></i>' : ''}
+              ${isSelected ? '<span class="text-[10px] font-bold shrink-0">Đang chọn</span>' : ''}
             </button>
           `;
         }).join('');
@@ -1372,8 +1323,6 @@
 
         if (explorerLabel) explorerLabel.textContent = mentor.name;
         if (resetBtn) resetBtn.classList.remove('hidden');
-
-        lucide.createIcons();
       }
 
       window.copyMentorPhone = function(phone, mentorName) {
@@ -1433,7 +1382,7 @@
           }
           return `
             <div class="flex items-start gap-2.5">
-              <img src="${mentor.avatar}" alt="${mentor.name}" class="w-7 h-7 rounded-full bg-white ring-1 ring-slate-200 shrink-0 mt-0.5">
+              <img src="${mentor.avatar}" alt="${mentor.name}" class="w-7 h-7 rounded-full bg-white ring-1 ring-slate-200 shrink-0 mt-0.5 object-cover">
               <div class="flex flex-col items-start max-w-[82%]">
                 <div class="px-3.5 py-2.5 rounded-2xl rounded-bl-xs bg-white border border-slate-200/90 text-slate-800 text-xs leading-relaxed shadow-2xs">
                   ${msg.text}
@@ -1453,7 +1402,7 @@
           return `Mình vừa nhắn trực tiếp cho anh Nguyễn Văn Hải (IT Helpdesk - Ext 104) để ưu tiên duyệt SSH Key cho ${currentUser.name} rồi nhé! Khoảng 10 phút nữa em thử clone lại repo rồi đính kèm link PR minh chứng vào nhiệm vụ T02 nha.`;
         }
         if (lower.includes('minh chứng') || lower.includes('review') || lower.includes('nộp')) {
-          return `Tuyệt vời quá! ${shortName} đã nhận được thông báo minh chứng của em. Cách trình bày rất rõ ràng, em cứ tiếp tục hoàn thành các đầu việc còn lại của Tuần 1 theo đúng đà này nhé! 👍`;
+          return `Tuyệt vời quá! ${shortName} đã nhận được thông báo minh chứng của em. Cách trình bày rất rõ ràng, em cứ tiếp tục hoàn thành các đầu việc còn lại của Tuần 1 theo đúng đà này nhé!`;
         }
         if (lower.includes('1-on-1') || lower.includes('lịch') || lower.includes('gặp')) {
           const slot = getMentorCustomSlot(mentor);
@@ -1478,7 +1427,6 @@
         const unreadBadge = document.getElementById('mentorUnreadBadge');
         if (unreadBadge) unreadBadge.classList.add('hidden');
         renderMentorChatMessages();
-        lucide.createIcons();
         setTimeout(() => {
           const input = document.getElementById('mentorChatInput');
           if (input) input.focus();
@@ -1508,7 +1456,7 @@
         typingDiv.id = 'mentorTypingIndicator';
         typingDiv.className = 'flex items-center gap-2 text-xs text-slate-500 italic px-2 py-1';
         typingDiv.innerHTML = `
-          <img src="${mentor.avatar}" class="w-5 h-5 rounded-full bg-white ring-1 ring-slate-200">
+          <img src="${mentor.avatar}" class="w-5 h-5 rounded-full bg-white ring-1 ring-slate-200 object-cover">
           <span>${mentor.name} đang soạn phản hồi...</span>
         `;
         container.appendChild(typingDiv);
@@ -1616,7 +1564,7 @@
                     <div class="min-w-0">
                       <div class="flex items-center gap-1.5 flex-wrap">
                         <h4 class="text-sm font-extrabold text-slate-900 truncate">${mentor.name}</h4>
-                        <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200/70">★ ${mentor.rating}</span>
+                        <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200/70">${mentor.rating}</span>
                         ${isTopAi ? '<span class="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-blue-600 text-white">Top 1 AI</span>' : ''}
                       </div>
                       <p class="text-xs text-slate-600 font-medium truncate">${mentor.role}</p>
@@ -1634,19 +1582,16 @@
 
                 <!-- Liên hệ nhanh SĐT & Zalo -->
                 <div class="grid grid-cols-2 gap-2">
-                  <button type="button" onclick="copyMentorPhone('${mentor.phone}', '${mentor.name}')" class="px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/90 flex items-center justify-center gap-1.5 text-[11px] font-bold text-slate-700 transition-all cursor-pointer" title="Nhấn để sao chép SĐT">
-                    <i data-lucide="phone-call" class="w-3.5 h-3.5 text-emerald-600 shrink-0"></i>
+                  <button type="button" onclick="copyMentorPhone('${mentor.phone}', '${mentor.name}')" class="px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/90 flex items-center justify-center text-[11px] font-bold text-slate-700 transition-all cursor-pointer" title="Nhấn để sao chép SĐT">
                     <span class="truncate">SĐT: ${mentor.phone}</span>
                   </button>
-                  <button type="button" onclick="openMentorZalo('${mentor.zalo}', '${mentor.name}', '${mentor.zaloUrl}')" class="px-2.5 py-1.5 rounded-xl bg-blue-50/70 hover:bg-blue-100/80 border border-blue-200/90 flex items-center justify-center gap-1.5 text-[11px] font-bold text-[#0068FF] transition-all cursor-pointer" title="Nhấn để kết nối Zalo">
-                    <span class="w-4 h-4 rounded-md bg-[#0068FF] text-white text-[9px] font-black inline-flex items-center justify-center shrink-0">Z</span>
+                  <button type="button" onclick="openMentorZalo('${mentor.zalo}', '${mentor.name}', '${mentor.zaloUrl}')" class="px-2.5 py-1.5 rounded-xl bg-blue-50/70 hover:bg-blue-100/80 border border-blue-200/90 flex items-center justify-center text-[11px] font-bold text-[#0068FF] transition-all cursor-pointer" title="Nhấn để kết nối Zalo">
                     <span class="truncate">Zalo: ${mentor.zalo}</span>
                   </button>
                 </div>
 
                 <!-- Lý do gợi ý từ AI -->
-                <div class="px-3 py-2 rounded-xl bg-indigo-50/70 border border-indigo-100 text-[11px] text-indigo-950 flex items-start gap-2">
-                  <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#1F5AFE] shrink-0 mt-0.5"></i>
+                <div class="px-3 py-2 rounded-xl bg-indigo-50/70 border border-indigo-100 text-[11px] text-indigo-950">
                   <span class="line-clamp-2"><strong>Đề xuất từ AI:</strong> ${mentor.matchReason}</span>
                 </div>
 
@@ -1656,12 +1601,12 @@
                 </p>
 
                 <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1 text-[11px]">
-                  <div class="truncate"><strong class="text-slate-800">🎯 Phong cách:</strong> ${mentor.style}</div>
-                  <div class="truncate"><strong class="text-slate-800">📅 Lịch 1-on-1:</strong> ${mentor.nextSession}</div>
+                  <div class="truncate"><strong class="text-slate-800">Phong cách:</strong> ${mentor.style}</div>
+                  <div class="truncate"><strong class="text-slate-800">Lịch 1-on-1:</strong> ${mentor.nextSession}</div>
                   <div class="flex items-center justify-between gap-2">
-                    <span><strong class="text-slate-800">👥 Nhận kèm:</strong> <span class="text-emerald-700 font-semibold">${mentor.capacity}</span></span>
+                    <span><strong class="text-slate-800">Nhận kèm:</strong> <span class="text-emerald-700 font-semibold">${mentor.capacity}</span></span>
                     <button type="button" onclick="toggleMentorCardDetail('${mentor.id}')" class="text-[11px] font-bold text-[#1F5AFE] hover:underline shrink-0 cursor-pointer">
-                      ${isExpanded ? 'Thu gọn ▴' : 'Xem chi tiết & đánh giá ▾'}
+                      ${isExpanded ? 'Thu gọn' : 'Xem chi tiết & đánh giá'}
                     </button>
                   </div>
                 </div>
@@ -1684,23 +1629,21 @@
               <div class="pt-2.5 border-t border-slate-200/70 flex items-center justify-between gap-2 mt-auto">
                 ${
                   isCurrent
-                    ? `<span class="inline-flex items-center gap-1.5 text-xs font-extrabold text-[#00B67A]">
-                         <i data-lucide="check-circle-2" class="w-4 h-4"></i> Đang đồng hành cùng bạn
+                    ? `<span class="inline-flex items-center text-xs font-extrabold text-[#00B67A]">
+                         Đang đồng hành cùng bạn
                        </span>
-                       <button onclick="closeMentorExplorerModal(); openMentorChatModal();" class="px-3.5 py-1.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer">
-                         <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Nhắn tin ngay
+                       <button onclick="closeMentorExplorerModal(); openMentorChatModal();" class="px-3.5 py-1.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold transition-all cursor-pointer">
+                         Nhắn tin ngay
                        </button>`
                     : `<span class="text-[11px] text-slate-500 font-medium">Sẵn sàng đồng hành</span>
-                       <button onclick="selectMentor('${mentor.id}')" class="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-[#1F5AFE] text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer">
-                         <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Chọn làm Người đồng hành
+                       <button onclick="selectMentor('${mentor.id}')" class="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-[#1F5AFE] text-white text-xs font-bold transition-all shadow-xs active:scale-95 cursor-pointer">
+                         Chọn làm Người đồng hành
                        </button>`
                 }
               </div>
             </div>
           `;
         }).join('');
-
-        lucide.createIcons();
 
         if (highlightId) {
           setTimeout(() => {
@@ -1872,8 +1815,7 @@
           let blockedSubtext = '';
           if (isBlocked && task.blockedReason) {
             blockedSubtext = `
-              <div class="mt-1.5 text-xs text-rose-800 bg-rose-50 p-2 rounded-xl border border-rose-200/60 flex items-center gap-1.5 font-medium">
-                <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0 text-rose-600"></i>
+              <div class="mt-1.5 text-xs text-rose-800 bg-rose-50 p-2 rounded-xl border border-rose-200/60 font-medium">
                 <span>${task.blockedReason}</span>
               </div>`;
           }
@@ -1881,11 +1823,11 @@
           const hasProof = Boolean(task.proof && task.proof.trim() !== '');
           const safeTitle = task.title.replace(/'/g, "\\'");
           const proofActionHtml = hasProof
-            ? `<button onclick="openDashProofModal('${task.id}', '${safeTitle}')" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/80 hover:bg-emerald-100 transition-colors cursor-pointer" title="${task.proof}">
-                 <i data-lucide="file-check-2" class="w-3 h-3"></i> Đã nộp minh chứng
+            ? `<button onclick="openDashProofModal('${task.id}', '${safeTitle}')" class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/80 hover:bg-emerald-100 transition-colors cursor-pointer" title="${task.proof}">
+                 Đã nộp minh chứng
                </button>`
-            : `<button onclick="openDashProofModal('${task.id}', '${safeTitle}')" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-blue-50 text-[#1F5AFE] border border-blue-200/80 hover:bg-blue-100 transition-colors cursor-pointer">
-                 <i data-lucide="upload-cloud" class="w-3 h-3"></i> Nộp minh chứng
+            : `<button onclick="openDashProofModal('${task.id}', '${safeTitle}')" class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold bg-blue-50 text-[#1F5AFE] border border-blue-200/80 hover:bg-blue-100 transition-colors cursor-pointer">
+                 Nộp minh chứng
                </button>`;
 
           taskDiv.innerHTML = `
@@ -1917,8 +1859,8 @@
               ${blockedSubtext}
             </div>
             
-            <button onclick="quickAsk('${safeTitle}')" title="Hỏi Onbi về nhiệm vụ này" class="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-[#1F5AFE] p-1 rounded-lg transition-all shrink-0 active:scale-90">
-              <i data-lucide="bot" class="w-4 h-4"></i>
+            <button onclick="quickAsk('${safeTitle}')" title="Hỏi Onbi về nhiệm vụ này" class="opacity-0 group-hover:opacity-100 text-[11px] font-semibold text-slate-500 hover:text-[#1F5AFE] px-2 py-1 rounded-lg transition-all shrink-0 active:scale-90">
+              Hỏi AI
             </button>
           `;
 
