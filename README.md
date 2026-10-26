@@ -118,7 +118,7 @@ Dự án triển khai **3 mô-đun AI thuộc 3 nhóm khác nhau** kèm đầy �
 
 | STT | Thành viên | Vai trò trong nhóm | Phân hệ & Tính năng phụ trách | Nhánh Git | Video OBS |
 |:---:|:---|:---|:---|:---|:---:|
-| 1 | **SV1 (Huy)** | **Trưởng nhóm – UI/UX, New Hire, HR & Admin Lead** | • Phân hệ Khách & Nhân viên mới (`index.html`, `newhire-*`)<br>• Phân hệ HR & Admin (`hr-dashboard.html`, `admin-user-management.html`, Chế độ thị sát `View-As`)<br>• Tính năng **AI-1**, **AI-2 (Mentor Matching & Chat)**, **AI-3 (HR Risk Radar)** | `huy/feature/newhire-checklist`<br>`fix/sv3-data-sync-hr-admin` | `OBS-01`<br>`OBS-03` |
+| 1 | **SV1 ? Nguy?n Gia Huy (2551170897)** | **Trưởng nhóm – UI/UX, New Hire, HR & Admin Lead** | • Phân hệ Khách & Nhân viên mới (`index.html`, `newhire-*`)<br>• Phân hệ HR & Admin (`hr-dashboard.html`, `admin-user-management.html`, Chế độ thị sát `View-As`)<br>• Tính năng **AI-1**, **AI-2 (Mentor Matching & Chat)**, **AI-3 (HR Risk Radar)** | `huy/feature/newhire-checklist`<br>`fix/sv3-data-sync-hr-admin` | `OBS-01`<br>`OBS-03` |
 | 2 | **SV2 (Hoàng)** | **Core Data & Mentor Lead** | • Kiến trúc dữ liệu (`js/api.js`, `assets/data/mock-data.json`)<br>• Đăng nhập & Hồ sơ (`login.html`, `profile.html`)<br>• Phân hệ Người hướng dẫn (`mentor-mentee-list.html`) & **AI-2 (Checklist Personalizer)** | `feat/sv2-data-mentor` | `OBS-02` |
 
 ---
@@ -168,9 +168,9 @@ Nhóm tuân thủ quy trình GitHub Flow chuẩn (Xem chi tiết tại [`docs/TO
 
 | Mã Video | Phân hệ & Tệp trọng tâm | Thành viên | Nội dung giải thích code & Sửa trực tiếp (Live Coding) | Link Video (Drive / YouTube) |
 |:---:|:---|:---:|:---|:---:|
-| **`OBS-01`** | **Phân hệ Nhân viên mới & AI-1**<br>(`index.html`, `newhire-onboarding-dashboard.html`, `newhire-checklist.html`, `newhire-ai-help.html`) | **SV1 (Huy)** | Giải thích thuật toán AI gợi ý 8 Người đồng hành & Chat trực tiếp, tích chọn hoàn thành Checklist lưu `localStorage`, hỏi đáp trợ lý **AI-1** và sửa trực tiếp giao diện/logic trên code. | [Xem Video OBS 01](https://...) |
+| **`OBS-01`** | **Phân hệ Nhân viên mới & AI-1**<br>(`index.html`, `newhire-onboarding-dashboard.html`, `newhire-checklist.html`, `newhire-ai-help.html`) | **SV1 ? Nguy?n Gia Huy (2551170897)** | Giải thích thuật toán AI gợi ý 8 Người đồng hành & Chat trực tiếp, tích chọn hoàn thành Checklist lưu `localStorage`, hỏi đáp trợ lý **AI-1** và sửa trực tiếp giao diện/logic trên code. | [Xem Video OBS 01](https://...) |
 | **`OBS-02`** | **Core Data Engine, Phân hệ Mentor & AI-2**<br>(`js/api.js`, `assets/data/mock-data.json`, `login.html`, `mentor-mentee-list.html`, `profile.html`) | **SV2 (Hoàng)** | Giải thích kiến trúc `window.OnboardAPI` & `localStorage`, tìm kiếm/lọc Mentee, kiểm tra hợp lệ biểu mẫu (Form Validation), tính năng **AI-2 (Checklist Personalizer)** và sửa trực tiếp code. | [Xem Video OBS 02](https://...) |
-| **`OBS-03`** | **Phân hệ HR, Quản trị viên (Admin) & AI-3**<br>(`hr-dashboard.html`, `admin-user-management.html`, Chế độ thị sát `View-As`) | **SV1 (Huy)** | Giải thích biểu đồ `Chart.js`, thuật toán cảnh báo sớm **AI-3 (HR Risk Radar)**, quản lý CRUD tài khoản, Chế độ thị sát đa người dùng (`NH01`..`NH06`, `MT01`..`MT08`) và sửa trực tiếp code. | [Xem Video OBS 03](https://...) |
+| **`OBS-03`** | **Phân hệ HR, Quản trị viên (Admin) & AI-3**<br>(`hr-dashboard.html`, `admin-user-management.html`, Chế độ thị sát `View-As`) | **SV1 ? Nguy?n Gia Huy (2551170897)** | Giải thích biểu đồ `Chart.js`, thuật toán cảnh báo sớm **AI-3 (HR Risk Radar)**, quản lý CRUD tài khoản, Chế độ thị sát đa người dùng (`NH01`..`NH06`, `MT01`..`MT08`) và sửa trực tiếp code. | [Xem Video OBS 03](https://...) |
 
 ---
 

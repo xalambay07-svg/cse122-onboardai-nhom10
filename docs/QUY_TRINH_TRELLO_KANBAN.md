@@ -25,7 +25,7 @@ Bảng Trello của nhóm được đặt tên là **`[CSE122 - BTL20] OnboardAI
 ## 2. Hệ thống Nhãn màu (Labels) & Phân công Thành viên
 
 ### 2.1. Nhãn theo Thành viên phụ trách
-- 🟦 **`SV1 - UI/UX & New Hire (Huy)`** *(Màu Xanh dương - Blue)*: Phụ trách Design System (`css/style.css`), Landing Page (`index.html`), Đăng nhập (`login.html`), Dashboard Nhân viên mới (`newhire-onboarding-dashboard.html`), Checklist & Nộp minh chứng (`newhire-checklist.html`), Đề xuất & Chat với Người đồng hành, và trợ lý **AI-1 (Policy Q&A Assistant - `newhire-ai-help.html`)**.
+- 🟦 **`SV1 - Nguy?n Gia Huy (2551170897)`** *(Màu Xanh dương - Blue)*: Phụ trách Design System (`css/style.css`), Landing Page (`index.html`), Đăng nhập (`login.html`), Dashboard Nhân viên mới (`newhire-onboarding-dashboard.html`), Checklist & Nộp minh chứng (`newhire-checklist.html`), Đề xuất & Chat với Người đồng hành, và trợ lý **AI-1 (Policy Q&A Assistant - `newhire-ai-help.html`)**.
 - 🟩 **`SV2 - Core Data & Mentor (Hoàng)`** *(Màu Xanh lá - Green)*: Phụ trách Kiến trúc dữ liệu (`assets/data/mock-data.json`), Data Engine (`js/api.js`), Phân hệ Người hướng dẫn (`mentor-mentee-list.html`), Hồ sơ cá nhân (`profile.html`), và **AI-2 (Checklist Personalizer & Mentor Matching)**.
 - 🟪 **`SV1 - DevOps, HR & Admin (Huy) (Trưởng nhóm)`** *(Màu Tím - Purple)*: Phụ trách Quản trị Git/Trello, Phân hệ Nhân sự (`hr-dashboard.html` + Chart.js), Phân hệ Quản trị viên (`admin-user-management.html`), Chế độ thị sát đa tài khoản (`View-As`), và **AI-3 (Progress Risk Warning / Risk Radar)**.
 
@@ -107,7 +107,7 @@ Dưới đây là nội dung chi tiết của từng thẻ để nhóm sử dụ
   - [x] Vẽ sơ đồ luồng giao việc – nộp minh chứng – duyệt nhiệm vụ – cảnh báo rủi ro HR
 
 #### Thẻ T03: `[Tuần 1] Thiết kế UI/UX Design System & Wireframe trên Figma`
-- **Phụ trách:** SV1 (Huy)
+- **Phụ trách:** SV1 ? Nguy?n Gia Huy (2551170897)
 - **Nhãn:** `SV1 - UI/UX & New Hire`, `UI/UX & Responsive`
 - **Hạn chót:** Cuối Tuần 1
 - **Mô tả:** Xây dựng hệ thống màu sắc thương hiệu (`Primary Indigo #4F46E5`, `Secondary Emerald #10B981`, `Accent Amber #F59E0B`, `Danger Rose #F43F5E`), Typography (`Plus Jakarta Sans` & `Inter`) và bố cục Bento Grid.
@@ -141,7 +141,7 @@ Dưới đây là nội dung chi tiết của từng thẻ để nhóm sử dụ
 ### 🧱 GIAI ĐOẠN TUẦN 2: KIẾN TRÚC DỮ LIỆU & DỰNG KHUNG GIAO DIỆN TĨNH
 
 #### Thẻ T06: `[Tuần 2] Xây dựng Global CSS Design System (css/style.css)`
-- **Phụ trách:** SV1 (Huy)
+- **Phụ trách:** SV1 ? Nguy?n Gia Huy (2551170897)
 - **Nhãn:** `SV1 - UI/UX & New Hire`, `Core Data & Architecture`, `UI/UX & Responsive`
 - **Hạn chót:** Giữa Tuần 2
 - **Mô tả:** Lập trình file `css/style.css` chứa toàn bộ CSS Variables, Sidebar Layout, Topbar, Bento Cards, Modals, Badges, Progress Bars và Responsive Breakpoints cho toàn dự án.
@@ -161,7 +161,7 @@ Dưới đây là nội dung chi tiết của từng thẻ để nhóm sử dụ
   - [x] Lập trình cơ chế phát sự kiện đồng bộ đa tab qua `window.addEventListener('storage')`
 
 #### Thẻ T08: `[Tuần 2] Dựng giao diện Trang chủ Landing Page (index.html) & Đăng nhập (login.html)`
-- **Phụ trách:** SV1 (Huy)
+- **Phụ trách:** SV1 ? Nguy?n Gia Huy (2551170897)
 - **Nhãn:** `SV1 - UI/UX & New Hire`, `UI/UX & Responsive`
 - **Hạn chót:** Cuối Tuần 2
 - **Mô tả:** Thiết kế trang giới thiệu nền tảng OnboardAI (`index.html`) và cổng đăng nhập xác thực người dùng (`login.html`).
@@ -171,7 +171,7 @@ Dưới đây là nội dung chi tiết của từng thẻ để nhóm sử dụ
   - [x] Tích hợp kiểm tra thông tin đăng nhập và điều hướng đúng vai trò (`newhire`, `mentor`, `hr`, `admin`)
 
 #### Thẻ T09: `[Tuần 2] Dựng khung giao diện Dashboard Nhân viên mới & Checklist (NH-01, NH-02)`
-- **Phụ trách:** SV1 (Huy)
+- **Phụ trách:** SV1 ? Nguy?n Gia Huy (2551170897)
 - **Nhãn:** `SV1 - UI/UX & New Hire`, `UI/UX & Responsive`
 - **Hạn chót:** Cuối Tuần 2
 - **Mô tả:** Xây dựng bố cục giao diện cho `newhire-onboarding-dashboard.html` và `newhire-checklist.html`.
@@ -214,7 +214,7 @@ Dưới đây là nội dung chi tiết của từng thẻ để nhóm sử dụ
 ### ⚡ GIAI ĐOẠN TUẦN 3: LẬP TRÌNH DOM, LOCALSTORAGE CRUD & 3 TÍNH NĂNG AI
 
 #### Thẻ T13: `[Tuần 3] Lập trình Luồng Checklist, Bộ lọc Giai đoạn & Nộp Minh chứng (newhire-checklist.html)`
-- **Phụ trách:** SV1 (Huy)
+- **Phụ trách:** SV1 ? Nguy?n Gia Huy (2551170897)
 - **Nhãn:** `SV1 - UI/UX & New Hire`, `Core Data & Architecture`
 - **Hạn chót:** Giữa Tuần 3
 - **Mô tả:** Kết nối `newhire-checklist.html` với `window.OnboardAPI`, cho phép lọc công việc theo Tuần 1 / Tháng 1 / Tháng 2, đánh dấu hoàn thành và đính kèm link minh chứng.
@@ -224,7 +224,7 @@ Dưới đây là nội dung chi tiết của từng thẻ để nhóm sử dụ
   - [x] Hiển thị thông báo Toast trực quan khi cập nhật thành công
 
 #### Thẻ T14: `[Tuần 3] Nâng cấp Hệ thống Đề xuất 8 Người đồng hành (Mentor) & Khung Chat Trực tiếp`
-- **Phụ trách:** SV1 (Huy) & SV2 (Hoàng)
+- **Phụ trách:** SV1 ? Nguy?n Gia Huy (2551170897) & SV2 (Hoàng)
 - **Nhãn:** `SV1 - UI/UX & New Hire`, `SV2 - Core Data & Mentor`, `AI Feature (Bắt buộc)`
 - **Hạn chót:** Giữa Tuần 3
 - **Mô tả:** Mỗi tài khoản nhân sự mới khi khởi tạo chưa gán sẵn Mentor cố định mà được AI phân tích vị trí công việc để đề xuất độ tương thích (`Match Score %`), cho phép xem hồ sơ chi tiết (SĐT, Zalo, chuyên môn, phong cách đồng hành), tự chọn/đổi Mentor và nhắn tin trao đổi trực tiếp.
@@ -234,7 +234,7 @@ Dưới đây là nội dung chi tiết của từng thẻ để nhóm sử dụ
   - [x] Xây dựng ngăn kéo Chat trực tiếp (Mentor Chat Drawer) hỗ trợ gửi tin nhắn, câu hỏi gợi ý nhanh và phản hồi tự động theo ngữ cảnh
 
 #### Thẻ T15: `[Tuần 3] Lập trình Tính năng AI-1: Trợ lý Hỏi đáp Chính sách & Sổ tay Nhân sự (newhire-ai-help.html)`
-- **Phụ trách:** SV1 (Huy)
+- **Phụ trách:** SV1 ? Nguy?n Gia Huy (2551170897)
 - **Nhãn:** `SV1 - UI/UX & New Hire`, `AI Feature (Bắt buộc)`
 - **Hạn chót:** Cuối Tuần 3
 - **Mô tả:** Xây dựng trợ lý AI giải đáp tức thì các câu hỏi về lương thưởng, bảo hiểm, nghỉ phép, thiết bị IT, quy trình đánh giá thử việc và tra cứu kho FAQ.
@@ -283,7 +283,7 @@ Dưới đây là nội dung chi tiết của từng thẻ để nhóm sử dụ
   - [x] Lập trình nút **Khôi phục Dữ liệu Gốc (Reset DB)** và **Export JSON**
 
 #### Thẻ T20: `[Tuần 3] Thiết lập Hệ thống Tài khoản Đăng nhập Chuẩn cho 4 Vai trò & Tài liệu Tra cứu`
-- **Phụ trách:** SV3 (Trưởng nhóm) & SV1 (Huy)
+- **Phụ trách:** SV3 (Trưởng nhóm) & SV1 ? Nguy?n Gia Huy (2551170897)
 - **Nhãn:** `SV1 - UI/UX & New Hire`, `SV1 - DevOps, HR & Admin (Huy)`
 - **Hạn chót:** Cuối Tuần 3
 - **Mô tả:** Thiết lập đầy đủ các tài khoản đăng nhập cho cả 4 vai trò (**New Hire**, **Mentor**, **HR**, **Admin**) trong `login.html`, đồng bộ hiển thị thông tin người dùng trên thanh Topbar và lập bảng tra cứu tài khoản.
@@ -297,7 +297,7 @@ Dưới đây là nội dung chi tiết của từng thẻ để nhóm sử dụ
 ### 🔍 GIAI ĐOẠN TUẦN 4: TỐI ƯU HÓA, CHẾ ĐỘ THỊ SÁT ĐA TÀI KHOẢN, QUAY OBS & NGHIỆM THU
 
 #### Thẻ T21: `[Tuần 4] Chuẩn hóa Ảnh đại diện Mentor Việt Nam & Tối ưu Hiệu năng Cuộn trang 60FPS`
-- **Phụ trách:** SV1 (Huy)
+- **Phụ trách:** SV1 ? Nguy?n Gia Huy (2551170897)
 - **Nhãn:** `SV1 - UI/UX & New Hire`, `UI/UX & Responsive`
 - **Hạn chót:** Đầu Tuần 4
 - **Mô tả:** Cập nhật bộ ảnh chân dung công sở Việt Nam/Châu Á chân thực cho toàn bộ 8 Người đồng hành (`assets/images/mentors/mt01.jpg`..`mt08.jpg`), loại bỏ các icon trang trí dư thừa và tối ưu CSS để cuộn trang mượt mà.

@@ -21,7 +21,7 @@
 ### Màn hình 1: `index.html` (Trang chủ giới thiệu nền tảng OnboardAI)
 ```text
 Màn hình  : index.html
-Người làm : SV1 (Huy)
+Người làm : SV1 ? Nguy?n Gia Huy (2551170897)
 Trello    : TASK-01 (T08)
 Nhánh     : feat/sv1-ui-newhire
 Commit    : 33166a3
@@ -41,7 +41,7 @@ Video     : OBS-02 (SV2-core-data-mentor.mp4)
 ### Màn hình 3: `newhire-onboarding-dashboard.html` (Dashboard Nhân sự mới, Đề xuất 8 Mentor & Chat trực tiếp)
 ```text
 Màn hình  : newhire-onboarding-dashboard.html
-Người làm : SV1 (Huy)
+Người làm : SV1 ? Nguy?n Gia Huy (2551170897)
 Trello    : TASK-02 (T09, T14, T21)
 Nhánh     : huy/feature/newhire-checklist
 Commit    : 33166a3
@@ -51,7 +51,7 @@ Video     : OBS-01 (SV1-newhire-flow.mp4)
 ### Màn hình 4: `newhire-checklist.html` (Hành trình hội nhập 4 giai đoạn & Nộp minh chứng hoàn thành)
 ```text
 Màn hình  : newhire-checklist.html
-Người làm : SV1 (Huy)
+Người làm : SV1 ? Nguy?n Gia Huy (2551170897)
 Trello    : TASK-03 (T09, T13)
 Nhánh     : huy/feature/newhire-checklist
 Commit    : e4d688f
@@ -61,7 +61,7 @@ Video     : OBS-01 (SV1-newhire-flow.mp4)
 ### Màn hình 5: `newhire-ai-help.html` (Trợ lý AI-1 Hỏi đáp chính sách & Tìm kiếm ngữ nghĩa)
 ```text
 Màn hình  : newhire-ai-help.html
-Người làm : SV1 (Huy)
+Người làm : SV1 ? Nguy?n Gia Huy (2551170897)
 Trello    : TASK-04 (T15)
 Nhánh     : feat/sv1-ui-newhire
 Commit    : 33166a3
