@@ -1558,17 +1558,27 @@
 
     function syncChecklistMentorWidget() {
       const currentUser = API.getCurrentUser();
-      const mentorId = localStorage.getItem(`ONBOARDAI_SELECTED_MENTOR_${currentUser.id}`) || currentUser.mentorId || 'MT01';
+      const mentorId = localStorage.getItem(`ONBOARDAI_CONFIRMED_MENTOR_${currentUser.id}`) || null;
       const mentorProfiles = {
         MT01: { name: 'Trần Thị Mai', role: 'Tech Lead • Kỹ thuật', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Mai' },
         MT05: { name: 'Nguyễn Hoàng Minh', role: 'Principal Architect • Kỹ thuật', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Minh' },
+        MT06: { name: 'Vũ Đình Trọng', role: 'Backend & Cloud Lead • Kỹ thuật', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Trong' },
+        MT07: { name: 'Hoàng Bảo Ngọc', role: 'AI & Data Lead • Kỹ thuật', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ngoc' },
+        MT04: { name: 'Đỗ Hoàng Sơn', role: 'Senior QA & Security • Kỹ thuật', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Son' },
         MT02: { name: 'Lê Minh Tuấn', role: 'Product Lead • Sản phẩm', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Tuan' },
+        MT08: { name: 'Ngô Thanh Hà', role: 'Brand Manager • Marketing', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ha' },
         MT03: { name: 'Phạm Quang Huy', role: 'People Partner • Nhân sự', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Huy' }
       };
-      const m = mentorProfiles[mentorId] || mentorProfiles.MT01;
       const avatarEl = document.getElementById('checklistMentorAvatar');
       const nameEl = document.getElementById('checklistMentorName');
       const roleEl = document.getElementById('checklistMentorRole');
+      if (!mentorId || !mentorProfiles[mentorId]) {
+        if (avatarEl) avatarEl.src = 'assets/images/mascot/onbi-avatar-128.webp';
+        if (nameEl) nameEl.textContent = 'Chưa chọn Người đồng hành';
+        if (roleEl) roleEl.textContent = 'AI đã đề xuất 8 Mentor phù hợp';
+        return;
+      }
+      const m = mentorProfiles[mentorId];
       if (avatarEl) avatarEl.src = m.avatar;
       if (nameEl) nameEl.textContent = m.name;
       if (roleEl) roleEl.textContent = m.role;
