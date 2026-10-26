@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trello Kanban – [CSE122 - BTL20] OnboardAI - Nhóm 10</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-board: #0B5394;
+      --bg-board-gradient: linear-gradient(135deg, #1e3a8a 0%, #312e81 55%, #1e1b4b 100%);
+      --bg-list: #F1F2F4;
+      --bg-card: #FFFFFF;
+      --text-main: #172B4D;
+      --text-sub: #44546F;
+      --border-soft: #DCDFE4;
+      --shadow-card: 0 1px 2px rgba(9, 30, 66, 0.15), 0 0 1px rgba(9, 30, 66, 0.2);
+      --shadow-list: 0 4px 12px rgba(9, 30, 66, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-board-gradient);
+      color: var(--text-main);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Trello Global Topbar */
+    .trello-nav {
+      height: 48px;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      color: #FFFFFF;
+      flex-shrink: 0;
+    }
+
+    .trello-nav-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .trello-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      color: #FFFFFF;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .trello-logo-box {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      background: #60A5FA;
+      display: inline-grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      padding: 3px;
+    }
+
+    .trello-logo-box span:first-child {
+      background: #1E3A8A;
+      border-radius: 1px;
+      height: 100%;
+    }
+
+    .trello-logo-box span:last-child {
+      background: #1E3A8A;
+      border-radius: 1px;
+      height: 65%;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+    }
+
+    .nav-link-pill {
+      color: rgba(255, 255, 255, 0.88);
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: background 0.15s;
+    }
+
+    .nav-link-pill:hover {
+      background: rgba(255, 255, 255, 0.16);
+      color: #fff;
+    }
+
+    .trello-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+    }
+
+    .member-avatars {
+      display: flex;
+      align-items: center;
+    }
+
+    .avatar-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #FFFFFF;
+      border: 2px solid #1E293B;
+      margin-left: -6px;
+      cursor: pointer;
+    }
+
+    .avatar-circle:first-child {
+      margin-left: 0;
+    }
+
+    /* Board Header Subbar */
+    .board-header {
+      min-height: 56px;
+      background: rgba(15, 23, 42, 0.38);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 8px 16px;
+      color: #FFFFFF;
+      flex-shrink: 0;
+    }
+
+    .board-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .board-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .board-badge {
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.16);
+      color: #E2E8F0;
+    }
+
+    .board-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .sprint-tabs {
+      display: inline-flex;
+      background: rgba(15, 23, 42, 0.55);
+      padding: 3px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .sprint-tab {
+      border: none;
+      background: transparent;
+      color: #CBD5E1;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .sprint-tab:hover {
+      color: #FFFFFF;
+    }
+
+    .sprint-tab.active {
+      background: #4F46E5;
+      color: #FFFFFF;
+      box-shadow: 0 2px 6px rgba(79, 70, 229, 0.45);
+    }
+
+    .filter-select {
+      background: rgba(15, 23, 42, 0.65);
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 7px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .filter-select option {
+      background: #0F172A;
+      color: #FFFFFF;
+    }
+
+    /* Sprint Status Banner */
+    .sprint-banner {
+      background: rgba(15, 23, 42, 0.52);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 7px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #E2E8F0;
+      font-size: 12.5px;
+      flex-shrink: 0;
+    }
+
+    .sprint-metrics {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-weight: 600;
+    }
+
+    .metric-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.12);
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 11.5px;
+    }
+
+    /* Board Columns Container */
+    .board-canvas {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 16px;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+
+    .board-canvas::-webkit-scrollbar {
+      height: 10px;
+    }
+
+    .board-canvas::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.35);
+      border-radius: 6px;
+    }
+
+    .board-canvas::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.35);
+      border-radius: 6px;
+    }
+
+    .trello-list {
+      width: 305px;
+      min-width: 305px;
+      max-height: 100%;
+      background: var(--bg-list);
+      border-radius: 12px;
+      box-shadow: var(--shadow-list);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .list-header {
+      padding: 12px 14px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border-bottom: 1px solid rgba(9, 30, 66, 0.08);
+    }
+
+    .list-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.3;
+    }
+
+    .list-count {
+      font-size: 11.5px;
+      font-weight: 700;
+      background: #DCDFE4;
+      color: #172B4D;
+      padding: 2px 8px;
+      border-radius: 999px;
+      flex-shrink: 0;
+    }
+
+    .list-cards {
+      padding: 8px 8px 10px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .list-cards::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .list-cards::-webkit-scrollbar-thumb {
+      background: #C1C7D0;
+      border-radius: 4px;
+    }
+
+    /* Trello Card */
+    .trello-card {
+      background: var(--bg-card);
+      border-radius: 8px;
+      padding: 10px 12px;
+      box-shadow: var(--shadow-card);
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+      border: 1px solid transparent;
+    }
+
+    .trello-card:hover {
+      border-color: #388BFF;
+      box-shadow: 0 4px 10px rgba(9, 30, 66, 0.18);
+      transform: translateY(-1px);
+    }
+
+    .card-labels {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 6px;
+    }
+
+    .card-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      line-height: 1.35;
+    }
+
+    .lbl-sv1 { background: #E0E7FF; color: #3730A3; }
+    .lbl-sv2 { background: #DCFCE7; color: #166534; }
+    .lbl-sv3 { background: #F3E8FF; color: #6B21A8; }
+    .lbl-core { background: #FFEDD5; color: #9A3412; }
+    .lbl-ai { background: #FEE2E2; color: #991B1B; }
+    .lbl-ui { background: #FEF3C7; color: #92400E; }
+    .lbl-test { background: #E0F2FE; color: #075985; }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .card-code {
+      color: #4F46E5;
+      font-weight: 700;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px solid #F1F2F4;
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .card-badges {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .badge-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+      background: #F1F2F4;
+      color: #44546F;
+    }
+
+    .badge-item.done {
+      background: #DCFCE7;
+      color: #166534;
+    }
+
+    .badge-item.in-progress {
+      background: #FEF3C7;
+      color: #92400E;
+    }
+
+    .card-member {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      font-size: 10px;
+      font-weight: 700;
+      color: #FFFFFF;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* Card Detail Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(9, 30, 66, 0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 1000;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-card {
+      background: #F1F2F4;
+      width: 100%;
+      max-width: 680px;
+      max-height: 88vh;
+      border-radius: 12px;
+      box-shadow: 0 20px 45px rgba(9, 30, 66, 0.35);
+      overflow-y: auto;
+      padding: 22px 24px;
+      color: var(--text-main);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .modal-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .modal-close {
+      border: none;
+      background: #DCDFE4;
+      color: #172B4D;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .modal-section {
+      background: #FFFFFF;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .modal-section h4 {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-sub);
+      margin-bottom: 8px;
+    }
+
+    .modal-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 6px 0;
+      border-bottom: 1px solid #F1F2F4;
+      font-size: 13px;
+    }
+
+    .checklist-item:last-child {
+      border-bottom: none;
+    }
+
+    .btn-copy-card {
+      background: #4F46E5;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 14px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-copy-card:hover {
+      background: #4338CA;
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Trello Bar -->
+  <header class="trello-nav">
+    <div class="trello-nav-left">
+      <a href="index.html" class="trello-logo">
+        <span class="trello-logo-box"><span></span><span></span></span>
+        <span>Trello</span>
+      </a>
+      <nav class="nav-links">
+        <a href="index.html" class="nav-link-pill">Trang chủ OnboardAI</a>
+        <a href="newhire-onboarding-dashboard.html" class="nav-link-pill">Phân hệ New Hire</a>
+        <a href="mentor-mentee-list.html" class="nav-link-pill">Phân hệ Mentor</a>
+        <a href="hr-dashboard.html" class="nav-link-pill">Phân hệ HR</a>
+        <a href="admin-user-management.html" class="nav-link-pill">Phân hệ Admin</a>
+      </nav>
+    </div>
+    <div class="trello-nav-right">
+      <span>Thành viên Nhóm 10:</span>
+      <div class="member-avatars">
+        <span class="avatar-circle" style="background:#4F46E5;" title="SV1 - Huy (UI/UX & New Hire)">SV1</span>
+        <span class="avatar-circle" style="background:#10B981;" title="SV2 - Hoàng (Core Data & Mentor)">SV2</span>
+        <span class="avatar-circle" style="background:#9333EA;" title="SV3 - Trưởng nhóm (DevOps, HR & Admin)">SV3</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Board Controls Bar -->
+  <section class="board-header">
+    <div class="board-title-group">
+      <h1 class="board-title">[CSE122 - BTL20] OnboardAI – Nền tảng Hội nhập Nhân sự Thông minh (Nhóm 10)</h1>
+      <span class="board-badge">Workspace Public</span>
+      <span class="board-badge">25 Thẻ công việc</span>
+    </div>
+
+    <div class="board-controls">
+      <span style="font-size:12px;font-weight:600;color:#E2E8F0;">Xem quá trình theo tuần:</span>
+      <div class="sprint-tabs" id="sprintTabs">
+        <button class="sprint-tab" data-week="1">Tuần 1: Phân tích & Thiết kế</button>
+        <button class="sprint-tab" data-week="2">Tuần 2: Core Data & Khung UI</button>
+        <button class="sprint-tab" data-week="3">Tuần 3: DOM, CRUD & 3 AI</button>
+        <button class="sprint-tab active" data-week="4">Tuần 4: Hoàn thiện 100%</button>
+      </div>
+
+      <select id="memberFilter" class="filter-select" aria-label="Lọc theo thành viên">
+        <option value="ALL">Tất cả thành viên (SV1, SV2, SV3)</option>
+        <option value="SV1">SV1 – UI/UX & New Hire (Huy)</option>
+        <option value="SV2">SV2 – Core Data & Mentor (Hoàng)</option>
+        <option value="SV3">SV3 – DevOps, HR & Admin (Trưởng nhóm)</option>
+      </select>
+    </div>
+  </section>
+
+  <!-- Sprint Progress Summary -->
+  <div class="sprint-banner">
+    <div id="sprintSummaryText">
+      <strong>Trạng thái Tuần 4 (Nghiệm thu):</strong> Toàn bộ 24/24 hạng mục công việc từ Tuần 1 đến Tuần 4 đã hoàn thành, kiểm thử liên thông và đồng bộ lên GitHub.
+    </div>
+    <div class="sprint-metrics" id="sprintMetrics"></div>
+  </div>
+
+  <!-- 6 Kanban Columns -->
+  <main class="board-canvas" id="boardCanvas"></main>
+
+  <!-- Card Detail Modal -->
+  <div class="modal-backdrop" id="cardModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <div class="card-labels" id="modalLabels"></div>
+          <h2 class="modal-title" id="modalTitle"></h2>
+        </div>
+        <button class="modal-close" id="closeModalBtn" title="Đóng">×</button>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-meta-grid" id="modalMeta"></div>
+      </div>
+
+      <div class="modal-section">
+        <h4>Mô tả công việc (Description)</h4>
+        <p id="modalDesc" style="font-size:13.5px;line-height:1.55;color:#172B4D;"></p>
+      </div>
+
+      <div class="modal-section">
+        <h4>Checklist công việc con (Subtasks)</h4>
+        <div id="modalChecklist"></div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+        <span id="copyFeedback" style="font-size:12px;color:#166534;font-weight:600;"></span>
+        <button class="btn-copy-card" id="copyCardBtn">Sao chép nội dung thẻ sang Trello</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const COLUMNS = [
+      { id: 'col-info', title: '1. Thông tin Dự án & Quy ước' },
+      { id: 'col-backlog', title: '2. Backlog (Danh sách việc)' },
+      { id: 'col-w12', title: '3. Tuần 1–2: Thiết kế & Khung UI/Data' },
+      { id: 'col-w3', title: '4. Tuần 3: Lập trình DOM, CRUD & AI' },
+      { id: 'col-review', title: '5. Kiểm thử & Quay OBS (In Review)' },
+      { id: 'col-done', title: '6. Đã hoàn thành (Done)' }
+    ];
+
+    const CARDS = [
+      {
+        id: 'INFO-01',
+        week: 1,
+        title: 'Tài nguyên Dự án, Nhánh Git & Quy ước Phối hợp Nhóm 10',
+        assignee: 'ALL',
+        assigneeName: 'Cả nhóm (SV1, SV2, SV3)',
+        avatarBg: '#0EA5E9',
+        avatarText: 'N10',
+        labels: [
+          { text: 'Testing, Git & Báo cáo', cls: 'lbl-test' }
+        ],
+        due: 'Xuyên suốt 4 tuần',
+        branch: 'main / dev',
+        deliverable: 'docs/TONG_QUAN_VA_QUY_TRINH_PHOI_HOP.md',
+        desc: 'Lưu trữ thông tin cốt lõi của dự án BTL-20 OnboardAI: Link GitHub Repo (cse122-onboardai-nhom10), quy tắc phân nhánh (main, dev, feature/*), chuẩn Conventional Commits và bảng tài khoản đăng nhập tại docs/TAI_KHOAN_DANG_NHAP.md.',
+        checklist: [
+          'Thống nhất quy tắc nhánh Git & Conventional Commits (feat:, fix:, style:, docs:)',
+          'Cấu hình kho dữ liệu chung window.OnboardAPI (js/api.js)',
+          'Lưu trữ tài liệu tra cứu tài khoản 4 vai trò tại docs/TAI_KHOAN_DANG_NHAP.md'
+        ]
+      },
+      {
+        id: 'T01',
+        week: 1,
+        title: 'Phân tích nghiệp vụ BTL-20 & Đặc tả 4 phân hệ người dùng',
+        assignee: 'SV3',
+        assigneeName: 'SV3 – Trưởng nhóm',
+        avatarBg: '#9333EA',
+        avatarText: 'SV3',
+        labels: [
+          { text: 'SV3 - DevOps, HR & Admin', cls: 'lbl-sv3' },
+          { text: 'Testing, Git & Báo cáo', cls: 'lbl-test' }
+        ],
+        due: 'Tuần 1',
+        branch: 'main',
+        deliverable: 'docs/TONG_QUAN_VA_QUY_TRINH_PHOI_HOP.md',
+        desc: 'Phân tích bài toán Hội nhập nhân sự (Onboarding) tại doanh nghiệp, xác định rõ 4 nhóm tác nhân (New Hire, Mentor, HR Specialist, System Admin) và 3 tính năng AI cốt lõi.',
+        checklist: [
+          'Xác định 4 vai trò người dùng và ma trận phân quyền RBAC',
+          'Đặc tả 3 tính năng AI: AI-1 (Policy Q&A), AI-2 (Checklist/Mentor Matching), AI-3 (HR Risk Radar)',
+          'Hoàn thiện tài liệu tổng quan dự án'
+        ]
+      },
+      {
+        id: 'T02',
+        week: 1,
+        title: 'Lập Danh mục màn hình (Screen Inventory) & Sơ đồ luồng (User Flows)',
+        assignee: 'SV2',
+        assigneeName: 'SV2 – Hoàng (Phối hợp SV3)',
+        avatarBg: '#10B981',
+        avatarText: 'SV2',
+        labels: [
+          { text: 'SV2 - Core Data & Mentor', cls: 'lbl-sv2' },
+          { text: 'SV3 - DevOps, HR & Admin', cls: 'lbl-sv3' }
+        ],
+        due: 'Tuần 1',
+        branch: 'dev',
+        deliverable: 'README.md',
+        desc: 'Liệt kê đầy đủ 9 màn hình chức năng của dự án OnboardAI và thiết kế sơ đồ luồng nghiệp vụ khép kín từ lúc nhân sự mới nhận việc đến khi hoàn thành thử việc.',
+        checklist: [
+          'Thiết lập bảng Screen Inventory cho 4 phân hệ',
+          'Vẽ sơ đồ luồng xác thực đăng nhập & điều hướng theo vai trò',
+          'Vẽ sơ đồ luồng nộp minh chứng – duyệt nhiệm vụ – cảnh báo rủi ro HR'
+        ]
+      },
+      {
+        id: 'T03',
+        week: 1,
+        title: 'Thiết kế UI/UX Design System & Wireframe trên Figma',
+        assignee: 'SV1',
+        assigneeName: 'SV1 – Huy',
+        avatarBg: '#4F46E5',
+        avatarText: 'SV1',
+        labels: [
+          { text: 'SV1 - UI/UX & New Hire', cls: 'lbl-sv1' },
+          { text: 'UI/UX & Responsive', cls: 'lbl-ui' }
+        ],
+        due: 'Tuần 1',
+        branch: 'feat/sv1-ui-newhire',
+        deliverable: 'Figma Design System',
+        desc: 'Thiết kế bảng màu thương hiệu (Primary Indigo #4F46E5, Emerald #10B981, Amber #F59E0B, Rose #F43F5E), Typography Plus Jakarta Sans & Inter, và bố cục Bento Grid.',
+        checklist: [
+          'Xây dựng Color Tokens & Typography Scale',
+          'Thiết kế UI Components: Sidebar, KPI Cards, Badges, Modals',
+          'Thiết kế Wireframe cho 9 màn hình chính'
+        ]
+      },
+      {
+        id: 'T04',
+        week: 1,
+        title: 'Thiết kế Lược đồ Dữ liệu JSON (Schema) & Kiến trúc LocalStorage',
+        assignee: 'SV2',
+        assigneeName: 'SV2 – Hoàng',
+        avatarBg: '#10B981',
+        avatarText: 'SV2',
+        labels: [
+          { text: 'SV2 - Core Data & Mentor', cls: 'lbl-sv2' },
+          { text: 'Core Data & Architecture', cls: 'lbl-core' }
+        ],
+        due: 'Tuần 1',
+        branch: 'feat/sv2-data-mentor',
+        deliverable: 'assets/data/mock-data.json',
+        desc: 'Thiết kế cấu trúc JSON chuẩn cho 6 nhân sự mới (NH01..NH06), 8 người đồng hành (MT01..MT08), danh sách công việc, kho FAQ chính sách và nhật ký kiểm toán.',
+        checklist: [
+          'Định nghĩa schema cho users, mentors, newHires, tasks, templates, faqs, activityLogs',
+          'Thiết kế khóa lưu trữ onboardai_db_v1 trong LocalStorage',
+          'Thống nhất chữ ký hàm (method signatures) cho window.OnboardAPI'
+        ]
+      },
+      {
+        id: 'T05',
+        week: 1,
+        title: 'Khởi tạo GitHub Repository, Cấu trúc Thư mục & Bảng Trello Kanban',
+        assignee: 'SV3',
+        assigneeName: 'SV3 – Trưởng nhóm',
+        avatarBg: '#9333EA',
+        avatarText: 'SV3',
+        labels: [
+          { text: 'SV3 - DevOps, HR & Admin', cls: 'lbl-sv3' },
+          { text: 'Testing, Git & Báo cáo', cls: 'lbl-test' }
+        ],
+        due: 'Tuần 1',
+        branch: 'main / dev',
+        deliverable: 'GitHub Repo & Trello Board',
+        desc: 'Khởi tạo kho mã nguồn GitHub của Nhóm 10, tạo cây thư mục chuẩn và thiết lập bảng Trello Kanban 6 cột để theo dõi tiến độ 4 tuần.',
+        checklist: [
+          'Khởi tạo thư mục css/, js/, assets/data/, assets/images/, docs/',
+          'Tạo nhánh main, dev và các nhánh thành viên',
+          'Thiết lập bảng Trello 6 cột và gắn nhãn cho 24 thẻ công việc'
+        ]
+      },
+      {
+        id: 'T06',
+        week: 2,
+        title: 'Xây dựng Global CSS Design System (css/style.css)',
+        assignee: 'SV1',
+        assigneeName: 'SV1 – Huy',
+        avatarBg: '#4F46E5',
+        avatarText: 'SV1',
+        labels: [
+          { text: 'SV1 - UI/UX & New Hire', cls: 'lbl-sv1' },
+          { text: 'Core Data & Architecture', cls: 'lbl-core' },
+          { text: 'UI/UX & Responsive', cls: 'lbl-ui' }
+        ],
+        due: 'Giữa Tuần 2',
+        branch: 'feat/sv1-ui-newhire',
+        deliverable: 'css/style.css',
+        desc: 'Lập trình bộ khung CSS dùng chung cho toàn dự án: biến màu sắc, bố cục Sidebar + Main Content, Bento Grid, Table, Modal, Drawer và Responsive Breakpoints.',
+        checklist: [
+          'Khai báo hệ thống biến CSS (:root) đồng bộ toàn bộ 9 màn hình',
+          'Xây dựng layout Sidebar cố định và Topbar linh hoạt',
+          'Tạo class tiện ích cho Button, Badge, Progress Bar và Toast Notification'
+        ]
+      },
+      {
+        id: 'T07',
+        week: 2,
+        title: 'Xây dựng Cơ sở dữ liệu mẫu (mock-data.json) & Data Engine (js/api.js)',
+        assignee: 'SV2',
+        assigneeName: 'SV2 – Hoàng',
+        avatarBg: '#10B981',
+        avatarText: 'SV2',
+        labels: [
+          { text: 'SV2 - Core Data & Mentor', cls: 'lbl-sv2' },
+          { text: 'Core Data & Architecture', cls: 'lbl-core' }
+        ],
+        due: 'Giữa Tuần 2',
+        branch: 'feat/sv2-data-mentor',
+        deliverable: 'assets/data/mock-data.json, js/api.js',
+        desc: 'Hoàn thiện dữ liệu mẫu tiếng Việt chân thực và lập trình thư viện window.OnboardAPI hỗ trợ đọc/ghi LocalStorage và đồng bộ thời gian thực giữa các tab.',
+        checklist: [
+          'Nhập dữ liệu đầy đủ cho 6 New Hires (NH01..NH06) và 8 Mentors (MT01..MT08)',
+          'Lập trình các hàm getNewHires(), updateTaskStatus(), submitTaskProof(), submitMentorReview()',
+          'Tích hợp sự kiện storage để đồng bộ dữ liệu tức thì giữa các tab trình duyệt'
+        ]
+      },
+      {
+        id: 'T08',
+        week: 2,
+        title: 'Dựng giao diện Trang chủ Landing Page (index.html) & Đăng nhập (login.html)',
+        assignee: 'SV1',
+        assigneeName: 'SV1 – Huy',
+        avatarBg: '#4F46E5',
+        avatarText: 'SV1',
+        labels: [
+          { text: 'SV1 - UI/UX & New Hire', cls: 'lbl-sv1' },
+          { text: 'UI/UX & Responsive', cls: 'lbl-ui' }
+        ],
+        due: 'Cuối Tuần 2',
+        branch: 'feat/sv1-ui-newhire',
+        deliverable: 'index.html, login.html',
+        desc: 'Thiết kế trang giới thiệu giải pháp OnboardAI và cổng đăng nhập xác thực điều hướng đúng phân hệ theo vai trò.',
+        checklist: [
+          'Xây dựng Hero Banner và khu vực giới thiệu 3 mô-đun AI trên index.html',
+          'Thiết kế form đăng nhập tinh gọn, chuyên nghiệp trên login.html',
+          'Kiểm tra điều hướng tự động sau khi đăng nhập thành công'
+        ]
+      },
+      {
+        id: 'T09',
+        week: 2,
+        title: 'Dựng khung giao diện Dashboard Nhân viên mới & Checklist (NH-01, NH-02)',
+        assignee: 'SV1',
+        assigneeName: 'SV1 – Huy',
+        avatarBg: '#4F46E5',
+        avatarText: 'SV1',
+        labels: [
+          { text: 'SV1 - UI/UX & New Hire', cls: 'lbl-sv1' },
+          { text: 'UI/UX & Responsive', cls: 'lbl-ui' }
+        ],
+        due: 'Cuối Tuần 2',
+        branch: 'huy/feature/newhire-checklist',
+        deliverable: 'newhire-onboarding-dashboard.html, newhire-checklist.html',
+        desc: 'Dựng giao diện tổng quan lộ trình hội nhập của nhân viên mới, 4 thẻ chỉ số KPI, khu vực Người đồng hành và danh sách Checklist công việc theo giai đoạn.',
+        checklist: [
+          'Dựng Hero tiến độ, 4 KPI Cards và Timeline 3 giai đoạn trên Dashboard',
+          'Dựng giao diện danh sách nhiệm vụ, bộ lọc giai đoạn và ô tìm kiếm trên trang Checklist',
+          'Dựng Modal nộp minh chứng hoàn thành công việc'
+        ]
+      },
+      {
+        id: 'T10',
+        week: 2,
+        title: 'Dựng khung giao diện Phân hệ Người hướng dẫn (mentor-mentee-list.html) & Hồ sơ (profile.html)',
+        assignee: 'SV2',
+        assigneeName: 'SV2 – Hoàng',
+        avatarBg: '#10B981',
+        avatarText: 'SV2',
+        labels: [
+          { text: 'SV2 - Core Data & Mentor', cls: 'lbl-sv2' },
+          { text: 'UI/UX & Responsive', cls: 'lbl-ui' }
+        ],
+        due: 'Cuối Tuần 2',
+        branch: 'feat/sv2-data-mentor',
+        deliverable: 'mentor-mentee-list.html, profile.html',
+        desc: 'Xây dựng giao diện quản lý danh sách nhân viên mới dành cho Mentor và trang quản lý hồ sơ cá nhân.',
+        checklist: [
+          'Dựng 4 KPI tổng quan Mentor và lưới thẻ Mentee đang hướng dẫn',
+          'Dựng Modal chấm điểm định kỳ và xem chi tiết tiến độ Mentee',
+          'Dựng trang profile.html hiển thị thông tin cá nhân'
+        ]
+      },
+      {
+        id: 'T11',
+        week: 2,
+        title: 'Dựng khung giao diện HR Dashboard (hr-dashboard.html) & Admin (admin-user-management.html)',
+        assignee: 'SV3',
+        assigneeName: 'SV3 – Trưởng nhóm',
+        avatarBg: '#9333EA',
+        avatarText: 'SV3',
+        labels: [
+          { text: 'SV3 - DevOps, HR & Admin', cls: 'lbl-sv3' },
+          { text: 'UI/UX & Responsive', cls: 'lbl-ui' }
+        ],
+        due: 'Cuối Tuần 2',
+        branch: 'feat/sv3-hr-admin',
+        deliverable: 'hr-dashboard.html, admin-user-management.html',
+        desc: 'Xây dựng giao diện Trung tâm điều hành HR và trang Quản trị hệ thống & Phân quyền người dùng dành cho Admin.',
+        checklist: [
+          'Dựng 4 KPI Cards, khung biểu đồ Chart.js và bảng theo dõi toàn công ty trên hr-dashboard.html',
+          'Dựng khu vực quản lý kịch bản Onboarding mẫu (Templates)',
+          'Dựng bảng danh sách tài khoản và Nhật ký kiểm toán (Audit Logs) trên admin-user-management.html'
+        ]
+      },
+      {
+        id: 'T12',
+        week: 2,
+        title: 'Kiểm tra Responsive & Đồng bộ Navigation Sidebar trên toàn bộ 9 màn hình',
+        assignee: 'ALL',
+        assigneeName: 'Cả nhóm (SV1, SV2, SV3)',
+        avatarBg: '#0EA5E9',
+        avatarText: 'N10',
+        labels: [
+          { text: 'UI/UX & Responsive', cls: 'lbl-ui' },
+          { text: 'Testing, Git & Báo cáo', cls: 'lbl-test' }
+        ],
+        due: 'Cuối Tuần 2',
+        branch: 'dev',
+        deliverable: 'Toàn bộ 9 file HTML',
+        desc: 'Rà soát tính nhất quán của thanh Sidebar, Header, liên kết chuyển trang và khả năng co giãn trên các kích thước màn hình.',
+        checklist: [
+          'Đồng bộ menu điều hướng giữa các màn hình trong cùng phân hệ',
+          'Kiểm tra hiển thị trên màn hình Laptop (1366px), Desktop (1920px) và Mobile (375px)'
+        ]
+      },
+      {
+        id: 'T13',
+        week: 3,
+        title: 'Lập trình Luồng Checklist, Bộ lọc Giai đoạn & Nộp Minh chứng (newhire-checklist.html)',
+        assignee: 'SV1',
+        assigneeName: 'SV1 – Huy',
+        avatarBg: '#4F46E5',
+        avatarText: 'SV1',
+        labels: [
+          { text: 'SV1 - UI/UX & New Hire', cls: 'lbl-sv1' },
+          { text: 'Core Data & Architecture', cls: 'lbl-core' }
+        ],
+        due: 'Giữa Tuần 3',
+        branch: 'huy/feature/newhire-checklist',
+        deliverable: 'newhire-checklist.html',
+        desc: 'Lập trình tương tác DOM cho phép nhân viên mới lọc công việc theo giai đoạn, đánh dấu hoàn thành, đính kèm link minh chứng và tự động cập nhật phần trăm tiến độ.',
+        checklist: [
+          'Lập trình bộ lọc công việc theo Tuần 1, Tháng 1, Tháng 2 và trạng thái',
+          'Lưu link minh chứng (proofUrl) và ghi chú (proofNote) vào LocalStorage',
+          'Tự động tính lại tiến độ tổng thể ngay khi tick hoàn thành'
+        ]
+      },
+      {
+        id: 'T14',
+        week: 3,
+        title: 'Nâng cấp Hệ thống Đề xuất 8 Người đồng hành (Mentor) & Khung Chat Trực tiếp',
+        assignee: 'SV1',
+        assigneeName: 'SV1 – Huy & SV2 – Hoàng',
+        avatarBg: '#4F46E5',
+        avatarText: 'SV1',
+        labels: [
+          { text: 'SV1 - UI/UX & New Hire', cls: 'lbl-sv1' },
+          { text: 'SV2 - Core Data & Mentor', cls: 'lbl-sv2' },
+          { text: 'AI Feature (Bắt buộc)', cls: 'lbl-ai' }
+        ],
+        due: 'Giữa Tuần 3',
+        branch: 'huy/feature/newhire-checklist',
+        deliverable: 'newhire-onboarding-dashboard.html',
+        desc: 'Mỗi tài khoản mới chưa có sẵn Mentor cố định mà được AI gợi ý danh sách 8 Người đồng hành (MT01..MT08) kèm điểm tương thích (Match Score %), thông tin SĐT, Zalo, giới thiệu chi tiết và khung Chat trao đổi trực tiếp.',
+        checklist: [
+          'Xây dựng thuật toán AI tính điểm phù hợp giữa Nhân viên mới và 8 Mentor',
+          'Hiển thị đầy đủ SĐT, Zalo, chuyên môn, phong cách hỗ trợ để người dùng tự chọn Mentor',
+          'Lập trình ngăn kéo Chat trực tiếp với Người đồng hành có gợi ý câu hỏi nhanh và phản hồi tự động'
+        ]
+      },
+      {
+        id: 'T15',
+        week: 3,
+        title: 'Lập trình Tính năng AI-1: Trợ lý Hỏi đáp Chính sách & Sổ tay Nhân sự (newhire-ai-help.html)',
+        assignee: 'SV1',
+        assigneeName: 'SV1 – Huy',
+        avatarBg: '#4F46E5',
+        avatarText: 'SV1',
+        labels: [
+          { text: 'SV1 - UI/UX & New Hire', cls: 'lbl-sv1' },
+          { text: 'AI Feature (Bắt buộc)', cls: 'lbl-ai' }
+        ],
+        due: 'Cuối Tuần 3',
+        branch: 'feat/sv1-ui-newhire',
+        deliverable: 'newhire-ai-help.html',
+        desc: 'Phát triển trợ lý AI-1 giúp nhân viên mới hỏi đáp tức thì về chế độ phúc lợi, bảo hiểm, nghỉ phép, cấp phát thiết bị IT và quy trình đánh giá thử việc.',
+        checklist: [
+          'Lập trình giao diện hội thoại AI có trích dẫn nguồn tài liệu nội bộ',
+          'Thiết lập các nút câu hỏi mẫu (Quick Prompts) theo chủ đề',
+          'Kết nối bộ tìm kiếm trực tiếp với kho dữ liệu FAQ trong mock-data.json'
+        ]
+      },
+      {
+        id: 'T16',
+        week: 3,
+        title: 'Lập trình Phân hệ Mentor: Duyệt Minh chứng, Giao thêm việc & Đánh giá Mentee',
+        assignee: 'SV2',
+        assigneeName: 'SV2 – Hoàng',
+        avatarBg: '#10B981',
+        avatarText: 'SV2',
+        labels: [
+          { text: 'SV2 - Core Data & Mentor', cls: 'lbl-sv2' },
+          { text: 'Core Data & Architecture', cls: 'lbl-core' }
+        ],
+        due: 'Cuối Tuần 3',
+        branch: 'feat/sv2-data-mentor',
+        deliverable: 'mentor-mentee-list.html',
+        desc: 'Lập trình đầy đủ nghiệp vụ dành cho Người hướng dẫn: theo dõi tiến độ từng Mentee, kiểm tra link minh chứng, giao thêm đầu việc mới và chấm điểm định kỳ.',
+        checklist: [
+          'Lập trình lọc danh sách Mentee theo trạng thái tiến độ',
+          'Lập trình chức năng giao thêm nhiệm vụ và duyệt trạng thái hoàn thành',
+          'Lập trình Modal chấm điểm 1–5 sao và lưu nhận xét của Mentor'
+        ]
+      },
+      {
+        id: 'T17',
+        week: 3,
+        title: 'Lập trình Tính năng AI-2: Cá nhân hóa Lộ trình Checklist theo Vị trí (Checklist Personalizer)',
+        assignee: 'SV2',
+        assigneeName: 'SV2 – Hoàng',
+        avatarBg: '#10B981',
+        avatarText: 'SV2',
+        labels: [
+          { text: 'SV2 - Core Data & Mentor', cls: 'lbl-sv2' },
+          { text: 'AI Feature (Bắt buộc)', cls: 'lbl-ai' }
+        ],
+        due: 'Cuối Tuần 3',
+        branch: 'feat/sv2-data-mentor',
+        deliverable: 'mentor-mentee-list.html, js/api.js',
+        desc: 'Xây dựng mô-đun AI-2 tự động phân tích vị trí công việc (Frontend, Backend, AI/Data, Product, QC, Marketing) để đề xuất các đầu việc hội nhập chuyên sâu.',
+        checklist: [
+          'Xây dựng kho mẫu nhiệm vụ chuyên biệt theo từng vị trí kỹ thuật và nghiệp vụ',
+          'Cho phép Mentor hoặc HR kích hoạt AI-2 bổ sung nhiệm vụ cá nhân hóa chỉ với 1 click'
+        ]
+      },
+      {
+        id: 'T18',
+        week: 3,
+        title: 'Lập trình Tính năng AI-3: Cảnh báo Sớm Rủi ro Hội nhập (HR Risk Radar) & Biểu đồ Chart.js',
+        assignee: 'SV3',
+        assigneeName: 'SV3 – Trưởng nhóm',
+        avatarBg: '#9333EA',
+        avatarText: 'SV3',
+        labels: [
+          { text: 'SV3 - DevOps, HR & Admin', cls: 'lbl-sv3' },
+          { text: 'AI Feature (Bắt buộc)', cls: 'lbl-ai' }
+        ],
+        due: 'Cuối Tuần 3',
+        branch: 'feat/sv3-hr-admin',
+        deliverable: 'hr-dashboard.html',
+        desc: 'Tích hợp Chart.js và thuật toán AI-3 Risk Radar trên HR Dashboard để tự động phát hiện nhân sự có nguy cơ chậm tiến độ và đề xuất hành động hỗ trợ kịp thời.',
+        checklist: [
+          'Vẽ biểu đồ tiến độ theo phòng ban và biểu đồ tỷ lệ trạng thái bằng Chart.js',
+          'Hiển thị bảng cảnh báo sớm AI-3 Risk Radar kèm mức độ rủi ro và khuyến nghị can thiệp',
+          'Lập trình chức năng xuất báo cáo CSV (Export CSV)'
+        ]
+      },
+      {
+        id: 'T19',
+        week: 3,
+        title: 'Lập trình Phân hệ Admin: Quản lý Người dùng CRUD, Khóa/Mở khóa & Nhật ký Kiểm toán',
+        assignee: 'SV3',
+        assigneeName: 'SV3 – Trưởng nhóm',
+        avatarBg: '#9333EA',
+        avatarText: 'SV3',
+        labels: [
+          { text: 'SV3 - DevOps, HR & Admin', cls: 'lbl-sv3' },
+          { text: 'Core Data & Architecture', cls: 'lbl-core' }
+        ],
+        due: 'Cuối Tuần 3',
+        branch: 'feat/sv3-hr-admin',
+        deliverable: 'admin-user-management.html',
+        desc: 'Hoàn thiện bảng điều khiển Quản trị viên: thêm/sửa tài khoản, đổi vai trò, khóa/mở khóa người dùng, xem Audit Logs và khôi phục dữ liệu mẫu.',
+        checklist: [
+          'Lập trình tìm kiếm & lọc tài khoản theo Vai trò, Phòng ban, Trạng thái',
+          'Lập trình thêm mới, chỉnh sửa vai trò và khóa/mở khóa tài khoản',
+          'Tích hợp nút Khôi phục dữ liệu gốc (Reset Demo Data) và Xuất file JSON'
+        ]
+      },
+      {
+        id: 'T20',
+        week: 3,
+        title: 'Thiết lập Hệ thống Tài khoản Đăng nhập Chuẩn cho 4 Vai trò & Tài liệu Tra cứu',
+        assignee: 'SV3',
+        assigneeName: 'SV3 – Trưởng nhóm & SV1 – Huy',
+        avatarBg: '#9333EA',
+        avatarText: 'SV3',
+        labels: [
+          { text: 'SV1 - UI/UX & New Hire', cls: 'lbl-sv1' },
+          { text: 'SV3 - DevOps, HR & Admin', cls: 'lbl-sv3' }
+        ],
+        due: 'Cuối Tuần 3',
+        branch: 'fix/sv3-data-sync-hr-admin',
+        deliverable: 'login.html, docs/TAI_KHOAN_DANG_NHAP.md',
+        desc: 'Cấu hình đầy đủ tài khoản đăng nhập cho cả 4 vai trò (New Hire, Mentor, HR, Admin), đồng bộ thông tin người dùng trên thanh Topbar và lập file tra cứu nhanh.',
+        checklist: [
+          'Tích hợp tài khoản Mentor, HR, Admin và 6 New Hires vào login.html',
+          'Loại bỏ các khung chọn nhanh rườm rà để giữ giao diện đăng nhập chuẩn thực tế',
+          'Tạo file docs/TAI_KHOAN_DANG_NHAP.md tổng hợp toàn bộ email và mật khẩu'
+        ]
+      },
+      {
+        id: 'T21',
+        week: 4,
+        title: 'Chuẩn hóa Ảnh đại diện Mentor Việt Nam & Tối ưu Hiệu năng Cuộn trang 60FPS',
+        assignee: 'SV1',
+        assigneeName: 'SV1 – Huy',
+        avatarBg: '#4F46E5',
+        avatarText: 'SV1',
+        labels: [
+          { text: 'SV1 - UI/UX & New Hire', cls: 'lbl-sv1' },
+          { text: 'UI/UX & Responsive', cls: 'lbl-ui' }
+        ],
+        due: 'Đầu Tuần 4',
+        branch: 'huy/feature/newhire-checklist',
+        deliverable: 'assets/images/mentors/mt01.jpg..mt08.jpg, css/style.css',
+        desc: 'Cập nhật bộ ảnh chân dung người Việt Nam chuyên nghiệp cho 8 Người đồng hành, loại bỏ các icon trang trí dư thừa và tối ưu CSS giúp cuộn trang mượt mà.',
+        checklist: [
+          'Cập nhật ảnh chân dung người Việt cho 8 Mentor (mt01.jpg..mt08.jpg)',
+          'Loại bỏ các icon trang trí không cần thiết trên giao diện',
+          'Tối ưu hiệu năng render CSS khi cuộn trang danh sách dài'
+        ]
+      },
+      {
+        id: 'T22',
+        week: 4,
+        title: 'Nâng cấp Chế độ Thị sát Đa người dùng (Multi-User View-As) cho HR & Admin',
+        assignee: 'SV3',
+        assigneeName: 'SV3 – Trưởng nhóm',
+        avatarBg: '#9333EA',
+        avatarText: 'SV3',
+        labels: [
+          { text: 'SV3 - DevOps, HR & Admin', cls: 'lbl-sv3' },
+          { text: 'Core Data & Architecture', cls: 'lbl-core' }
+        ],
+        due: 'Giữa Tuần 4',
+        branch: 'fix/sv3-data-sync-hr-admin',
+        deliverable: 'admin-user-management.html, hr-dashboard.html, mentor-mentee-list.html',
+        desc: 'Nâng cấp Chế độ thị sát (View-As) cho phép chọn xem góc nhìn của bất kỳ Nhân sự mới nào (NH01..NH06) hoặc bất kỳ Người hướng dẫn nào (MT01..MT08) ngay từ Sidebar và thanh Impersonation Bar.',
+        checklist: [
+          'Tích hợp hộp chọn 6 Nhân viên mới (NH01..NH06) và 8 Mentor (MT01..MT08) trên Sidebar',
+          'Tích hợp bộ chuyển đổi nhanh nhân sự/mentor trên thanh #adminImpersonateBar đầu trang',
+          'Tự động cập nhật dữ liệu Dashboard, Checklist và Danh sách Mentee theo người được chọn'
+        ]
+      },
+      {
+        id: 'T23',
+        week: 4,
+        title: 'Kiểm thử Liên thông Toàn Hệ thống (End-to-End) & Quay 11 Video Minh chứng OBS',
+        assignee: 'ALL',
+        assigneeName: 'Cả nhóm (SV1, SV2, SV3)',
+        avatarBg: '#0EA5E9',
+        avatarText: 'N10',
+        labels: [
+          { text: 'Testing, Git & Báo cáo', cls: 'lbl-test' }
+        ],
+        due: 'Cuối Tuần 4',
+        branch: 'main / dev',
+        deliverable: 'Bộ 11 Video OBS & Kịch bản kiểm thử',
+        desc: 'Thực hiện kiểm thử tích hợp toàn bộ luồng dữ liệu giữa 4 phân hệ và quay đầy đủ 11 video OBS minh chứng theo quy định của học phần CSE122.',
+        checklist: [
+          'Kiểm thử luồng Nhân viên mới chọn Mentor, chat với Mentor và nộp minh chứng',
+          'Kiểm thử luồng Mentor duyệt minh chứng, chấm điểm và dùng AI-2',
+          'Kiểm thử luồng HR xem biểu đồ, AI-3 Risk Radar và Admin thị sát đa người dùng'
+        ]
+      },
+      {
+        id: 'T24',
+        week: 4,
+        title: 'Hoàn thiện Báo cáo Sử dụng AI (ai-usage-report.md), Tài liệu Trello & Đóng gói Nộp bài',
+        assignee: 'ALL',
+        assigneeName: 'Cả nhóm (SV1, SV2, SV3)',
+        avatarBg: '#0EA5E9',
+        avatarText: 'N10',
+        labels: [
+          { text: 'Testing, Git & Báo cáo', cls: 'lbl-test' }
+        ],
+        due: 'Cuối Tuần 4',
+        branch: 'main',
+        deliverable: 'docs/ai-usage-report.md, docs/QUY_TRINH_TRELLO_KANBAN.md',
+        desc: 'Tổng hợp báo cáo sử dụng AI minh bạch, tài liệu quy trình Trello Kanban 4 tuần, file CSV import và đồng bộ toàn bộ mã nguồn lên GitHub.',
+        checklist: [
+          'Hoàn thiện docs/ai-usage-report.md và README.md',
+          'Hoàn thiện docs/QUY_TRINH_TRELLO_KANBAN.md và trello-kanban.html',
+          'Merge và đồng bộ tất cả nhánh lên GitHub Repository chính thức'
+        ]
+      }
+    ];
+
+    let activeWeek = 4;
+    let activeMember = 'ALL';
+    let selectedCard = null;
+
+    function getCardColumnForWeek(card, weekView) {
+      if (card.id === 'INFO-01') return 'col-info';
+
+      if (weekView === 1) {
+        if (['T01', 'T02', 'T05'].includes(card.id)) return 'col-done';
+        if (['T03', 'T04'].includes(card.id)) return 'col-review';
+        if (['T06', 'T07'].includes(card.id)) return 'col-w12';
+        return 'col-backlog';
+      }
+
+      if (weekView === 2) {
+        if (card.week === 1 || ['T06', 'T07', 'T08', 'T09'].includes(card.id)) return 'col-done';
+        if (['T10', 'T11', 'T12'].includes(card.id)) return 'col-review';
+        if (['T13', 'T14'].includes(card.id)) return 'col-w3';
+        return 'col-backlog';
+      }
+
+      if (weekView === 3) {
+        if (card.week <= 2 || ['T13', 'T14', 'T15', 'T16', 'T17'].includes(card.id)) return 'col-done';
+        if (['T18', 'T19', 'T20'].includes(card.id)) return 'col-review';
+        if (['T21', 'T22'].includes(card.id)) return 'col-w3';
+        return 'col-backlog';
+      }
+
+      // Week 4 (100% Completed & Final Review)
+      if (card.week <= 2) return 'col-done';
+      if (card.week === 3) return 'col-done';
+      if (['T21', 'T22', 'T23', 'T24'].includes(card.id)) return 'col-done';
+      return 'col-done';
+    }
+
+    const WEEK_SUMMARIES = {
+      1: '<strong>Quá trình Tuần 1 (Phân tích & Thiết kế):</strong> Hoàn thành phân tích nghiệp vụ, thiết kế Figma, lược đồ JSON, khởi tạo GitHub Repo & Bảng Trello; chuẩn bị bước sang dựng Core CSS & Data Engine.',
+      2: '<strong>Quá trình Tuần 2 (Core Data & Khung Giao diện):</strong> Đã hoàn thành css/style.css, mock-data.json, js/api.js và dựng khung giao diện tĩnh cho 9 màn hình của 4 phân hệ.',
+      3: '<strong>Quá trình Tuần 3 (Lập trình DOM, CRUD & 3 AI):</strong> Hoàn thiện luồng Checklist, Đề xuất & Chat với 8 Mentor, tích hợp 3 mô-đun AI-1, AI-2, AI-3 và thiết lập tài khoản 4 vai trò.',
+      4: '<strong>Quá trình Tuần 4 (Nghiệm thu 100%):</strong> Hoàn thiện ảnh chân dung Mentor Việt Nam, tối ưu cuộn mượt 60fps, nâng cấp Chế độ thị sát đa người dùng (View-As), quay OBS và đóng gói báo cáo.'
+    };
+
+    function renderBoard() {
+      const canvas = document.getElementById('boardCanvas');
+      canvas.innerHTML = '';
+
+      const filteredCards = CARDS.filter(card => {
+        if (activeMember === 'ALL') return true;
+        return card.assignee === activeMember || card.assignee === 'ALL';
+      });
+
+      let doneCount = 0;
+      let inProgressCount = 0;
+      let backlogCount = 0;
+
+      COLUMNS.forEach(col => {
+        const colCards = filteredCards.filter(c => getCardColumnForWeek(c, activeWeek) === col.id);
+
+        if (col.id === 'col-done') doneCount += colCards.length;
+        else if (col.id === 'col-backlog') backlogCount += colCards.length;
+        else if (col.id !== 'col-info') inProgressCount += colCards.length;
+
+        const listEl = document.createElement('section');
+        listEl.className = 'trello-list';
+        listEl.innerHTML = `
+          <div class="list-header">
+            <h2 class="list-title">${col.title}</h2>
+            <span class="list-count">${colCards.length}</span>
+          </div>
+          <div class="list-cards"></div>
+        `;
+
+        const cardsWrap = listEl.querySelector('.list-cards');
+
+        if (colCards.length === 0) {
+          cardsWrap.innerHTML = `
+            <div style="padding:14px 10px;text-align:center;font-size:12px;color:#626F86;border:1px dashed #C1C7D0;border-radius:8px;">
+              Không có thẻ nào ở cột này trong Giai đoạn Tuần ${activeWeek}
+            </div>
+          `;
+        } else {
+          colCards.forEach(card => {
+            const isDone = col.id === 'col-done' || card.id === 'INFO-01';
+            const totalChecks = card.checklist.length;
+            const doneChecks = isDone ? totalChecks : Math.max(1, totalChecks - 1);
+
+            const cardEl = document.createElement('article');
+            cardEl.className = 'trello-card';
+            cardEl.innerHTML = `
+              <div class="card-labels">
+                ${card.labels.map(l => `<span class="card-label ${l.cls}">${l.text}</span>`).join('')}
+              </div>
+              <div class="card-title">
+                <span class="card-code">[${card.id}]</span> ${card.title}
+              </div>
+              <div class="card-footer">
+                <div class="card-badges">
+                  <span class="badge-item ${isDone ? 'done' : 'in-progress'}">
+                    ☑ ${doneChecks}/${totalChecks}
+                  </span>
+                  <span class="badge-item">🕒 ${card.due}</span>
+                </div>
+                <span class="card-member" style="background:${card.avatarBg};" title="${card.assigneeName}">
+                  ${card.avatarText}
+                </span>
+              </div>
+            `;
+            cardEl.addEventListener('click', () => openCardModal(card, isDone));
+            cardsWrap.appendChild(cardEl);
+          });
+        }
+
+        canvas.appendChild(listEl);
+      });
+
+      document.getElementById('sprintSummaryText').innerHTML = WEEK_SUMMARIES[activeWeek];
+      document.getElementById('sprintMetrics').innerHTML = `
+        <span class="metric-pill">Hoàn thành: ${doneCount} thẻ</span>
+        <span class="metric-pill">Đang thực hiện / Review: ${inProgressCount} thẻ</span>
+        <span class="metric-pill">Backlog: ${backlogCount} thẻ</span>
+      `;
+    }
+
+    function openCardModal(card, isDone) {
+      selectedCard = card;
+      document.getElementById('modalLabels').innerHTML = card.labels
+        .map(l => `<span class="card-label ${l.cls}">${l.text}</span>`)
+        .join('');
+      document.getElementById('modalTitle').textContent = `[${card.id}] ${card.title}`;
+      document.getElementById('modalMeta').innerHTML = `
+        <div><strong>Người phụ trách:</strong><br/>${card.assigneeName}</div>
+        <div><strong>Giai đoạn:</strong><br/>${card.due}</div>
+        <div><strong>Nhánh Git:</strong><br/><code>${card.branch}</code></div>
+        <div><strong>File bàn giao:</strong><br/><code>${card.deliverable}</code></div>
+      `;
+      document.getElementById('modalDesc').textContent = card.desc;
+      document.getElementById('modalChecklist').innerHTML = card.checklist
+        .map((item, idx) => {
+          const checked = isDone || idx < card.checklist.length - 1;
+          return `
+            <div class="checklist-item">
+              <input type="checkbox" ${checked ? 'checked' : ''} readonly style="margin-top:3px;" />
+              <span style="${checked ? 'text-decoration:line-through;color:#44546F;' : ''}">${item}</span>
+            </div>
+          `;
+        })
+        .join('');
+      document.getElementById('copyFeedback').textContent = '';
+      document.getElementById('cardModal').classList.add('open');
+    }
+
+    document.getElementById('closeModalBtn').addEventListener('click', () => {
+      document.getElementById('cardModal').classList.remove('open');
+    });
+
+    document.getElementById('cardModal').addEventListener('click', (e) => {
+      if (e.target.id === 'cardModal') {
+        document.getElementById('cardModal').classList.remove('open');
+      }
+    });
+
+    document.getElementById('copyCardBtn').addEventListener('click', () => {
+      if (!selectedCard) return;
+      const text = [
+        `[${selectedCard.id}] ${selectedCard.title}`,
+        `Phụ trách: ${selectedCard.assigneeName} | Hạn: ${selectedCard.due} | Nhánh: ${selectedCard.branch}`,
+        `Mô tả: ${selectedCard.desc}`,
+        `Checklist:`,
+        ...selectedCard.checklist.map(i => `- [x] ${i}`)
+      ].join('\n');
+      navigator.clipboard.writeText(text).then(() => {
+        document.getElementById('copyFeedback').textContent = 'Đã sao chép nội dung thẻ vào Clipboard!';
+      });
+    });
+
+    document.querySelectorAll('.sprint-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.sprint-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeWeek = Number(btn.dataset.week);
+        renderBoard();
+      });
+    });
+
+    document.getElementById('memberFilter').addEventListener('change', (e) => {
+      activeMember = e.target.value;
+      renderBoard();
+    });
+
+    renderBoard();
+  </script>
+</body>
+</html>
