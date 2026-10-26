@@ -72,23 +72,15 @@ Dự án là ứng dụng Web Frontend thuần (Vanilla HTML/CSS/JS) kết hợp
 
 ---
 
-## 📹 DANH SÁCH MINH CHỨNG VIDEO OBS (BẮT BUỘC THEO GUIDE 10)
+## 📹 DANH SÁCH 03 VIDEO MINH CHỨNG OBS (BẮT BUỘC THEO TIÊU CHÍ ĐÁNH GIÁ MỤC 14)
 
-> Mỗi giao diện độc lập được minh chứng bằng 1 video OBS có mặt sinh viên, thao tác trực tiếp trên mã nguồn và chạy thử trên trình duyệt.
+> Dự án được minh chứng bằng **03 Video OBS** có mặt sinh viên (Webcam), giải thích cấu trúc mã nguồn, thao tác sửa code trực tiếp (Live Coding) trên VS Code và kiểm tra kết quả ngay trên trình duyệt.
 
-| Mã Video | Màn hình / Tệp | Người quay | Nội dung demo | Link Video (Drive / YouTube) |
+| Mã Video | Phân hệ & Tệp trọng tâm | Thành viên | Nội dung giải thích code & Sửa trực tiếp (Live Coding) | Link Video (Drive / YouTube) |
 |:---:|:---|:---:|:---|:---:|
-| `SV3-01` | `index.html` | SV3 | Landing Page, giới thiệu đề tài, điều hướng | [Xem Video](https://...) |
-| `SV2-01` | `login.html` & `api.js` | SV2 | Đăng nhập chọn vai trò, khởi tạo LocalStorage DB | [Xem Video](https://...) |
-| `SV3-02` | `newhire-onboarding-dashboard.html` | SV3 | Dashboard nhân sự mới, thanh tiến độ động % | [Xem Video](https://...) |
-| `SV3-03` | `newhire-checklist.html` | SV3 | Tích chọn hoàn thành task, lưu state, empty state | [Xem Video](https://...) |
-| `SV3-04` | `newhire-ai-help.html` | SV3 | **AI-1:** Hỏi đáp chính sách có trích nguồn & fallback | [Xem Video](https://...) |
-| `SV2-02` | `mentor-mentee-list.html` | SV2 | Tìm kiếm mentee realtime, lọc dropdown trạng thái | [Xem Video](https://...) |
-| `SV2-03` | `mentor-checkin-note.html` | SV2 | Tạo phiếu 1-on-1, validate form, lưu lịch sử | [Xem Video](https://...) |
-| `SV2-04` | `mentor-task-assignment.html` | SV2 | **AI-2:** Gợi ý checklist theo vị trí, sửa/xóa trước khi lưu | [Xem Video](https://...) |
-| `SV2-05` | `profile.html` | SV2 | Cập nhật hồ sơ cá nhân, đổi mật khẩu | [Xem Video](https://...) |
-| `SV3-05` | `hr-dashboard.html` | SV3 | **AI-3:** Biểu đồ Chart.js & Cảnh báo nhân sự trễ hạn | [Xem Video](https://...) |
-| `SV3-06` | `admin-user-management.html` | SV3 | Quản trị tài khoản, khóa/mở khóa user, trang 404 | [Xem Video](https://...) |
+| **`OBS-01`** | **Phân hệ Nhân viên mới & AI-1**<br>(`index.html`, `newhire-onboarding-dashboard.html`, `newhire-checklist.html`, `newhire-ai-help.html`) | **SV1** | Giải thích thuật toán AI gợi ý 8 Người đồng hành & Chat trực tiếp, tích chọn hoàn thành Checklist lưu `localStorage`, hỏi đáp trợ lý **AI-1** và sửa trực tiếp giao diện/logic trên code. | [Xem Video OBS 01](https://...) |
+| **`OBS-02`** | **Core Data Engine, Phân hệ Mentor & AI-2**<br>(`js/api.js`, `assets/data/mock-data.json`, `login.html`, `mentor-mentee-list.html`, `profile.html`) | **SV2** | Giải thích kiến trúc `window.OnboardAPI` & `localStorage`, tìm kiếm/lọc Mentee, kiểm tra hợp lệ biểu mẫu (Form Validation), tính năng **AI-2 (Checklist Personalizer)** và sửa trực tiếp code. | [Xem Video OBS 02](https://...) |
+| **`OBS-03`** | **Phân hệ HR, Quản trị viên (Admin) & AI-3**<br>(`hr-dashboard.html`, `admin-user-management.html`, Chế độ thị sát `View-As`) | **SV3** | Giải thích biểu đồ `Chart.js`, thuật toán cảnh báo sớm **AI-3 (HR Risk Radar)**, quản lý CRUD tài khoản, Chế độ thị sát đa người dùng (`NH01`..`NH06`, `MT01`..`MT08`) và sửa trực tiếp code. | [Xem Video OBS 03](https://...) |
 
 ---
 
