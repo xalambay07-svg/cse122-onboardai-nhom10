@@ -427,27 +427,45 @@
   <div id="proofModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4 transition-opacity duration-200">
     <div class="modal-content-box bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4 transform transition-all duration-200 scale-95 opacity-0 border border-[#E2E8F0]">
       <div class="flex items-center justify-between">
-        <h3 class="text-sm font-bold text-slate-900">Nộp minh chứng hoàn thành</h3>
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-lg bg-blue-50 text-[#1F5AFE] flex items-center justify-center">
+            <i data-lucide="shield-check" class="w-4 h-4"></i>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900">Nộp minh chứng để hoàn thành nhiệm vụ</h3>
+        </div>
         <button onclick="closeModal('proofModal')" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
-      <p id="proofTaskTitle" class="text-xs text-slate-600 font-medium"></p>
+      <div class="p-2.5 rounded-xl bg-amber-50 border border-amber-200/80 text-[11px] text-amber-800 flex items-start gap-2 leading-relaxed">
+        <i data-lucide="info" class="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5"></i>
+        <span><strong>Điều kiện bắt buộc:</strong> Hệ thống chỉ xác nhận nhiệm vụ <strong>Hoàn thành</strong> sau khi bạn đính kèm đường dẫn minh chứng hợp lệ.</span>
+      </div>
+      <p id="proofTaskTitle" class="text-xs text-slate-700 font-semibold"></p>
       
       <div class="space-y-3">
         <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">Đường dẫn minh chứng (GitHub PR / Link Docs)</label>
-          <input type="text" id="proofInputUrl" placeholder="https://github.com/company/repo/pull/1" class="w-full p-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#1F5AFE] focus:ring-2 focus:ring-blue-100 transition-all">
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-xs font-semibold text-slate-700">Đường dẫn minh chứng (GitHub PR / Link Docs / Ảnh) <span class="text-rose-500">*</span></label>
+            <button type="button" onclick="fillSampleProofUrl()" class="text-[11px] font-semibold text-[#1F5AFE] hover:underline flex items-center gap-1">
+              <i data-lucide="wand-2" class="w-3 h-3"></i>
+              <span>Điền nhanh link mẫu</span>
+            </button>
+          </div>
+          <input type="text" id="proofInputUrl" placeholder="https://github.com/onboardai/frontend/pull/12" class="w-full p-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#1F5AFE] focus:ring-2 focus:ring-blue-100 transition-all">
         </div>
         <div>
           <label class="block text-xs font-semibold text-slate-700 mb-1">Ghi chú cho Mentor (Tùy chọn)</label>
-          <textarea id="proofInputNote" rows="2" placeholder="Em đã setup xong và chạy thành công trên localhost:3000..." class="w-full p-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#1F5AFE] focus:ring-2 focus:ring-blue-100 transition-all"></textarea>
+          <textarea id="proofInputNote" rows="2" placeholder="Em đã thực hiện xong và kiểm tra hoạt động ổn định..." class="w-full p-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#1F5AFE] focus:ring-2 focus:ring-blue-100 transition-all"></textarea>
         </div>
       </div>
 
       <div class="flex items-center justify-end gap-2 pt-2">
         <button onclick="closeModal('proofModal')" class="px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors">Hủy</button>
-        <button onclick="submitTaskProof()" class="px-4 py-2 rounded-xl bg-[#1F5AFE] text-white text-xs font-semibold hover:bg-blue-700 shadow-sm transition-all duration-150 active:scale-95">Xác nhận nộp bài</button>
+        <button onclick="submitTaskProof()" class="px-4 py-2 rounded-xl bg-[#00B67A] text-white text-xs font-semibold hover:bg-emerald-700 shadow-sm transition-all duration-150 active:scale-95 flex items-center gap-1.5">
+          <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
+          <span>Xác nhận nộp & Hoàn thành</span>
+        </button>
       </div>
     </div>
   </div>
@@ -695,7 +713,7 @@
           priority: 'Bắt buộc',
           description: 'Kiểm tra cấu hình máy tính, ký biên bản bàn giao tài sản với bộ phận Hành chính - IT.',
           aiActionType: 'guide_3_steps',
-          proof: ''
+          proof: 'https://portal.onboardai.vn/handover/bien-ban-thiet-bi-NH01'
         },
         {
           id: 'D02',
@@ -707,7 +725,7 @@
           priority: 'Bắt buộc',
           description: 'Nộp bản sao công chứng giấy tờ tùy thân và ký xác nhận quy chế bảo mật thông tin OnboardAI.',
           aiActionType: '',
-          proof: ''
+          proof: 'https://portal.onboardai.vn/hr-docs/hop-dong-nda-NH01'
         },
         {
           id: 'D03',
@@ -719,7 +737,7 @@
           priority: 'Tiêu chuẩn',
           description: 'Làm quen không gian làm việc, khu vực Pantry, phòng họp và gặp gỡ trực tiếp Mentor Trần Thị Mai.',
           aiActionType: 'smart_template',
-          proof: ''
+          proof: 'https://portal.onboardai.vn/checkin/office-tour-day1-NH01'
         }
       ],
       'Tháng 1': [
@@ -1018,19 +1036,32 @@
             </button>`;
         }
 
+        // Đồng bộ minh chứng mặc định cho nhiệm vụ T01 vốn đã hoàn thành từ đầu trong mock-data
+        if (task.status === 'completed' && (!task.proof || !task.proof.trim())) {
+          task.proof = `https://portal.onboardai.vn/verify/${task.id.toLowerCase()}-completed`;
+        }
+        const hasProof = Boolean(task.proof && task.proof.trim());
+
         let proofInfo = '';
-        if (task.proof) {
-          proofInfo = `<div class="mt-2 text-xs text-[#0A7A52] flex items-center gap-1.5 font-medium min-w-0">
-            <i data-lucide="link" class="w-3.5 h-3.5 text-[#00B67A] shrink-0"></i> 
-            <span class="shrink-0">Đã nộp minh chứng:</span>
+        if (hasProof) {
+          proofInfo = `<div class="mt-2 text-xs text-[#0A7A52] bg-emerald-50/70 border border-emerald-200/70 px-3 py-1.5 rounded-xl flex items-center gap-1.5 font-medium min-w-0">
+            <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-[#00B67A] shrink-0"></i> 
+            <span class="shrink-0 font-semibold">Đã nộp minh chứng:</span>
             <a href="${task.proof}" target="_blank" class="underline truncate hover:text-emerald-900">${task.proof}</a>
+          </div>`;
+        } else {
+          proofInfo = `<div class="mt-2 text-[11px] text-amber-800 bg-amber-50/80 border border-amber-200/70 px-3 py-1.5 rounded-xl flex items-center justify-between gap-2 font-medium">
+            <span class="flex items-center gap-1.5">
+              <i data-lucide="file-warning" class="w-3.5 h-3.5 text-amber-600 shrink-0"></i>
+              <span>Chưa có minh chứng &bull; <strong>Cần nộp minh chứng để xác nhận hoàn thành</strong></span>
+            </span>
           </div>`;
         }
 
         card.innerHTML = `
           <div class="flex items-start gap-3.5 min-w-0">
             <!-- Checkbox SVG dấu tick vẽ dần (Mục 3.2 & Lỗi #3, #5) -->
-            <label class="relative flex items-center justify-center cursor-pointer shrink-0 mt-0.5 group/cb ${isDone ? 'is-done' : ''}" title="${isDone ? 'Đánh dấu chưa xong' : 'Đánh dấu hoàn thành'}">
+            <label class="relative flex items-center justify-center cursor-pointer shrink-0 mt-0.5 group/cb ${isDone ? 'is-done' : ''}" title="${isDone ? 'Đánh dấu chưa xong' : (hasProof ? 'Đánh dấu hoàn thành' : 'Cần nộp minh chứng trước khi hoàn thành')}">
               <input type="checkbox" class="task-checkbox peer sr-only" data-id="${task.id}" ${isDone ? 'checked' : ''}>
               <div class="w-5 h-5 rounded-md border-2 ${isDone ? 'border-[#00B67A] bg-[#00B67A]' : 'border-slate-400 group-hover/cb:border-blue-500'} flex items-center justify-center transition-all duration-200 active:scale-90 shadow-2xs">
                 <svg viewBox="0 0 24 24" class="w-3.5 h-3.5" aria-hidden="true">
@@ -1057,9 +1088,9 @@
               <div class="flex flex-wrap items-center justify-between gap-2 mt-3 pt-2.5 border-t border-slate-100">
                 <div class="flex flex-wrap items-center gap-2">
                   ${aiButtonHtml}
-                  <button onclick="openProofModal('${task.id}', '${task.title.replace(/'/g, "\\'")}')" class="inline-flex items-center gap-1 text-xs font-semibold text-slate-600 hover:text-[#1F5AFE] px-2.5 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-50 transition-all duration-150 active:scale-95 shadow-2xs">
+                  <button onclick="openProofModal('${task.id}', '${task.title.replace(/'/g, "\\'")}')" class="inline-flex items-center gap-1 text-xs font-semibold ${hasProof ? 'text-emerald-700 border-emerald-200 bg-emerald-50/60 hover:bg-emerald-100/70' : 'text-[#1F5AFE] border-blue-200 bg-blue-50/70 hover:bg-blue-100'} px-2.5 py-1.5 rounded-xl border transition-all duration-150 active:scale-95 shadow-2xs">
                     <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i>
-                    <span>${task.proof ? 'Cập nhật minh chứng' : 'Nộp minh chứng'}</span>
+                    <span>${hasProof ? 'Cập nhật minh chứng' : 'Nộp minh chứng để hoàn thành'}</span>
                   </button>
                 </div>
 
@@ -1086,10 +1117,19 @@
           </div>
         `;
 
-        // Bắt sự kiện tích chọn nhiệm vụ (Mục 3.2: nếu hoàn thành việc cuối của chặng -> bắn pháo giấy + lật thẻ huy hiệu + hiện Onbi vui)
+        // Bắt sự kiện tích chọn nhiệm vụ: BẮT BUỘC phải có minh chứng mới cho phép xác nhận hoàn thành
         const cb = card.querySelector('.task-checkbox');
         cb.addEventListener('change', (e) => {
           const triggerEl = e.currentTarget.nextElementSibling || e.currentTarget;
+
+          // Nếu người dùng tích hoàn thành nhưng CHƯA nộp minh chứng -> Chặn và mở ngay Modal nộp minh chứng
+          if (e.target.checked && (!task.proof || !task.proof.trim())) {
+            e.target.checked = false;
+            showToast('Vui lòng nộp minh chứng trước khi xác nhận hoàn thành nhiệm vụ!', 'warning');
+            openProofModal(task.id, task.title);
+            return;
+          }
+
           const newStatus = e.target.checked ? 'completed' : 'pending';
           API.update('tasks', task.id, { status: newStatus });
           task.status = newStatus;
@@ -1229,12 +1269,44 @@
       currentSelectedTaskId = taskId;
       document.getElementById('proofTaskTitle').innerText = `Nhiệm vụ: ${title}`;
       const inputEl = document.getElementById('proofInputUrl');
+      const noteEl = document.getElementById('proofInputNote');
+      const allTasks = API.getAll('tasks') || [];
+      let existingTask = allTasks.find(t => t.id === taskId);
+      if (!existingTask) {
+        Object.values(FALLBACK_PHASE_TASKS).forEach(list => {
+          const found = list.find(t => t.id === taskId);
+          if (found) existingTask = found;
+        });
+      }
+      inputEl.value = (existingTask && existingTask.proof) ? existingTask.proof : '';
+      if (noteEl) noteEl.value = (existingTask && existingTask.proofNote) ? existingTask.proofNote : '';
       inputEl.classList.remove('border-rose-500', 'ring-2', 'ring-rose-200');
       openModal('proofModal');
+      setTimeout(() => inputEl.focus(), 100);
+    }
+
+    function fillSampleProofUrl() {
+      const inputEl = document.getElementById('proofInputUrl');
+      const noteEl = document.getElementById('proofInputNote');
+      const sampleMap = {
+        'T01': 'https://portal.onboardai.vn/verify/2fa-google-authenticator-NH01',
+        'T02': 'https://github.com/onboardai/frontend/pull/18',
+        'T03': 'https://onboardai.slack.com/archives/C01WELCOME/p17264500',
+        'T04': 'https://portal.onboardai.vn/quiz/security-policy-100pct',
+        'T05': 'https://docs.google.com/document/d/1OKR-60days-NH01/edit'
+      };
+      const id = currentSelectedTaskId || 'TASK';
+      inputEl.value = sampleMap[id] || `https://github.com/onboardai/frontend/pull/${id.toLowerCase()}`;
+      inputEl.classList.remove('border-rose-500', 'ring-2', 'ring-rose-200');
+      if (noteEl && !noteEl.value.trim()) {
+        noteEl.value = 'Em đã hoàn thành đầy đủ các yêu cầu của nhiệm vụ và đính kèm minh chứng xác thực.';
+      }
     }
 
     function submitTaskProof() {
       const url = document.getElementById('proofInputUrl').value.trim();
+      const noteEl = document.getElementById('proofInputNote');
+      const note = noteEl ? noteEl.value.trim() : '';
       const modalBox = document.querySelector('#proofModal .modal-content-box');
       const inputEl = document.getElementById('proofInputUrl');
 
@@ -1246,21 +1318,37 @@
           void modalBox.offsetWidth;
           modalBox.classList.add('animate-shake');
         }
-        showToast('Vui lòng dán liên kết minh chứng trước khi nộp!', 'warning');
+        showToast('Vui lòng dán liên kết minh chứng trước khi xác nhận hoàn thành!', 'warning');
         return;
       }
 
       inputEl.classList.remove('border-rose-500', 'ring-2', 'ring-rose-200');
-      API.update('tasks', currentSelectedTaskId, { proof: url, status: 'completed' });
+      API.update('tasks', currentSelectedTaskId, { proof: url, proofNote: note, status: 'completed' });
       Object.values(FALLBACK_PHASE_TASKS).forEach(list => {
         const found = list.find(t => t.id === currentSelectedTaskId);
         if (found) {
           found.proof = url;
+          found.proofNote = note;
           found.status = 'completed';
         }
       });
       closeModal('proofModal');
-      showToast('Đã nộp minh chứng thành công! Mentor sẽ nhận được thông báo.', 'success');
+
+      const currentUser = API.getCurrentUser();
+      const allAfter = getTasksForPhase(currentActivePhase, currentUser, API.getAll('tasks'));
+      const doneAfter = allAfter.filter((t) => t.status === 'completed').length;
+      const justCompletedPhase = allAfter.length > 0 && doneAfter === allAfter.length;
+
+      if (justCompletedPhase) {
+        const badgeMeta = PHASE_BADGE_MAP[currentActivePhase] || PHASE_BADGE_MAP['Tuần 1'];
+        celebrateFrom(document.getElementById('phaseProgressBar'));
+        const flipCard = document.getElementById('badgeFlipCard');
+        if (flipCard) flipCard.classList.add('flipped');
+        showToast(`Đã nộp minh chứng & đạt cột mốc ${badgeMeta.name}!`, 'success');
+      } else {
+        showToast('Đã nộp minh chứng & xác nhận hoàn thành nhiệm vụ!', 'success');
+      }
+
       renderTasksList();
       updatePhaseStats();
     }
@@ -1414,9 +1502,10 @@
       }
 
       if (q1.value === 'correct' && q2.value === 'correct') {
-        API.update('tasks', currentSelectedTaskId, { status: 'completed' });
+        const quizProofUrl = 'https://portal.onboardai.vn/quiz/security-policy-passed-2of2';
+        API.update('tasks', currentSelectedTaskId, { status: 'completed', proof: quizProofUrl });
         closeModal('aiQuizModal');
-        showToast('Chính xác 2/2 câu! Đã tự động hoàn thành nhiệm vụ.', 'success');
+        showToast('Chính xác 2/2 câu! Đã ghi nhận minh chứng Quiz và hoàn thành nhiệm vụ.', 'success');
         renderTasksList();
         updatePhaseStats();
       } else {

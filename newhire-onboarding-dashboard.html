@@ -364,6 +364,58 @@
     </div>
   </div>
 
+  <!-- MODAL NỘP MINH CHỨNG (BẮT BUỘC TRƯỚC KHI HOÀN THÀNH NHIỆM VỤ) -->
+  <div id="dashboardProofModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(4px);">
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-md w-full p-6 relative animate-fade-in">
+      <div class="flex items-start justify-between gap-3 mb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-blue-50 text-[#1F5AFE] flex items-center justify-center shrink-0">
+            <i data-lucide="file-check-2" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-base font-bold text-slate-900">Nộp minh chứng hoàn thành</h3>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">Bắt buộc</span>
+            </div>
+            <p class="text-xs text-slate-500 font-medium line-clamp-1" id="dashProofTaskTitle">Nhiệm vụ</p>
+          </div>
+        </div>
+        <button onclick="closeDashProofModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="mb-3.5 p-3 rounded-xl bg-amber-50/80 border border-amber-200/80 flex items-start gap-2.5 text-xs text-amber-900 font-medium">
+        <i data-lucide="shield-check" class="w-4 h-4 text-amber-600 shrink-0 mt-0.5"></i>
+        <span>Bạn cần cung cấp đường dẫn minh chứng kết quả (PR GitHub, ảnh chụp màn hình hoặc tài liệu) để hệ thống xác nhận <strong>Hoàn thành nhiệm vụ</strong>.</span>
+      </div>
+
+      <div class="space-y-3 mb-5">
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-xs font-bold text-slate-700">Đường dẫn (URL) kết quả hoặc tài liệu minh chứng <span class="text-rose-600">*</span></label>
+            <button type="button" onclick="fillDashSampleProof()" class="text-[11px] font-bold text-[#1F5AFE] hover:underline flex items-center gap-1 cursor-pointer">
+              <i data-lucide="wand-2" class="w-3 h-3"></i> Điền mẫu nhanh
+            </button>
+          </div>
+          <input type="text" id="dashProofInputUrl" placeholder="Ví dụ: https://github.com/org/repo/pull/12 hoặc link ảnh chụp..." class="w-full px-3.5 py-2.5 text-xs font-medium bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#1F5AFE] focus:bg-white transition-all">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Ghi chú kết quả thực hiện (Tùy chọn)</label>
+          <textarea id="dashProofInputNote" rows="2" placeholder="Mô tả ngắn gọn kết quả bạn đã hoàn thành..." class="w-full px-3.5 py-2 text-xs font-medium bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#1F5AFE] focus:bg-white transition-all"></textarea>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2">
+        <button onclick="closeDashProofModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition-all cursor-pointer">Hủy</button>
+        <button onclick="submitDashTaskProof()" class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition-all flex items-center gap-1.5 shadow-xs cursor-pointer">
+          <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
+          <span>Xác nhận nộp & Hoàn thành</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Nạp module CSDL LocalStorage và Logic tương tác -->
   <script src="js/api.js"></script>
   <script>
@@ -466,7 +518,60 @@
       
       // Lọc nhiệm vụ thuộc về New Hire hiện tại
       const userTasks = allTasks.filter(t => t.newHireId === currentUser.id);
+      // Đảm bảo nhiệm vụ đã hoàn thành từ dữ liệu gốc có sẵn minh chứng hợp lệ
+      userTasks.forEach(t => {
+        if (t.status === 'completed' && (!t.proof || !t.proof.trim())) {
+          t.proof = `https://portal.onboardai.vn/verify/${t.id.toLowerCase()}-completed`;
+        }
+      });
       let isFirstProgressRender = true;
+      let activeDashProofTaskId = null;
+
+      window.openDashProofModal = function(taskId, taskTitle) {
+        activeDashProofTaskId = taskId;
+        const task = userTasks.find(t => t.id === taskId);
+        document.getElementById('dashProofTaskTitle').textContent = taskTitle || (task ? task.title : '');
+        const existingProof = task && task.proof ? task.proof : '';
+        document.getElementById('dashProofInputUrl').value = existingProof.includes(' — ') ? existingProof.split(' — ')[0] : existingProof;
+        document.getElementById('dashProofInputNote').value = existingProof.includes(' — ') ? existingProof.split(' — ').slice(1).join(' — ') : '';
+        document.getElementById('dashboardProofModal').classList.remove('hidden');
+        lucide.createIcons();
+      };
+
+      window.closeDashProofModal = function() {
+        document.getElementById('dashboardProofModal').classList.add('hidden');
+        activeDashProofTaskId = null;
+      };
+
+      window.fillDashSampleProof = function() {
+        const suffix = (activeDashProofTaskId || 'task').toLowerCase();
+        document.getElementById('dashProofInputUrl').value = `https://github.com/onboardai-corp/workspace/pull/${suffix}-proof`;
+        if (!document.getElementById('dashProofInputNote').value.trim()) {
+          document.getElementById('dashProofInputNote').value = 'Đã hoàn thành đầy đủ và đính kèm kết quả kiểm tra.';
+        }
+      };
+
+      window.submitDashTaskProof = function() {
+        const url = document.getElementById('dashProofInputUrl').value.trim();
+        const note = document.getElementById('dashProofInputNote').value.trim();
+        if (!url) {
+          showToast('Vui lòng nhập đường dẫn (URL) hoặc tên tài liệu minh chứng!', 'warning');
+          document.getElementById('dashProofInputUrl').focus();
+          return;
+        }
+        const finalProof = note ? `${url} — ${note}` : url;
+        const task = userTasks.find(t => t.id === activeDashProofTaskId);
+        if (task) {
+          task.proof = finalProof;
+          task.status = 'completed';
+          API.update('tasks', task.id, { proof: finalProof, status: 'completed' });
+        }
+        window.closeDashProofModal();
+        renderTodayTasks();
+        updateProgress();
+        lucide.createIcons();
+        showToast('Đã nộp minh chứng & xác nhận hoàn thành nhiệm vụ!', 'success');
+      };
 
       // Cập nhật thông tin Header & Banner
       document.getElementById('userName').innerText = currentUser.name;
@@ -578,9 +683,19 @@
               </div>`;
           }
 
+          const hasProof = Boolean(task.proof && task.proof.trim() !== '');
+          const safeTitle = task.title.replace(/'/g, "\\'");
+          const proofActionHtml = hasProof
+            ? `<button onclick="openDashProofModal('${task.id}', '${safeTitle}')" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/80 hover:bg-emerald-100 transition-colors cursor-pointer" title="${task.proof}">
+                 <i data-lucide="file-check-2" class="w-3 h-3"></i> Đã nộp minh chứng
+               </button>`
+            : `<button onclick="openDashProofModal('${task.id}', '${safeTitle}')" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-blue-50 text-[#1F5AFE] border border-blue-200/80 hover:bg-blue-100 transition-colors cursor-pointer">
+                 <i data-lucide="upload-cloud" class="w-3 h-3"></i> Nộp minh chứng
+               </button>`;
+
           taskDiv.innerHTML = `
             <!-- Checkbox SVG dấu tick vẽ dần (Mục 3.2 & Mục 4 Lỗi #3) -->
-            <label class="relative flex items-center justify-center cursor-pointer shrink-0 mt-0.5 group/cb ${isDone ? 'is-done' : ''}" title="${isDone ? 'Đánh dấu chưa xong' : 'Đánh dấu hoàn thành'}">
+            <label class="relative flex items-center justify-center cursor-pointer shrink-0 mt-0.5 group/cb ${isDone ? 'is-done' : ''}" title="${isDone ? 'Đánh dấu chưa xong' : (hasProof ? 'Đánh dấu hoàn thành' : 'Cần nộp minh chứng trước khi hoàn thành')}">
               <input type="checkbox" class="task-checkbox peer sr-only" data-id="${task.id}" ${isDone ? 'checked' : ''}>
               <div class="w-5 h-5 rounded-md border-2 ${isDone ? 'border-[#00B67A] bg-[#00B67A]' : 'border-slate-400 group-hover/cb:border-blue-500'} flex items-center justify-center transition-all duration-200 active:scale-90 shadow-2xs">
                 <svg viewBox="0 0 24 24" class="w-3.5 h-3.5" aria-hidden="true">
@@ -601,18 +716,27 @@
                 <span>Hạn chót: <strong class="text-slate-700 tabular-nums">${task.dueDate}</strong></span>
                 <span>&bull;</span>
                 <span class="text-slate-600">${task.phase || 'Tuần 1'}</span>
+                <span>&bull;</span>
+                ${proofActionHtml}
               </div>
               ${blockedSubtext}
             </div>
             
-            <button onclick="quickAsk('${task.title}')" title="Hỏi Onbi về nhiệm vụ này" class="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-[#1F5AFE] p-1 rounded-lg transition-all shrink-0 active:scale-90">
+            <button onclick="quickAsk('${safeTitle}')" title="Hỏi Onbi về nhiệm vụ này" class="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-[#1F5AFE] p-1 rounded-lg transition-all shrink-0 active:scale-90">
               <i data-lucide="bot" class="w-4 h-4"></i>
             </button>
           `;
 
-          // Bắt sự kiện tích chọn
+          // Bắt sự kiện tích chọn (Yêu cầu bắt buộc nộp minh chứng trước khi hoàn thành)
           const checkbox = taskDiv.querySelector('.task-checkbox');
           checkbox.addEventListener('change', (e) => {
+            if (e.target.checked && (!task.proof || !task.proof.trim())) {
+              e.target.checked = false;
+              showToast('Vui lòng nộp minh chứng trước khi xác nhận hoàn thành nhiệm vụ!', 'warning');
+              window.openDashProofModal(task.id, task.title);
+              return;
+            }
+
             const newStatus = e.target.checked ? 'completed' : 'pending';
             API.update('tasks', task.id, { status: newStatus });
             task.status = newStatus;
