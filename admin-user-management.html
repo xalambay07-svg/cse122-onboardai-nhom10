@@ -1895,14 +1895,14 @@
         return aSame - bSame;
       });
 
-      let optionsHtml = `<option value="">-- Chọn Mentor phụ trách --</option>`;
+      let optionsHtml = `<option value="">✨ Chưa gán ngay — Để AI đề xuất & Nhân viên tự lựa chọn (Mặc định)</option>`;
       sorted.forEach((m) => {
         const mKey = m.profileId || m.id;
         const isSameDept = deptId && m.departmentId === deptId;
         const menteeCount = getMenteesForMentor(m).length;
         optionsHtml += `
           <option value="${mKey}" data-name="${m.name}">
-            ${m.name} (${m.department || 'Mentor'}) ${isSameDept ? '• Cùng phòng ban' : ''} [Đang kèm ${menteeCount}]
+            ${m.name} (${m.department || 'Mentor'}) ${isSameDept ? '• Gợi ý AI cùng phòng ban' : ''} [Đang kèm ${menteeCount}]
           </option>
         `;
       });
@@ -1911,12 +1911,9 @@
 
       if (selectedMentorId) {
         select.value = selectedMentorId;
-      } else if (deptId) {
-        // Tự động chọn Mentor đầu tiên cùng phòng ban
-        const sameDeptMentor = sorted.find((m) => m.departmentId === deptId);
-        if (sameDeptMentor) {
-          select.value = sameDeptMentor.profileId || sameDeptMentor.id;
-        }
+      } else {
+        // Mặc định khi tạo tài khoản mới: chưa gán người đồng hành ngay lập tức để AI đề xuất & người dùng tự chọn
+        select.value = '';
       }
     }
 
@@ -2002,11 +1999,7 @@
         hasError = true;
       }
 
-      // 5. Kiểm tra Mentor (Bắt buộc với New Hire)
-      if (role === 'newhire' && !mentorId) {
-        showFieldError('errMentor', 'formMentor');
-        hasError = true;
-      }
+      // 5. Người đồng hành (Mentor): Với tài khoản New Hire mới tạo, cho phép để trống để AI đề xuất & người dùng tự lựa chọn
 
       if (hasError) {
         triggerFormShake();
@@ -2034,10 +2027,10 @@
       const deptObj = departmentsList.find((d) => d.id === deptId);
       const deptName = deptObj ? deptObj.name : 'Toàn công ty';
 
-      let mentorName = '';
+      let mentorName = 'Chưa chọn (AI đề xuất)';
       if (role === 'newhire' && mentorId) {
         const mentorUser = usersList.find((u) => u.profileId === mentorId || u.id === mentorId);
-        mentorName = mentorUser ? mentorUser.name : '';
+        mentorName = mentorUser ? mentorUser.name : 'Chưa chọn (AI đề xuất)';
       }
 
       if (!editingId) {
@@ -2056,7 +2049,7 @@
           departmentId: deptId || 'DEP01',
           department: deptName,
           position: position || (role === 'newhire' ? 'Nhân sự mới' : ROLE_META[role]?.label),
-          mentorId: role === 'newhire' ? mentorId : undefined,
+          mentorId: role === 'newhire' ? (mentorId || '') : undefined,
           mentorName: role === 'newhire' ? mentorName : undefined,
           status,
           avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name)}`,
@@ -2067,8 +2060,13 @@
         usersList.unshift(newUser);
         lastHighlightedUserId = newUser.id;
 
-        // Mục 5.5: Tự động tạo hồ sơ trong newHires để nhân sự hiện ngay trên HR Dashboard
+        // Mục 5.5: Tự động tạo hồ sơ trong newHires & khởi tạo nhiệm vụ mẫu để nhân sự hiện ngay trên HR Dashboard và New Hire Dashboard
         if (role === 'newhire' && window.API) {
+          if (mentorId) {
+            localStorage.setItem(`ONBOARDAI_CONFIRMED_MENTOR_${newProfileId}`, mentorId);
+          } else {
+            localStorage.removeItem(`ONBOARDAI_CONFIRMED_MENTOR_${newProfileId}`);
+          }
           const db = API.getDB() || {};
           if (!Array.isArray(db.newHires)) db.newHires = [];
           db.newHires.unshift({
@@ -2084,6 +2082,17 @@
             progress: 0,
             status: 'on_track',
             avatar: newUser.avatar
+          });
+          if (!Array.isArray(db.tasks)) db.tasks = [];
+          const templateTasks = db.tasks.filter((t) => t.newHireId === 'NH01');
+          templateTasks.forEach((tpl, idx) => {
+            db.tasks.push({
+              ...tpl,
+              id: `${newProfileId}_T0${idx + 1}`,
+              newHireId: newProfileId,
+              status: 'pending',
+              proof: ''
+            });
           });
           API.saveDB(db);
         }

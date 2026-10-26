@@ -307,8 +307,7 @@
                     <div class="text-[11px] text-slate-500">Trợ lý hội nhập</div>
                   </div>
                 </div>
-                <div class="flex items-center gap-1 text-[11px] font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100">
-                  <i data-lucide="sparkles" class="w-3 h-3 text-indigo-600"></i>
+                <div class="text-[11px] font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100">
                   <span>Gợi ý ưu tiên</span>
                 </div>
               </div>
@@ -316,9 +315,8 @@
               <p class="text-xs text-slate-700 leading-relaxed">
                 Onbi khuyên bạn nên ưu tiên hoàn thành việc <strong>"Clone repo & Cài đặt Node.js"</strong> trước 14:00 vì IT Support cần khoảng 2 giờ để cấp quyền token SSH cho máy bạn.
               </p>
-              <button onclick="focusTask('T02')" class="w-full inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#1F5AFE] text-white text-xs font-semibold hover:bg-blue-700 transition-all duration-150 active:scale-95 shadow-xs">
+              <button onclick="focusTask('T02')" class="w-full inline-flex items-center justify-center px-3.5 py-2 rounded-xl bg-[#1F5AFE] text-white text-xs font-semibold hover:bg-blue-700 transition-all duration-150 active:scale-95 shadow-xs">
                 <span>Thực hiện ngay việc này</span>
-                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
               </button>
             </div>
 
@@ -327,20 +325,35 @@
               <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Kênh hỗ trợ nhanh (Help Desk)</h3>
               
               <!-- Mentor -->
-              <div class="flex items-center gap-3">
-                <div class="relative shrink-0">
-                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mai" alt="Mentor" class="w-10 h-10 rounded-full bg-slate-50 ring-1 ring-slate-200">
-                  <span class="absolute bottom-0 right-0 flex h-2.5 w-2.5">
-                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#00B67A] ring-2 ring-white"></span>
-                  </span>
+              <div class="p-3 rounded-xl bg-slate-50/80 border border-slate-200/80 space-y-2.5">
+                <div class="flex items-center gap-3">
+                  <div class="relative shrink-0">
+                    <img id="checklistMentorAvatar" src="assets/images/mentors/mt01.jpg" alt="Mentor" class="w-10 h-10 rounded-full bg-white ring-1 ring-slate-200 object-cover">
+                    <span class="absolute bottom-0 right-0 flex h-2.5 w-2.5">
+                      <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#00B67A] ring-2 ring-white"></span>
+                    </span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div id="checklistMentorName" class="text-xs font-bold text-slate-900 truncate">Trần Thị Mai</div>
+                    <div id="checklistMentorRole" class="text-[11px] text-slate-500 truncate">Tech Lead &bull; Mentor đồng hành</div>
+                  </div>
                 </div>
-                <div class="flex-1 min-w-0">
-                  <div class="text-xs font-bold text-slate-900">Trần Thị Mai</div>
-                  <div class="text-xs text-slate-500">Tech Lead &bull; Mentor chỉ định</div>
+                <div id="checklistMentorContactRow" class="grid grid-cols-2 gap-1.5">
+                  <button type="button" id="checklistMentorPhoneBtn" class="px-2 py-1 rounded-lg bg-white border border-slate-200 text-slate-700 hover:border-[#1F5AFE] hover:text-[#1F5AFE] text-[10px] font-semibold flex items-center justify-center cursor-pointer">
+                    <span id="checklistMentorPhone" class="truncate">SĐT: 0904 682 115</span>
+                  </button>
+                  <button type="button" id="checklistMentorZaloBtn" class="px-2 py-1 rounded-lg bg-blue-50/80 border border-blue-200 text-[#0068FF] hover:bg-blue-100 text-[10px] font-bold flex items-center justify-center cursor-pointer">
+                    <span id="checklistMentorZalo" class="truncate">Zalo: 0904 682 115</span>
+                  </button>
                 </div>
-                <button onclick="showToast('Đã mở tin nhắn Slack với Mentor Mai!', 'success')" class="p-2 rounded-lg border border-slate-200 text-slate-600 hover:text-[#1F5AFE] hover:border-blue-300 hover:bg-blue-50/50 transition-all active:scale-90" title="Nhắn tin với Mentor">
-                  <i data-lucide="message-circle" class="w-4 h-4"></i>
-                </button>
+                <div class="grid grid-cols-2 gap-1.5">
+                  <button onclick="openMentorActionFromChecklist('chat')" class="px-2.5 py-1.5 rounded-lg bg-[#1F5AFE] text-white text-[11px] font-bold hover:bg-blue-700 transition-all flex items-center justify-center cursor-pointer">
+                    <span>Chat trực tiếp</span>
+                  </button>
+                  <button onclick="openMentorActionFromChecklist('explore')" class="px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-[#1F5AFE] text-[11px] font-semibold transition-all flex items-center justify-center cursor-pointer">
+                    <span>Đổi Mentor</span>
+                  </button>
+                </div>
               </div>
 
               <!-- IT Support -->
@@ -352,8 +365,8 @@
                   <div class="text-xs font-bold text-slate-900">Nguyễn Văn Hải</div>
                   <div class="text-xs text-slate-500">IT Helpdesk &bull; Ext: 104</div>
                 </div>
-                <button onclick="showToast('Hotline IT: 024-3888-9999 (Máy lẻ 104)', 'info')" class="p-2 rounded-lg border border-slate-200 text-slate-600 hover:text-[#1F5AFE] hover:border-blue-300 hover:bg-blue-50/50 transition-all active:scale-90" title="Gọi IT">
-                  <i data-lucide="phone" class="w-4 h-4"></i>
+                <button onclick="showToast('Hotline IT: 024-3888-9999 (Máy lẻ 104)', 'info')" class="px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-600 hover:text-[#1F5AFE] hover:border-blue-300 hover:bg-blue-50/50 transition-all active:scale-90" title="Gọi IT">
+                  Liên hệ
                 </button>
               </div>
 
@@ -368,8 +381,7 @@
             <div class="bg-white rounded-2xl border border-[#E2E8F0] p-5 shadow-xs space-y-3">
               <div class="flex items-center justify-between">
                 <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Huy hiệu kế tiếp</h3>
-                <button onclick="toggleFlipCard()" class="text-xs font-semibold text-[#1F5AFE] hover:underline flex items-center gap-1 transition-all active:scale-95">
-                  <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>
+                <button onclick="toggleFlipCard()" class="text-xs font-semibold text-[#1F5AFE] hover:underline transition-all active:scale-95">
                   <span id="flipToggleLabel">Lật xem cột mốc</span>
                 </button>
               </div>
@@ -389,19 +401,18 @@
                         <span id="nextBadgePhaseTag" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-800 whitespace-nowrap">Tuần 1</span>
                       </div>
                       <div id="nextBadgeRemainText" class="text-xs text-slate-600 mt-1">Còn 4 việc để mở khóa huy hiệu</div>
-                      <div class="text-[11px] text-[#1F5AFE] mt-1 font-semibold flex items-center gap-1">
-                        <i data-lucide="sparkles" class="w-3 h-3"></i> Bấm để lật xem ý nghĩa cột mốc
+                      <div class="text-[11px] text-[#1F5AFE] mt-1 font-semibold">
+                        Bấm để lật xem ý nghĩa cột mốc
                       </div>
                     </div>
                   </div>
 
                   <!-- Mặt sau (Back side: Ý nghĩa cột mốc & mở khóa) -->
                   <div class="flip-card-back h-28 flex items-center gap-3.5 p-3.5 rounded-xl bg-gradient-to-br from-indigo-900 via-blue-900 to-indigo-950 text-white shadow-md border border-indigo-700/80">
-                    <img id="nextBadgeBackImg" src="assets/images/badges/badge-2.webp" width="52" height="52" alt="Huy hiệu" class="w-13 h-13 shrink-0">
+                    <img id="nextBadgeBackImg" src="assets/images/badges/badge-2.webp" width="52" height="52" alt="Huy hiệu" class="w-12 h-12 shrink-0">
                     <div class="flex-1 min-w-0 text-left">
                       <div class="text-xs font-bold text-amber-300 flex items-center justify-between">
                         <span id="nextBadgeBackTitle">Cột mốc Tự lập</span>
-                        <i data-lucide="check-check" class="w-3.5 h-3.5 text-emerald-400"></i>
                       </div>
                       <div id="nextBadgeBackDesc" class="text-xs text-slate-200 mt-1 leading-snug">
                         Chứng nhận làm chủ công cụ, môi trường kỹ thuật và quy trình làm việc nhóm.
@@ -427,27 +438,37 @@
   <div id="proofModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4 transition-opacity duration-200">
     <div class="modal-content-box bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4 transform transition-all duration-200 scale-95 opacity-0 border border-[#E2E8F0]">
       <div class="flex items-center justify-between">
-        <h3 class="text-sm font-bold text-slate-900">Nộp minh chứng hoàn thành</h3>
+        <h3 class="text-sm font-bold text-slate-900">Nộp minh chứng để hoàn thành nhiệm vụ</h3>
         <button onclick="closeModal('proofModal')" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
-      <p id="proofTaskTitle" class="text-xs text-slate-600 font-medium"></p>
+      <div class="p-2.5 rounded-xl bg-amber-50 border border-amber-200/80 text-[11px] text-amber-800 leading-relaxed">
+        <span><strong>Điều kiện bắt buộc:</strong> Hệ thống chỉ xác nhận nhiệm vụ <strong>Hoàn thành</strong> sau khi bạn đính kèm đường dẫn minh chứng hợp lệ.</span>
+      </div>
+      <p id="proofTaskTitle" class="text-xs text-slate-700 font-semibold"></p>
       
       <div class="space-y-3">
         <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">Đường dẫn minh chứng (GitHub PR / Link Docs)</label>
-          <input type="text" id="proofInputUrl" placeholder="https://github.com/company/repo/pull/1" class="w-full p-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#1F5AFE] focus:ring-2 focus:ring-blue-100 transition-all">
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-xs font-semibold text-slate-700">Đường dẫn minh chứng (GitHub PR / Link Docs / Ảnh) <span class="text-rose-500">*</span></label>
+            <button type="button" onclick="fillSampleProofUrl()" class="text-[11px] font-semibold text-[#1F5AFE] hover:underline">
+              <span>Điền nhanh link mẫu</span>
+            </button>
+          </div>
+          <input type="text" id="proofInputUrl" placeholder="https://github.com/onboardai/frontend/pull/12" class="w-full p-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#1F5AFE] focus:ring-2 focus:ring-blue-100 transition-all">
         </div>
         <div>
           <label class="block text-xs font-semibold text-slate-700 mb-1">Ghi chú cho Mentor (Tùy chọn)</label>
-          <textarea id="proofInputNote" rows="2" placeholder="Em đã setup xong và chạy thành công trên localhost:3000..." class="w-full p-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#1F5AFE] focus:ring-2 focus:ring-blue-100 transition-all"></textarea>
+          <textarea id="proofInputNote" rows="2" placeholder="Em đã thực hiện xong và kiểm tra hoạt động ổn định..." class="w-full p-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#1F5AFE] focus:ring-2 focus:ring-blue-100 transition-all"></textarea>
         </div>
       </div>
 
       <div class="flex items-center justify-end gap-2 pt-2">
         <button onclick="closeModal('proofModal')" class="px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors">Hủy</button>
-        <button onclick="submitTaskProof()" class="px-4 py-2 rounded-xl bg-[#1F5AFE] text-white text-xs font-semibold hover:bg-blue-700 shadow-sm transition-all duration-150 active:scale-95">Xác nhận nộp bài</button>
+        <button onclick="submitTaskProof()" class="px-4 py-2 rounded-xl bg-[#00B67A] text-white text-xs font-semibold hover:bg-emerald-700 shadow-sm transition-all duration-150 active:scale-95">
+          <span>Xác nhận nộp & Hoàn thành</span>
+        </button>
       </div>
     </div>
   </div>
@@ -471,9 +492,8 @@
       <div id="aiGuideContent" class="space-y-3 text-xs text-slate-700"></div>
 
       <div class="flex items-center justify-between pt-3 border-t border-slate-100 text-xs">
-        <span class="text-slate-500 flex items-center gap-1">
-          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-indigo-500"></i>
-          <span>Trích xuất từ Sổ tay nhân sự 2026</span>
+        <span class="text-slate-500">
+          Trích xuất từ Sổ tay nhân sự 2026
         </span>
         <button onclick="closeModal('aiGuideModal')" class="px-4 py-2 rounded-xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition-all duration-150 active:scale-95">Đã hiểu, đóng hướng dẫn</button>
       </div>
@@ -503,8 +523,7 @@
 
       <div class="flex items-center justify-between pt-2">
         <span class="text-xs text-slate-500">Bạn có thể chỉnh sửa trước khi gửi</span>
-        <button onclick="copyTemplateToClipboard()" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#1F5AFE] text-white text-xs font-semibold hover:bg-blue-700 transition-all duration-150 active:scale-95 shadow-xs">
-          <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+        <button onclick="copyTemplateToClipboard()" class="inline-flex items-center px-4 py-2 rounded-xl bg-[#1F5AFE] text-white text-xs font-semibold hover:bg-blue-700 transition-all duration-150 active:scale-95 shadow-xs">
           <span>Sao chép vào Clipboard</span>
         </button>
       </div>
@@ -515,14 +534,9 @@
   <div id="aiQuizModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4 transition-opacity duration-200">
     <div class="modal-content-box bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4 transform transition-all duration-200 scale-95 opacity-0 border border-[#E2E8F0]">
       <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-        <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-lg bg-[#00B67A] text-white flex items-center justify-center shadow-xs">
-            <i data-lucide="check-circle" class="w-4 h-4"></i>
-          </div>
-          <div>
-            <h3 class="text-sm font-bold text-slate-900">Kiểm tra nhanh: An toàn thông tin</h3>
-            <p class="text-xs text-slate-500">Trả lời đúng 2 câu hỏi để tự động hoàn thành nhiệm vụ</p>
-          </div>
+        <div>
+          <h3 class="text-sm font-bold text-slate-900">Kiểm tra nhanh: An toàn thông tin</h3>
+          <p class="text-xs text-slate-500">Trả lời đúng 2 câu hỏi để tự động hoàn thành nhiệm vụ</p>
         </div>
         <button onclick="closeModal('aiQuizModal')" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors">
           <i data-lucide="x" class="w-4 h-4"></i>
@@ -695,7 +709,7 @@
           priority: 'Bắt buộc',
           description: 'Kiểm tra cấu hình máy tính, ký biên bản bàn giao tài sản với bộ phận Hành chính - IT.',
           aiActionType: 'guide_3_steps',
-          proof: ''
+          proof: 'https://portal.onboardai.vn/handover/bien-ban-thiet-bi-NH01'
         },
         {
           id: 'D02',
@@ -707,7 +721,7 @@
           priority: 'Bắt buộc',
           description: 'Nộp bản sao công chứng giấy tờ tùy thân và ký xác nhận quy chế bảo mật thông tin OnboardAI.',
           aiActionType: '',
-          proof: ''
+          proof: 'https://portal.onboardai.vn/hr-docs/hop-dong-nda-NH01'
         },
         {
           id: 'D03',
@@ -719,7 +733,7 @@
           priority: 'Tiêu chuẩn',
           description: 'Làm quen không gian làm việc, khu vực Pantry, phòng họp và gặp gỡ trực tiếp Mentor Trần Thị Mai.',
           aiActionType: 'smart_template',
-          proof: ''
+          proof: 'https://portal.onboardai.vn/checkin/office-tour-day1-NH01'
         }
       ],
       'Tháng 1': [
@@ -991,8 +1005,7 @@
         let blockedAlert = '';
         if (isBlocked && task.blockedReason) {
           blockedAlert = `
-            <div class="mt-2 text-xs text-rose-800 bg-rose-50/90 p-2.5 rounded-xl border border-rose-200/70 flex items-center gap-2 font-medium">
-              <i data-lucide="shield-alert" class="w-4 h-4 text-rose-600 shrink-0"></i>
+            <div class="mt-2 text-xs text-rose-800 bg-rose-50/90 p-2.5 rounded-xl border border-rose-200/70 font-medium">
               <span><strong>Điểm nghẽn:</strong> ${task.blockedReason}</span>
             </div>`;
         }
@@ -1000,37 +1013,43 @@
         let aiButtonHtml = '';
         if (task.aiActionType === 'guide_3_steps') {
           aiButtonHtml = `
-            <button onclick="triggerAiGuide('${task.id}')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 text-indigo-700 border border-indigo-200/80 text-xs font-semibold hover:bg-indigo-100 transition-all duration-150 active:scale-95 shadow-2xs">
-              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-indigo-600"></i>
+            <button onclick="triggerAiGuide('${task.id}')" class="inline-flex items-center px-3 py-1.5 rounded-xl bg-indigo-50 text-indigo-700 border border-indigo-200/80 text-xs font-semibold hover:bg-indigo-100 transition-all duration-150 active:scale-95 shadow-2xs">
               <span>Onbi hướng dẫn 3 bước</span>
             </button>`;
         } else if (task.aiActionType === 'smart_template') {
           aiButtonHtml = `
-            <button onclick="triggerAiTemplate('${task.id}')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 text-[#1F5AFE] border border-blue-200/80 text-xs font-semibold hover:bg-blue-100 transition-all duration-150 active:scale-95 shadow-2xs">
-              <i data-lucide="message-square" class="w-3.5 h-3.5 text-[#1F5AFE]"></i>
+            <button onclick="triggerAiTemplate('${task.id}')" class="inline-flex items-center px-3 py-1.5 rounded-xl bg-blue-50 text-[#1F5AFE] border border-blue-200/80 text-xs font-semibold hover:bg-blue-100 transition-all duration-150 active:scale-95 shadow-2xs">
               <span>Onbi soạn mẫu tin nhắn</span>
             </button>`;
         } else if (task.aiActionType === 'micro_quiz') {
           aiButtonHtml = `
-            <button onclick="triggerAiQuiz('${task.id}')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200/80 text-xs font-semibold hover:bg-emerald-100 transition-all duration-150 active:scale-95 shadow-2xs">
-              <i data-lucide="help-circle" class="w-3.5 h-3.5 text-[#00B67A]"></i>
+            <button onclick="triggerAiQuiz('${task.id}')" class="inline-flex items-center px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200/80 text-xs font-semibold hover:bg-emerald-100 transition-all duration-150 active:scale-95 shadow-2xs">
               <span>Làm Quiz 2 câu</span>
             </button>`;
         }
 
+        // Đồng bộ minh chứng mặc định cho nhiệm vụ T01 vốn đã hoàn thành từ đầu trong mock-data
+        if (task.status === 'completed' && (!task.proof || !task.proof.trim())) {
+          task.proof = `https://portal.onboardai.vn/verify/${task.id.toLowerCase()}-completed`;
+        }
+        const hasProof = Boolean(task.proof && task.proof.trim());
+
         let proofInfo = '';
-        if (task.proof) {
-          proofInfo = `<div class="mt-2 text-xs text-[#0A7A52] flex items-center gap-1.5 font-medium min-w-0">
-            <i data-lucide="link" class="w-3.5 h-3.5 text-[#00B67A] shrink-0"></i> 
-            <span class="shrink-0">Đã nộp minh chứng:</span>
+        if (hasProof) {
+          proofInfo = `<div class="mt-2 text-xs text-[#0A7A52] bg-emerald-50/70 border border-emerald-200/70 px-3 py-1.5 rounded-xl flex items-center gap-1.5 font-medium min-w-0">
+            <span class="shrink-0 font-semibold">Đã nộp minh chứng:</span>
             <a href="${task.proof}" target="_blank" class="underline truncate hover:text-emerald-900">${task.proof}</a>
+          </div>`;
+        } else {
+          proofInfo = `<div class="mt-2 text-[11px] text-amber-800 bg-amber-50/80 border border-amber-200/70 px-3 py-1.5 rounded-xl flex items-center justify-between gap-2 font-medium">
+            <span>Chưa có minh chứng &bull; <strong>Cần nộp minh chứng để xác nhận hoàn thành</strong></span>
           </div>`;
         }
 
         card.innerHTML = `
           <div class="flex items-start gap-3.5 min-w-0">
             <!-- Checkbox SVG dấu tick vẽ dần (Mục 3.2 & Lỗi #3, #5) -->
-            <label class="relative flex items-center justify-center cursor-pointer shrink-0 mt-0.5 group/cb ${isDone ? 'is-done' : ''}" title="${isDone ? 'Đánh dấu chưa xong' : 'Đánh dấu hoàn thành'}">
+            <label class="relative flex items-center justify-center cursor-pointer shrink-0 mt-0.5 group/cb ${isDone ? 'is-done' : ''}" title="${isDone ? 'Đánh dấu chưa xong' : (hasProof ? 'Đánh dấu hoàn thành' : 'Cần nộp minh chứng trước khi hoàn thành')}">
               <input type="checkbox" class="task-checkbox peer sr-only" data-id="${task.id}" ${isDone ? 'checked' : ''}>
               <div class="w-5 h-5 rounded-md border-2 ${isDone ? 'border-[#00B67A] bg-[#00B67A]' : 'border-slate-400 group-hover/cb:border-blue-500'} flex items-center justify-center transition-all duration-200 active:scale-90 shadow-2xs">
                 <svg viewBox="0 0 24 24" class="w-3.5 h-3.5" aria-hidden="true">
@@ -1057,9 +1076,8 @@
               <div class="flex flex-wrap items-center justify-between gap-2 mt-3 pt-2.5 border-t border-slate-100">
                 <div class="flex flex-wrap items-center gap-2">
                   ${aiButtonHtml}
-                  <button onclick="openProofModal('${task.id}', '${task.title.replace(/'/g, "\\'")}')" class="inline-flex items-center gap-1 text-xs font-semibold text-slate-600 hover:text-[#1F5AFE] px-2.5 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-50 transition-all duration-150 active:scale-95 shadow-2xs">
-                    <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i>
-                    <span>${task.proof ? 'Cập nhật minh chứng' : 'Nộp minh chứng'}</span>
+                  <button onclick="openProofModal('${task.id}', '${task.title.replace(/'/g, "\\'")}')" class="inline-flex items-center text-xs font-semibold ${hasProof ? 'text-emerald-700 border-emerald-200 bg-emerald-50/60 hover:bg-emerald-100/70' : 'text-[#1F5AFE] border-blue-200 bg-blue-50/70 hover:bg-blue-100'} px-2.5 py-1.5 rounded-xl border transition-all duration-150 active:scale-95 shadow-2xs">
+                    <span>${hasProof ? 'Cập nhật minh chứng' : 'Nộp minh chứng để hoàn thành'}</span>
                   </button>
                 </div>
 
@@ -1072,8 +1090,7 @@
               <!-- Khối Accordion -->
               <div id="accordion-${task.id}" class="hidden pt-3 mt-2 border-t border-dashed border-slate-200 text-xs text-slate-600 animate-fade-in">
                 <div class="p-3 rounded-xl bg-slate-50/80 border border-[#E2E8F0] space-y-1">
-                  <div class="flex items-center gap-1.5 font-semibold text-slate-800">
-                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#1F5AFE]"></i>
+                  <div class="font-semibold text-slate-800">
                     <span>Mẹo thực hiện nhanh từ Onbi:</span>
                   </div>
                   <p class="text-xs text-slate-600 leading-relaxed">
@@ -1086,10 +1103,19 @@
           </div>
         `;
 
-        // Bắt sự kiện tích chọn nhiệm vụ (Mục 3.2: nếu hoàn thành việc cuối của chặng -> bắn pháo giấy + lật thẻ huy hiệu + hiện Onbi vui)
+        // Bắt sự kiện tích chọn nhiệm vụ: BẮT BUỘC phải có minh chứng mới cho phép xác nhận hoàn thành
         const cb = card.querySelector('.task-checkbox');
         cb.addEventListener('change', (e) => {
           const triggerEl = e.currentTarget.nextElementSibling || e.currentTarget;
+
+          // Nếu người dùng tích hoàn thành nhưng CHƯA nộp minh chứng -> Chặn và mở ngay Modal nộp minh chứng
+          if (e.target.checked && (!task.proof || !task.proof.trim())) {
+            e.target.checked = false;
+            showToast('Vui lòng nộp minh chứng trước khi xác nhận hoàn thành nhiệm vụ!', 'warning');
+            openProofModal(task.id, task.title);
+            return;
+          }
+
           const newStatus = e.target.checked ? 'completed' : 'pending';
           API.update('tasks', task.id, { status: newStatus });
           task.status = newStatus;
@@ -1229,12 +1255,44 @@
       currentSelectedTaskId = taskId;
       document.getElementById('proofTaskTitle').innerText = `Nhiệm vụ: ${title}`;
       const inputEl = document.getElementById('proofInputUrl');
+      const noteEl = document.getElementById('proofInputNote');
+      const allTasks = API.getAll('tasks') || [];
+      let existingTask = allTasks.find(t => t.id === taskId);
+      if (!existingTask) {
+        Object.values(FALLBACK_PHASE_TASKS).forEach(list => {
+          const found = list.find(t => t.id === taskId);
+          if (found) existingTask = found;
+        });
+      }
+      inputEl.value = (existingTask && existingTask.proof) ? existingTask.proof : '';
+      if (noteEl) noteEl.value = (existingTask && existingTask.proofNote) ? existingTask.proofNote : '';
       inputEl.classList.remove('border-rose-500', 'ring-2', 'ring-rose-200');
       openModal('proofModal');
+      setTimeout(() => inputEl.focus(), 100);
+    }
+
+    function fillSampleProofUrl() {
+      const inputEl = document.getElementById('proofInputUrl');
+      const noteEl = document.getElementById('proofInputNote');
+      const sampleMap = {
+        'T01': 'https://portal.onboardai.vn/verify/2fa-google-authenticator-NH01',
+        'T02': 'https://github.com/onboardai/frontend/pull/18',
+        'T03': 'https://onboardai.slack.com/archives/C01WELCOME/p17264500',
+        'T04': 'https://portal.onboardai.vn/quiz/security-policy-100pct',
+        'T05': 'https://docs.google.com/document/d/1OKR-60days-NH01/edit'
+      };
+      const id = currentSelectedTaskId || 'TASK';
+      inputEl.value = sampleMap[id] || `https://github.com/onboardai/frontend/pull/${id.toLowerCase()}`;
+      inputEl.classList.remove('border-rose-500', 'ring-2', 'ring-rose-200');
+      if (noteEl && !noteEl.value.trim()) {
+        noteEl.value = 'Em đã hoàn thành đầy đủ các yêu cầu của nhiệm vụ và đính kèm minh chứng xác thực.';
+      }
     }
 
     function submitTaskProof() {
       const url = document.getElementById('proofInputUrl').value.trim();
+      const noteEl = document.getElementById('proofInputNote');
+      const note = noteEl ? noteEl.value.trim() : '';
       const modalBox = document.querySelector('#proofModal .modal-content-box');
       const inputEl = document.getElementById('proofInputUrl');
 
@@ -1246,21 +1304,37 @@
           void modalBox.offsetWidth;
           modalBox.classList.add('animate-shake');
         }
-        showToast('Vui lòng dán liên kết minh chứng trước khi nộp!', 'warning');
+        showToast('Vui lòng dán liên kết minh chứng trước khi xác nhận hoàn thành!', 'warning');
         return;
       }
 
       inputEl.classList.remove('border-rose-500', 'ring-2', 'ring-rose-200');
-      API.update('tasks', currentSelectedTaskId, { proof: url, status: 'completed' });
+      API.update('tasks', currentSelectedTaskId, { proof: url, proofNote: note, status: 'completed' });
       Object.values(FALLBACK_PHASE_TASKS).forEach(list => {
         const found = list.find(t => t.id === currentSelectedTaskId);
         if (found) {
           found.proof = url;
+          found.proofNote = note;
           found.status = 'completed';
         }
       });
       closeModal('proofModal');
-      showToast('Đã nộp minh chứng thành công! Mentor sẽ nhận được thông báo.', 'success');
+
+      const currentUser = API.getCurrentUser();
+      const allAfter = getTasksForPhase(currentActivePhase, currentUser, API.getAll('tasks'));
+      const doneAfter = allAfter.filter((t) => t.status === 'completed').length;
+      const justCompletedPhase = allAfter.length > 0 && doneAfter === allAfter.length;
+
+      if (justCompletedPhase) {
+        const badgeMeta = PHASE_BADGE_MAP[currentActivePhase] || PHASE_BADGE_MAP['Tuần 1'];
+        celebrateFrom(document.getElementById('phaseProgressBar'));
+        const flipCard = document.getElementById('badgeFlipCard');
+        if (flipCard) flipCard.classList.add('flipped');
+        showToast(`Đã nộp minh chứng & đạt cột mốc ${badgeMeta.name}!`, 'success');
+      } else {
+        showToast('Đã nộp minh chứng & xác nhận hoàn thành nhiệm vụ!', 'success');
+      }
+
       renderTasksList();
       updatePhaseStats();
     }
@@ -1414,9 +1488,10 @@
       }
 
       if (q1.value === 'correct' && q2.value === 'correct') {
-        API.update('tasks', currentSelectedTaskId, { status: 'completed' });
+        const quizProofUrl = 'https://portal.onboardai.vn/quiz/security-policy-passed-2of2';
+        API.update('tasks', currentSelectedTaskId, { status: 'completed', proof: quizProofUrl });
         closeModal('aiQuizModal');
-        showToast('Chính xác 2/2 câu! Đã tự động hoàn thành nhiệm vụ.', 'success');
+        showToast('Chính xác 2/2 câu! Đã ghi nhận minh chứng Quiz và hoàn thành nhiệm vụ.', 'success');
         renderTasksList();
         updatePhaseStats();
       } else {
@@ -1453,10 +1528,126 @@
       window.location.href = savedReturn || (isImpersonating === 'admin' ? 'admin-user-management.html' : returnUrl);
     }
 
+    function openMentorActionFromChecklist(action) {
+      sessionStorage.setItem('OPEN_MENTOR_ACTION', action);
+      window.location.href = 'newhire-onboarding-dashboard.html';
+    }
+
+    function syncChecklistMentorWidget() {
+      const currentUser = API.getCurrentUser();
+      const mentorId = localStorage.getItem(`ONBOARDAI_CONFIRMED_MENTOR_${currentUser.id}`) || null;
+      const mentorProfiles = {
+        MT01: {
+          name: 'Trần Thị Mai',
+          role: 'Tech Lead • Kỹ thuật',
+          phone: '0904 682 115',
+          zalo: '0904 682 115',
+          zaloUrl: 'https://zalo.me/0904682115',
+          avatar: 'assets/images/mentors/mt01.jpg'
+        },
+        MT05: {
+          name: 'Nguyễn Hoàng Minh',
+          role: 'Principal Architect • Kỹ thuật',
+          phone: '0912 345 889',
+          zalo: '0912 345 889',
+          zaloUrl: 'https://zalo.me/0912345889',
+          avatar: 'assets/images/mentors/mt05.jpg'
+        },
+        MT06: {
+          name: 'Vũ Đình Trọng',
+          role: 'Backend & Cloud Lead • Kỹ thuật',
+          phone: '0983 771 420',
+          zalo: '0983 771 420',
+          zaloUrl: 'https://zalo.me/0983771420',
+          avatar: 'assets/images/mentors/mt06.jpg'
+        },
+        MT07: {
+          name: 'Hoàng Bảo Ngọc',
+          role: 'AI & Data Lead • Kỹ thuật',
+          phone: '0936 519 208',
+          zalo: '0936 519 208',
+          zaloUrl: 'https://zalo.me/0936519208',
+          avatar: 'assets/images/mentors/mt07.jpg'
+        },
+        MT04: {
+          name: 'Đỗ Hoàng Sơn',
+          role: 'Senior QA & Security • Kỹ thuật',
+          phone: '0978 402 661',
+          zalo: '0978 402 661',
+          zaloUrl: 'https://zalo.me/0978402661',
+          avatar: 'assets/images/mentors/mt04.jpg'
+        },
+        MT02: {
+          name: 'Lê Minh Tuấn',
+          role: 'Product Lead • Sản phẩm',
+          phone: '0945 812 330',
+          zalo: '0945 812 330',
+          zaloUrl: 'https://zalo.me/0945812330',
+          avatar: 'assets/images/mentors/mt02.jpg'
+        },
+        MT08: {
+          name: 'Ngô Thanh Hà',
+          role: 'Brand Manager • Marketing',
+          phone: '0962 198 745',
+          zalo: '0962 198 745',
+          zaloUrl: 'https://zalo.me/0962198745',
+          avatar: 'assets/images/mentors/mt08.jpg'
+        },
+        MT03: {
+          name: 'Phạm Quang Huy',
+          role: 'People Partner • Nhân sự',
+          phone: '0918 905 512',
+          zalo: '0918 905 512',
+          zaloUrl: 'https://zalo.me/0918905512',
+          avatar: 'assets/images/mentors/mt03.jpg'
+        }
+      };
+      const avatarEl = document.getElementById('checklistMentorAvatar');
+      const nameEl = document.getElementById('checklistMentorName');
+      const roleEl = document.getElementById('checklistMentorRole');
+      const contactRowEl = document.getElementById('checklistMentorContactRow');
+      const phoneEl = document.getElementById('checklistMentorPhone');
+      const zaloEl = document.getElementById('checklistMentorZalo');
+      const phoneBtn = document.getElementById('checklistMentorPhoneBtn');
+      const zaloBtn = document.getElementById('checklistMentorZaloBtn');
+      if (!mentorId || !mentorProfiles[mentorId]) {
+        if (avatarEl) avatarEl.src = 'assets/images/mascot/onbi-avatar-128.webp';
+        if (nameEl) nameEl.textContent = 'Chưa chọn Người đồng hành';
+        if (roleEl) roleEl.textContent = 'AI đã đề xuất 8 Mentor phù hợp';
+        if (contactRowEl) contactRowEl.classList.add('hidden');
+        return;
+      }
+      const m = mentorProfiles[mentorId];
+      if (avatarEl) avatarEl.src = m.avatar;
+      if (nameEl) nameEl.textContent = m.name;
+      if (roleEl) roleEl.textContent = m.role;
+      if (contactRowEl) contactRowEl.classList.remove('hidden');
+      if (phoneEl) phoneEl.textContent = `SĐT: ${m.phone}`;
+      if (zaloEl) zaloEl.textContent = `Zalo: ${m.zalo}`;
+      if (phoneBtn) {
+        phoneBtn.onclick = () => {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(m.phone.replace(/\s+/g, '')).catch(() => {});
+          }
+          showToast(`Đã sao chép SĐT của ${m.name}: ${m.phone}`, 'success');
+        };
+      }
+      if (zaloBtn) {
+        zaloBtn.onclick = () => {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(m.zalo.replace(/\s+/g, '')).catch(() => {});
+          }
+          showToast(`Đã sao chép Zalo của ${m.name} (${m.zalo}). Đang mở Zalo...`, 'success');
+          if (m.zaloUrl) window.open(m.zaloUrl, '_blank', 'noopener');
+        };
+      }
+    }
+
     // Khởi tạo trang khi DOM sẵn sàng
     document.addEventListener('DOMContentLoaded', async () => {
       checkAdminImpersonation();
       await API.init();
+      syncChecklistMentorWidget();
 
       document.getElementById('taskSearchInput').addEventListener('input', renderTasksList);
       document.getElementById('categoryFilter').addEventListener('change', renderTasksList);
