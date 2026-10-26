@@ -38,6 +38,29 @@
 
   <!-- Lucide Vector Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .mentor-scroll-area {
+      scroll-behavior: smooth;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+      will-change: scroll-position;
+      transform: translateZ(0);
+    }
+    .mentor-scroll-area::-webkit-scrollbar {
+      width: 7px;
+    }
+    .mentor-scroll-area::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 9999px;
+    }
+    .mentor-scroll-area::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    .mentor-scroll-area::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
 </head>
 <body class="bg-[#F1F5F9] text-slate-900 font-sans antialiased h-full flex flex-col">
   <!-- Thanh Thị sát của Quản trị viên (Admin View-as Bar - Mặc định ẩn, chỉ hiện khi HR/Admin truy cập) -->
@@ -335,7 +358,7 @@
                 <div class="p-4 rounded-xl bg-slate-50/90 border border-[#E2E8F0] space-y-3">
                   <div class="flex items-start gap-3.5">
                     <div class="relative shrink-0">
-                      <img id="mentorCardAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mai" alt="Mentor" class="w-13 h-13 rounded-full bg-white ring-2 ring-blue-100 object-cover">
+                      <img id="mentorCardAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mai" alt="Mentor" class="w-12 h-12 rounded-full bg-white ring-2 ring-blue-100 object-cover">
                       <span class="absolute bottom-0 right-0 flex h-3 w-3">
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-3 w-3 bg-[#00B67A] ring-2 ring-white"></span>
@@ -515,10 +538,10 @@
   </div>
 
   <!-- MODAL 2: CỬA SỔ TRÒ CHUYỆN TRỰC TIẾP VỚI NGƯỜI ĐỒNG HÀNH (MENTOR LIVE CHAT) -->
-  <div id="mentorChatModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(4px);">
+  <div id="mentorChatModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60">
     <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-lg w-full flex flex-col overflow-hidden animate-fade-in" style="max-height: 86vh;">
       <!-- Header Chat -->
-      <div class="px-5 py-4 bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white flex items-center justify-between gap-3">
+      <div class="px-5 py-4 bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white flex items-center justify-between gap-3 shrink-0">
         <div class="flex items-center gap-3 min-w-0">
           <div class="relative shrink-0">
             <img id="chatMentorAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mai" alt="Mentor" class="w-11 h-11 rounded-full bg-white ring-2 ring-white/30 object-cover">
@@ -544,7 +567,7 @@
       </div>
 
       <!-- Thanh ghim lịch 1-on-1 & cam kết hỗ trợ -->
-      <div class="px-4 py-2.5 bg-amber-50/90 border-b border-amber-200/70 flex items-center justify-between gap-2 text-xs">
+      <div class="px-4 py-2.5 bg-amber-50/90 border-b border-amber-200/70 flex items-center justify-between gap-2 text-xs shrink-0">
         <div class="flex items-center gap-1.5 text-amber-900 font-medium truncate">
           <i data-lucide="calendar-clock" class="w-3.5 h-3.5 text-amber-600 shrink-0"></i>
           <span id="chatPinnedSchedule" class="truncate">Lịch 1-on-1: 15:00 Thứ Sáu tuần này (Check-in 7 ngày)</span>
@@ -555,12 +578,12 @@
       </div>
 
       <!-- Danh sách tin nhắn -->
-      <div id="mentorChatMessages" class="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50/70" style="min-height: 290px; max-height: 360px;">
+      <div id="mentorChatMessages" class="flex-1 min-h-0 overflow-y-auto p-4 space-y-3 bg-slate-50/70 mentor-scroll-area" style="min-height: 290px; max-height: 360px;">
         <!-- Render động bằng JS -->
       </div>
 
       <!-- Gợi ý câu hỏi nhanh với Mentor -->
-      <div class="px-4 py-2.5 bg-white border-t border-slate-100">
+      <div class="px-4 py-2.5 bg-white border-t border-slate-100 shrink-0">
         <div class="text-[11px] font-semibold text-slate-400 mb-1.5">Gợi ý trao đổi nhanh cùng Mentor:</div>
         <div class="flex flex-wrap gap-1.5">
           <button onclick="sendMentorQuickPrompt('Nhờ anh/chị hỗ trợ thúc đẩy phê duyệt quyền SSH Key cho nhiệm vụ T02 giúp em với ạ!')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-[#1F5AFE] text-[11px] font-medium text-slate-700 transition-colors cursor-pointer">
@@ -576,7 +599,7 @@
       </div>
 
       <!-- Ô nhập tin nhắn -->
-      <form onsubmit="handleMentorChatSubmit(event)" class="p-3.5 bg-white border-t border-slate-200 flex items-center gap-2">
+      <form onsubmit="handleMentorChatSubmit(event)" class="p-3.5 bg-white border-t border-slate-200 flex items-center gap-2 shrink-0">
         <input id="mentorChatInput" type="text" placeholder="Nhập tin nhắn trao đổi trực tiếp với Mentor..." class="flex-1 px-3.5 py-2.5 text-xs font-medium bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#1F5AFE] focus:bg-white transition-all">
         <button type="submit" class="px-4 py-2.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95 shadow-xs cursor-pointer">
           <span>Gửi</span>
@@ -586,32 +609,32 @@
     </div>
   </div>
 
-  <!-- MODAL 3: GIỚI THIỆU & LỰA CHỌN NGƯỜI ĐỒNG HÀNH (MENTOR DIRECTORY & SELECTION) -->
-  <div id="mentorExplorerModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);">
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-4xl w-full flex flex-col overflow-hidden animate-fade-in" style="max-height: 90vh;">
-      <!-- Header Modal -->
-      <div class="px-6 py-5 border-b border-slate-200 bg-gradient-to-r from-blue-50/80 via-white to-indigo-50/70 flex items-start justify-between gap-4">
-        <div class="flex items-start gap-3.5">
-          <div class="w-11 h-11 rounded-2xl bg-[#1F5AFE] text-white flex items-center justify-center shadow-sm shrink-0">
+  <!-- MODAL 3: GIỚI THIỆU & LỰA CHỌN NGƯỜI ĐỒNG HÀNH (TỐI ƯU CUỘN MƯỢT 60FPS & BỐ CỤC GỌN GÀNG) -->
+  <div id="mentorExplorerModal" onclick="if(event.target === this) closeMentorExplorerModal()" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-900/60">
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-5xl w-full h-[90vh] max-h-[820px] flex flex-col overflow-hidden animate-fade-in">
+      <!-- Header Modal (Cố định phía trên) -->
+      <div class="px-6 py-4 border-b border-slate-200 bg-gradient-to-r from-blue-50/80 via-white to-indigo-50/70 flex items-center justify-between gap-4 shrink-0">
+        <div class="flex items-center gap-3.5 min-w-0">
+          <div class="w-10 h-10 rounded-xl bg-[#1F5AFE] text-white flex items-center justify-center shadow-xs shrink-0">
             <i data-lucide="compass" class="w-5 h-5"></i>
           </div>
-          <div>
+          <div class="min-w-0">
             <div class="flex flex-wrap items-center gap-2">
-              <h3 class="text-base md:text-lg font-extrabold text-slate-900">Giới thiệu & Lựa chọn Người đồng hành (Mentor)</h3>
-              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 text-[#1F5AFE]">AI Matching</span>
+              <h3 class="text-base font-extrabold text-slate-900">Giới thiệu & Lựa chọn Người đồng hành (Mentor)</h3>
+              <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 text-[#1F5AFE]">AI Matching</span>
             </div>
-            <p class="text-xs text-slate-600 mt-1 leading-relaxed">
-              Tìm hiểu hồ sơ năng lực, phong cách hướng dẫn, lịch trống 1-on-1 và đánh giá từ các khóa trước để lựa chọn Người đồng hành phù hợp nhất với mục tiêu 60 ngày thử việc của bạn.
+            <p class="text-xs text-slate-600 mt-0.5 truncate">
+              Tìm hiểu năng lực, phong cách hướng dẫn và lịch 1-on-1 để chọn Người đồng hành phù hợp nhất với bạn.
             </p>
           </div>
         </div>
-        <button onclick="closeMentorExplorerModal()" class="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer">
+        <button onclick="closeMentorExplorerModal()" class="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer shrink-0">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
 
-      <!-- Thanh bộ lọc tiêu chí lựa chọn Mentor -->
-      <div class="px-6 py-3 bg-slate-50 border-b border-slate-200/80 flex flex-wrap items-center justify-between gap-3">
+      <!-- Thanh bộ lọc & Tìm kiếm nhanh (Cố định phía trên vùng cuộn) -->
+      <div class="px-6 py-2.5 bg-slate-50 border-b border-slate-200/80 flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 shrink-0">
         <div class="flex flex-wrap items-center gap-1.5" id="mentorFilterBar">
           <button onclick="filterMentorCatalog('all')" data-filter="all" class="mentor-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#1F5AFE] text-white shadow-2xs transition-all cursor-pointer">
             Tất cả Mentor (8)
@@ -626,28 +649,46 @@
             🌱 Sản phẩm, Marketing & Nhân sự (3)
           </button>
         </div>
-        <div class="flex items-center gap-2 text-[11px] text-slate-500 font-medium">
-          <span>Trạng thái: <strong id="explorerCurrentMentorLabel" class="text-slate-900">Chưa chọn (Đang xem đề xuất AI)</strong></span>
-          <button id="resetMentorSelectionBtn" onclick="resetMentorSelection()" class="hidden px-2 py-0.5 rounded-md border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 text-[10px] font-bold transition-colors cursor-pointer">
-            Hủy chọn để xem lại đề xuất AI
-          </button>
+
+        <div class="flex items-center justify-between lg:justify-end gap-2">
+          <!-- Ô tìm kiếm nhanh Mentor -->
+          <div class="relative w-48 sm:w-56">
+            <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+            <input id="mentorSearchInput" oninput="renderMentorExplorerCatalog()" type="text" placeholder="Tìm tên, kỹ năng (React, AI...)" class="w-full pl-8 pr-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs text-slate-800 focus:outline-none focus:border-[#1F5AFE]">
+          </div>
+          <div class="hidden sm:flex items-center gap-1.5 text-[11px] text-slate-500 font-medium shrink-0">
+            <strong id="explorerCurrentMentorLabel" class="text-slate-800">Chưa chọn</strong>
+            <button id="resetMentorSelectionBtn" onclick="resetMentorSelection()" class="hidden px-2 py-0.5 rounded-md border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 text-[10px] font-bold transition-colors cursor-pointer">
+              Hủy chọn
+            </button>
+          </div>
         </div>
       </div>
 
-      <!-- Danh sách thẻ giới thiệu chi tiết từng Mentor -->
-      <div id="mentorCatalogGrid" class="p-6 overflow-y-auto grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50/40" style="max-height: 65vh;">
-        <!-- Render động bằng JS -->
+      <!-- Vùng cuộn độc lập mượt mà 60fps -->
+      <div id="mentorCatalogScrollArea" class="flex-1 min-h-0 overflow-y-auto px-5 py-4 bg-slate-50/60 mentor-scroll-area">
+        <div id="mentorCatalogGrid" class="grid grid-cols-1 md:grid-cols-2 gap-3.5 items-stretch pb-2">
+          <!-- Render động bằng JS -->
+        </div>
       </div>
 
-      <!-- Footer hướng dẫn lựa chọn -->
-      <div class="px-6 py-3.5 bg-white border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+      <!-- Footer hướng dẫn & Nút cuộn nhanh lên/xuống -->
+      <div class="px-6 py-3 bg-white border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500 shrink-0">
         <div class="flex items-center gap-2">
           <i data-lucide="shield-check" class="w-4 h-4 text-[#00B67A] shrink-0"></i>
-          <span>Mỗi tài khoản mới sẽ được Onbi AI gợi ý Người đồng hành phù hợp nhất; quyền quyết định lựa chọn thuộc về bạn.</span>
+          <span>Onbi AI gợi ý theo vị trí của bạn; bạn có thể đọc thông tin và tự do lựa chọn Người đồng hành.</span>
         </div>
-        <button onclick="closeMentorExplorerModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-all cursor-pointer shrink-0">
-          Đóng cửa sổ
-        </button>
+        <div class="flex items-center gap-2 ml-auto">
+          <button type="button" onclick="scrollMentorCatalog(-340)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-[11px] flex items-center gap-1 cursor-pointer transition-colors" title="Trượt lên trên">
+            <i data-lucide="chevron-up" class="w-3.5 h-3.5"></i> Lên trên
+          </button>
+          <button type="button" onclick="scrollMentorCatalog(340)" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-[11px] flex items-center gap-1 cursor-pointer transition-colors" title="Trượt xuống dưới">
+            <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i> Xem tiếp
+          </button>
+          <button onclick="closeMentorExplorerModal()" class="px-4 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition-all cursor-pointer">
+            Đóng
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -1429,20 +1470,59 @@
         appendAndReplyMentorMessage(promptText);
       };
 
-      // ================= GIỚI THIỆU & LỰA CHỌN NGƯỜI ĐỒNG HÀNH (8 MENTORS) =================
+      // ================= GIỚI THIỆU & LỰA CHỌN NGƯỜI ĐỒNG HÀNH (8 MENTORS - TỐI ƯU CUỘN & ĐỌC MƯỢT MÀ) =================
+      const expandedMentorCards = new Set();
+
+      window.toggleMentorCardDetail = function(mentorId) {
+        if (expandedMentorCards.has(mentorId)) {
+          expandedMentorCards.delete(mentorId);
+        } else {
+          expandedMentorCards.add(mentorId);
+        }
+        renderMentorExplorerCatalog();
+      };
+
+      window.scrollMentorCatalog = function(deltaY) {
+        const scrollArea = document.getElementById('mentorCatalogScrollArea');
+        if (scrollArea) {
+          scrollArea.scrollBy({ top: deltaY, behavior: 'smooth' });
+        }
+      };
+
       function renderMentorExplorerCatalog(highlightId = null) {
         const grid = document.getElementById('mentorCatalogGrid');
+        const searchInput = document.getElementById('mentorSearchInput');
+        const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+        if (highlightId) {
+          expandedMentorCards.add(highlightId);
+        }
+
         const filtered = MENTOR_CATALOG.filter(m => {
-          if (currentMentorFilter === 'ai_best') return m.matchScore >= 90;
-          if (currentMentorFilter === 'tech') return m.category === 'tech';
-          if (currentMentorFilter === 'culture') return m.category === 'culture';
+          if (currentMentorFilter === 'ai_best' && m.matchScore < 90) return false;
+          if (currentMentorFilter === 'tech' && m.category !== 'tech') return false;
+          if (currentMentorFilter === 'culture' && m.category !== 'culture') return false;
+          if (query) {
+            const haystack = `${m.name} ${m.role} ${m.shortBio} ${m.tags.join(' ')}`.toLowerCase();
+            if (!haystack.includes(query)) return false;
+          }
           return true;
         });
 
+        if (filtered.length === 0) {
+          grid.innerHTML = `
+            <div class="col-span-full py-10 text-center text-xs text-slate-500 bg-white rounded-2xl border border-slate-200">
+              Không tìm thấy Người đồng hành phù hợp với từ khóa. Hãy thử bộ lọc khác nhé!
+            </div>
+          `;
+          return;
+        }
+
         grid.innerHTML = filtered.map((mentor, index) => {
           const isCurrent = mentor.id === selectedMentorId;
-          const isTopAi = index === 0 && currentMentorFilter === 'all';
+          const isTopAi = index === 0 && currentMentorFilter === 'all' && !query;
           const isHighlighted = highlightId === mentor.id;
+          const isExpanded = expandedMentorCards.has(mentor.id);
           return `
             <div id="explorer-mentor-card-${mentor.id}" class="rounded-2xl border ${
               isCurrent
@@ -1450,23 +1530,23 @@
                 : isHighlighted
                 ? 'border-indigo-400 bg-indigo-50/20 ring-2 ring-indigo-400/20'
                 : 'border-slate-200 bg-white hover:border-blue-300'
-            } p-5 shadow-xs flex flex-col justify-between gap-4 transition-all">
-              <div class="space-y-3.5">
-                <!-- Header thẻ giới thiệu Mentor -->
-                <div class="flex items-start justify-between gap-3">
-                  <div class="flex items-center gap-3">
+            } p-4 shadow-2xs flex flex-col justify-between gap-3 transition-colors">
+              <div class="space-y-2.5">
+                <!-- Header thẻ giới thiệu Mentor (Avatar chuẩn w-12 h-12) -->
+                <div class="flex items-start justify-between gap-2.5">
+                  <div class="flex items-center gap-3 min-w-0">
                     <div class="relative shrink-0">
-                      <img src="${mentor.avatar}" alt="${mentor.name}" class="w-13 h-13 rounded-full bg-slate-50 ring-2 ${isCurrent ? 'ring-[#1F5AFE]' : 'ring-slate-100'} object-cover">
+                      <img src="${mentor.avatar}" alt="${mentor.name}" class="w-12 h-12 rounded-full bg-slate-50 ring-2 ${isCurrent ? 'ring-[#1F5AFE]' : 'ring-slate-100'} object-cover">
                       <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-[#00B67A] ring-2 ring-white"></span>
                     </div>
-                    <div>
+                    <div class="min-w-0">
                       <div class="flex items-center gap-1.5 flex-wrap">
-                        <h4 class="text-sm font-extrabold text-slate-900">${mentor.name}</h4>
+                        <h4 class="text-sm font-extrabold text-slate-900 truncate">${mentor.name}</h4>
                         <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200/70">★ ${mentor.rating}</span>
-                        ${isTopAi ? '<span class="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-blue-600 text-white">Top 1 Đề xuất AI</span>' : ''}
+                        ${isTopAi ? '<span class="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-blue-600 text-white">Top 1 AI</span>' : ''}
                       </div>
-                      <p class="text-xs text-slate-600 font-medium">${mentor.role}</p>
-                      <p class="text-[11px] text-slate-500 mt-0.5">${mentor.experience} • ${mentor.responseTime}</p>
+                      <p class="text-xs text-slate-600 font-medium truncate">${mentor.role}</p>
+                      <p class="text-[11px] text-slate-500 truncate">${mentor.experience} • ${mentor.responseTime}</p>
                     </div>
                   </div>
                   <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold ${
@@ -1479,44 +1559,53 @@
                 </div>
 
                 <!-- Lý do gợi ý từ AI -->
-                <div class="p-2.5 rounded-xl bg-indigo-50/70 border border-indigo-100 text-[11px] text-indigo-950 flex items-start gap-2">
+                <div class="px-3 py-2 rounded-xl bg-indigo-50/70 border border-indigo-100 text-[11px] text-indigo-950 flex items-start gap-2">
                   <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#1F5AFE] shrink-0 mt-0.5"></i>
-                  <span><strong>Đề xuất từ AI:</strong> ${mentor.matchReason}</span>
+                  <span class="line-clamp-2"><strong>Đề xuất từ AI:</strong> ${mentor.matchReason}</span>
                 </div>
 
-                <!-- Giới thiệu chi tiết & Phong cách đồng hành -->
-                <div class="space-y-2 text-xs text-slate-600 leading-relaxed">
-                  <p>${mentor.fullIntro}</p>
-                  <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1 text-[11px]">
-                    <div><strong class="text-slate-800">🎯 Phong cách hướng dẫn:</strong> ${mentor.style}</div>
-                    <div><strong class="text-slate-800">📅 Lịch 1-on-1 gần nhất:</strong> ${mentor.nextSession}</div>
-                    <div><strong class="text-slate-800">👥 Tình trạng nhận Mentee:</strong> <span class="text-emerald-700 font-semibold">${mentor.capacity}</span></div>
+                <!-- Tóm tắt năng lực & Khung thông tin nhanh gọn gàng -->
+                <p class="text-xs text-slate-600 leading-relaxed ${isExpanded ? '' : 'line-clamp-2'}">
+                  ${isExpanded ? mentor.fullIntro : mentor.shortBio}
+                </p>
+
+                <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1 text-[11px]">
+                  <div class="truncate"><strong class="text-slate-800">🎯 Phong cách:</strong> ${mentor.style}</div>
+                  <div class="truncate"><strong class="text-slate-800">📅 Lịch 1-on-1:</strong> ${mentor.nextSession}</div>
+                  <div class="flex items-center justify-between gap-2">
+                    <span><strong class="text-slate-800">👥 Nhận kèm:</strong> <span class="text-emerald-700 font-semibold">${mentor.capacity}</span></span>
+                    <button type="button" onclick="toggleMentorCardDetail('${mentor.id}')" class="text-[11px] font-bold text-[#1F5AFE] hover:underline shrink-0 cursor-pointer">
+                      ${isExpanded ? 'Thu gọn ▴' : 'Xem chi tiết & đánh giá ▾'}
+                    </button>
                   </div>
                 </div>
 
-                <!-- Chuyên môn hỗ trợ -->
-                <div class="flex flex-wrap gap-1.5">
-                  ${mentor.tags.map(t => `<span class="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-100 text-slate-700">${t}</span>`).join('')}
-                </div>
+                ${
+                  isExpanded
+                    ? `<div class="p-2.5 rounded-xl bg-blue-50/40 border border-blue-200/60 text-[11px] text-slate-600 italic">
+                         ${mentor.testimonial}
+                       </div>`
+                    : ''
+                }
 
-                <!-- Nhận xét từ nhân viên mới khóa trước -->
-                <div class="text-[11px] text-slate-500 italic border-l-2 border-blue-300 pl-2.5">
-                  ${mentor.testimonial}
+                <!-- Chuyên môn hỗ trợ -->
+                <div class="flex flex-wrap gap-1">
+                  ${mentor.tags.map(t => `<span class="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-100 text-slate-700">${t}</span>`).join('')}
                 </div>
               </div>
 
-              <!-- Nút lựa chọn người đồng hành -->
-              <div class="pt-3 border-t border-slate-200/70 flex items-center justify-between gap-2">
+              <!-- Nút lựa chọn người đồng hành (Luôn hiển thị rõ ngay trong tầm mắt) -->
+              <div class="pt-2.5 border-t border-slate-200/70 flex items-center justify-between gap-2 mt-auto">
                 ${
                   isCurrent
                     ? `<span class="inline-flex items-center gap-1.5 text-xs font-extrabold text-[#00B67A]">
                          <i data-lucide="check-circle-2" class="w-4 h-4"></i> Đang đồng hành cùng bạn
                        </span>
-                       <button onclick="closeMentorExplorerModal(); openMentorChatModal();" class="px-3.5 py-2 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer">
+                       <button onclick="closeMentorExplorerModal(); openMentorChatModal();" class="px-3.5 py-1.5 rounded-xl bg-[#1F5AFE] hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer">
                          <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Nhắn tin ngay
                        </button>`
-                    : `<span class="text-[11px] text-slate-500 font-medium">Sẵn sàng nhận đồng hành</span>
-                       <button onclick="selectMentor('${mentor.id}')" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-[#1F5AFE] text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer">
+                    : `<span class="text-[11px] text-slate-500 font-medium">Sẵn sàng đồng hành</span>
+                       <button onclick="selectMentor('${mentor.id}')" class="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-[#1F5AFE] text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer">
                          <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Chọn làm Người đồng hành
                        </button>`
                 }
@@ -1530,18 +1619,20 @@
         if (highlightId) {
           setTimeout(() => {
             const targetCard = document.getElementById(`explorer-mentor-card-${highlightId}`);
-            if (targetCard) targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }, 80);
+            if (targetCard) targetCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, 60);
         }
       }
 
       window.openMentorExplorerModal = function(highlightId = null) {
         document.getElementById('mentorExplorerModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
         renderMentorExplorerCatalog(highlightId);
       };
 
       window.closeMentorExplorerModal = function() {
         document.getElementById('mentorExplorerModal').classList.add('hidden');
+        document.body.style.overflow = '';
       };
 
       window.filterMentorCatalog = function(filterKey) {
@@ -1553,6 +1644,8 @@
             btn.className = 'mentor-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-white text-slate-700 border border-slate-200 hover:border-blue-300 transition-all cursor-pointer';
           }
         });
+        const scrollArea = document.getElementById('mentorCatalogScrollArea');
+        if (scrollArea) scrollArea.scrollTop = 0;
         renderMentorExplorerCatalog();
       };
 
