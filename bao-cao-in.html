@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Báo Cáo Bài Tập Lớn CSE122 - Đề tài BTL-20 OnboardAI - Nhóm 10</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 18mm 16mm 18mm 22mm;
+    }
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    body {
+      font-family: "Times New Roman", Times, serif;
+      font-size: 13pt;
+      line-height: 1.48;
+      color: #111827;
+      background: #e2e8f0;
+      margin: 0;
+      padding: 24px 0;
+    }
+    .page-container {
+      width: 210mm;
+      max-width: 100%;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 18mm 16mm 18mm 22mm;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    }
+    @media print {
+      body {
+        background: #ffffff;
+        padding: 0;
+      }
+      .page-container {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .page-break {
+        page-break-before: always;
+        break-before: page;
+      }
+      table, tr, blockquote, .keep-together {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+    }
+
+    /* Thanh công cụ nổi khi xem trên màn hình */
+    .print-toolbar {
+      position: fixed;
+      top: 16px;
+      right: 24px;
+      z-index: 9999;
+      display: flex;
+      gap: 10px;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    .btn-print {
+      background: #1F5AFE;
+      color: #ffffff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(31, 90, 254, 0.35);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-print:hover {
+      background: #1545d8;
+    }
+    .btn-secondary {
+      background: #ffffff;
+      color: #1e293b;
+      border: 1px solid #cbd5e1;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 13px;
+      text-decoration: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    /* Trang bìa chuẩn Đồ án / Bài tập lớn */
+    .cover-page {
+      border: 3px double #1e293b;
+      padding: 28px 24px;
+      min-height: 256mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-align: center;
+    }
+    .cover-header p {
+      margin: 4px 0;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 13pt;
+    }
+    .cover-line {
+      width: 180px;
+      height: 1.5px;
+      background: #1e293b;
+      margin: 10px auto;
+    }
+    .cover-type {
+      font-size: 20pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 22px;
+      color: #0f172a;
+    }
+    .cover-course {
+      font-size: 14pt;
+      font-weight: bold;
+      margin-top: 8px;
+      color: #1e293b;
+    }
+    .cover-topic-box {
+      margin: 26px auto;
+      padding: 18px 20px;
+      border: 1.5px solid #1e293b;
+      background: #f8fafc;
+      max-width: 92%;
+    }
+    .cover-topic-label {
+      font-size: 12pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+    .cover-topic-title {
+      font-size: 16.5pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      line-height: 1.35;
+      color: #1F5AFE;
+    }
+    .cover-topic-sub {
+      font-size: 12.5pt;
+      font-style: italic;
+      margin-top: 6px;
+      color: #334155;
+    }
+    .cover-meta-table {
+      width: 88%;
+      margin: 16px auto;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 12.5pt;
+    }
+    .cover-meta-table td {
+      padding: 6px 8px;
+      border: none;
+      vertical-align: top;
+    }
+    .cover-footer {
+      margin-top: 24px;
+      font-weight: bold;
+      font-size: 12.5pt;
+      text-transform: uppercase;
+    }
+
+    /* Định dạng chương mục */
+    h1.chapter-title {
+      font-size: 15.5pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #0f172a;
+      border-bottom: 2px solid #1e293b;
+      padding-bottom: 6px;
+      margin-top: 22px;
+      margin-bottom: 12px;
+    }
+    h2.section-title {
+      font-size: 13.5pt;
+      font-weight: bold;
+      color: #1e293b;
+      margin-top: 16px;
+      margin-bottom: 8px;
+    }
+    h3.sub-title {
+      font-size: 13pt;
+      font-weight: bold;
+      font-style: italic;
+      color: #1e293b;
+      margin-top: 12px;
+      margin-bottom: 6px;
+    }
+    p {
+      margin: 6px 0 8px 0;
+      text-align: justify;
+    }
+    ul, ol {
+      margin: 6px 0 10px 22px;
+      padding: 0;
+    }
+    li {
+      margin-bottom: 4px;
+      text-align: justify;
+    }
+
+    /* Bảng dữ liệu chuẩn in ấn */
+    table.report-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0 14px 0;
+      font-size: 11.5pt;
+      line-height: 1.35;
+    }
+    table.report-table th,
+    table.report-table td {
+      border: 1px solid #334155;
+      padding: 6px 8px;
+      vertical-align: top;
+      text-align: left;
+    }
+    table.report-table th {
+      background: #f1f5f9;
+      font-weight: bold;
+      color: #0f172a;
+      text-align: center;
+    }
+    .text-center {
+      text-align: center !important;
+    }
+    code {
+      font-family: "Consolas", "Courier New", monospace;
+      font-size: 10.5pt;
+      background: #f1f5f9;
+      padding: 1px 4px;
+      border-radius: 3px;
+    }
+    pre {
+      font-family: "Consolas", "Courier New", monospace;
+      font-size: 10pt;
+      line-height: 1.35;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      padding: 10px 12px;
+      border-radius: 4px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: 8px 0 12px 0;
+    }
+    .info-box {
+      border: 1px solid #94a3b8;
+      background: #f8fafc;
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-size: 12pt;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Thanh công cụ In nhanh (Tự động ẩn khi bấm In ra giấy / PDF) -->
+  <div class="print-toolbar no-print">
+    <button class="btn-print" onclick="window.print()">
+      🖨️ In Báo Cáo / Lưu PDF (Ctrl + P)
+    </button>
+    <a class="btn-secondary" href="docs/BAO_CAO_BTL_CSE122_NHOM10_ONBOARDAI.docx" download>
+      📥 Tải bản Word (.docx)
+    </a>
+  </div>
+
+  <div class="page-container">
+
+    <!-- ==================== TRANG 1: TRANG BÌA ==================== -->
+    <div class="cover-page">
+      <div class="cover-header">
+        <p>TRƯỜNG ĐẠI HỌC THỦY LỢI</p>
+        <p>KHOA CÔNG NGHỆ THÔNG TIN</p>
+        <p>BỘ MÔN CÔNG NGHỆ PHẦN MỀM</p>
+        <div class="cover-line"></div>
+      </div>
+
+      <div>
+        <div class="cover-type">BÁO CÁO BÀI TẬP LỚN</div>
+        <div class="cover-course">HỌC PHẦN: PHÁT TRIỂN ỨNG DỤNG WEB CƠ BẢN (CSE122)</div>
+
+        <div class="cover-topic-box">
+          <div class="cover-topic-label">ĐỀ TÀI SỐ 20 (BTL-20 – LĨNH VỰC NHÂN SỰ / HRTECH)</div>
+          <div class="cover-topic-title">
+            ONBOARDAI – NỀN TẢNG QUẢN TRỊ HÀNH TRÌNH<br>
+            HỘI NHẬP NHÂN SỰ MỚI THÔNG MINH
+          </div>
+          <div class="cover-topic-sub">
+            (Tích hợp Phân quyền 4 Vai trò RBAC, Chế độ Thị sát View-As &amp; Bộ 3 Mô-đun Trí tuệ Nhân tạo AI-1, AI-2, AI-3)
+          </div>
+        </div>
+
+        <table class="cover-meta-table">
+          <tr>
+            <td style="width: 34%;"><strong>Nhóm thực hiện:</strong></td>
+            <td><strong>Nhóm 10</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Thành viên thực hiện:</strong></td>
+            <td>
+              <strong>1. Nguyễn Gia Huy</strong> – MSV: <strong>2551170897</strong> <em>(Trưởng nhóm – SV1)</em><br>
+              <strong>2. Đào Viết Huy Hoàng</strong> – MSV: <strong>2551170888</strong> <em>(Thành viên – SV2)</em>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Kho mã nguồn GitHub:</strong></td>
+            <td><code>https://github.com/xalambay07-svg/cse122-onboardai-nhom10</code></td>
+          </tr>
+          <tr>
+            <td><strong>Bảng quản lý Trello:</strong></td>
+            <td><code>https://trello.com/b/J0c8nZ2l</code></td>
+          </tr>
+          <tr>
+            <td><strong>Thư mục 03 Video OBS:</strong></td>
+            <td><code>docs/obs-videos/</code> <em>(Video_OBS1, Video_OBS2, Video_OBS3)</em></td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="cover-footer">
+        HÀ NỘI – NĂM 2026
+      </div>
+    </div>
+
+    <!-- ==================== TRANG 2: MỤC LỤC & TỔNG QUAN ==================== -->
+    <div class="page-break"></div>
+
+    <h1 class="chapter-title">MỤC LỤC BÁO CÁO</h1>
+    <table class="report-table">
+      <thead>
+        <tr>
+          <th style="width: 14%;">Phần / Mục</th>
+          <th>Nội dung chi tiết theo chuẩn Đề cương Bài tập lớn CSE122</th>
+          <th style="width: 24%;">Tệp đối chiếu trên GitHub</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="text-center"><strong>Chương 1</strong></td>
+          <td><strong>Đề xuất Dự án (Project Proposal):</strong> Ngữ cảnh thực tế, Phát biểu vấn đề, Mục tiêu sản phẩm &amp; Giá trị cốt lõi</td>
+          <td><code>docs/project-proposal.md</code></td>
+        </tr>
+        <tr>
+          <td class="text-center"><strong>Chương 2</strong></td>
+          <td><strong>Phân tích 4 Vai trò (RBAC) &amp; Đặc tả 3 Mô-đun AI:</strong> Giải đáp 10 câu hỏi nghiệp vụ cho từng vai trò &amp; thiết kế AI-1, AI-2, AI-3</td>
+          <td><code>docs/roles-and-features.md</code></td>
+        </tr>
+        <tr>
+          <td class="text-center"><strong>Chương 3</strong></td>
+          <td><strong>Kiến trúc Dữ liệu &amp; Bảng Kiểm kê 9 Màn hình (Screen Inventory):</strong> Thao tác CRUD, 5 trạng thái UI, biểu đồ Chart.js &amp; Form Validation</td>
+          <td><code>docs/screen-inventory.md</code></td>
+        </tr>
+        <tr>
+          <td class="text-center"><strong>Chương 4</strong></td>
+          <td><strong>Phân công Nhóm, Quản lý Trello Kanban &amp; Quy trình GitHub Flow:</strong> Lát cắt dọc, trách nhiệm chéo, 25 thẻ Trello &amp; 4 Pull Requests</td>
+          <td><code>docs/team-assignment.md</code><br><code>docs/QUY_TRINH_TRELLO_KANBAN.md</code></td>
+        </tr>
+        <tr>
+          <td class="text-center"><strong>Chương 5</strong></td>
+          <td><strong>Minh chứng 03 Video OBS Live Coding &amp; Liên kết Commit:</strong> Đối chiếu Video ↔ Màn hình ↔ Nhánh Git ↔ Mã Commit ↔ Thẻ Trello</td>
+          <td><code>docs/obs-evidence.md</code><br><code>docs/obs-videos/</code></td>
+        </tr>
+        <tr>
+          <td class="text-center"><strong>Chương 6</strong></td>
+          <td><strong>Báo cáo Khai báo &amp; Đánh giá Sử dụng AI (AI Usage Report):</strong> Nhật ký Prompt, phần chỉnh sửa của sinh viên &amp; kiểm chứng thực tế</td>
+          <td><code>docs/ai-usage-report.md</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ==================== CHƯƠNG 1 ==================== -->
+    <h1 class="chapter-title">CHƯƠNG 1. ĐỀ XUẤT DỰ ÁN &amp; PHÁT BIỂU BÀI TOÁN (PHỤ LỤC A)</h1>
+
+    <h2 class="section-title">1.1. Ngữ cảnh thực tế (Context)</h2>
+    <p>
+      Trong các doanh nghiệp công nghệ và dịch vụ hiện đại, giai đoạn <strong>Hội nhập nhân sự mới (Employee Onboarding)</strong> kéo dài trong <strong>60 ngày thử việc đầu tiên</strong> là giai đoạn quyết định năng suất làm việc và tỷ lệ gắn bó lâu dài của nhân viên. Một nhân sự mới khi gia nhập tổ chức phải hoàn thành hàng chục đầu việc liên phòng ban theo 4 cột mốc: <strong>Ngày đầu (Day 1) – Tuần 1 (Week 1) – Tháng 1 (Month 1) – Tháng 2 (Month 2)</strong>, bao gồm: nhận bàn giao thiết bị CNTT, ký cam kết bảo mật (NDA), tìm hiểu quy chế lương thưởng – bảo hiểm, kết nối với Người đồng hành (Mentor/Buddy) và hoàn thành các nhiệm vụ chuyên môn.
+    </p>
+
+    <h2 class="section-title">1.2. Phát biểu vấn đề (Problem Statement)</h2>
+    <p>Quy trình Onboarding truyền thống bằng bảng tính Excel rời rạc, email thủ công và các tệp PDF quy chế dài hàng chục trang đang gây ra 4 điểm nghẽn lớn:</p>
+    <ul>
+      <li><strong>Đối với Nhân sự mới (New Hire):</strong> Quá tải thông tin trong tuần đầu tiên; không biết hỏi ai khi thắc mắc về ngày nghỉ phép, bảo hiểm, gửi xe, thiết bị IT; không được tự lựa chọn Người đồng hành phù hợp và không theo dõi được tỷ lệ hoàn thành thử việc của bản thân.</li>
+      <li><strong>Đối với Người hướng dẫn (Mentor):</strong> Khó theo dõi đồng thời nhiều nhân sự mới (Mentee), thiếu công cụ nghiệm thu minh chứng công việc tập trung và tốn thời gian soạn thảo lộ trình riêng cho từng vị trí.</li>
+      <li><strong>Đối với Chuyên viên Nhân sự (HR Specialist):</strong> Thiếu bảng điều khiển (Dashboard) thống kê theo thời gian thực; chỉ phát hiện nhân sự mới bị kẹt quyền IT hoặc chậm tiến độ khi kỳ thử việc đã kết thúc.</li>
+      <li><strong>Đối với Quản trị viên (System Admin):</strong> Khó kiểm soát phân quyền truy cập theo vai trò (RBAC), trạng thái vòng đời tài khoản và lịch sử kiểm toán (Audit Logs).</li>
+    </ul>
+
+    <h2 class="section-title">1.3. Mục tiêu giải pháp OnboardAI (Objectives)</h2>
+    <ol>
+      <li><strong>Số hóa lộ trình hội nhập 60 ngày theo 4 chặng huy hiệu:</strong> Xây dựng hệ thống Checklist trực quan có tìm kiếm, lọc đa điều kiện, nộp minh chứng hoàn thành (Proof Submission) và tự động tính toán tiến độ phần trăm kèm mở khóa 4 huy hiệu cột mốc (<em>Tân binh – Tự lập – Hòa nhập – Chính thức</em>).</li>
+      <li><strong>Liên thông 4 vai trò người dùng trên một kho dữ liệu thống nhất:</strong> Kết nối xuyên suốt <em>Nhân sự mới – Người hướng dẫn – Chuyên viên HR – Quản trị viên</em> thông qua tầng dịch vụ <code>window.OnboardAPI</code> (<code>js/api.js</code>, <code>assets/data/mock-data.json</code> và <code>localStorage</code>).</li>
+      <li><strong>Tích hợp 3 mô-đun Trí tuệ nhân tạo (AI-1, AI-2, AI-3) thực chất:</strong> Hỗ trợ hỏi đáp quy chế có trích dẫn nguồn, gợi ý ghép cặp 8 Người đồng hành kèm khung Chat trực tiếp, cá nhân hóa Checklist theo vị trí và cảnh báo sớm rủi ro trễ hạn cho HR.</li>
+    </ol>
+
+    <!-- ==================== CHƯƠNG 2 ==================== -->
+    <div class="page-break"></div>
+    <h1 class="chapter-title">CHƯƠNG 2. PHÂN TÍCH 4 VAI TRÒ NGHIỆP VỤ &amp; 3 TÍNH NĂNG AI</h1>
+
+    <h2 class="section-title">2.1. Kiến trúc Phân quyền 4 Vai trò (Role-Based Access Control – RBAC)</h2>
+    <table class="report-table">
+      <thead>
+        <tr>
+          <th style="width: 18%;">Vai trò</th>
+          <th style="width: 26%;">Tài khoản Demo<br><em>(Mật khẩu: 123456)</em></th>
+          <th>Mục tiêu &amp; Chức năng Nghiệp vụ Cốt lõi</th>
+          <th style="width: 22%;">Màn hình chính</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1. Nhân sự mới<br>(New Hire)</strong></td>
+          <td><code>an.nguyen@onboardai.vn</code> (NH01)<br><code>nam.le@onboardai.vn</code> (NH02)<br><code>chi.pham@onboardai.vn</code> (NH03)</td>
+          <td>Theo dõi tiến độ 60 ngày, mở khóa 4 huy hiệu cột mốc; xem AI đề xuất <strong>8 Mentor</strong> theo điểm tương thích (%) và <strong>Chat trực tiếp</strong>; lọc Checklist 4 chặng, nộp link minh chứng; hỏi đáp quy chế 24/7 với trợ lý ảo <strong>Onbi (AI-1)</strong>.</td>
+          <td><code>newhire-onboarding-dashboard.html</code><br><code>newhire-checklist.html</code><br><code>newhire-ai-help.html</code></td>
+        </tr>
+        <tr>
+          <td><strong>2. Người hướng dẫn<br>(Mentor)</strong></td>
+          <td><code>mentor@onboardai.vn</code> (MT01)<br><code>minh.nguyen@onboardai.vn</code> (MT02)<br><code>tuan.le@onboardai.vn</code> (MT04)</td>
+          <td>Giám sát danh sách Mentee phụ trách trực tiếp; tìm kiếm, lọc theo trạng thái tiến độ; nghiệm thu nhiệm vụ; ghi nhận phiếu đánh giá 1-on-1 định kỳ và dùng <strong>AI-2</strong> tự động sinh bộ nhiệm vụ chuyên môn theo vị trí.</td>
+          <td><code>mentor-mentee-list.html</code><br><code>mentor-checkin-note.html</code><br><code>mentor-task-assignment.html</code></td>
+        </tr>
+        <tr>
+          <td><strong>3. Chuyên viên Nhân sự (HR)</strong></td>
+          <td><code>hr@onboardai.vn</code><br><code>huy.pham@onboardai.vn</code></td>
+          <td>Quan sát 4 chỉ số KPI toàn công ty; phân tích biểu đồ cột &amp; biểu đồ tròn (<code>Chart.js</code>); phát hiện sớm nhân sự bị kẹt quyền IT hoặc trễ hạn qua <strong>AI-3 Risk Radar</strong> và gửi thông điệp can thiệp 1-Click.</td>
+          <td><code>hr-dashboard.html</code></td>
+        </tr>
+        <tr>
+          <td><strong>4. Quản trị viên<br>(System Admin)</strong></td>
+          <td><code>admin@onboardai.vn</code><br><code>son.do@onboardai.vn</code></td>
+          <td>Quản lý vòng đời tài khoản (Thêm, Sửa, Khóa/Mở khóa có kiểm tra Form Validation); đối chiếu Ma trận phân quyền RBAC 4 tầng; tra cứu Nhật ký kiểm toán (Audit Logs) và sử dụng <strong>Chế độ thị sát đa người dùng (View-As)</strong>.</td>
+          <td><code>admin-user-management.html</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="section-title">2.2. Thiết kế 3 Mô-đun Trí tuệ Nhân tạo (AI Features &amp; Fallback UX)</h2>
+    <table class="report-table">
+      <thead>
+        <tr>
+          <th style="width: 14%;">Mã AI</th>
+          <th style="width: 24%;">Tên Mô-đun &amp; Màn hình</th>
+          <th>Cơ chế Hoạt động &amp; Giải thích Kết quả (Explainability)</th>
+          <th style="width: 26%;">Xử lý khi AI không chắc chắn (Fallback UX)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="text-center"><strong>AI-1</strong></td>
+          <td><strong>Trợ lý Hỏi đáp Quy chế Onbi</strong><br>(<code>newhire-ai-help.html</code>)<br><em>Phụ trách: SV1 – Nguyễn Gia Huy</em></td>
+          <td>Chuẩn hóa tiếng Việt không dấu (<code>normalize</code>), chấm điểm từ khóa chính (+3đ), từ đồng nghĩa (+2đ) kết hợp tìm kiếm mờ <code>Fuse.js</code>. Trả lời bằng hiệu ứng gõ chữ kèm <strong>Nhãn độ khớp</strong> và <strong>Trích dẫn điều khoản sổ tay</strong>.</td>
+          <td>• Khi câu hỏi khớp ngang điểm 2 chủ đề: Bật hộp thoại <strong>Hỏi lại làm rõ (Clarification)</strong>.<br>• Khi câu hỏi ngoài tài liệu: Hiển thị phiếu <strong>Chuyển tiếp câu hỏi cho HR (Escalation)</strong>.</td>
+        </tr>
+        <tr>
+          <td class="text-center"><strong>AI-2</strong></td>
+          <td><strong>Ghép cặp 8 Mentor &amp; Cá nhân hóa Checklist</strong><br>(<code>newhire-onboarding-dashboard.html</code>, <code>mentor-mentee-list.html</code>)<br><em>Phụ trách: SV1 &amp; SV2</em></td>
+          <td>Đối chiếu phòng ban, vị trí chuyên môn của nhân sự mới với hồ sơ 8 Mentor (<code>MT01..MT08</code>) để tính <strong>Điểm tương thích (Match Score %)</strong> và gợi ý Top 3 Mentor phù hợp nhất; đồng thời gợi ý danh sách việc theo vị trí.</td>
+          <td>Người dùng toàn quyền xem toàn bộ 8 Mentor để tự chọn hoặc bấm <strong>Đổi Người đồng hành</strong> bất cứ lúc nào.</td>
+        </tr>
+        <tr>
+          <td class="text-center"><strong>AI-3</strong></td>
+          <td><strong>Dự báo Rủi ro &amp; Can thiệp Sớm (Risk Radar)</strong><br>(<code>hr-dashboard.html</code>)<br><em>Phụ trách: SV1 – Nguyễn Gia Huy</em></td>
+          <td>Tự động quét tiến độ phần trăm, số ngày chưa tương tác với Mentor và các nhiệm vụ có trạng thái <code>blocked</code> (kẹt quyền IT SSH Key) để phân loại rủi ro và soạn sẵn nội dung nhắc việc.</td>
+          <td>Cho phép HR chỉnh sửa trực tiếp nội dung thông điệp trước khi bấm gửi can thiệp 1-Click.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ==================== CHƯƠNG 3 ==================== -->
+    <div class="page-break"></div>
+    <h1 class="chapter-title">CHƯƠNG 3. BẢNG KIỂM KÊ MÀN HÌNH &amp; KIẾN TRÚC KỸ THUẬT (PHỤ LỤC B)</h1>
+
+    <h2 class="section-title">3.1. Bảng Kiểm kê Toàn bộ Màn hình của Hệ thống (Screen Inventory)</h2>
+    <table class="report-table">
+      <thead>
+        <tr>
+          <th style="width: 5%;">#</th>
+          <th style="width: 12%;">Vai trò</th>
+          <th style="width: 22%;">Tên Màn hình &amp; Tệp HTML</th>
+          <th style="width: 10%;">CRUD</th>
+          <th>Các Trạng thái Giao diện (UI States) &amp; Tính năng</th>
+          <th style="width: 18%;">Thành viên Phụ trách</th>
+          <th style="width: 10%;">Video OBS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="text-center">1</td>
+          <td>Dùng chung</td>
+          <td>Trang chủ giới thiệu<br><code>index.html</code></td>
+          <td class="text-center">R</td>
+          <td>Hero 2 cột + Khung mô phỏng Live UI, giới thiệu 4 không gian RBAC, 3 mô-đun AI &amp; 4 cột mốc huy hiệu.</td>
+          <td><strong>SV1 – Nguyễn Gia Huy</strong><br>(2551170897)</td>
+          <td class="text-center"><code>OBS-01</code></td>
+        </tr>
+        <tr>
+          <td class="text-center">2</td>
+          <td>New Hire</td>
+          <td>Dashboard Nhân sự mới<br><code>newhire-onboarding-dashboard.html</code></td>
+          <td class="text-center">C/R/U</td>
+          <td>Bình thường, Hoàn thành, Chưa chọn Mentor (AI đề xuất Top 3 / 8 Mentor), Khung Chat trực tiếp với Mentor, Báo cáo nhanh tiến độ.</td>
+          <td><strong>SV1 – Nguyễn Gia Huy</strong><br>(2551170897)</td>
+          <td class="text-center"><code>OBS-01</code></td>
+        </tr>
+        <tr>
+          <td class="text-center">3</td>
+          <td>New Hire</td>
+          <td>Checklist Hội nhập 4 Chặng<br><code>newhire-checklist.html</code></td>
+          <td class="text-center">C/R/U</td>
+          <td>Lọc 4 chặng, Tìm kiếm từ khóa, Lọc danh mục/trạng thái, <strong>Empty State + Nút Xóa bộ lọc</strong>, Nộp minh chứng, Mở khóa huy hiệu.</td>
+          <td><strong>SV1 – Nguyễn Gia Huy</strong><br>(2551170897)</td>
+          <td class="text-center"><code>OBS-02</code></td>
+        </tr>
+        <tr>
+          <td class="text-center">4</td>
+          <td>New Hire</td>
+          <td>Trợ lý AI-1 Hỏi đáp Quy chế<br><code>newhire-ai-help.html</code></td>
+          <td class="text-center">C/R</td>
+          <td>Gợi ý Typeahead, Trạng thái <strong>Loading (Onbi đang suy nghĩ)</strong>, Trả lời có trích dẫn nguồn, Hỏi lại làm rõ, Chuyển tiếp HR.</td>
+          <td><strong>SV1 – Nguyễn Gia Huy</strong><br>(2551170897)</td>
+          <td class="text-center"><code>OBS-02</code></td>
+        </tr>
+        <tr>
+          <td class="text-center">5</td>
+          <td>HR</td>
+          <td>Bảng điều khiển Nhân sự HR<br><code>hr-dashboard.html</code></td>
+          <td class="text-center">C/R/U</td>
+          <td>4 Thẻ KPI, <strong>AI-3 Risk Radar</strong> + Ngăn kéo Can thiệp 1-Click, 2 Biểu đồ <code>Chart.js</code> (Bar &amp; Doughnut), Bảng lọc nhân sự.</td>
+          <td><strong>SV1 – Nguyễn Gia Huy</strong><br>(2551170897)</td>
+          <td class="text-center"><code>OBS-03</code></td>
+        </tr>
+        <tr>
+          <td class="text-center">6</td>
+          <td>Admin</td>
+          <td>Quản trị Tài khoản &amp; RBAC<br><code>admin-user-management.html</code></td>
+          <td class="text-center">C/R/U/D</td>
+          <td>CRUD tài khoản, <strong>Form Validation</strong> báo lỗi đỏ, Khóa/Mở khóa, Ma trận RBAC 4 tầng, Nhật ký Audit Logs, <strong>Chế độ thị sát View-As</strong>.</td>
+          <td><strong>SV1 – Nguyễn Gia Huy</strong><br>(2551170897)</td>
+          <td class="text-center"><code>OBS-03</code></td>
+        </tr>
+        <tr>
+          <td class="text-center">7</td>
+          <td>Dùng chung</td>
+          <td>Cổng Đăng nhập 4 Vai trò<br><code>login.html</code></td>
+          <td class="text-center">C/R</td>
+          <td>Kiểm tra hợp lệ Email/Mật khẩu, Đăng nhập nhanh 4 vai trò (Demo Quick Login), Cảnh báo tài khoản bị khóa.</td>
+          <td><strong>SV2 – Đào Viết Huy Hoàng</strong><br>(2551170888)</td>
+          <td class="text-center">Phối hợp</td>
+        </tr>
+        <tr>
+          <td class="text-center">8</td>
+          <td>Mentor</td>
+          <td>Quản lý Danh sách Mentee<br><code>mentor-mentee-list.html</code></td>
+          <td class="text-center">C/R/U</td>
+          <td>Thống kê Mentee, Tìm kiếm &amp; Lọc trạng thái, Đánh giá 1-on-1 định kỳ, Giao việc &amp; Gợi ý lộ trình bằng <strong>AI-2</strong>.</td>
+          <td><strong>SV2 – Đào Viết Huy Hoàng</strong><br>(2551170888)</td>
+          <td class="text-center">Phối hợp</td>
+        </tr>
+        <tr>
+          <td class="text-center">9</td>
+          <td>Dùng chung</td>
+          <td>Hồ sơ Cá nhân &amp; Bảo mật<br><code>profile.html</code> &amp; <code>js/api.js</code></td>
+          <td class="text-center">R/U</td>
+          <td>Cập nhật thông tin liên hệ, Đổi mật khẩu có kiểm tra hợp lệ, Khởi tạo &amp; đồng bộ cơ sở dữ liệu <code>LocalStorage</code>.</td>
+          <td><strong>SV2 – Đào Viết Huy Hoàng</strong><br>(2551170888)</td>
+          <td class="text-center">Phối hợp</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ==================== CHƯƠNG 4 ==================== -->
+    <h1 class="chapter-title">CHƯƠNG 4. PHÂN CÔNG NHÓM, TRELLO KANBAN &amp; QUY TRÌNH GITHUB (PHỤ LỤC C)</h1>
+
+    <h2 class="section-title">4.1. Ma trận Phân công Thành viên (2 Thành viên chính thức)</h2>
+    <p>
+      <em>Ghi chú: Do thành viên thứ 3 nghỉ học, toàn bộ phần công việc của SV3 đã được gộp vào <strong>SV1 – Nguyễn Gia Huy (MSV: 2551170897 – Trưởng nhóm)</strong> đảm nhận trọn vẹn.</em>
+    </p>
+    <table class="report-table">
+      <thead>
+        <tr>
+          <th style="width: 24%;">Họ và tên &amp; Mã SV</th>
+          <th style="width: 18%;">Vai trò</th>
+          <th>Phân hệ Chuyên trách (Lát cắt dọc) &amp; Trách nhiệm Chéo</th>
+          <th style="width: 22%;">Nhánh Git &amp; Thẻ Trello</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Nguyễn Gia Huy</strong><br>MSV: <strong>2551170897</strong></td>
+          <td><strong>SV1 – Trưởng nhóm</strong><br>(UI/UX, New Hire, HR &amp; Admin Lead)</td>
+          <td>
+            • Thiết kế Design System (<code>css/style.css</code>), Trang chủ (<code>index.html</code>).<br>
+            • Toàn bộ Phân hệ Nhân sự mới (<code>newhire-onboarding-dashboard.html</code>, <code>newhire-checklist.html</code>, <code>newhire-ai-help.html</code>).<br>
+            • Toàn bộ Phân hệ HR (<code>hr-dashboard.html</code> + <code>Chart.js</code>) &amp; Quản trị viên Admin (<code>admin-user-management.html</code> + Chế độ thị sát <code>View-As</code>).<br>
+            • Phát triển mô-đun <strong>AI-1</strong>, <strong>AI-2 (Ghép cặp 8 Mentor &amp; Chat)</strong>, <strong>AI-3 (Risk Radar)</strong>.<br>
+            • Quản trị kho GitHub, điều phối bảng Trello Kanban &amp; thực hiện 03 Video OBS Live Coding.
+          </td>
+          <td>
+            • Nhánh:<br><code>huy/feature/newhire-checklist</code><br><code>fix/sv3-data-sync-hr-admin</code><br>
+            • Thẻ Trello:<br><code>T01..T03, T08, T09, T11..T15, T18, T19, T21..T24</code>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Đào Viết Huy Hoàng</strong><br>MSV: <strong>2551170888</strong></td>
+          <td><strong>SV2 – Thành viên</strong><br>(Core Data &amp; Mentor Lead)</td>
+          <td>
+            • Xây dựng kiến trúc dữ liệu lõi <code>js/api.js</code> và bộ dữ liệu mẫu <code>assets/data/mock-data.json</code>.<br>
+            • Xây dựng Cổng đăng nhập 4 vai trò (<code>login.html</code>) và trang Hồ sơ cá nhân (<code>profile.html</code>).<br>
+            • Xây dựng Phân hệ Người hướng dẫn (<code>mentor-mentee-list.html</code>, <code>mentor-checkin-note.html</code>, <code>mentor-task-assignment.html</code>) &amp; mô-đun <strong>AI-2 (Checklist Personalizer)</strong>.
+          </td>
+          <td>
+            • Nhánh:<br><code>feat/sv2-data-mentor</code><br>
+            • Thẻ Trello:<br><code>T04..T07, T10, T16, T17, T20</code>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="section-title">4.2. Tổ chức Bảng Trello Kanban &amp; Quy trình GitHub Flow (4 Pull Requests)</h2>
+    <ul>
+      <li><strong>Bảng Trello Kanban trực tuyến:</strong> <code>https://trello.com/b/J0c8nZ2l</code> (Gồm <strong>6 cột chuẩn</strong>: <em>Backlog, Sprint / To Do, In Progress, Review / Testing, Done, Tài liệu &amp; Quy ước nhóm</em>; <strong>7 nhãn màu</strong> và <strong>25 thẻ công việc</strong> chia theo 4 tuần).</li>
+      <li><strong>Quy trình nhánh &amp; Pull Requests trên GitHub:</strong> Từ nhánh tính năng (<code>huy/feature/newhire-checklist</code>, <code>feat/sv2-data-mentor</code>, <code>fix/sv3-data-sync-hr-admin</code>) tạo Pull Request hợp nhất vào <code>dev</code> và phát hành lên <code>main</code> (Đã hoàn thành 4 Pull Requests: <strong>PR #1, PR #2, PR #3, PR #4</strong> tại <code>https://github.com/xalambay07-svg/cse122-onboardai-nhom10/pulls?q=is%3Apr+is%3Aclosed</code>).</li>
+    </ul>
+
+    <!-- ==================== CHƯƠNG 5 ==================== -->
+    <div class="page-break"></div>
+    <h1 class="chapter-title">CHƯƠNG 5. MINH CHỨNG 03 VIDEO OBS LIVE CODING &amp; COMMIT (PHỤ LỤC D)</h1>
+
+    <p>
+      Cả 03 Video OBS của Trưởng nhóm <strong>Nguyễn Gia Huy (MSV: 2551170897)</strong> đều được quay đầy đủ màn hình + Webcam góc dưới phải + giọng nói giải thích trực tiếp + <strong>Live Coding gõ mới mã nguồn trong VS Code và kiểm thử thực tế trên trình duyệt</strong>, đồng thời đã được tải trực tiếp lên kho GitHub tại thư mục <code>docs/obs-videos/</code>:
+    </p>
+
+    <table class="report-table">
+      <thead>
+        <tr>
+          <th style="width: 11%;">Mã Video</th>
+          <th style="width: 24%;">Tệp Video trên GitHub &amp; Thời lượng</th>
+          <th style="width: 22%;">Màn hình Trình bày</th>
+          <th>Nội dung Giải thích Mã nguồn &amp; Bài toán Live Coding Trực tiếp trên Video</th>
+          <th style="width: 13%;">Commit &amp; Trello</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="text-center"><strong>OBS-01</strong></td>
+          <td><code>docs/obs-videos/Video_OBS1_NguyenGiaHuy_2551170897.mp4</code><br><em>(~10 phút 50 giây)</em></td>
+          <td>1. <code>index.html</code><br>2. <code>newhire-onboarding-dashboard.html</code></td>
+          <td>
+            • <strong>Giải thích code:</strong> Bố cục CSS Grid 12 cột phần Hero (dòng 108), hàm <code>buildPersonalizedMentorCatalog()</code> chấm điểm tương thích 8 Mentor (dòng 1215), hàm <code>saveMentorChatHistory()</code> (dòng 1270) và <code>generateSmartMentorReply()</code> (dòng 1482).<br>
+            • <strong>Live Coding:</strong> Trực tiếp gõ nút bấm Tailwind CSS ở dòng 219 và viết mới hàm <code>showQuickProgressSummary()</code> ở dòng 1999 truy xuất <code>LocalStorage</code> đếm số nhiệm vụ đã hoàn thành.
+          </td>
+          <td class="text-center">Commit:<br><code>228fe05</code><br><code>2e48ef1</code><br><code>abe6970</code><br>Trello:<br><code>T08, T09, T14, T21</code></td>
+        </tr>
+        <tr>
+          <td class="text-center"><strong>OBS-02</strong></td>
+          <td><code>docs/obs-videos/Video_OBS2_NguyenGiaHuy_2551170897.mp4</code><br><em>(~8 phút 35 giây)</em></td>
+          <td>3. <code>newhire-checklist.html</code><br>4. <code>newhire-ai-help.html</code></td>
+          <td>
+            • <strong>Giải thích code:</strong> Hàm lọc đa điều kiện &amp; Empty State <code>renderTasksList()</code> (dòng 948), tính tiến độ <code>updatePhaseStats()</code> (dòng 1163); hàm chuẩn hóa tiếng Việt <code>normalize()</code> (dòng 255), bộ máy quyết định AI-1 <code>processAIResponse()</code> (dòng 788) và <code>typewriteHtml()</code> (dòng 852).<br>
+            • <strong>Live Coding:</strong> Trực tiếp gõ bổ sung Object chủ đề mới <code>id: 'parking-card-policy'</code> (<em>Đăng ký vé gửi xe hầm B1 &amp; B2</em>) vào mảng <code>KNOWLEDGE_BASE</code> tại dòng 322 và hỏi trực tiếp Onbi trên trình duyệt.
+          </td>
+          <td class="text-center">Commit:<br><code>e4d688f</code><br><code>2e48ef1</code><br><code>9283bf0</code><br>Trello:<br><code>T09, T13, T15</code></td>
+        </tr>
+        <tr>
+          <td class="text-center"><strong>OBS-03</strong></td>
+          <td><code>docs/obs-videos/Video_OBS3_NguyenGiaHuy_2551170897.mp4</code><br><em>(~10 phút 43 giây)</em></td>
+          <td>5. <code>hr-dashboard.html</code><br>6. <code>admin-user-management.html</code></td>
+          <td>
+            • <strong>Giải thích code:</strong> Hàm phân tích rủi ro AI-3 <code>renderTable()</code> (dòng 814) và khởi tạo biểu đồ <code>Chart.js</code> <code>initCharts()</code> (dòng 912); hàm <code>renderUserTable()</code> (dòng 1526), chuyển đổi đa tài khoản <code>impersonateSpecificPerson()</code> (dòng 1872) và <code>saveUserForm()</code> (dòng 2128).<br>
+            • <strong>Live Coding:</strong> Trực tiếp gõ nhánh <code>else if (name.split(/\s+/).length &lt; 2 || name.length &lt; 5)</code> tại dòng 2149 để bắt buộc Họ tên gồm ít nhất 2 từ (tối thiểu 5 ký tự), kiểm thử báo lỗi đỏ và lưu ghi vết vào Audit Logs.
+          </td>
+          <td class="text-center">Commit:<br><code>3810ab0</code><br><code>2e48ef1</code><br><code>30e0865</code><br>Trello:<br><code>T11, T18, T19, T22, T24</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ==================== CHƯƠNG 6 ==================== -->
+    <h1 class="chapter-title">CHƯƠNG 6. KHAI BÁO &amp; ĐÁNH GIÁ VIỆC SỬ DỤNG AI (PHỤ LỤC F)</h1>
+
+    <p>
+      Nhóm tuân thủ nguyên tắc sử dụng công cụ AI minh bạch, có kiểm soát: mọi đoạn mã gợi ý từ AI đều được sinh viên đọc hiểu, chỉnh sửa lại cho khớp với cấu trúc dữ liệu <code>window.OnboardAPI</code> và kiểm thử thực tế trên trình duyệt.
+    </p>
+
+    <table class="report-table">
+      <thead>
+        <tr>
+          <th style="width: 8%;">Lần</th>
+          <th style="width: 24%;">Mục đích &amp; Câu lệnh (Prompt)</th>
+          <th style="width: 24%;">Kết quả AI sinh ra ban đầu</th>
+          <th>Phần Sinh viên Tự chỉnh sửa &amp; Cách Kiểm chứng</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="text-center">1</td>
+          <td>Gợi ý thuật toán chấm điểm từ khóa tiếng Việt có dấu/không dấu cho trợ lý <strong>AI-1 Onbi</strong> (<code>newhire-ai-help.html</code>).</td>
+          <td>Hàm chuẩn hóa chuỗi cơ bản và tìm kiếm <code>includes()</code> đơn thuần (dễ khớp nhầm từ con như <em>"ca"</em> trong <em>"các"</em>).</td>
+          <td>• <strong>Chỉnh sửa:</strong> Viết lại hàm <code>containsPhrase()</code> kiểm tra ranh giới từ (Word Boundary), bổ sung trọng số <code>+10đ</code> cho tiêu đề chính xác, <code>+3đ</code> cho <code>keywords</code>, <code>+2đ</code> cho <code>synonyms</code> và tích hợp <code>Fuse.js</code>.<br>• <strong>Kiểm chứng:</strong> Gõ thử cả câu có dấu, không dấu và câu ngoài tài liệu trên trình duyệt.</td>
+        </tr>
+        <tr>
+          <td class="text-center">2</td>
+          <td>Thiết kế thuật toán ghép cặp 8 Người đồng hành (<strong>AI-2 Mentor Matching</strong>) trên <code>newhire-onboarding-dashboard.html</code>.</td>
+          <td>Danh sách Mentor tĩnh cố định 1 người, chưa tự động tính điểm theo phòng ban của nhân sự mới.</td>
+          <td>• <strong>Chỉnh sửa:</strong> Xây dựng danh mục 8 Mentor (<code>MT01..MT08</code>) kèm ảnh chân dung, SĐT, Zalo và viết hàm <code>buildPersonalizedMentorCatalog()</code> cộng điểm ưu tiên khi trùng <code>departmentId</code> và kỹ năng.<br>• <strong>Kiểm chứng:</strong> Chuyển đổi giữa <code>NH01</code> (Kỹ thuật) và <code>NH02</code> (Marketing) qua thanh <code>View-As</code> để kiểm tra Top 3 Mentor thay đổi động.</td>
+        </tr>
+        <tr>
+          <td class="text-center">3</td>
+          <td>Cấu hình biểu đồ thống kê <code>Chart.js</code> và bảng cảnh báo <strong>AI-3 Risk Radar</strong> trên <code>hr-dashboard.html</code>.</td>
+          <td>Biểu đồ cột mặc định chưa đồng bộ bảng màu Design System và chưa tự cập nhật khi lọc dữ liệu.</td>
+          <td>• <strong>Chỉnh sửa:</strong> Tùy biến bảng màu chuẩn thương hiệu (<code>#1F5AFE</code>, <code>#00B67A</code>, <code>#F59E0B</code>), kết nối trực tiếp mảng <code>newHires</code> và <code>tasks</code> từ <code>LocalStorage</code> và thêm ngăn kéo Can thiệp nhanh 1-Click.<br>• <strong>Kiểm chứng:</strong> Bấm gửi can thiệp và kiểm tra thông báo Toast + cập nhật trạng thái tức thì.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ==================== KHUNG XÁC NHẬN CỦA GIẢNG VIÊN ==================== -->
+    <div class="keep-together" style="margin-top: 28px;">
+      <h2 class="section-title">XÁC NHẬN CỦA NHÓM THỰC HIỆN &amp; NHẬN XÉT CỦA GIẢNG VIÊN</h2>
+      <table class="report-table">
+        <thead>
+          <tr>
+            <th style="width: 50%;">ĐẠI DIỆN NHÓM 10 CAM KẾT</th>
+            <th style="width: 50%;">NHẬN XÉT &amp; ĐIỂM ĐÁNH GIÁ CỦA GIẢNG VIÊN</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="height: 120px;">
+            <td style="text-align: center; vertical-align: middle;">
+              Nhóm cam kết toàn bộ mã nguồn, dữ liệu, bảng Trello và 03 Video OBS Live Coding là kết quả làm việc thực chất của nhóm.<br><br><br>
+              <strong>Trưởng nhóm: Nguyễn Gia Huy (2551170897)</strong>
+            </td>
+            <td style="vertical-align: top;">
+              <em>Nhận xét:</em> ......................................................................................<br>
+              .........................................................................................................<br>
+              .........................................................................................................<br><br>
+              <strong>Điểm đánh giá:</strong> ....................... / 10
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</body>
+</html>
