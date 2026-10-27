@@ -47,7 +47,7 @@
         page-break-before: always;
         break-before: page;
       }
-      table, tr, .keep-together {
+      tr, .keep-together {
         page-break-inside: avoid;
         break-inside: avoid;
       }
@@ -200,9 +200,12 @@
     table.report-table {
       width: 100%;
       border-collapse: collapse;
+      table-layout: fixed;
       margin: 10px 0 14px 0;
       font-size: 11.5pt;
-      line-height: 1.38;
+      line-height: 1.4;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
     }
     table.report-table th,
     table.report-table td {
@@ -210,6 +213,8 @@
       padding: 6px 8px;
       vertical-align: top;
       text-align: left;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
     }
     table.report-table th {
       background: #f3f4f6;
@@ -221,7 +226,29 @@
     }
     code {
       font-family: "Courier New", Courier, monospace;
-      font-size: 11pt;
+      font-size: 10.5pt;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+    .figure-box {
+      margin: 12px auto 16px auto;
+      text-align: center;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .figure-box img {
+      max-width: 96%;
+      height: auto;
+      border: 1px solid #000000;
+      display: block;
+      margin: 0 auto;
+    }
+    .figure-caption {
+      font-size: 11.5pt;
+      font-style: italic;
+      text-align: center;
+      margin-top: 6px;
+      margin-bottom: 4px;
     }
   </style>
 </head>
@@ -363,6 +390,11 @@
       <li>Giúp <strong>Quản trị viên (Admin)</strong> thêm, sửa, khóa tài khoản người dùng và kiểm tra lại giao diện của từng vai trò.</li>
     </ul>
 
+    <div class="figure-box">
+      <img src="docs/report-images/fig_1_index.png" alt="Giao diện Trang chủ giới thiệu hệ thống OnboardAI">
+      <p class="figure-caption">Hình 1.1. Giao diện Trang chủ giới thiệu đề tài OnboardAI (index.html)</p>
+    </div>
+
     <!-- ==================== PHẦN 2 ==================== -->
     <div class="page-break"></div>
     <h1 class="chapter-title">PHẦN 2. CÁC NHÓM NGƯỜI DÙNG VÀ 3 CHỨC NĂNG HỖ TRỢ (AI)</h1>
@@ -440,6 +472,16 @@
         </tr>
       </tbody>
     </table>
+
+    <div class="figure-box">
+      <img src="docs/report-images/fig_2_login.png" alt="Giao diện Đăng nhập phân quyền 4 vai trò">
+      <p class="figure-caption">Hình 2.1. Giao diện Đăng nhập và chọn nhanh tài khoản 4 vai trò (login.html)</p>
+    </div>
+
+    <div class="figure-box">
+      <img src="docs/report-images/fig_5_newhire_ai_help.png" alt="Giao diện Trợ lý hỏi đáp quy chế Onbi">
+      <p class="figure-caption">Hình 2.2. Giao diện Trợ lý hỏi đáp nội quy Onbi – Mô phỏng chức năng AI-1 (newhire-ai-help.html)</p>
+    </div>
 
     <!-- ==================== PHẦN 3 ==================== -->
     <div class="page-break"></div>
@@ -523,6 +565,33 @@
       </tbody>
     </table>
 
+    <h2 class="section-title">3.2. Hình ảnh minh họa các màn hình chính của website</h2>
+
+    <div class="figure-box">
+      <img src="docs/report-images/fig_3_newhire_dashboard.png" alt="Màn hình Bảng điều khiển Nhân viên mới">
+      <p class="figure-caption">Hình 3.1. Màn hình Bảng điều khiển Nhân viên mới và gợi ý Mentor AI-2 (newhire-onboarding-dashboard.html)</p>
+    </div>
+
+    <div class="figure-box">
+      <img src="docs/report-images/fig_4_newhire_checklist.png" alt="Màn hình Checklist công việc 4 chặng">
+      <p class="figure-caption">Hình 3.2. Màn hình Checklist công việc 4 chặng và nộp link minh chứng (newhire-checklist.html)</p>
+    </div>
+
+    <div class="figure-box">
+      <img src="docs/report-images/fig_6_mentor_list.png" alt="Màn hình Quản lý danh sách Mentee">
+      <p class="figure-caption">Hình 3.3. Màn hình Quản lý danh sách Mentee của Người hướng dẫn (mentor-mentee-list.html)</p>
+    </div>
+
+    <div class="figure-box">
+      <img src="docs/report-images/fig_7_hr_dashboard.png" alt="Màn hình Bảng điều khiển Nhân sự HR">
+      <p class="figure-caption">Hình 3.4. Màn hình Bảng điều khiển Nhân sự HR, cảnh báo AI-3 và biểu đồ Chart.js (hr-dashboard.html)</p>
+    </div>
+
+    <div class="figure-box">
+      <img src="docs/report-images/fig_8_admin_users.png" alt="Màn hình Quản trị tài khoản Admin">
+      <p class="figure-caption">Hình 3.5. Màn hình Quản trị tài khoản và phân quyền của Admin (admin-user-management.html)</p>
+    </div>
+
     <!-- ==================== PHẦN 4 ==================== -->
     <h1 class="chapter-title">PHẦN 4. PHÂN CÔNG CÔNG VIỆC, QUẢN LÝ TRELLO VÀ GITHUB</h1>
 
@@ -567,29 +636,40 @@
       <li><strong>Quy trình làm việc trên GitHub:</strong> Mỗi thành viên code trên nhánh riêng, sau đó tạo Pull Request (PR #1 đến PR #4) để gộp code vào nhánh <code>dev</code> kiểm tra trước khi đưa lên nhánh <code>main</code> tại địa chỉ: <code>https://github.com/xalambay07-svg/cse122-onboardai-nhom10</code>.</li>
     </ul>
 
+    <div class="figure-box">
+      <img src="docs/report-images/fig_9_trello.png" alt="Giao diện bảng quản lý công việc Trello của Nhóm 10">
+      <p class="figure-caption">Hình 4.1. Bảng quản lý tiến độ 25 thẻ công việc theo 4 tuần của Nhóm 10 (trello-kanban.html)</p>
+    </div>
+
     <!-- ==================== PHẦN 5 ==================== -->
     <div class="page-break"></div>
-    <h1 class="chapter-title">PHẦN 5. MINH CHỨNG 03 VIDEO QUAY OBS VÀ COMMIT</h1>
+    <h1 class="chapter-title">PHẦN 5. MINH CHỨNG 03 VIDEO QUAY OBS VÀ LỊCH SỬ COMMIT</h1>
 
+    <h2 class="section-title">5.1. Quy cách quay và vị trí lưu trữ 03 video OBS</h2>
     <p class="indent">
-      Trưởng nhóm <strong>Nguyễn Gia Huy (MSV: 2551170897)</strong> đã thực hiện quay 03 video bằng phần mềm OBS Studio (có hiển thị màn hình code, trình duyệt, webcam góc dưới phải và giọng nói giải thích). Trong mỗi video đều có phần <strong>gõ code trực tiếp trên VS Code, giải thích từng dòng và lưu lại chạy thử trên trình duyệt</strong>. Cả 3 video đã được đẩy lên thư mục <code>docs/obs-videos/</code> trên GitHub:
+      Trưởng nhóm <strong>Nguyễn Gia Huy (MSV: 2551170897)</strong> đã thực hiện quay 03 video bằng phần mềm OBS Studio (có hiển thị màn hình code VS Code, trình duyệt chạy thực tế, webcam góc dưới phải và giọng nói giải thích trực tiếp). Trong mỗi video đều có phần <strong>gõ code trực tiếp trên VS Code, giải thích từng dòng và lưu lại chạy thử trên trình duyệt</strong>. Toàn bộ 03 file video đã được đẩy lên thư mục <code>docs/obs-videos/</code> trên kho lưu trữ GitHub của nhóm.
     </p>
 
+    <h2 class="section-title">5.2. Bảng tổng hợp nội dung giải thích code và gõ code trực tiếp</h2>
     <table class="report-table">
       <thead>
         <tr>
-          <th style="width: 12%;">Video</th>
-          <th style="width: 25%;">Tên file video trong thư mục <code>docs/obs-videos/</code></th>
-          <th style="width: 22%;">Màn hình demo trong video</th>
-          <th>Nội dung giải thích code &amp; Phần gõ code trực tiếp trên video</th>
-          <th style="width: 13%;">Mã Commit</th>
+          <th style="width: 13%;">Video</th>
+          <th style="width: 26%;">File video &amp; Màn hình demo</th>
+          <th style="width: 47%;">Nội dung giải thích code &amp; Phần gõ code trực tiếp trên video</th>
+          <th style="width: 14%;">Mã Commit</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td class="text-center"><strong>Video 1</strong><br>(~10 phút)</td>
-          <td><code>Video_OBS1_NguyenGiaHuy_2551170897.mp4</code></td>
-          <td><code>index.html</code><br><code>newhire-onboarding-dashboard.html</code></td>
+          <td>
+            <strong>File video:</strong><br>
+            <code>Video_OBS1_NguyenGiaHuy_2551170897.mp4</code><br><br>
+            <strong>Màn hình:</strong><br>
+            - <code>index.html</code><br>
+            - <code>newhire-onboarding-dashboard.html</code>
+          </td>
           <td>
             - <strong>Giải thích code:</strong> Bố cục lưới 12 cột ở trang chủ; hàm <code>buildPersonalizedMentorCatalog()</code> tính điểm gợi ý 8 Mentor; hàm <code>saveMentorChatHistory()</code> và <code>generateSmartMentorReply()</code> lưu tin nhắn chat vào <code>localStorage</code>.<br>
             - <strong>Gõ code trực tiếp:</strong> Thêm nút bấm <em>"Báo cáo nhanh tiến độ"</em> ở dòng 219 và viết hàm <code>showQuickProgressSummary()</code> ở cuối file để đếm số công việc đã hoàn thành từ <code>localStorage</code> rồi hiển thị lên hộp thoại <code>alert()</code>.
@@ -598,8 +678,13 @@
         </tr>
         <tr>
           <td class="text-center"><strong>Video 2</strong><br>(~8.5 phút)</td>
-          <td><code>Video_OBS2_NguyenGiaHuy_2551170897.mp4</code></td>
-          <td><code>newhire-checklist.html</code><br><code>newhire-ai-help.html</code></td>
+          <td>
+            <strong>File video:</strong><br>
+            <code>Video_OBS2_NguyenGiaHuy_2551170897.mp4</code><br><br>
+            <strong>Màn hình:</strong><br>
+            - <code>newhire-checklist.html</code><br>
+            - <code>newhire-ai-help.html</code>
+          </td>
           <td>
             - <strong>Giải thích code:</strong> Hàm <code>renderTasksList()</code> lọc công việc theo giai đoạn, từ khóa và hiển thị trạng thái rỗng (Empty State); hàm <code>updatePhaseStats()</code> tính phần trăm tiến độ; hàm <code>normalize()</code> và <code>processAIResponse()</code> tìm câu trả lời trong trang Onbi.<br>
             - <strong>Gõ code trực tiếp:</strong> Gõ thêm 1 mục dữ liệu mới (<code>id: 'parking-card-policy'</code> – <em>Đăng ký vé gửi xe hầm B1 &amp; B2</em>) vào mảng <code>KNOWLEDGE_BASE</code> tại dòng 322, lưu file và hỏi thử trên khung chat.
@@ -608,8 +693,13 @@
         </tr>
         <tr>
           <td class="text-center"><strong>Video 3</strong><br>(~10.5 phút)</td>
-          <td><code>Video_OBS3_NguyenGiaHuy_2551170897.mp4</code></td>
-          <td><code>hr-dashboard.html</code><br><code>admin-user-management.html</code></td>
+          <td>
+            <strong>File video:</strong><br>
+            <code>Video_OBS3_NguyenGiaHuy_2551170897.mp4</code><br><br>
+            <strong>Màn hình:</strong><br>
+            - <code>hr-dashboard.html</code><br>
+            - <code>admin-user-management.html</code>
+          </td>
           <td>
             - <strong>Giải thích code:</strong> Hàm <code>renderTable()</code> lọc nhân viên trễ hạn và hàm <code>initCharts()</code> vẽ biểu đồ <code>Chart.js</code> ở trang HR; hàm <code>renderUserTable()</code>, <code>impersonateSpecificPerson()</code> và <code>saveUserForm()</code> ở trang Admin.<br>
             - <strong>Gõ code trực tiếp:</strong> Viết thêm điều kiện <code>else if (name.split(/\s+/).length &lt; 2 || name.length &lt; 5)</code> tại dòng 2149 để kiểm tra họ tên nhập vào phải có từ 2 từ trở lên (tối thiểu 5 ký tự) mới cho phép lưu tài khoản.
@@ -618,6 +708,23 @@
         </tr>
       </tbody>
     </table>
+
+    <h2 class="section-title">5.3. Hình ảnh minh chứng trích xuất từ 03 video quay OBS</h2>
+
+    <div class="figure-box">
+      <img src="docs/report-images/fig_obs1.jpg" alt="Minh chứng Video OBS 1">
+      <p class="figure-caption">Hình 5.1. Ảnh cắt từ Video OBS 1 – Giải thích và gõ code trực tiếp trên trang newhire-onboarding-dashboard.html</p>
+    </div>
+
+    <div class="figure-box">
+      <img src="docs/report-images/fig_obs2.jpg" alt="Minh chứng Video OBS 2">
+      <p class="figure-caption">Hình 5.2. Ảnh cắt từ Video OBS 2 – Giải thích và gõ code thêm dữ liệu vào mảng KNOWLEDGE_BASE trên trang newhire-ai-help.html</p>
+    </div>
+
+    <div class="figure-box">
+      <img src="docs/report-images/fig_obs3.jpg" alt="Minh chứng Video OBS 3">
+      <p class="figure-caption">Hình 5.3. Ảnh cắt từ Video OBS 3 – Giải thích và gõ code kiểm tra hợp lệ họ tên (Form Validation) trên trang admin-user-management.html</p>
+    </div>
 
     <!-- ==================== PHẦN 6 ==================== -->
     <h1 class="chapter-title">PHẦN 6. BÁO CÁO VIỆC SỬ DỤNG CÔNG CỤ AI HỖ TRỢ</h1>
